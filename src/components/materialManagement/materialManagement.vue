@@ -29,61 +29,61 @@
                         icon: "iconfont icon-zhunbeiliangchan",
                         label: '物料准备',
                         id: "1",
-                        url: "/MaterialManagement"
+                        url: "/404"
                     },
                     {
                         icon: "iconfont icon-ccgl-chukucaozuo-1",
                         label: '物料出库',
                         id: "3",
-                        url: "/MaterialManagement"
+                        url: "/404"
                     },
                     {
-                        icon: "iconfont icon-peisong2",
+                        icon: "iconfont icon-wuliao",
                         label: '物料配送',
                         id: "2",
-                        url: "/MaterialManagement"
+                        url: "/404"
                     },
                     {
                         icon: "iconfont icon-genzong",
                         label: '领料追踪',
                         id: "4",
-                        url: "/MaterialManagement"
+                        url: "/404"
                     },
                     {
                         icon: "iconfont icon-zhizuo",
                         label: '托单制作',
                         id: "3",
-                        url: "/Warehousing"
+                        url: "/404"
                     },
                     {
                         icon: "iconfont icon-shenhe",
                         label: '托单审核',
                         id: "3",
-                        url: "/Warehousing"
+                        url: "/404"
                     },
                     {
                         icon: "iconfont icon-fahang_on",
                         label: '托单发行',
                         id: "3",
-                        url: "/Warehousing"
+                        url: "/404"
                     },
                     {
                         icon: "iconfont icon-zhuizong",
                         label: '托单追踪',
                         id: "3",
-                        url: "/Warehousing"
+                        url: "/404"
                     },
                     {
                         icon: "iconfont icon-wei",
                         label: '为引当',
                         id: "4",
-                        url: "/MaterialManagement"
+                        url: "/ForReference"
                     },
                     {
                         icon: "iconfont icon-chaxun",
                         label: '查询',
                         id: "5",
-                        url: "/MaterialManagement"
+                        url: "/404"
                     }
                 ]
 
@@ -186,7 +186,8 @@
                 color: #3EC455;
 
             }
-            .icon-peisong2 {
+            .icon-wuliao
+            {
                 display: block;
                 font-size: 400%;
                 margin-bottom: 20px;

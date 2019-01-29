@@ -10,78 +10,18 @@
                             <div>{{role}}</div>
                         </div>
                     </div>
-                    <div class="user-info-list">上次登录时间：<span>2018-11-15</span></div>
-                    <div class="user-info-list">上次登录地点：<span>南通</span></div>
+                    <div class="user-info-list">上次登录时间：<span>2019-1-24</span></div>
+                    <div class="user-info-list">上次登录地点：<span>北京</span></div>
                 </el-card>
             </el-col>
-            <el-col :span="16">
-                <el-row :gutter="20" class="mgb20">
-                    <el-col :span="8">
-                        <el-card shadow="hover" :body-style="{padding: '0px'}">
-                            <div class="grid-content grid-con-1">
-                                <i class="el-icon-lx-people grid-con-icon"></i>
-                                <div class="grid-cont-right">
-                                    <div class="grid-num">1234</div>
-                                    <div>用户访问量</div>
-                                </div>
-                            </div>
-                        </el-card>
-                    </el-col>
-                    <el-col :span="8">
-                        <el-card shadow="hover" :body-style="{padding: '0px'}">
-                            <div class="grid-content grid-con-2">
-                                <i class="el-icon-lx-notice grid-con-icon"></i>
-                                <div class="grid-cont-right">
-                                    <div class="grid-num">321</div>
-                                    <div>系统消息</div>
-                                </div>
-                            </div>
-                        </el-card>
-                    </el-col>
-                    <el-col :span="8">
-                        <el-card shadow="hover" :body-style="{padding: '0px'}">
-                            <div class="grid-content grid-con-3">
-                                <i class="el-icon-lx-goods grid-con-icon"></i>
-                                <div class="grid-cont-right">
-                                    <div class="grid-num">5000</div>
-                                    <div>数量</div>
-                                </div>
-                            </div>
-                        </el-card>
-                    </el-col>
-                </el-row>
-                <el-card shadow="hover" style="height:403px;">
-                    <div slot="header" class="clearfix">
-                        <span>待办事项</span>
-                        <el-button style="float: right; padding: 3px 0" type="text">添加</el-button>
-                    </div>
-                    <el-table :data="todoList" :show-header="false" height="304" style="width: 100%;font-size:14px;">
-                        <el-table-column width="40">
-                            <template slot-scope="scope">
-                                <el-checkbox v-model="scope.row.status"></el-checkbox>
-                            </template>
-                        </el-table-column>
-                        <el-table-column>
-                            <template slot-scope="scope">
-                                <div class="todo-item" :class="{'todo-item-del': scope.row.status}">{{scope.row.title}}</div>
-                            </template>
-                        </el-table-column>
-                        <el-table-column width="60">
-                            <template slot-scope="scope">
-                                <i class="el-icon-edit"></i>
-                                <i class="el-icon-delete"></i>
-                            </template>
-                        </el-table-column>
-                    </el-table>
-                </el-card>
-            </el-col>
+
         </el-row>
     </div>
 </template>
 
 <script>
     import Schart from 'vue-schart';
-   
+
     export default {
         name: 'dashboard',
         data() {

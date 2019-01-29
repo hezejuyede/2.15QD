@@ -3,14 +3,14 @@
         <div class="crumbs">
             <el-breadcrumb separator="/">
                 <el-breadcrumb-item>资源模型</el-breadcrumb-item>
-                <el-breadcrumb-item>工序管理</el-breadcrumb-item>
+                <el-breadcrumb-item>班次管理</el-breadcrumb-item>
             </el-breadcrumb>
         </div>
         <div class="WorkingProcedure-content">
             <div class="container">
                 <div class="handle-box">
                     <el-input v-model="select_word" placeholder="筛选工序" class="handle-input mr10"></el-input>
-                    <el-button type="primary" icon="delete" class="handle-del mr10" @click="addWorkStation">新增工序</el-button>
+                    <el-button type="primary" icon="delete" class="handle-del mr10" @click="addWorkStation">新增班次</el-button>
                 </div>
                 <div class="">
                     <el-table class="tb-edit"
@@ -39,27 +39,14 @@
             </div>
 
             <!--新增弹出框 -->
-            <el-dialog title="新增工序" :visible.sync="addVisible" width="60%">
+            <el-dialog title="新增班次" :visible.sync="addVisible" width="60%">
                 <el-form ref="form" :model="form" label-width="100px">
-                    <el-form-item label="序号">
+                    <el-form-item label="班次">
                         <el-input v-model="form.name"></el-input>
                     </el-form-item>
-                    <el-form-item label="工序名称">
+                    <el-form-item label="时间">
                         <el-input v-model="form.address"></el-input>
                     </el-form-item>
-                    <el-form-item label="工序代码">
-                        <el-input v-model="form.name"></el-input>
-                    </el-form-item>
-                    <el-form-item label="工序内容">
-                        <el-input v-model="form.address"></el-input>
-                    </el-form-item>
-                    <el-form-item label="饱和人数">
-                        <el-input v-model="form.name"></el-input>
-                    </el-form-item>
-                    <el-form-item label="所属生产线">
-                        <el-input v-model="form.address"></el-input>
-                    </el-form-item>
-
                 </el-form>
                 <span slot="footer" class="dialog-footer">
                 <el-button @click="addVisible = false" style="height:30px;width:80px">取 消</el-button>
@@ -67,7 +54,7 @@
             </span>
             </el-dialog>
             <!-- 编辑弹出框 -->
-            <el-dialog title="编辑工序" :visible.sync="editVisible" width="60%">
+            <el-dialog title="编辑班次" :visible.sync="editVisible" width="60%">
                 <el-form ref="form" :model="form" label-width="100px">
                     <el-form-item label="序号">
                         <el-input v-model="form.name"></el-input>
@@ -79,7 +66,7 @@
                         <el-input v-model="form.name"></el-input>
                     </el-form-item>
                     <el-form-item label="工序内容">
-                        <el-input v-model="form.jiagongnengli"></el-input>
+                        <el-input v-model="form.address"></el-input>
                     </el-form-item>
                     <el-form-item label="饱和人数">
                         <el-input v-model="form.name"></el-input>
@@ -94,7 +81,7 @@
             </span>
             </el-dialog>
             <!-- 删除提示框 -->
-            <el-dialog title="删除工序" :visible.sync="delVisible" width="300px" center>
+            <el-dialog title="删除班次" :visible.sync="delVisible" width="300px" center>
                 <div class="del-dialog-cnt">删除不可恢复，是否确定删除？</div>
                 <span slot="footer" class="dialog-footer">
                 <el-button @click="delVisible = false" style="height:30px;width:80px">取 消</el-button>
@@ -123,7 +110,6 @@
                 form: {
                     name: '',
                     date: '',
-                    jiagongnengli:"",
                     address: ''
                 }
             }
@@ -161,8 +147,8 @@
                 else {
                     let that = this;
                     axios.all([
-                        axios.post(" "+ url +"/sys/showTableTitle",{"name":"gongxu"}),
-                        axios.post(" "+ url +"/sysconfig/getGongxuList")
+                        axios.post(" "+ url +"/sys/showTableTitle",{"name":"banci"}),
+                        axios.post(" "+ url +"/sysconfig/getBanciList")
                     ])
                         .then(axios.spread(function (title, table) {
                             that.cols = title.data;
@@ -233,7 +219,7 @@
                     display: inline-block;
                 }
                 .el-button {
-                    width:100px;
+                    width: 100px;
                     height: 30px;
                 }
             }

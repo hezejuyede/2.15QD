@@ -19,7 +19,7 @@
     import vHead from './Header.vue';
     import vSidebar from './Sidebar.vue';
     import vTags from './Tags.vue';
-    import bus from './bus';
+    import bus from '../assets/js/bus';
     export default {
         data(){
             return {
@@ -46,3 +46,9 @@
         }
     }
 </script>
+<style scoped lang="less" rel="stylesheet/less">
+    @import "../assets/less/base";
+
+
+
+</style>

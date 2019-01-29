@@ -16,19 +16,27 @@
                 <div class="login-btn">
                     <el-button type="primary" @click="submitForm('ruleForm')">登录</el-button>
                 </div>
-                <p class="login-tips">Tips : 用户名和密码随便填。</p>
             </el-form>
         </div>
+        <Modal :msg="message"
+               :isHideModal="HideModal"></Modal>
     </div>
 </template>
 
-<script>
+<script type="text/ecmascript-6">
+    import axios from 'axios';
+    import Modal from '../../common/modal'
+    import url from '../../assets/js/URL'
     export default {
+        components: {Modal},
         data: function(){
             return {
+                message: '',
+                HideModal: true,
+
                 ruleForm: {
-                    username: 'admin',
-                    password: '123123'
+                    username: '',
+                    password: ''
                 },
                 rules: {
                     username: [
@@ -44,10 +52,66 @@
             submitForm(formName) {
                 this.$refs[formName].validate((valid) => {
                     if (valid) {
-                        localStorage.setItem('ms_username',this.ruleForm.username);
-                        this.$router.push('/');
-                    } else {
-                        console.log('error submit!!');
+                        axios.post("  "+ url +"/api/login.html", {"username": this.ruleForm.username, "password": this.ruleForm.password})
+                            .then((res) => {
+                                if (res.data.state === "1") {
+                                    let userInfo = res.data;
+                                    userInfo = JSON.stringify(userInfo);
+                                    localStorage.setItem("userInfo", userInfo);
+                                    localStorage.setItem('ms_username',res.data.username);
+                                    this.message = "登录成功";
+                                    this.HideModal = false;
+                                    const that = this;
+                                    function a() {
+                                        that.message = "";
+                                        that.HideModal = true;
+                                        that.$router.push('/');
+                                    }
+                                    function showPromptBox() {
+                                        that.openPromptBox = false;
+                                        that.needKnown = res.data.needKnown;
+                                        that.contentText = res.data.contentText;
+                                    }
+                                    setTimeout(showPromptBox, 3000);
+                                    setTimeout(a, 2000);
+                                }
+                                else if (res.data === "2") {
+                                    this.message = "该用户没有注册";
+                                    this.HideModal = false;
+                                    const that = this;
+                                    function b() {
+                                        that.message = "";
+                                        that.HideModal = true;
+                                        that.username = '';
+                                        that.password = '';
+                                    }
+                                    setTimeout(b, 2000);
+                                }
+                                else if (res.data === "-1") {
+                                    this.message = "密码错误";
+                                    this.HideModal = false;
+                                    const that = this;
+                                    function c() {
+                                        that.message = "";
+                                        that.HideModal = true;
+                                        that.password = '';
+                                    }
+                                    setTimeout(c, 2000);
+                                }
+                            })
+                            .catch((err) => {
+                                console.log(err)
+                            });
+                    }
+                    else {
+                        this.message = "请正确填写信息";
+                        this.HideModal = false;
+                        const that = this;
+                        function a() {
+                            that.message = "";
+                            that.HideModal = true;
+                        }
+                        setTimeout(a, 2000);
                         return false;
                     }
                 });
@@ -56,20 +120,21 @@
     }
 </script>
 
-<style scoped>
+<style scoped lang="less" rel="stylesheet/less">
+    @import "../../assets/less/base";
     .login-wrap{
         position: relative;
         width:100%;
         height:100%;
         background-image: url(../../assets/img/login-bg.jpg);
-        background-size: 100%;
+        background-size: cover;
     }
     .ms-title{
         width:100%;
         line-height: 50px;
         text-align: center;
         font-size:20px;
-        color: #fff;
+        color: @color-bg-hei;
         border-bottom: 1px solid #ddd;
     }
     .ms-login{
@@ -79,7 +144,7 @@
         width:350px;
         margin:-190px 0 0 -175px;
         border-radius: 5px;
-        background: rgba(255,255,255, 0.3);
+        background: rgba(255,255,255, 0.7);
         overflow: hidden;
     }
     .ms-content{
@@ -92,10 +157,5 @@
         width:100%;
         height:36px;
         margin-bottom: 10px;
-    }
-    .login-tips{
-        font-size:12px;
-        line-height:30px;
-        color:#fff;
     }
 </style>

@@ -32,7 +32,7 @@
 </template>
 
 <script>
-    import bus from './bus';
+    import bus from '../assets/js/bus';
 
     export default {
         data() {
@@ -47,7 +47,7 @@
                     {
                         icon: 'el-icon-tickets',
                         index: 'PlannedProduction',
-                        title: '计划排产'
+                        title: '生产管理'
                     },
                     {
                         icon: 'el-icon-lx-cartfill',
@@ -55,19 +55,14 @@
                         title: '物料管理'
                     },
                     {
-                        icon: 'el-icon-news',
-                        index: 'productionExecution',
-                        title: '生产执行'
+                        icon: 'el-icon-star-on',
+                        index: 'QualityAssurance',
+                        title: '质量管理'
                     },
                     {
                         icon: 'el-icon-view',
                         index: 'ProductionMonitoring',
-                        title: '生产监视'
-                    },
-                    {
-                        icon: 'el-icon-star-on',
-                        index: 'QualityAssurance',
-                        title: '质量管理'
+                        title: '设备管理'
                     },
                     {
                         icon: 'el-icon-lx-group',
@@ -77,28 +72,8 @@
                     {
                         icon: 'el-icon-share',
                         index: 'SecurityManagement',
-                        title: '安全管理'
-                    },
-                    {
-                        icon: 'el-icon-setting',
-                        index: 'SystemManagement',
-                        title: '系统管理'
-                    },
-                    {
-                        icon: 'el-icon-lx-warn',
-                        index: '6',
-                        title: '错误处理',
-                        subs: [
-                            {
-                                index: '403',
-                                title: '权限测试'
-                            },
-                            {
-                                index: '404',
-                                title: '404页面'
-                            }
-                        ]
-                    },
+                        title: '看板管理'
+                    }
                 ]
             }
         },

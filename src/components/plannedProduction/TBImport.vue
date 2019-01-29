@@ -3,7 +3,7 @@
         <div class="crumbs">
             <el-breadcrumb separator="/">
                 <el-breadcrumb-item>计划排产</el-breadcrumb-item>
-                <el-breadcrumb-item>信息导入</el-breadcrumb-item>
+                <el-breadcrumb-item>特别流程管数据导入</el-breadcrumb-item>
             </el-breadcrumb>
         </div>
         <div class="container">
@@ -23,7 +23,6 @@
                     <el-button style="margin:10px;width: 150px;height: 30px;" size="small" type="success"
                                @click="submitUpload">上传到系统
                     </el-button>
-                    <div slot="tip" class="el-upload__tip">只能上传jpg/png文件，且不超过500kb</div>
                 </el-upload>
             </div>
 

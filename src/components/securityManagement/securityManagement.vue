@@ -3,7 +3,7 @@
     <main ref="indexDiv" id="indexDiv">
       <div class="indexDiv-top ">
         <div class="indexDiv-top-left fl"></div>
-        <div class="indexDiv-top-center fl">安全管理</div>
+        <div class="indexDiv-top-center fl">看板管理</div>
         <div class="indexDiv-top-right fl"></div>
       </div>
       <div class="indexDiv-bottom clearfix">
@@ -28,13 +28,13 @@
             icon:"iconfont icon-xinxi",
             label: '推送信息',
             id: "2",
-            url:"/ProductionScheduling"
+            url:"/404"
           },
           {
             icon:"iconfont icon-chaxun",
             label: '信息查询',
             id: "4",
-            url:"/ProductionScheduling"
+            url:"/404"
           }
         ]
 

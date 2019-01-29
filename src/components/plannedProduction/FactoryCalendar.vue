@@ -2,7 +2,7 @@
     <div class="FactoryCalendar">
         <div class="crumbs">
             <el-breadcrumb separator="/">
-                <el-breadcrumb-item>计划排产</el-breadcrumb-item>
+                <el-breadcrumb-item>资源模型</el-breadcrumb-item>
                 <el-breadcrumb-item>工作日历</el-breadcrumb-item>
             </el-breadcrumb>
         </div>

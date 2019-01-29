@@ -1,86 +1,184 @@
 <template>
-    <div class="PlannedProduction">
-        <main id="indexDiv">
-            <div class="indexDiv-top ">
-                <div class="indexDiv-top-left fl"></div>
-                <div class="indexDiv-top-center fl">计划排产</div>
-                <div class="indexDiv-top-right fl"></div>
-            </div>
-            <div class="indexDiv-bottom clearfix">
-                <div class="nav-div fl" v-for="(item,index) in navBarData"
-                     @click="goToNavBar(index,item.url)">
-                    <div class="indexDivText">
-                        <i :class=" item.icon"></i>
-                        <span>{{item.label}}</span>
-                    </div>
+    <div class="plannedProduction">
+        <div class="plannedProduction-nav">
+            <el-menu :default-active="activeIndex" class="el-menu-demo" mode="horizontal">
+                <div  v-for="(item,index) in navBarData"  :class="{'navDivColor':index === num}">
+                    <el-submenu :index="item.index">
+                        <template slot="title">{{item.label}}</template>
+                        <div class="" v-for="(item ,index) in item.children" @click=" handleSelect(item.index,item.url)">
+                            <el-menu-item :index="item.index">{{item.label}}</el-menu-item>
+                        </div>
+                    </el-submenu>
                 </div>
-            </div>
-        </main>
+            </el-menu>
+        </div>
+        <div class="plannedProduction-content">
+            <keep-alive>
+                <router-view></router-view>
+            </keep-alive>
+        </div>
     </div>
 </template>
 <script type="text/ecmascript-6">
 
 
     export default {
-        name: 'PlannedProduction',
+        name: 'plannedProduction',
         data() {
             return {
+                num:0,
                 navBarData: [
                     {
-                        icon: "iconfont icon-chuan1",
-                        label: ' 船型设置',
-                        id: "1",
-                        url: "/ShipType"
-                    },
-                    {
-                        icon: "iconfont icon-linecar111",
-                        label: '工序管理',
-                        id: "2",
-                        url: "/WorkingProcedure"
-                    },
-                    {
-                        icon: "iconfont icon-rizhi",
-                        label: '工艺路线',
-                        id: "3",
-                        url: "/ProcessRoute"
-                    },
-                    {
-                        icon: "iconfont icon-zhilianganquan",
-                        label: '工作日历',
-                        id: "4",
-                        url: "/FactoryCalendar"
-                    },
-                    {
-                        icon: "iconfont icon-moxing",
                         label: '资源模型',
-                        id: "5",
-                        url: "/ResourceModel"
+                        index: "1",
+                        children: [
+                            {
+                                label: '工序管理',
+                                index: "1-1",
+                                url: "/WorkingProcedure"
+                            },
+                            {
+                                label: '工艺路线',
+                                index: "1-2",
+                                url: "/ProcessRoute"
+                            },
+                            {
+                                label: ' 工作日历',
+                                index: "1-3",
+                                url: "/FactoryCalendar"
+                            },
+                            {
+                                label: '班次管理',
+                                index: "1-4",
+                                url: "/ShiftManagement"
+                            },
+                            {
+                                label: '加工能力',
+                                index: "1-5",
+                                url: "/404"
+                            }
+                        ]
                     },
                     {
-                        icon: "iconfont icon-daoru-tianchong",
-                        label: ' 信息导入',
-                        id: "1",
-                        url: "/InformationImport"
+                        label: '计划排产',
+                        index: "2",
+                        url: "/WorkingProcedure",
+                        children: [
+                            {
+                                label: '船型设置',
+                                index: "2-1",
+                                url: "/ShipType"
+                            },
+                            {
+                                label: '管加工数据导入',
+                                index: "2-2",
+                                url: "/InformationImport"
+                            },
+                            {
+                                label: '特别流程管数据导入',
+                                index: "2-3",
+                                url: "/TBImport"
+                            },
+                            {
+                                label: '导入数据查询',
+                                index: "2-4",
+                                url: "/ImportDataQuery"
+                            },
+                            {
+                                label: '计划排产',
+                                index: "2-5",
+                                url: "/Production"
+                            }
+                        ]
                     },
                     {
-                        icon: "iconfont icon-xiafashuju",
-                        label: '任务发行',
-                        id: "8",
-                        url: "/Planned"
+                        label: '任务派发',
+                        index: "3",
+                        url: "/ProcessRoute",
+                        children: [
+                            {
+                                label: '任务派发',
+                                index: "3-1",
+                                url: "/Distribute"
+                            }
+                        ]
                     },
                     {
-                        icon: "iconfont icon-tiaodu",
-                        label: '计划调度',
-                        id: "9",
-                        url: "/WorksheetPlanning"
+                        label: '排产分析',
+                        index: "4",
+                        url: "/FactoryCalendar",
+                        children: [
+                            {
+                                label: '排产分析',
+                                index: "4-1",
+                                url: "/404"
+                            }
+                        ]
                     },
                     {
-                        icon: "iconfont icon-chaxun",
-                        label: '计划查询',
-                        id: "11",
-                        url: "/"
+                        label: '生产调度',
+                        index: "5",
+                        url: "/ResourceModel",
+                        children: [
+                            {
+                                label: '任务调度',
+                                index: "5-1",
+                                url: "/TaskScheduling"
+                            },
+                            {
+                                label: '工位监测',
+                                index: "5-3",
+                                url: "/404"
+                            }
+                        ]
+                    },
+                    {
+                        label: ' 生产监控',
+                        index: "6",
+                        url: "/InformationImport",
+                        children: [
+                            {
+                                label: ' 生产进度',
+                                index: "6-1",
+                                url: "/404"
+                            },
+                            {
+                                label: '工位动态',
+                                index: "6-2",
+                                url: "/404"
+                            },
+                            {
+                                label: ' 视频监控',
+                                index: "6-3",
+                                url: "/404"
+                            }
+                        ]
+
+                    },
+                    {
+                        label: '任务跟踪',
+                        index: "9",
+                        url: "/WorksheetPlanning",
+                        children: [
+                            {
+                                label: ' 生产进度',
+                                index: "9-1",
+                                url: "/ProductionSchedule"
+                            },
+                            {
+                                label: '工位动态',
+                                index: "9-2",
+                                url: "/WorkstationDynamics"
+                            },
+                            {
+                                label: ' 视频监控',
+                                index: "9-3",
+                                url: "/404"
+                            }
+                        ]
                     }
-                ]
+                ],
+                activeIndex: '1',
             }
         },
         components: {},
@@ -107,6 +205,13 @@
             //点击前往那个子组件
             goToNavBar(index, url) {
                 this.$router.push(url);
+            },
+
+            //点击导航前往哪一个页面
+            handleSelect(index, url) {
+                let Num = parseInt(index.substr(0,1));
+                this.num = Num-1;
+                this.$router.push(url);
             }
 
 
@@ -116,145 +221,47 @@
 <style scoped lang="less" rel="stylesheet/less">
     @import "../../assets/less/base";
 
-    .PlannedProduction {
+    .plannedProduction {
         width: 100%;
         height: 100%;
         background-color: @color-white;
+        .plannedProduction-nav {
+            width: 100%;
+            height: 10%;
+            .el-menu-demo {
+                display: flex;
+                > div {
+                    flex: 1;
+                    text-align: center;
+
+                }
+
+
+            }
+
+        }
+        .plannedProduction-content{
+            margin-bottom: 50px;
+        }
+
     }
 
-    .indexDiv-top {
-        height: 50px;
-        .indexDiv-top-left {
-            height: 1px;
-            width: 5%;
-            margin-top: 25px;
-            background-color: #303133;
-        }
-        .indexDiv-top-center {
-            width: 10%;
-            margin-top: 15px;
-            text-align: center;
-        }
-        .indexDiv-top-right {
-            height: 1px;
-            width: 85%;
-            margin-top: 25px;
-            background-color: #303133;
-        }
+
+    .navDivColor {
+        background-color: @color-background-d;
     }
 
-    .indexDiv-bottom {
-        width: 70%;
-        margin-top: 20px;
-        .nav-div {
-            width: 15%;
-            margin-left: 6%;
-            height: 100px;
-            margin-bottom: 5%;
-            text-align: center;
-            cursor: pointer;
-            border:1px solid @color-background-dd;
-            box-shadow: 2px 2px 1px @color-background-dd;
-            border-radius: 10%;
-            .indexDivText {
-                margin-top: 20px;
-                width: 100%;
-                height: 60px;
-                line-height: 30px;
+    @media only screen and (max-width: 1200px) {
+        .plannedProduction {
+            width: 1200px;
+            .plannedProduction-nav{
+                width: 1200px;
             }
-            i {
-                display: block;
-                font-size: 200%;
-                margin-bottom: 5px;
+            .plannedProduction-content{
+                width: 1200px;
             }
-            span {
-                display: block;
-                color: @color-background-dddd;
-            }
-            .icon-chuan1{
-                display: block;
-                font-size: 400%;
-                margin-bottom: 20px;
-                color: #3a8ee6;
-            }
-            .icon-daoru-tianchong {
-                display: block;
-                font-size: 400%;
-                margin-bottom: 20px;
-                color: #ffcd32;
-
-            }
-            .icon-linecar111 {
-                display: block;
-                font-size: 400%;
-                margin-bottom: 20px;
-                color: #3EC455;
-
-            }
-            .icon-rizhi {
-                display: block;
-                font-size: 400%;
-                margin-bottom: 20px;
-                color: #d93f30;
-
-            }
-            .icon-zhilianganquan {
-                display: block;
-                font-size: 400%;
-                margin-bottom: 20px;
-                color: cadetblue;
-
-            }
-            .icon-moxing {
-                display: block;
-                font-size: 400%;
-                margin-bottom: 20px;
-                color: chartreuse;
-
-            }
-            .icon-gouwuche-copy {
-                display: block;
-                font-size: 400%;
-                margin-bottom: 20px;
-                color: deeppink;
-
-            }
-            .icon-dingdan {
-                display: block;
-                font-size: 400%;
-                margin-bottom: 20px;
-                color: brown;
-
-            }
-            .icon-xiafashuju {
-                display: block;
-                font-size: 400%;
-                margin-bottom: 20px;
-                color: blueviolet;
-            }
-            .icon-tiaodu {
-                display: block;
-                font-size: 400%;
-                margin-bottom: 20px;
-                color: chocolate;
-
-            }
-            .icon-change {
-                display: block;
-                font-size: 400%;
-                margin-bottom: 20px;
-                color: darkmagenta;
-
-            }
-            .icon-chaxun {
-                display: block;
-                font-size: 400%;
-                margin-bottom: 20px;
-                color: hotpink;
-
-            }
-
         }
+
     }
 
 

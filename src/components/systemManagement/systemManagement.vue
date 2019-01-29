@@ -30,25 +30,25 @@
                         icon: "iconfont icon-quanxian",
                         label: '权限管理',
                         id: "1",
-                        url: "/"
+                        url: "/404"
                     },
                     {
                         icon: "iconfont icon-note",
                         label: '日志管理',
                         id: "2",
-                        url: "/ProductionScheduling"
+                        url: "/404"
                     },
                     {
                         icon: "iconfont icon-jiekou",
                         label: '系统接口',
                         id: "3",
-                        url: "/SecurityManagement"
+                        url: "/404"
                     },
                     {
                         icon: "iconfont icon-chaxun",
                         label: '查询',
                         id: "4",
-                        url: "/ProductionScheduling"
+                        url: "/404"
                     }
                 ]
 

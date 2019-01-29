@@ -23,7 +23,7 @@
 </template>
 
 <script>
-    import bus from './bus';
+    import bus from '../assets/js/bus';
     export default {
         data() {
             return {
@@ -58,11 +58,13 @@
             },
             // 设置标签
             setTags(route){
+                var length =route.matched.length;
                 const isExist = this.tagsList.some(item => {
                     return item.path === route.fullPath;
-                })
-                if(!isExist){
-                    if(this.tagsList.length >= 8){
+                });
+
+                if (!isExist && length <= 2) {
+                    if (this.tagsList.length >= 8) {
                         this.tagsList.shift();
                     }
                     this.tagsList.push({
@@ -165,5 +167,6 @@
         box-shadow: -3px 0 15px 3px rgba(0, 0, 0, .1);
         z-index: 10;
     }
+
 
 </style>

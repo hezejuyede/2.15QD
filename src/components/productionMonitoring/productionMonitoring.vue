@@ -3,7 +3,7 @@
     <main ref="indexDiv" id="indexDiv">
       <div class="indexDiv-top ">
         <div class="indexDiv-top-left fl"></div>
-        <div class="indexDiv-top-center fl">生产监视</div>
+        <div class="indexDiv-top-center fl">设备管理</div>
         <div class="indexDiv-top-right fl"></div>
       </div>
       <div class="indexDiv-bottom clearfix">
@@ -30,49 +30,49 @@
             icon:"iconfont icon-shuju",
             label: '数据采集',
             id: "1",
-            url:"/ProductionMonitoring"
+            url:"/404"
           },
           {
             icon:"iconfont icon-jiaojishiji",
             label: '计划实绩追踪',
             id: "2",
-            url:"/ProductionMonitoring"
+            url:"/404"
           },
           {
             icon:"iconfont icon-youhuiquanguanli-",
             label: '工位动态',
             id: "3",
-            url:"/ProductionMonitoring"
+            url:"/404"
           },
           {
             icon:"iconfont icon-renyuan",
             label: '人员分布',
             id: "4",
-            url:"/ProductionMonitoring"
+            url:"/404"
           },
           {
             icon:"iconfont icon-dongtai",
             label: '物料动态',
             id: "5",
-            url:"/ProductionMonitoring"
+            url:"/404"
           },
           {
             icon:"iconfont icon-icon-life-alarm",
             label: '异常报警',
             id: "6",
-            url:"/ProductionMonitoring"
+            url:"/404"
           },
           {
             icon:"iconfont icon-daiji",
             label: '待料时间',
             id: "7",
-            url:"/ProductionMonitoring"
+            url:"/404"
           },
           {
             icon:"iconfont icon-shujutubiao11",
             label: '设备运行',
             id: "8",
-            url:"/ProductionMonitoring"
+            url:"/404"
           },
           {
             icon:"iconfont icon-baobiao",
@@ -84,7 +84,7 @@
             icon:"iconfont icon-jiankong",
             label: '监控信息',
             id: "10",
-            url:"/ProductionMonitoring"
+            url:"/404"
           },
           {
             icon:"iconfont icon-dianzikanban",
@@ -96,7 +96,7 @@
             icon:"iconfont icon-chaxun",
             label: '查询',
             id: "12",
-            url:"/ProductionMonitoring"
+            url:"/404"
           }
         ]
 

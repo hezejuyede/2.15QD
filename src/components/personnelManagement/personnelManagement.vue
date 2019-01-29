@@ -1,106 +1,168 @@
 <template>
-    <div class="PersonnelManagement">
-        <main ref="indexDiv" id="indexDiv">
-            <div class="indexDiv-top ">
-                <div class="indexDiv-top-left fl"></div>
-                <div class="indexDiv-top-center fl">人员管理</div>
-                <div class="indexDiv-top-right fl"></div>
-            </div>
-            <div class="indexDiv-bottom clearfix">
-                <div class="nav-div fl" v-for="(item,index) in navBarData"
-                     @click="goToNavBar(index,item.url)">
-                    <div class="indexDivText">
-                        <i :class=" item.icon"></i>
-                        <span>{{item.label}}</span>
-                    </div>
+    <div class="plannedProduction">
+        <div class="plannedProduction-nav">
+            <el-menu :default-active="activeIndex" class="el-menu-demo" mode="horizontal">
+                <div v-for="(item,index) in navBarData" :class="{'navDivColor':index === num}">
+                    <el-submenu :index="item.index">
+                        <template slot="title">{{item.label}}</template>
+                        <div class="" v-for="(item ,index) in item.children"
+                             @click=" handleSelect(item.index,item.url)">
+                            <el-menu-item :index="item.index">{{item.label}}</el-menu-item>
+                        </div>
+                    </el-submenu>
                 </div>
-            </div>
-        </main>
+            </el-menu>
+        </div>
+        <div class="plannedProduction-content">
+            <keep-alive>
+                <router-view></router-view>
+            </keep-alive>
+        </div>
     </div>
 </template>
 <script type="text/ecmascript-6">
 
+
     export default {
-        name: 'PersonnelManagement',
+        name: 'plannedProduction',
         data() {
             return {
+                num: 0,
                 navBarData: [
                     {
-                        icon: "iconfont icon-lurudingdan",
-                        label: '录入信息',
-                        id: "1",
-                        url: "/"
+                        label: '人员权限设置',
+                        index: "1",
+                        children: [
+                            {
+                                label: '定义权限类型',
+                                index: "1-1",
+                                url: "/404"
+                            },
+                            {
+                                label: '人员权限设置',
+                                index: "1-2",
+                                url: "/PersonnelSetting"
+                            }
+                        ]
                     },
                     {
-                        icon: "iconfont icon-zizhi",
-                        label: '资质管理',
-                        id: "2",
-                        url: "/ProductionScheduling"
+                        label: '上岗资质管理',
+                        index: "2",
+                        url: "/404",
+                        children: [
+                            {
+                                label: '人员资质设定',
+                                index: "2-1",
+                                url: "/404"
+                            },
+                            {
+                                label: "加工线内部误作",
+                                index: "2-2",
+                                url: "/404"
+                            }
+                        ]
                     },
                     {
-                        icon: "iconfont icon-banciguanli",
-                        label: '班次管理',
-                        id: "3",
-                        url: "/SecurityManagement"
+                        label: '人员绩效跟踪',
+                        index: "3",
+                        url: "/404",
+                        children: [
+                            {
+                                label: '人员工作记录查询',
+                                index: "3-1",
+                                url: "/404"
+                            },
+                            {
+                                label: '人员不良记录统计',
+                                index: "3-2",
+                                url: "/404"
+                            },
+                            {
+                                label: '人员作业效率跟踪',
+                                index: "3-3",
+                                url: "/404"
+                            }
+                        ]
                     },
                     {
-                        icon: "iconfont icon-anquanzuoye",
-                        label: '作业记录',
-                        id: "5",
-                        url: "/ProductionMonitoringStatistics"
+                        label: '人员报表',
+                        index: "4",
+                        url: "/404",
+                        children: [
+                            {
+                                label: '人员资质报表',
+                                index: "4-1",
+                                url: "/404"
+                            },
+                            {
+                                label: '人员上岗率报表',
+                                index: "4-2",
+                                url: "/404"
+                            },
+                            {
+                                label: '不良记录报表',
+                                index: "4-3",
+                                url: "/404"
+                            },
+                            {
+                                label: '人员效率报表',
+                                index: "4-4",
+                                url: "/404"
+                            },
+                            {
+                                label: '人员总体绩效评估报表',
+                                index: "4-5",
+                                url: "/404"
+                            }
+                        ]
                     },
                     {
-                        icon: "iconfont icon-jixiao",
-                        label: '绩效统计',
-                        id: "4",
-                        url: "/QualityAssurance"
-                    },
-
-                    {
-                        icon: "iconfont icon-caozuo",
-                        label: '操作统计',
-                        id: "6",
-                        url: "/PersonnelManagement"
-                    },
-                    {
-                        icon: "iconfont icon-buliangshijian",
-                        label: '不良记录',
-                        id: "7",
-                        url: "/SystemManagement"
-                    },
-                    {
-                        icon: "iconfont icon-chaxun",
-                        label: '查询',
-                        id: "8",
-                        url: "/"
+                        label: '人员监控',
+                        index: "5",
+                        url: "/404",
+                        children: [
+                            {
+                                label: '人员动态分布图',
+                                index: "5-1",
+                                url: "/404"
+                            }
+                        ]
                     }
-                ]
-
+                ],
+                activeIndex: '1',
             }
         },
         components: {},
         mounted() {
 
-
         },
+
         created() {
-
-
+            this.getAdminState()
         },
         methods: {
 
-
             //页面加载检查用户是否登陆，没有登陆就加载登陆页面
             getAdminState() {
-                const userInfo = sessionStorage.getItem("userInfo");
+                const userInfo = localStorage.getItem("userInfo");
                 if (userInfo === null) {
-
+                    this.$router.push("/")
                 }
                 else {
 
-
                 }
             },
+            //点击前往那个子组件
+            goToNavBar(index, url) {
+                this.$router.push(url);
+            },
+
+            //点击导航前往哪一个页面
+            handleSelect(index, url) {
+                let Num = parseInt(index.substr(0, 1));
+                this.num = Num - 1;
+                this.$router.push(url);
+            }
 
 
         }
@@ -108,122 +170,56 @@
 </script>
 <style scoped lang="less" rel="stylesheet/less">
     @import "../../assets/less/base";
-    .PersonnelManagement{
+
+    .plannedProduction {
         width: 100%;
         height: 100%;
         background-color: @color-white;
+        .plannedProduction-nav {
+            width: 100%;
+            height: 10%;
+            .el-menu-demo {
+                display: flex;
+                > div {
+                    flex: 1;
+                    text-align: center;
+                }
+                div:nth-child(3) {
+                    flex: 1.2;
+                    text-align: center;
+                }
+                div:nth-child(4) {
+                    flex: 1.2;
+                    text-align: center;
+                }
+
+            }
+
+        }
+        .plannedProduction-content{
+            margin-bottom: 50px;
+        }
+
     }
 
-    .indexDiv-top {
-        height: 50px;
-        margin-bottom: 20px;
-        .indexDiv-top-left {
-            height: 1px;
-            width: 5%;
-            margin-top: 25px;
-            background-color: #303133;
-        }
-        .indexDiv-top-center {
-            width: 10%;
-            margin-top: 15px;
-            text-align: center;
-        }
-        .indexDiv-top-right {
-            height: 1px;
-            width: 85%;
-            margin-top: 25px;
-            background-color: #303133;
-        }
+    .navDivColor {
+        background-color: @color-background-d;
     }
 
-    .indexDiv-bottom {
-        width: 70%;
-        margin-top: 20px;
-        .nav-div {
-            width: 15%;
-            margin-left: 6%;
-            height: 100px;
-            margin-bottom: 5%;
-            text-align: center;
-            cursor: pointer;
-            border:1px solid @color-background-dd;
-            box-shadow: 2px 2px 1px @color-background-dd;
-            border-radius: 10%;
-            .indexDivText {
-                margin-top: 20px;
-                width: 100%;
-                height: 60px;
-                line-height: 30px;
+    @media only screen and (max-width: 1200px) {
+        .plannedProduction {
+            width: 1200px;
+            .plannedProduction-nav {
+                width: 1200px;
             }
-            i {
-                display: block;
-                font-size: 200%;
-                margin-bottom: 5px;
+            .plannedProduction-content {
+                width: 1200px;
             }
-            span {
-                display: block;
-            }
-
-            .icon-lurudingdan {
-                display: block;
-                font-size: 400%;
-                margin-bottom: 20px;
-                color: #3EC455;
-
-            }
-            .icon-zizhi {
-                display: block;
-                font-size: 400%;
-                margin-bottom: 20px;
-                color: #d93f30;
-
-            }
-
-            .icon-banciguanli {
-                display: block;
-                font-size: 400%;
-                margin-bottom: 20px;
-                color: deeppink;
-
-            }
-            .icon-jixiao {
-                display: block;
-                font-size: 400%;
-                margin-bottom: 20px;
-                color: brown;
-
-            }
-            .icon-anquanzuoye {
-                display: block;
-                font-size: 400%;
-                margin-bottom: 20px;
-                color: blueviolet;
-            }
-            .icon-caozuo {
-                display: block;
-                font-size: 400%;
-                margin-bottom: 20px;
-                color: chocolate;
-
-            }
-            .icon-buliangshijian {
-                display: block;
-                font-size: 400%;
-                margin-bottom: 20px;
-                color: darkmagenta;
-
-            }
-            .icon-chaxun {
-                display: block;
-                font-size: 400%;
-                margin-bottom: 20px;
-                color: hotpink;
-
-            }
-
         }
+
     }
 
 
 </style>
+
 

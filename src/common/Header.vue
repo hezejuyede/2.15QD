@@ -38,7 +38,8 @@
     </div>
 </template>
 <script type="text/ecmascript-6">
-    import bus from './bus';
+    import bus from '../assets/js/bus';
+
 
     export default {
         data() {
@@ -51,15 +52,24 @@
         },
         computed: {
             username() {
-                let username = localStorage.getItem('ms_username');
-                return username ? username : this.name;
+                let info =localStorage.getItem('userInfo');
+                if(info !==null){
+                    let Info = JSON.parse(info);
+                    let username = Info.username;
+                    return username ? username : this.name;
+                }
+                else {
+                    this.$router.push("/login")
+
+                }
+
             }
         },
         methods: {
             // 用户名下拉菜单选择事件
             handleCommand(command) {
                 if (command == 'loginout') {
-                    localStorage.removeItem('ms_username')
+                    localStorage.removeItem('userInfo');
                     this.$router.push('/login');
                 }
             },
