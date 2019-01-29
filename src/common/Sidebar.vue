@@ -73,6 +73,11 @@
                         icon: 'el-icon-share',
                         index: 'SecurityManagement',
                         title: '看板管理'
+                    },
+                    {
+                        icon: 'el-icon-setting',
+                        index: 'SystemManagement',
+                        title: '系统管理'
                     }
                 ]
             }

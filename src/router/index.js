@@ -91,6 +91,8 @@ import ForReference from '../components/materialManagement/ForReference';
 
 
 
+//系统管理
+import OperationLog from '../components/systemManagement/operationLog';
 
 
 
@@ -211,9 +213,6 @@ export default new Router({
                     component: ForReference,
                     meta: {title: '为引当'}
                 },
-
-
-
                 {
                     path: '/ProductionMonitoring',
                     component: ProductionMonitoring,
@@ -246,7 +245,19 @@ export default new Router({
                 {
                     path: '/SystemManagement',
                     component: SystemManagement,
-                    meta: {title: '系统管理'}
+                    meta: {title: '系统管理'},
+                    children: [
+                        {
+                            path: '/OperationLog',
+                            component: OperationLog,
+                            meta: {title: '运行日志'}
+                        },
+                        {
+                            path: '/InformationImport',
+                            component: InformationImport,
+                            meta: {title: '信息导入'}
+                        }
+                    ]
                 },
                 {
                     path: '/SecurityManagement',

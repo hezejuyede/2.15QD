@@ -11,29 +11,24 @@
                 <div class="handle-box">
                     <el-input v-model="select_word" placeholder="筛选工序" class="handle-input mr10"></el-input>
                     <el-button type="primary" icon="delete" class="handle-del mr10" @click="addWorkStation">新增班次</el-button>
+                    <el-button type="danger" icon="delete" class="handle-del mr10" @click="deleteWorkStation">删除工序</el-button>
                 </div>
                 <div class="">
                     <el-table class="tb-edit"
                               :data="tables"
                               :header-cell-style="{background:'#f7f7f7',color:'rgba(0, 0, 0, 1)',fontSize:'14px'}"
                               border
+                              @select="selectList"
+                              @row-dblclick="editWorkStation"
                               highlight-current-row
                               style="width: 98%;margin: auto">
+                        <el-table-column
+                            type="selection"
+                            width="30">
+                        </el-table-column>
                         <template v-for="(col ,index) in cols">
                             <el-table-column align="center" :prop="col.prop" :label="col.label"></el-table-column>
                         </template>
-
-                        <el-table-column align="center" label="操作">
-                            <template slot-scope="scope">
-                                <el-button type="text" icon="el-icon-edit" @click="handleEdit(scope.$index, scope.row)">
-                                    编辑
-                                </el-button>
-                                <el-button type="text" icon="el-icon-delete" class="red"
-                                           @click="handleDelete(scope.$index, scope.row)">删除
-                                </el-button>
-                            </template>
-                        </el-table-column>
-
                     </el-table>
                 </div>
             </div>
@@ -89,11 +84,14 @@
             </span>
             </el-dialog>
         </div>
+        <Modal :msg="message"
+               :isHideModal="HideModal"></Modal>
     </div>
 </template>
 <script type="text/ecmascript-6">
     import axios from 'axios'
     import url from '../../assets/js/URL'
+    import Modal from '../../common/modal'
 
     export default {
         name: 'WorkingProcedure',
@@ -101,6 +99,10 @@
             return {
                 cols: [],
                 tableData: [],
+
+                message: '',
+                HideModal: true,
+                listData:[],
 
                 select_word: '',
 
@@ -128,7 +130,7 @@
                 return this.tableData
             }
         },
-        components: {},
+        components: {Modal},
         mounted() {
 
 
@@ -156,25 +158,65 @@
                         }));
                 }
             },
+            //选择那个一个
+            selectList(val) {
+                if (val.length) {
+                    let data = [];
+                    for (let i = 0; i < val.length; i++) {
+                        let a = val[i].id;
+                        data.push(a)
+                    }
+                    this.listData = data;
+                }
+                else {
+                    this.listData=[];
+                }
+            },
 
-            //行内点击编辑
-            handleEdit(index, row) {
-                this.idx = index;
-                const item = this.tableData[index];
-                this.form = {
-                    name: item.name,
-                    date: item.date,
-                    address: item.address
-                };
+
+            //双击点击行内编辑
+            editWorkStation(index, row) {
                 this.editVisible = true;
+                let id = this.listData[0];
+                this.id =id;
+                axios.post(" " + url + "/shengchan/getShengchanguanDetail", {"id": id})
+                    .then((res) => {
+                        let data = [];
+                        for (let i = 0; i < res.data.length; i++) {
+
+                            var list = {
+                                stationname: res.data[i].stationname,
+                                realetime: res.data[i].realetime,
+                                realbtime: res.data[i].realbtime,
+                                id:res.data[i].id
+                            };
+                            data.push(list);
+                        }
+                        this.routeData = data
+                    })
+                    .catch((err) => {
+                        console.log(err)
+                    });
             },
 
-            //行内点击删除
-            handleDelete(index, row) {
-                this.idx = index;
-                this.delVisible = true;
-            },
+            //选择点击删除
+            deleteWorkStation() {
+                if (this.listData.length) {
+                    this.delVisible = true;
+                }
+                else {
+                    this.message = "请勾选要删除的班次";
+                    this.HideModal = false;
+                    const that = this;
 
+                    function a() {
+                        that.message = "";
+                        that.HideModal = true;
+                    }
+
+                    setTimeout(a, 2000);
+                }
+            },
 
             // 保存编辑
             saveEdit() {

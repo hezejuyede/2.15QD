@@ -12,6 +12,7 @@
                     <el-input v-model="select_word" placeholder="筛选工艺路线" class="handle-input mr10"></el-input>
                     <button @click="addWorkStation">新增工艺路线</button>
                     <button @click="editYs" class="color">编辑约束条件</button>
+                    <button @click="deleteWorkStation" class="colorRed">删除工艺路线</button>
                 </div>
                 <div class="">
                     <el-table class="tb-edit"
@@ -20,7 +21,7 @@
                               border
                               highlight-current-row
                               @select='selectRow'
-
+                              @row-dblclick="editWorkStation"
                               style="width: 98%;margin: auto">
                         <el-table-column
                             type="selection"
@@ -62,20 +63,6 @@
                                 </el-steps>
                             </template>
                         </el-table-column>
-                        <el-table-column
-                            label="操作"
-                            align="center"
-                            min-width="10%">
-                            <template slot-scope="scope">
-                                <el-button type="text" icon="el-icon-edit" @click="handleEdit(scope.$index, scope.row)">
-                                    编辑
-                                </el-button>
-                                <el-button type="text" icon="el-icon-delete" class="red"
-                                           @click="handleDelete(scope.$index, scope.row)">删除
-                                </el-button>
-                            </template>
-                        </el-table-column>
-
                     </el-table>
                 </div>
             </div>
@@ -164,7 +151,7 @@
                 </div>
             </el-dialog>
             <!-- 编辑弹出框 -->
-            <el-dialog title="编辑工序" :visible.sync="editVisible" width="60%">
+            <el-dialog title="编辑工艺路线" :visible.sync="editVisible" width="60%">
                 <el-form ref="form" label-width="100px">
                     <el-form-item label="工艺路线名称">
                         <el-input v-model="name"></el-input>
@@ -176,7 +163,7 @@
             </span>
             </el-dialog>
             <!-- 删除提示框 -->
-            <el-dialog title="删除工序" :visible.sync="delVisible" width="300px" center>
+            <el-dialog title="删除工艺路线" :visible.sync="delVisible" width="300px" center>
                 <div class="del-dialog-cnt">删除不可恢复，是否确定删除？</div>
                 <span slot="footer" class="dialog-footer">
                 <el-button @click="delVisible = false" style="height:30px;width:80px">取 消</el-button>
@@ -184,19 +171,27 @@
             </span>
             </el-dialog>
         </div>
+        <Modal :msg="message"
+               :isHideModal="HideModal"></Modal>
     </div>
 </template>
 <script type="text/ecmascript-6">
     import axios from 'axios'
     import url from '../../assets/js/URL'
+    import Modal from '../../common/modal'
 
     export default {
         name: 'WorkingProcedure',
         data() {
             return {
+                message: '',
+                HideModal: true,
+
+
                 cols: [],
                 tableData: [],
                 tjID: "",
+
 
 
                 s: 1,
@@ -214,7 +209,7 @@
                 xq: [],
 
                 /*  gwTypeOptions:[],*/
-
+                listData:[],
 
                 dynamicValidateForm: {
                     domains: [{
@@ -243,7 +238,7 @@
                 return this.tableData
             }
         },
-        components: {},
+        components: {Modal},
         mounted() {
 
 
@@ -264,30 +259,51 @@
                         .then((res) => {
                             this.tableData = res.data
                         });
-                    /*   axios.post(" " + url + "/api/getProcessList.html") .then((res)=>{
-                           this.gwTypeOptions = res.data;
-                       });*/
-
-
                 }
             },
 
             //行内点击编辑
-            handleEdit(index, row) {
-                this.idx = index;
-                const item = this.tableData[index];
-                this.form = {
-                    name: item.name,
-                    date: item.date,
-                    address: item.address
-                };
+            editWorkStation(index, row) {
                 this.editVisible = true;
+                let id = this.listData[0];
+                this.id = id;
+                axios.post(" " + url + "/shengchan/getShengchanguanDetail", {"id": id})
+                    .then((res) => {
+                        let data = [];
+                        for (let i = 0; i < res.data.length; i++) {
+
+                            var list = {
+                                stationname: res.data[i].stationname,
+                                realetime: res.data[i].realetime,
+                                realbtime: res.data[i].realbtime,
+                                id: res.data[i].id
+                            };
+                            data.push(list);
+                        }
+                        this.routeData = data
+                    })
+                    .catch((err) => {
+                        console.log(err)
+                    });
             },
 
             //行内点击删除
-            handleDelete(index, row) {
-                this.idx = index;
-                this.delVisible = true;
+            deleteWorkStation() {
+                if (this.listData.length) {
+                    this.delVisible = true;
+                }
+                else {
+                    this.message = "请选择要删除的工艺路线";
+                    this.HideModal = false;
+                    const that = this;
+
+                    function a() {
+                        that.message = "";
+                        that.HideModal = true;
+                    }
+
+                    setTimeout(a, 2000);
+                }
             },
 
             // 保存编辑
@@ -304,11 +320,34 @@
             },
             //编辑约束条件
             editYs() {
-                if (this.tjID) {
-                    this.editYsVisible = true;
+                if (this.listData.length) {
+                    if (this.listData.length > 1) {
+                        this.message = "只能选择一个";
+                        this.HideModal = false;
+                        const that = this;
+
+                        function a() {
+                            that.message = "";
+                            that.HideModal = true;
+                        }
+
+                        setTimeout(a, 2000);
+                    }
+                    else {
+                        this.editYsVisible = true;
+                    }
                 }
                 else {
-                    this.$message.warning(`请选择工序`);
+                    this.message = "请选择要删除的工艺路线";
+                    this.HideModal = false;
+                    const that = this;
+
+                    function a() {
+                        that.message = "";
+                        that.HideModal = true;
+                    }
+
+                    setTimeout(a, 2000);
                 }
             },
 
@@ -346,8 +385,17 @@
 
             // 获取表格选中时的数据
             selectRow(val) {
-                this.tjID = val[0].id
-
+                if (val.length) {
+                    let data = [];
+                    for (let i = 0; i < val.length; i++) {
+                        let a = val[i].id;
+                        data.push(a)
+                    }
+                    this.listData = data;
+                }
+                else {
+                    this.listData = [];
+                }
             },
             // 增加行
             addRow() {
@@ -378,8 +426,9 @@
             },
 
             submitYS() {
-                if (this.tjID) {
-                    axios.post(" " + url + "/condition/conditionSave", {"id": this.tjID, "name": this.tableData1})
+                if (this.listData.length) {
+                    let id =this.listData[0];
+                    axios.post(" " + url + "/condition/conditionSave", {"id": id, "name": this.tableData1})
                         .then((res) => {
                             if (res.data === "1") {
                                 this.$message.success(`新增成功`);
@@ -455,6 +504,9 @@
                 }
                 .color {
                     background-color: @color-bg-lv;
+                }
+                .colorRed{
+                    background-color: @color-bg-red;
                 }
             }
             .del-dialog-cnt {

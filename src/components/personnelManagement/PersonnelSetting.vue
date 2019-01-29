@@ -10,95 +10,94 @@
             <div class="container">
                 <div class="handle-box">
                     <el-input v-model="select_word" placeholder="筛选工序" class="handle-input mr10"></el-input>
-                    <el-button type="primary" icon="delete" class="handle-del mr10" @click="addWorkStation">新增班次
-                    </el-button>
+                    <el-button type="primary" icon="delete" class="handle-del mr10" @click="showAddPerson">新增人员</el-button>
+                    <el-button type="danger" icon="delete" class="handle-del mr10" @click="deletePerson">删除人员</el-button>
                 </div>
                 <div class="">
                     <el-table class="tb-edit"
                               :data="tables"
                               :header-cell-style="{background:'#f7f7f7',color:'rgba(0, 0, 0, 1)',fontSize:'14px'}"
                               border
+                              @select="selectList"
+                              @row-dblclick="editPerson"
                               highlight-current-row
                               style="width: 98%;margin: auto">
+                        <el-table-column
+                            type="selection"
+                            width="30">
+                        </el-table-column>
                         <template v-for="(col ,index) in cols">
                             <el-table-column align="center" :prop="col.prop" :label="col.label"></el-table-column>
                         </template>
-
-                        <el-table-column align="center" label="操作">
-                            <template slot-scope="scope">
-                                <el-button type="text" icon="el-icon-edit" @click="handleEdit(scope.$index, scope.row)">
-                                    编辑
-                                </el-button>
-                                <el-button type="text" icon="el-icon-delete" class="red"
-                                           @click="handleDelete(scope.$index, scope.row)">删除
-                                </el-button>
-                            </template>
-                        </el-table-column>
-
                     </el-table>
                 </div>
             </div>
-            <!--新增弹出框 -->
-            <el-dialog title="新增班次" :visible.sync="addVisible" width="60%">
-                <el-form ref="form" :model="form" label-width="100px">
-                    <el-form-item label="序号">
-                        <el-input v-model="form.name"></el-input>
-                    </el-form-item>
-                    <el-form-item label="登陆名">
-                        <el-input v-model="form.address"></el-input>
-                    </el-form-item>
-                    <el-form-item label="工位">
-                        <el-input v-model="form.name"></el-input>
-                    </el-form-item>
-                    <el-form-item label="显示名">
-                        <el-input v-model="form.address"></el-input>
-                    </el-form-item>
-                </el-form>
-                <span slot="footer" class="dialog-footer">
+
+        </div>
+        <!--新增弹出框 -->
+        <el-dialog title="新增人员" :visible.sync="addVisible" width="60%">
+            <el-form ref="form" label-width="100px">
+                <el-form-item label="登陆名">
+                    <el-input v-model="name"></el-input>
+                </el-form-item>
+                <el-form-item label="密码">
+                    <el-input v-model="pwd"></el-input>
+                </el-form-item>
+                <el-form-item label="显示名">
+                    <el-input v-model="showname"></el-input>
+                </el-form-item>
+                <el-form-item label="工号">
+                    <el-input v-model="code"></el-input>
+                </el-form-item>
+            </el-form>
+            <span slot="footer" class="dialog-footer">
                 <el-button @click="addVisible = false" style="height:30px;width:80px">取 消</el-button>
-                <el-button type="primary" @click="saveEdit" style="height:30px;width:80px">确 定</el-button>
+                <el-button type="primary" @click="doAddPerson" style="height:30px;width:80px">确 定</el-button>
             </span>
-            </el-dialog>
-            <!-- 编辑弹出框 -->
-            <el-dialog title="编辑班次" :visible.sync="editVisible" width="60%">
-                <el-form ref="form" :model="form" label-width="100px">
-                    <el-form-item label="序号">
-                        <el-input v-model="form.name"></el-input>
-                    </el-form-item>
-                    <el-form-item label="登陆名">
-                        <el-input v-model="form.address"></el-input>
-                    </el-form-item>
-                    <el-form-item label="工位">
-                        <el-input v-model="form.name"></el-input>
-                    </el-form-item>
-                    <el-form-item label="显示名">
-                        <el-input v-model="form.address"></el-input>
-                    </el-form-item>
-                </el-form>
-                <span slot="footer" class="dialog-footer">
+        </el-dialog>
+        <!-- 编辑弹出框 -->
+        <el-dialog title="编辑人员" :visible.sync="editVisible" width="60%">
+            <el-form ref="form" label-width="100px">
+                <el-form-item label="登陆名">
+                    <el-input v-model="name"  :disabled="true"></el-input>
+                </el-form-item>
+                <el-form-item label="显示名">
+                    <el-input v-model="showname"></el-input>
+                </el-form-item>
+                <el-form-item label="工号">
+                    <el-input v-model="code"></el-input>
+                </el-form-item>
+            </el-form>
+            <span slot="footer" class="dialog-footer">
                 <el-button @click="editVisible = false" style="height:30px;width:80px">取 消</el-button>
                 <el-button type="primary" @click="saveEdit" style="height:30px;width:80px">确 定</el-button>
             </span>
-            </el-dialog>
-            <!-- 删除提示框 -->
-            <el-dialog title="删除班次" :visible.sync="delVisible" width="300px" center>
-                <div class="del-dialog-cnt">删除不可恢复，是否确定删除？</div>
-                <span slot="footer" class="dialog-footer">
+        </el-dialog>
+        <!-- 删除提示框 -->
+        <el-dialog title="删除人员" :visible.sync="delVisible" width="300px" center>
+            <div class="del-dialog-cnt">删除不可恢复，是否确定删除？</div>
+            <span slot="footer" class="dialog-footer">
                 <el-button @click="delVisible = false" style="height:30px;width:80px">取 消</el-button>
                 <el-button type="primary" @click="deleteRow" style="height:30px;width:80px">确 定</el-button>
             </span>
-            </el-dialog>
-        </div>
+        </el-dialog>
+        <Modal :msg="message"
+               :isHideModal="HideModal"></Modal>
     </div>
 </template>
 <script type="text/ecmascript-6">
     import axios from 'axios'
     import url from '../../assets/js/URL'
-
+    import Modal from '../../common/modal'
     export default {
         name: 'WorkingProcedure',
         data() {
             return {
+                message: '',
+                HideModal: true,
+                listData: [],
+
+
                 cols: [],
                 tableData: [],
 
@@ -107,11 +106,13 @@
                 addVisible: false,
                 editVisible: false,
                 delVisible: false,
-                form: {
-                    name: '',
-                    date: '',
-                    address: ''
-                }
+
+                id:"",
+                name: '',
+                pwd: '',
+                showname: '',
+                code: ""
+
             }
         },
         computed: {
@@ -128,7 +129,7 @@
                 return this.tableData
             }
         },
-        components: {},
+        components: {Modal},
         mounted() {
 
 
@@ -156,44 +157,141 @@
                         }));
                 }
             },
-
-            //行内点击编辑
-            handleEdit(index, row) {
-                this.idx = index;
-                const item = this.tableData[index];
-                this.form = {
-                    name: item.name,
-                    date: item.date,
-                    address: item.address
-                };
+            //选择那个一个
+            selectList(val) {
+                if (val.length) {
+                    let data = [];
+                    for (let i = 0; i < val.length; i++) {
+                        let a = val[i].id;
+                        data.push(a)
+                    }
+                    this.listData = data;
+                }
+                else {
+                    this.listData = [];
+                }
+            },
+            //双击点击行内编辑
+            editPerson(row, column, cell, event) {
                 this.editVisible = true;
+                this.id = row.id;
+                axios.post(" " + url + "/sysconfig/personDetail", {"id": this.id})
+                    .then((res) => {
+                        this.name = res.data.name;
+                        this.pwd = res.data.pwd;
+                        this.showname = res.data.showname;
+                        this.code = res.data.code;
+                    })
+                    .catch((err) => {
+                        console.log(err)
+                    });
             },
+            //选择点击删除
+            deletePerson() {
+                if (this.listData.length) {
+                    this.delVisible = true;
+                }
+                else {
+                    this.message = "请勾选要删除的人员";
+                    this.HideModal = false;
+                    const that = this;
 
-            //行内点击删除
-            handleDelete(index, row) {
-                this.idx = index;
-                this.delVisible = true;
+                    function a() {
+                        that.message = "";
+                        that.HideModal = true;
+                    }
+
+                    setTimeout(a, 2000);
+                }
             },
-
-
             // 保存编辑
             saveEdit() {
-                this.$set(this.tableData, this.idx, this.form);
-                this.editVisible = false;
-                this.$message.success(`修改第 ${this.idx + 1} 行成功`);
+                if (this.showname && this.code) {
+                    axios.post(" " + url + "/sysconfig/updatePerson",
+                        {
+                            "id": this.id,
+                            "showname": this.showname,
+                            "code": this.code
+                        }
+                    )
+                        .then((res) => {
+                            if (res.data === "1") {
+                                this.$message.success(`修改第 ${this.idx + 1} 行成功`);
+                                this.$set(this.tableData, this.idx, this.form);
+                                this.editVisible = false;
+                            }
+                            else {
+                                this.$message.warning(`删除成功`);
+                            }
+                        })
+                        .catch((err) => {
+                            console.log(err)
+                        })
+                }
+                else {
+                    this.$message.warning(`输入不能为空`);
+                }
+
             },
             // 确定删除
             deleteRow() {
-                this.tableData.splice(this.idx, 1);
-                this.$message.success('删除成功');
-                this.delVisible = false;
+                axios.post(" " + url + "/sysconfig/updatePerson",
+                    {
+                        "ids": this.listData,
+                    }
+                )
+                    .then((res) => {
+                        if (res.data === "1") {
+                            this.tableData.splice(this.idx, 1);
+                            this.$message.success('删除成功');
+                            this.delVisible = false;
+                        }
+                        else {
+                            this.$message.warning(`删除成功`);
+                        }
+                    })
+                    .catch((err) => {
+                        console.log(err)
+                    })
             },
 
-            //新增工序
-            addWorkStation() {
+            //显示新增人员
+            showAddPerson() {
                 this.addVisible = true;
-
+            },
+            //新增人员
+            doAddPerson() {
+                if (this.name && this.pwd && this.showname && this.code) {
+                    axios.post(" " + url + "/sysconfig/userAdd",
+                        {
+                            "name": this.name,
+                            "pwd": this.pwd,
+                            "showname": this.showname,
+                            "code": this.code
+                        }
+                    )
+                        .then((res) => {
+                            if (res.data === "1") {
+                                this.$message.success(`新增成功`);
+                                this.$set(this.tableData, this.idx, this.form);
+                                this.editVisible = false;
+                                this.$router.go(0)
+                            }
+                            else {
+                                this.$message.warning(`新增失败`);
+                            }
+                        })
+                        .catch((err) => {
+                            console.log(err)
+                        })
+                }
+                else {
+                    this.$message.warning(`输入不能为空`);
+                }
             }
+
+
+
         }
     }
 </script>

@@ -11,33 +11,27 @@
                 <div class="handle-box">
                     <el-input v-model="select_word" placeholder="筛选工序" class="handle-input mr10"></el-input>
                     <el-button type="primary" icon="delete" class="handle-del mr10" @click="addWorkStation">新增工序</el-button>
+                    <el-button type="danger" icon="delete" class="handle-del mr10" @click="deleteWorkStation">删除工序</el-button>
                 </div>
                 <div class="">
                     <el-table class="tb-edit"
                               :data="tables"
                               :header-cell-style="{background:'#f7f7f7',color:'rgba(0, 0, 0, 1)',fontSize:'14px'}"
                               border
+                              @select="selectList"
+                              @row-dblclick="editWorkStation"
                               highlight-current-row
                               style="width: 98%;margin: auto">
+                        <el-table-column
+                            type="selection"
+                            width="30">
+                        </el-table-column>
                         <template v-for="(col ,index) in cols">
                             <el-table-column align="center" :prop="col.prop" :label="col.label"></el-table-column>
                         </template>
-
-                        <el-table-column align="center" label="操作">
-                            <template slot-scope="scope">
-                                <el-button type="text" icon="el-icon-edit" @click="handleEdit(scope.$index, scope.row)">
-                                    编辑
-                                </el-button>
-                                <el-button type="text" icon="el-icon-delete" class="red"
-                                           @click="handleDelete(scope.$index, scope.row)">删除
-                                </el-button>
-                            </template>
-                        </el-table-column>
-
                     </el-table>
                 </div>
             </div>
-
             <!--新增弹出框 -->
             <el-dialog title="新增工序" :visible.sync="addVisible" width="60%">
                 <el-form ref="form" :model="form" label-width="100px">
@@ -59,7 +53,6 @@
                     <el-form-item label="所属生产线">
                         <el-input v-model="form.address"></el-input>
                     </el-form-item>
-
                 </el-form>
                 <span slot="footer" class="dialog-footer">
                 <el-button @click="addVisible = false" style="height:30px;width:80px">取 消</el-button>
@@ -101,17 +94,26 @@
                 <el-button type="primary" @click="deleteRow" style="height:30px;width:80px">确 定</el-button>
             </span>
             </el-dialog>
+
+            <Modal :msg="message"
+                   :isHideModal="HideModal"></Modal>
         </div>
     </div>
 </template>
 <script type="text/ecmascript-6">
     import axios from 'axios'
     import url from '../../assets/js/URL'
+    import Modal from '../../common/modal'
 
     export default {
         name: 'WorkingProcedure',
         data() {
             return {
+                message: '',
+                HideModal: true,
+                listData:[],
+
+
                 cols: [],
                 tableData: [],
 
@@ -120,6 +122,7 @@
                 addVisible: false,
                 editVisible: false,
                 delVisible: false,
+
                 form: {
                     name: '',
                     date: '',
@@ -142,7 +145,7 @@
                 return this.tableData
             }
         },
-        components: {},
+        components: {Modal},
         mounted() {
 
 
@@ -171,22 +174,64 @@
                 }
             },
 
-            //行内点击编辑
-            handleEdit(index, row) {
-                this.idx = index;
-                const item = this.tableData[index];
-                this.form = {
-                    name: item.name,
-                    date: item.date,
-                    address: item.address
-                };
-                this.editVisible = true;
+            //选择那个一个
+            selectList(val) {
+                if (val.length) {
+                    let data = [];
+                    for (let i = 0; i < val.length; i++) {
+                        let a = val[i].id;
+                        data.push(a)
+                    }
+                    this.listData = data;
+                }
+                else {
+                    this.listData=[];
+                }
             },
 
-            //行内点击删除
-            handleDelete(index, row) {
-                this.idx = index;
-                this.delVisible = true;
+
+            //双击点击行内编辑
+            editWorkStation(index, row) {
+                this.editVisible = true;
+                let id = this.listData[0];
+                this.id =id;
+                axios.post(" " + url + "/shengchan/getShengchanguanDetail", {"id": id})
+                    .then((res) => {
+                        let data = [];
+                        for (let i = 0; i < res.data.length; i++) {
+
+                            var list = {
+                                stationname: res.data[i].stationname,
+                                realetime: res.data[i].realetime,
+                                realbtime: res.data[i].realbtime,
+                                id:res.data[i].id
+                            };
+                            data.push(list);
+                        }
+                        this.routeData = data
+                    })
+                    .catch((err) => {
+                        console.log(err)
+                    });
+            },
+
+            //选择点击删除
+            deleteWorkStation() {
+                if (this.listData.length) {
+                    this.delVisible = true;
+                }
+                else {
+                    this.message = "请勾选要删除的工序";
+                    this.HideModal = false;
+                    const that = this;
+
+                    function a() {
+                        that.message = "";
+                        that.HideModal = true;
+                    }
+
+                    setTimeout(a, 2000);
+                }
             },
 
 

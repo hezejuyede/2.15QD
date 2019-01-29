@@ -1,19 +1,21 @@
 <template>
-    <div class="systemManagement">
-        <div ref="indexDiv" id="indexDiv">
-            <div class="indexDiv-top ">
-                <div class="indexDiv-top-left fl"></div>
-                <div class="indexDiv-top-center fl">系统管理</div>
-                <div class="indexDiv-top-right fl"></div>
-            </div>
-            <div class="indexDiv-bottom clearfix">
-                <div class="nav-div fl" v-for="(item,index) in navBarData" @click="goToNavBar(index,item.url)">
-                    <div class="indexDivText">
-                        <i :class=" item.icon"></i>
-                        <span>{{item.label}}</span>
-                    </div>
+    <div class="plannedProduction">
+        <div class="plannedProduction-nav">
+            <el-menu :default-active="activeIndex" class="el-menu-demo" mode="horizontal">
+                <div  v-for="(item,index) in navBarData"  :class="{'navDivColor':index === num}">
+                    <el-submenu :index="item.index">
+                        <template slot="title">{{item.label}}</template>
+                        <div class="" v-for="(item ,index) in item.children" @click=" handleSelect(item.index,item.url)">
+                            <el-menu-item :index="item.index">{{item.label}}</el-menu-item>
+                        </div>
+                    </el-submenu>
                 </div>
-            </div>
+            </el-menu>
+        </div>
+        <div class="plannedProduction-content">
+            <keep-alive>
+                <router-view></router-view>
+            </keep-alive>
         </div>
     </div>
 </template>
@@ -21,47 +23,58 @@
 
 
     export default {
-        name: 'systemManagement',
+        name: 'plannedProduction',
         data() {
             return {
-
+                num:0,
                 navBarData: [
                     {
-                        icon: "iconfont icon-quanxian",
-                        label: '权限管理',
-                        id: "1",
-                        url: "/404"
-                    },
-                    {
-                        icon: "iconfont icon-note",
                         label: '日志管理',
-                        id: "2",
-                        url: "/404"
+                        index: "1",
+                        children: [
+                            {
+                                label: '运行日志',
+                                index: "1-1",
+                                url: "/OperationLog"
+                            },
+                            {
+                                label: '系统登录退出日志',
+                                index: "1-2",
+                                url: "/"
+                            }
+                        ]
                     },
                     {
-                        icon: "iconfont icon-jiekou",
-                        label: '系统接口',
-                        id: "3",
-                        url: "/404"
+                        label: '系统配置',
+                        index: "2",
+                        children: [
+                            {
+                                label: '字典管理',
+                                index: "2-1",
+                                url: "/"
+                            },
+                            {
+                                label: '表头维护',
+                                index: "2-2",
+                                url: "/"
+                            }
+                        ]
                     },
                     {
-                        icon: "iconfont icon-chaxun",
-                        label: '查询',
-                        id: "4",
-                        url: "/404"
-                    }
-                ]
-
+                        label: '接口管理',
+                        index: "3"
+                    },
+                ],
+                activeIndex: '1',
             }
         },
         components: {},
         mounted() {
 
-
         },
+
         created() {
-
-
+            this.getAdminState()
         },
         methods: {
 
@@ -76,6 +89,17 @@
 
                 }
             },
+            //点击前往那个子组件
+            goToNavBar(index, url) {
+                this.$router.push(url);
+            },
+
+            //点击导航前往哪一个页面
+            handleSelect(index, url) {
+                let Num = parseInt(index.substr(0,1));
+                this.num = Num-1;
+                this.$router.push(url);
+            }
 
 
         }
@@ -84,88 +108,49 @@
 <style scoped lang="less" rel="stylesheet/less">
     @import "../../assets/less/base";
 
-    .systemManagement {
+    .plannedProduction {
         width: 100%;
         height: 100%;
         background-color: @color-white;
+        .plannedProduction-nav {
+            width: 100%;
+            height: 10%;
+            .el-menu-demo {
+                display: flex;
+                > div {
+                    flex: 1;
+                    text-align: center;
+
+                }
+
+
+            }
+
+        }
+        .plannedProduction-content{
+            margin-bottom: 50px;
+        }
+
     }
 
-    .indexDiv-top {
-        height: 20px;
-        margin-bottom:50px;
-        .indexDiv-top-left {
-            height: 1px;
-            width: 5%;
-            margin-top: 25px;
-            background-color: #303133;
-        }
-        .indexDiv-top-center {
-            width: 10%;
-            margin-top: 15px;
-            text-align: center;
-        }
-        .indexDiv-top-right {
-            height: 1px;
-            width: 85%;
-            margin-top: 25px;
-            background-color: #303133;
-        }
+
+    .navDivColor {
+        background-color: @color-background-d;
     }
 
-    .indexDiv-bottom {
-        width: 70%;
-        margin-top: 20px;
-        .nav-div {
-            width: 15%;
-            margin-left: 6%;
-            height: 100px;
-            margin-bottom: 5%;
-            text-align: center;
-            cursor: pointer;
-            border: 1px solid @color-background-dd;
-            box-shadow: 2px 2px 1px @color-background-dd;
-            border-radius: 10%;
-            .indexDivText {
-                margin-top: 20px;
-                width: 100%;
-                height: 60px;
-                line-height: 30px;
+    @media only screen and (max-width: 1200px) {
+        .plannedProduction {
+            width: 1200px;
+            .plannedProduction-nav{
+                width: 1200px;
             }
-            i {
-                display: block;
-                font-size: 200%;
-                margin-bottom: 5px;
-            }
-            span {
-                display: block;
-            }
-            .icon-quanxian {
-                display: block;
-                font-size: 400%;
-                margin-bottom: 20px;
-                color: #ffcd32;
-
-            }
-            .icon-note {
-                display: block;
-                font-size: 400%;
-                margin-bottom: 20px;
-                color: #3EC455;
-
-            }
-            .icon-jiekou {
-                display: block;
-                font-size: 400%;
-                margin-bottom: 20px;
-                color: deeppink;
-
-            }
-            .icon-chaxun {
-                display: block;
-                font-size: 400%;
-                margin-bottom: 20px;
-                color: hotpink;
+            .plannedProduction-content{
+                width: 1200px;
             }
         }
+
     }
+
+
 </style>
+
