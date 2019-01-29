@@ -216,9 +216,9 @@
                     )
                         .then((res) => {
                             if (res.data === "1") {
-                                this.$message.success(`修改第 ${this.idx + 1} 行成功`);
-                                this.$set(this.tableData, this.idx, this.form);
+                                this.$message.success(`修改成功`);
                                 this.editVisible = false;
+                                this.$router.go(0)
                             }
                             else {
                                 this.$message.warning(`删除成功`);
@@ -235,19 +235,19 @@
             },
             // 确定删除
             deleteRow() {
-                axios.post(" " + url + "/sysconfig/updatePerson",
+                axios.post(" " + url + "/sysconfig/delPerson",
                     {
                         "ids": this.listData,
                     }
                 )
                     .then((res) => {
                         if (res.data === "1") {
-                            this.tableData.splice(this.idx, 1);
                             this.$message.success('删除成功');
                             this.delVisible = false;
+                            this.$router.go(0)
                         }
                         else {
-                            this.$message.warning(`删除成功`);
+                            this.$message.warning(`删除失败`);
                         }
                     })
                     .catch((err) => {
@@ -273,7 +273,6 @@
                         .then((res) => {
                             if (res.data === "1") {
                                 this.$message.success(`新增成功`);
-                                this.$set(this.tableData, this.idx, this.form);
                                 this.editVisible = false;
                                 this.$router.go(0)
                             }

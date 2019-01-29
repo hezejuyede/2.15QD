@@ -34,51 +34,47 @@
             </div>
             <!--新增弹出框 -->
             <el-dialog title="新增工序" :visible.sync="addVisible" width="60%">
-                <el-form ref="form" :model="form" label-width="100px">
-                    <el-form-item label="序号">
-                        <el-input v-model="form.name"></el-input>
-                    </el-form-item>
+                <el-form ref="form"  label-width="100px">
+
                     <el-form-item label="工序名称">
-                        <el-input v-model="form.address"></el-input>
+                        <el-input v-model="name"></el-input>
                     </el-form-item>
                     <el-form-item label="工序代码">
-                        <el-input v-model="form.name"></el-input>
+                        <el-input v-model="code"></el-input>
                     </el-form-item>
                     <el-form-item label="工序内容">
-                        <el-input v-model="form.address"></el-input>
+                        <el-input v-model="context"></el-input>
                     </el-form-item>
                     <el-form-item label="饱和人数">
-                        <el-input v-model="form.name"></el-input>
+                        <el-input v-model="personnum"></el-input>
                     </el-form-item>
                     <el-form-item label="所属生产线">
-                        <el-input v-model="form.address"></el-input>
+                        <el-input v-model="line"></el-input>
                     </el-form-item>
                 </el-form>
                 <span slot="footer" class="dialog-footer">
                 <el-button @click="addVisible = false" style="height:30px;width:80px">取 消</el-button>
-                <el-button type="primary" @click="saveEdit" style="height:30px;width:80px">确 定</el-button>
+                <el-button type="primary" @click="doAddWorkStation" style="height:30px;width:80px">确 定</el-button>
             </span>
             </el-dialog>
             <!-- 编辑弹出框 -->
             <el-dialog title="编辑工序" :visible.sync="editVisible" width="60%">
-                <el-form ref="form" :model="form" label-width="100px">
-                    <el-form-item label="序号">
-                        <el-input v-model="form.name"></el-input>
-                    </el-form-item>
+                <el-form ref="form"  label-width="100px">
+
                     <el-form-item label="工序名称">
-                        <el-input v-model="form.address"></el-input>
+                        <el-input v-model="name"></el-input>
                     </el-form-item>
                     <el-form-item label="工序代码">
-                        <el-input v-model="form.name"></el-input>
+                        <el-input v-model="code"></el-input>
                     </el-form-item>
                     <el-form-item label="工序内容">
-                        <el-input v-model="form.jiagongnengli"></el-input>
+                        <el-input v-model="context"></el-input>
                     </el-form-item>
                     <el-form-item label="饱和人数">
-                        <el-input v-model="form.name"></el-input>
+                        <el-input v-model="personnum"></el-input>
                     </el-form-item>
                     <el-form-item label="所属生产线">
-                        <el-input v-model="form.address"></el-input>
+                        <el-input v-model="line"></el-input>
                     </el-form-item>
                 </el-form>
                 <span slot="footer" class="dialog-footer">
@@ -123,12 +119,13 @@
                 editVisible: false,
                 delVisible: false,
 
-                form: {
-                    name: '',
-                    date: '',
-                    jiagongnengli:"",
-                    address: ''
-                }
+                id: "",
+                code: "",
+                name: '',
+                context: '',
+                personnum: "",
+                line: ''
+
             }
         },
         computed: {
@@ -191,24 +188,16 @@
 
 
             //双击点击行内编辑
-            editWorkStation(index, row) {
+            editWorkStation(row, column, cell, event) {
                 this.editVisible = true;
-                let id = this.listData[0];
-                this.id =id;
-                axios.post(" " + url + "/shengchan/getShengchanguanDetail", {"id": id})
+                this.id = row.id;
+                axios.post(" " + url + "/sysconfig/gongxuDetail", {"id": this.id})
                     .then((res) => {
-                        let data = [];
-                        for (let i = 0; i < res.data.length; i++) {
-
-                            var list = {
-                                stationname: res.data[i].stationname,
-                                realetime: res.data[i].realetime,
-                                realbtime: res.data[i].realbtime,
-                                id:res.data[i].id
-                            };
-                            data.push(list);
-                        }
-                        this.routeData = data
+                        this.name = res.data.name;
+                        this.context = res.data.context;
+                        this.personnum = res.data.personnum;
+                        this.line = res.data.line;
+                        this.code = res.data.code;
                     })
                     .catch((err) => {
                         console.log(err)
@@ -237,21 +226,92 @@
 
             // 保存编辑
             saveEdit() {
-                this.$set(this.tableData, this.idx, this.form);
-                this.editVisible = false;
-                this.$message.success(`修改第 ${this.idx + 1} 行成功`);
+                if (this.name && this.code && this.context &&this.personnum&&this.line) {
+                    axios.post(" " + url + "/sysconfig/gongxuUpdate",
+                        {
+                            "id":this.id,
+                            "name": this.name,
+                            "code": this.code,
+                            "context": this.context,
+                            "personnum": this.personnum,
+                            "line": this.line
+                        }
+                    )
+                        .then((res) => {
+                            if (res.data == "1") {
+                                this.editVisible = false;
+                                this.$message.success(`修改成功`);
+                                this.$router.go(0)
+                            }
+                            else {
+                                this.$message.warning(`新增失败`);
+                            }
+                        })
+                        .catch((err) => {
+                            console.log(err)
+                        })
+                }
+                else {
+                    this.$message.warning(`输入不能为空`);
+                }
+
             },
             // 确定删除
             deleteRow() {
-                this.tableData.splice(this.idx, 1);
-                this.$message.success('删除成功');
-                this.delVisible = false;
+                axios.post(" " + url + "/sysconfig/gongxuDel",
+                    {
+                        "ids": this.listData,
+                    }
+                )
+                    .then((res) => {
+                        if (res.data === "1") {
+                            this.$message.success('删除成功');
+                            this.delVisible = false;
+                            this.$router.go(0)
+                        }
+                        else {
+                            this.$message.warning(`删除失败`);
+                        }
+                    })
+                    .catch((err) => {
+                        console.log(err)
+                    })
             },
 
             //新增工序
             addWorkStation(){
                 this.addVisible =true;
+            },
 
+            //新增人员
+            doAddWorkStation() {
+                if (this.name && this.code && this.context &&this.personnum&&this.line) {
+                    axios.post(" " + url + "/sysconfig/gongxuAdd",
+                        {
+                            "name": this.name,
+                            "code": this.code,
+                            "context": this.context,
+                            "personnum": this.personnum,
+                            "line": this.line
+                        }
+                    )
+                        .then((res) => {
+                            if (res.data === "1") {
+                                this.$message.success(`新增成功`);
+                                this.editVisible = false;
+                                this.$router.go(0)
+                            }
+                            else {
+                                this.$message.warning(`新增失败`);
+                            }
+                        })
+                        .catch((err) => {
+                            console.log(err)
+                        })
+                }
+                else {
+                    this.$message.warning(`输入不能为空`);
+                }
             }
         }
     }

@@ -9,25 +9,46 @@
         <div class="operationLogContent">
             <div class="operationLogContentTab">
                 <div class="normalTab">
-                    <el-select v-model="GJGType" placeholder="选择管加工类型">
-                        <el-option
-                            v-for="item in GJGTypeOptions"
-                            :key="item.value"
-                            :label="item.label"
-                            :value="item.value">
-                        </el-option>
-                    </el-select>
+                        <el-select
+                            v-model="batch"
+                            clearable
+                            filterable
+                            allow-create
+                            default-first-option
+                            placeholder="请输入或者选择批次">
+                            <el-option
+                                v-for="item in batchOptions"
+                                :key="item.id"
+                                :label="item.name"
+                                :value="item.id">
+                            </el-option>
+                        </el-select>
                 </div>
                 <div class="batchTab">
-                    <el-input v-model="batch" placeholder="请输入查询批次"></el-input>
+                    <div class="normalTab">
+                        <el-select
+                            v-model="logType"
+                            clearable
+                            filterable
+                            allow-create
+                            default-first-option
+                            placeholder="请查询的日志">
+                            <el-option
+                                v-for="item in logTypeOptions"
+                                :key="item.indexno"
+                                :label="item.name"
+                                :value="item.indexno">
+                            </el-option>
+                        </el-select>
+                    </div>
                 </div>
                 <div class="timeTab">
                     <el-date-picker
                         v-model="examineTime"
                         type="daterange"
-                        range-separator="至"
                         start-placeholder="开始日期"
-                        end-placeholder="结束日期">
+                        end-placeholder="结束日期"
+                        value-format="yyyy-MM-dd">
                     </el-date-picker>
                 </div>
                 <div class="operationTab">
@@ -40,7 +61,6 @@
                           :header-cell-style="{background:'#f7f7f7',color:'rgba(0, 0, 0, 1)',fontSize:'14px'}"
                           border
                           highlight-current-row
-                          @cell-click="clickTable"
                           style="width: 98%;margin: auto">
                     <template v-for="(col ,index) in cols">
                         <el-table-column align="center" :prop="col.prop" :label="col.label"></el-table-column>
@@ -48,36 +68,34 @@
                 </el-table>
             </div>
         </div>
+        <Modal :msg="message"
+               :isHideModal="HideModal"></Modal>
     </div>
 </template>
 <script type="text/ecmascript-6">
     import axios from 'axios'
     import url from '../../assets/js/URL'
+    import Modal from '../../common/modal'
 
     export default {
         name: 'FactoryCalendar',
         data() {
             return {
+                message: '',
+                HideModal: true,
+
 
                 cols: [],
                 tableData: [],
 
-                GJGType: '',
-                GJGTypeOptions: [
-                    {
-                        value: '1',
-                        label: '正常管加工'
-                    },
-                    {
-                        value: '2',
-                        label: '异常管加工'
-                    }
-                ],
-                batch: "",
+                batch: '',
+                batchOptions: [],
+                logType: "",
+                logTypeOptions: "",
                 examineTime: ""
             }
         },
-        components: {},
+        components: {Modal},
         mounted() {
 
 
@@ -94,16 +112,29 @@
                 if (userInfo === null) {
                     this.$router.push("/")
                 }
+                else {
+                    let that = this;
+                    axios.all([
+                        axios.post(" " + url + "/sys/getPiciList"),
+                        axios.post(" " + url + "/sys/dictionaryList", {"id": "6"})
+                    ])
+                        .then(axios.spread(function (batchOptions, logTypeOptions) {
+                            that.batchOptions = batchOptions.data;
+                            that.logTypeOptions = logTypeOptions.data;
+                        }));
+
+
+                }
             },
 
 
             //进行查询
             doSearch() {
-                if (this.batch && this.GJGType) {
+                if (this.batch && this.logType &&this.examineTime) {
                     let that = this;
                     axios.all([
-                        axios.post(" " + url + "/plan/paichanTitle.html", {"pici": this.batch}),
-                        axios.post(" " + url + "/plan/paichan.html", {"pici": this.batch})
+                        axios.post(" " + url + "/sys/showTableTitle", {"name": "rizhi"}),
+                        axios.post(" " + url + "/log/showLog", {"pici": this.batch,"type":this.logType,"time":this.examineTime})
                     ])
                         .then(axios.spread(function (title, table) {
                             that.cols = title.data;
@@ -111,18 +142,15 @@
                         }));
                 }
                 else {
-                    this.message = "请选择加工类型和批次";
+                    this.message = "请选择日志和批次和时间";
                     this.HideModal = false;
                     const that = this;
-
                     function a() {
                         that.message = "";
                         that.HideModal = true;
                     }
-
                     setTimeout(a, 2000);
                 }
-
             }
 
         }
