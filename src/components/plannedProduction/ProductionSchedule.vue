@@ -14,6 +14,22 @@
         <div class="productionContent">
             <div class="productionContentTab">
                 <div class="batchTab">
+                    <el-select
+                        v-model="batch"
+                        clearable
+                        filterable
+                        allow-create
+                        default-first-option
+                        placeholder="请输入或者选择批次">
+                        <el-option
+                            v-for="item in batchOptions"
+                            :key="item.id"
+                            :label="item.name"
+                            :value="item.id">
+                        </el-option>
+                    </el-select>
+                </div>
+                <div class="batchTab">
                     <el-input v-model="ch" placeholder="请输入船号"></el-input>
                 </div>
                 <div class="batchTab">
@@ -91,6 +107,8 @@
                 ygh: "",
                 code: "",
                 pie: "",
+                batch: "",
+                batchOptions: [],
 
                 cols: [],
                 tableData: [],
@@ -117,6 +135,15 @@
                 if (userInfo === null) {
                     this.$router.push("/")
                 }
+                else {
+                    axios.post(" " + url + "/sys/getPiciList")
+                        .then((res) => {
+                            this.batchOptions = res.data;
+                        })
+                        .catch((err) => {
+                            console.log(err)
+                        })
+                }
             },
 
             //点击表格
@@ -131,6 +158,7 @@
             doSearch() {
                 axios.post(" " + url + "/shengchan/getCurStatusList",
                     {
+                        "pici":this.batch,
                         "shipcode": this.ch,
                         "yiguanhao": this.ygh,
                         "xitong": this.code,
@@ -200,6 +228,9 @@
             }
             .productionContentTable{
                 padding-top: 10px;
+                height: 450px;
+                padding-bottom: 10px;
+                overflow-y: auto;
 
             }
 

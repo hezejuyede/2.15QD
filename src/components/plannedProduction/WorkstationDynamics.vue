@@ -112,8 +112,9 @@
                 }
             }
             .productionContentTable {
-                width: 90%;
-                margin: 0 auto;
+                padding: 10px;
+                height: 550px;
+                overflow-y: auto;
                 .tableDiv {
                     border-left: 1px solid @color-background-d;
                     border-top: 1px solid @color-background-d;

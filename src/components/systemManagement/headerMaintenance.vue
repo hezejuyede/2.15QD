@@ -1,17 +1,32 @@
 <template>
-    <div class="WorkingProcedure">
+    <div class="headerMaintenance">
         <div class="crumbs">
             <el-breadcrumb separator="/">
-                <el-breadcrumb-item>人员管理</el-breadcrumb-item>
-                <el-breadcrumb-item>人员管理</el-breadcrumb-item>
+                <el-breadcrumb-item>系统管理</el-breadcrumb-item>
+                <el-breadcrumb-item>表头维护</el-breadcrumb-item>
             </el-breadcrumb>
         </div>
-        <div class="WorkingProcedure-content">
+        <div class="headerMaintenance-content">
             <div class="container">
                 <div class="handle-box">
-                    <el-input v-model="select_word" placeholder="筛选工序" class="handle-input mr10"></el-input>
-                    <el-button type="primary" icon="delete" class="handle-del mr10" @click="showAddPerson">新增人员</el-button>
-                    <el-button type="danger" icon="delete" class="handle-del mr10" @click="deletePerson">删除人员</el-button>
+                    <el-input v-model="select_word" placeholder="筛选字典" class="handle-input mr10"></el-input>
+                    <el-select
+                        v-model="select"
+                        clearable
+                        filterable
+                        allow-create
+                        default-first-option
+                        placeholder="请选择字典类型">
+                        <el-option
+                            v-for="item in selectOptions"
+                            :key="item.code"
+                            :label="item.name"
+                            :value="item.code">
+                        </el-option>
+                    </el-select>
+                    <el-button type="success" icon="delete" class="handle-del mr10" @click="doSearch">查询表头</el-button>
+                    <el-button type="primary" icon="delete" class="handle-del mr10" @click="showAddPerson">新增表头</el-button>
+                    <el-button type="danger" icon="delete" class="handle-del mr10" @click="deletePerson">删除表头</el-button>
                 </div>
                 <div class="">
                     <el-table class="tb-edit"
@@ -32,22 +47,34 @@
                     </el-table>
                 </div>
             </div>
-
         </div>
         <!--新增弹出框 -->
-        <el-dialog title="新增人员" :visible.sync="addVisible" width="60%">
+        <el-dialog title="新增表头" :visible.sync="addVisible" width="60%">
             <el-form ref="form" label-width="100px">
-                <el-form-item label="登陆名">
-                    <el-input v-model="name"></el-input>
+                <el-form-item label="表头代码">
+                    <el-select
+                        v-model="select"
+                        clearable
+                        filterable
+                        allow-create
+                        default-first-option
+                        placeholder="请选择字典类型">
+                        <el-option
+                            v-for="item in selectOptions"
+                            :key="item.code"
+                            :label="item.name"
+                            :value="item.code">
+                        </el-option>
+                    </el-select>
                 </el-form-item>
-                <el-form-item label="密码">
-                    <el-input v-model="pwd"></el-input>
+                <el-form-item label="属性代码">
+                    <el-input v-model="pro"></el-input>
                 </el-form-item>
-                <el-form-item label="显示名">
-                    <el-input v-model="showname"></el-input>
+                <el-form-item label="属性显示名">
+                    <el-input v-model="label"></el-input>
                 </el-form-item>
-                <el-form-item label="工号">
-                    <el-input v-model="code"></el-input>
+                <el-form-item label="顺序号">
+                    <el-input v-model="sortnum"></el-input>
                 </el-form-item>
             </el-form>
             <span slot="footer" class="dialog-footer">
@@ -56,16 +83,32 @@
             </span>
         </el-dialog>
         <!-- 编辑弹出框 -->
-        <el-dialog title="编辑人员" :visible.sync="editVisible" width="60%">
+        <el-dialog title="编辑表头" :visible.sync="editVisible" width="60%">
             <el-form ref="form" label-width="100px">
-                <el-form-item label="登陆名">
-                    <el-input v-model="name"  :disabled="true"></el-input>
+                <el-form-item label="表头代码">
+                    <el-select
+                        v-model="select"
+                        clearable
+                        filterable
+                        allow-create
+                        default-first-option
+                        placeholder="请选择字典类型">
+                        <el-option
+                            v-for="item in selectOptions"
+                            :key="item.code"
+                            :label="item.name"
+                            :value="item.code">
+                        </el-option>
+                    </el-select>
                 </el-form-item>
-                <el-form-item label="显示名">
-                    <el-input v-model="showname"></el-input>
+                <el-form-item label="属性代码">
+                    <el-input v-model="pro"></el-input>
                 </el-form-item>
-                <el-form-item label="工号">
-                    <el-input v-model="code"></el-input>
+                <el-form-item label="属性显示名">
+                    <el-input v-model="label"></el-input>
+                </el-form-item>
+                <el-form-item label="顺序号">
+                    <el-input v-model="sortnum"></el-input>
                 </el-form-item>
             </el-form>
             <span slot="footer" class="dialog-footer">
@@ -74,7 +117,7 @@
             </span>
         </el-dialog>
         <!-- 删除提示框 -->
-        <el-dialog title="删除人员" :visible.sync="delVisible" width="300px" center>
+        <el-dialog title="删除表头" :visible.sync="delVisible" width="300px" center>
             <div class="del-dialog-cnt">删除不可恢复，是否确定删除？</div>
             <span slot="footer" class="dialog-footer">
                 <el-button @click="delVisible = false" style="height:30px;width:80px">取 消</el-button>
@@ -107,11 +150,16 @@
                 editVisible: false,
                 delVisible: false,
 
-                id:"",
-                name: '',
-                pwd: '',
-                showname: '',
-                code: ""
+
+
+                select:"",
+                selectOptions: [],
+
+                id: "",
+                pro: '',
+                label: '',
+                sortnum: '',
+
 
             }
         },
@@ -148,15 +196,47 @@
                 else {
                     let that = this;
                     axios.all([
-                        axios.post(" " + url + "/sys/showTableTitle", {"name": "renyuan"}),
-                        axios.post(" " + url + "/sysconfig/personList")
+                        axios.post(" " + url + "/sys/dictionaryList", {"id": "7"}),
+                        axios.post(" " + url + "/sys/showTableTitle", {"name": "tabletitle"}),
+                        axios.post(" " + url + "/sysconfig/tableTitleList",{"code":"qieduan"})
+                    ])
+                        .then(axios.spread(function (select,title, table) {
+                            that.selectOptions = select.data;
+                            that.cols = title.data;
+                            that.tableData = table.data;
+                        }));
+                }
+            },
+            //查询表头
+            doSearch(){
+                if (this.select) {
+                    let that = this;
+                    axios.all([
+                        axios.post(" " + url + "/sys/showTableTitle", {"name": "tabletitle"}),
+                        axios.post(" " + url + "/sysconfig/tableTitleList",{"code":this.select})
                     ])
                         .then(axios.spread(function (title, table) {
                             that.cols = title.data;
                             that.tableData = table.data;
                         }));
                 }
+                else {
+                    this.message = "请选择字典类型";
+                    this.HideModal = false;
+                    const that = this;
+
+                    function a() {
+                        that.message = "";
+                        that.HideModal = true;
+                    }
+
+                    setTimeout(a, 2000);
+                }
+
             },
+
+
+
             //选择那个一个
             selectList(val) {
                 if (val.length) {
@@ -175,12 +255,11 @@
             editPerson(row, column, cell, event) {
                 this.editVisible = true;
                 this.id = row.id;
-                axios.post(" " + url + "/sysconfig/personDetail", {"id": this.id})
+                axios.post(" " + url + "/sysconfig/tableTitleDetail", {"id": this.id})
                     .then((res) => {
-                        this.name = res.data.name;
-                        this.pwd = res.data.pwd;
-                        this.showname = res.data.showname;
-                        this.code = res.data.code;
+                        this.pro = res.data.pro;
+                        this.label = res.data.label;
+                        this.sortnum = res.data.sortnum;
                     })
                     .catch((err) => {
                         console.log(err)
@@ -206,22 +285,27 @@
             },
             // 保存编辑
             saveEdit() {
-                if (this.showname && this.code) {
-                    axios.post(" " + url + "/sysconfig/updatePerson",
+                if (this.pro && this.label && this.select && this.sortnum) {
+                    axios.post(" " + url + "/sysconfig/updateTableTitle",
                         {
-                            "id": this.id,
-                            "showname": this.showname,
-                            "code": this.code
+                            "id":this.id,
+                            "pro": this.pro,
+                            "label": this.label,
+                            "code": this.select,
+                            "sortnum": this.sortnum
                         }
                     )
                         .then((res) => {
-                            if (res.data === "1") {
+                            if (res.data == "1") {
                                 this.$message.success(`修改成功`);
                                 this.editVisible = false;
-                                this.$router.go(0)
+                                const that = this;
+                                setTimeout(function () {
+                                    that.$router.go(0)
+                                }, 1500)
                             }
                             else {
-                                this.$message.warning(`删除成功`);
+                                this.$message.warning(`修改失败`);
                             }
                         })
                         .catch((err) => {
@@ -235,16 +319,19 @@
             },
             // 确定删除
             deleteRow() {
-                axios.post(" " + url + "/sysconfig/delPerson",
+                axios.post(" " + url + "/sysconfig/delTableTitle",
                     {
                         "ids": this.listData,
                     }
                 )
                     .then((res) => {
                         if (res.data === "1") {
-
                             this.$message.success('删除成功');
                             this.delVisible = false;
+                            let that =this;
+                            setTimeout(function () {
+                                that.$router.go(0)
+                            }, 1500)
                         }
                         else {
                             this.$message.warning(`删除失败`);
@@ -254,26 +341,29 @@
                         console.log(err)
                     })
             },
-            //显示新增人员
+            //显示新增表头
             showAddPerson() {
                 this.addVisible = true;
             },
-            //新增人员
+            //新增表头
             doAddPerson() {
-                if (this.name && this.pwd && this.showname && this.code) {
-                    axios.post(" " + url + "/sysconfig/userAdd",
+                if (this.pro && this.label && this.select && this.sortnum) {
+                    axios.post(" " + url + "/sysconfig/TableTitleAdd",
                         {
-                            "name": this.name,
-                            "pwd": this.pwd,
-                            "showname": this.showname,
-                            "code": this.code
+                            "pro": this.pro,
+                            "label": this.label,
+                            "code":  this.select,
+                            "sortnum": this.sortnum
                         }
                     )
                         .then((res) => {
                             if (res.data === "1") {
                                 this.$message.success(`新增成功`);
                                 this.editVisible = false;
-                                this.$router.go(0)
+                                let that = this;
+                                setTimeout(function () {
+                                    that.$router.go(0)
+                                }, 1500)
                             }
                             else {
                                 this.$message.warning(`新增失败`);
@@ -293,7 +383,7 @@
 <style scoped lang="less" rel="stylesheet/less">
     @import "../../assets/less/base";
 
-    .WorkingProcedure {
+    .headerMaintenance {
         width: 100%;
         height: 100%;
         background-color: @color-white;
@@ -302,7 +392,7 @@
             padding-top: 20px;
             padding-left: 20px;
         }
-        .WorkingProcedure-content {
+        .headerMaintenance-content {
             padding-top: 10px;
             height: 450px;
             padding-bottom: 10px;

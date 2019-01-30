@@ -40,7 +40,7 @@
                             {
                                 label: '系统登录退出日志',
                                 index: "1-2",
-                                url: "/"
+                                url: "/LoginOutLog"
                             }
                         ]
                     },
@@ -51,12 +51,12 @@
                             {
                                 label: '字典管理',
                                 index: "2-1",
-                                url: "/"
+                                url: "/DictionaryMaintenance"
                             },
                             {
                                 label: '表头维护',
                                 index: "2-2",
-                                url: "/"
+                                url: "/HeaderMaintenance"
                             }
                         ]
                     },

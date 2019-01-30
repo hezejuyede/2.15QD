@@ -19,22 +19,29 @@
                     </el-select>
                 </div>
                 <div class="batchTab">
-                    <el-input v-model="batch" placeholder="请输入查询批次"></el-input>
+                    <el-select
+                        v-model="batch"
+                        clearable
+                        filterable
+                        allow-create
+                        default-first-option
+                        placeholder="请输入或者选择批次">
+                        <el-option
+                            v-for="item in batchOptions"
+                            :key="item.id"
+                            :label="item.name"
+                            :value="item.id">
+                        </el-option>
+                    </el-select>
                     <button @click="doSearch">查询</button>
                 </div>
                 <div class="timeTab">
                     <button @click="doExamine">生成计划</button>
-                    <el-date-picker
-                        v-model="examineTime"
-                        type="daterange"
-                        range-separator="至"
-                        start-placeholder="开始日期"
-                        end-placeholder="结束日期">
-                    </el-date-picker>
+                    <button @click="doDeletePlan" class="red">删除计划</button>
                 </div>
                 <div class="operationTab">
 
-                    <div class="operationTabDiv" @click="doSave">
+                <!--    <div class="operationTabDiv" @click="doSave">
                         <el-button type="success" icon="el-icon-check" circle ></el-button>
                         <span>保存</span>
                     </div>
@@ -45,7 +52,7 @@
                     <div class="operationTabDiv" @click="doDelete">
                         <el-button type="danger" icon="el-icon-delete" circle></el-button>
                         <span>删除</span>
-                    </div>
+                    </div>-->
                 </div>
             </div>
             <div class="productionContentTable">
@@ -54,13 +61,22 @@
                           :header-cell-style="{background:'#f7f7f7',color:'rgba(0, 0, 0, 1)',fontSize:'14px'}"
                           border
                           highlight-current-row
-                          @cell-click="clickTable"
+                          @row-dblclick="clickTable"
                           style="width: 98%;margin: auto">
                     <template v-for="(col ,index) in cols">
                         <el-table-column  align="center" :prop="col.prop" :label="col.label"></el-table-column>
                     </template>
                 </el-table>
             </div>
+
+            <!--弹出工序列表-->
+            <el-dialog title="工序列表" :visible.sync="workStationVisible" width="60%">
+                <div class="" style="width: 200px;height: 200px">
+                    <el-steps align-center :space="100">
+                        <el-step v-for="(item,index) in workstation" :title="item.stationname"></el-step>
+                    </el-steps>
+                </div>
+            </el-dialog>
 
 
             <!-- 保存提示框 -->
@@ -120,7 +136,7 @@
                 HideModal: true,
 
                 delVisible: false,
-
+                workStationVisible:false,
                 addVisible: false,
                 form: {
                     name: '',
@@ -146,9 +162,11 @@
                     }
                 ],
 
-                 batch:"",
+                batch: "",
+                batchOptions: [],
+                id:"",
 
-
+                workstation:[],
                 examineTime:""
             }
         },
@@ -169,12 +187,31 @@
                 if (userInfo === null) {
                     this.$router.push("/")
                 }
+                else {
+                    axios.post(" " + url + "/sys/getPiciList")
+                        .then((res) => {
+                            this.batchOptions = res.data;
+                        })
+                        .catch((err) => {
+                            console.log(err)
+                        })
+                }
             },
 
 
             //点击表格
             clickTable(row, column, cell, event) {
-                console.log("eee")
+                this.workStationVisible = true;
+                this.editVisible = true;
+                this.id = row.id;
+                axios.post(" " + url + "/plan/getPlanNode", {"id": this.id})
+                    .then((res) => {
+                        this.workstation = res.data;
+                    })
+                    .catch((err) => {
+                        console.log(err)
+                    });
+
             },
 
             //进行查询
@@ -202,7 +239,6 @@
 
                     setTimeout(a, 2000);
                 }
-
             },
 
 
@@ -287,6 +323,46 @@
                 this.tableData.splice(this.idx, 1);
                 this.$message.success('删除成功');
                 this.delVisible = false;
+            },
+            //删除排产
+            doDeletePlan() {
+                if (this.batch) {
+                    axios.post(" " + url + "/delData/delPlanData", {"pici": this.batch})
+                        .then((res) => {
+                            if (res.data.state === "1") {
+                                this.message = "已经删除";
+                                this.HideModal = false;
+                                const that = this;
+
+                                function a() {
+                                    that.message = "";
+                                    that.HideModal = true;
+                                }
+
+                                setTimeout(a, 2000);
+                            }
+                            else {
+                                let message = res.data.message;
+                                this.$message.warning(message);
+                            }
+                        })
+                        .catch((err) => {
+                            console.log(err)
+                        })
+                }
+                else {
+                    this.message = "请输入批次";
+                    this.HideModal = false;
+                    const that = this;
+
+                    function a() {
+                        that.message = "";
+                        that.HideModal = true;
+                    }
+
+                    setTimeout(a, 2000);
+                }
+
             }
 
         }
@@ -333,6 +409,7 @@
                         font-size: 16px;
                         margin-left: 5%;
                     }
+
                 }
                 .timeTab{
                     flex: 1.9;
@@ -351,6 +428,9 @@
                         font-size: 16px;
                         margin-left: 5%;
                         margin-right: 5%;
+                    }
+                    .red{
+                        background-color: @color-bg-red;
                     }
 
                 }
@@ -373,6 +453,9 @@
             }
             .productionContentTable{
                 padding-top: 10px;
+                height: 450px;
+                padding-bottom: 10px;
+                overflow-y: auto;
             }
 
 

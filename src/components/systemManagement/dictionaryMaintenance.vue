@@ -1,17 +1,32 @@
 <template>
-    <div class="WorkingProcedure">
+    <div class="dictionaryMaintenance">
         <div class="crumbs">
             <el-breadcrumb separator="/">
-                <el-breadcrumb-item>人员管理</el-breadcrumb-item>
-                <el-breadcrumb-item>人员管理</el-breadcrumb-item>
+                <el-breadcrumb-item>系统管理</el-breadcrumb-item>
+                <el-breadcrumb-item>字典维护</el-breadcrumb-item>
             </el-breadcrumb>
         </div>
-        <div class="WorkingProcedure-content">
+        <div class="dictionaryMaintenance-content">
             <div class="container">
                 <div class="handle-box">
-                    <el-input v-model="select_word" placeholder="筛选工序" class="handle-input mr10"></el-input>
-                    <el-button type="primary" icon="delete" class="handle-del mr10" @click="showAddPerson">新增人员</el-button>
-                    <el-button type="danger" icon="delete" class="handle-del mr10" @click="deletePerson">删除人员</el-button>
+                    <el-input v-model="select_word" placeholder="筛选字典" class="handle-input mr10"></el-input>
+                    <el-select
+                        v-model="select"
+                        clearable
+                        filterable
+                        allow-create
+                        default-first-option
+                        placeholder="请选择字典类型">
+                        <el-option
+                            v-for="item in selectOptions"
+                            :key="item.indexno"
+                            :label="item.name"
+                            :value="item.indexno">
+                        </el-option>
+                    </el-select>
+                    <el-button type="success" icon="delete" class="handle-del mr10" @click="doSearch">查询字典</el-button>
+                    <el-button type="primary" icon="delete" class="handle-del mr10" @click="showAddPerson">新增字典</el-button>
+                    <el-button type="danger" icon="delete" class="handle-del mr10" @click="deletePerson">删除字典</el-button>
                 </div>
                 <div class="">
                     <el-table class="tb-edit"
@@ -32,22 +47,37 @@
                     </el-table>
                 </div>
             </div>
-
         </div>
         <!--新增弹出框 -->
-        <el-dialog title="新增人员" :visible.sync="addVisible" width="60%">
+        <el-dialog title="新增字典" :visible.sync="addVisible" width="60%">
             <el-form ref="form" label-width="100px">
-                <el-form-item label="登陆名">
+                <el-form-item label="下拉列表">
+                    <el-select
+                        v-model="select"
+                        clearable
+                        filterable
+                        allow-create
+                        default-first-option
+                        placeholder="请选择字典类型">
+                        <el-option
+                            v-for="item in selectOptions"
+                            :key="item.indexno"
+                            :label="item.name"
+                            :value="item.indexno">
+                        </el-option>
+                    </el-select>
+                </el-form-item>
+                <el-form-item label="名称">
                     <el-input v-model="name"></el-input>
                 </el-form-item>
-                <el-form-item label="密码">
-                    <el-input v-model="pwd"></el-input>
+                <el-form-item label="序号">
+                    <el-input v-model="indexno"></el-input>
                 </el-form-item>
-                <el-form-item label="显示名">
-                    <el-input v-model="showname"></el-input>
-                </el-form-item>
-                <el-form-item label="工号">
+                <el-form-item label="代码">
                     <el-input v-model="code"></el-input>
+                </el-form-item>
+                <el-form-item label="顺序号">
+                    <el-input v-model="showindex"></el-input>
                 </el-form-item>
             </el-form>
             <span slot="footer" class="dialog-footer">
@@ -56,16 +86,35 @@
             </span>
         </el-dialog>
         <!-- 编辑弹出框 -->
-        <el-dialog title="编辑人员" :visible.sync="editVisible" width="60%">
+        <el-dialog title="编辑字典" :visible.sync="editVisible" width="60%">
             <el-form ref="form" label-width="100px">
-                <el-form-item label="登陆名">
-                    <el-input v-model="name"  :disabled="true"></el-input>
+                <el-form-item label="下拉列表">
+                    <el-select
+                        v-model="select"
+                        clearable
+                        filterable
+                        allow-create
+                        default-first-option
+                        placeholder="请选择字典类型">
+                        <el-option
+                            v-for="item in selectOptions"
+                            :key="item.indexno"
+                            :label="item.name"
+                            :value="item.indexno">
+                        </el-option>
+                    </el-select>
                 </el-form-item>
-                <el-form-item label="显示名">
-                    <el-input v-model="showname"></el-input>
+                <el-form-item label="名称">
+                    <el-input v-model="name"></el-input>
                 </el-form-item>
-                <el-form-item label="工号">
+                <el-form-item label="序号">
+                    <el-input v-model="indexno"></el-input>
+                </el-form-item>
+                <el-form-item label="代码">
                     <el-input v-model="code"></el-input>
+                </el-form-item>
+                <el-form-item label="顺序号">
+                    <el-input v-model="showindex"></el-input>
                 </el-form-item>
             </el-form>
             <span slot="footer" class="dialog-footer">
@@ -74,7 +123,7 @@
             </span>
         </el-dialog>
         <!-- 删除提示框 -->
-        <el-dialog title="删除人员" :visible.sync="delVisible" width="300px" center>
+        <el-dialog title="删除字典" :visible.sync="delVisible" width="300px" center>
             <div class="del-dialog-cnt">删除不可恢复，是否确定删除？</div>
             <span slot="footer" class="dialog-footer">
                 <el-button @click="delVisible = false" style="height:30px;width:80px">取 消</el-button>
@@ -107,10 +156,15 @@
                 editVisible: false,
                 delVisible: false,
 
-                id:"",
+
+
+                select:"",
+                selectOptions: [],
+
+                id: "",
                 name: '',
-                pwd: '',
-                showname: '',
+                indexno: '',
+                showindex: '',
                 code: ""
 
             }
@@ -148,15 +202,47 @@
                 else {
                     let that = this;
                     axios.all([
-                        axios.post(" " + url + "/sys/showTableTitle", {"name": "renyuan"}),
-                        axios.post(" " + url + "/sysconfig/personList")
+                        axios.post(" " + url + "/sys/dictionaryList", {"id": "0"}),
+                        axios.post(" " + url + "/sys/showTableTitle", {"name": "dictedit"}),
+                        axios.post(" " + url + "/sysconfig/dictionaryList",{"type":"1"})
+                    ])
+                        .then(axios.spread(function (select,title, table) {
+                            that.selectOptions = select.data;
+                            that.cols = title.data;
+                            that.tableData = table.data;
+                        }));
+                }
+            },
+            //查询字典
+            doSearch(){
+                if (this.select) {
+                    let that = this;
+                    axios.all([
+                        axios.post(" " + url + "/sys/showTableTitle", {"name": "dictedit"}),
+                        axios.post(" " + url + "/sysconfig/dictionaryList",{"type":this.select})
                     ])
                         .then(axios.spread(function (title, table) {
                             that.cols = title.data;
                             that.tableData = table.data;
                         }));
                 }
+                else {
+                    this.message = "请选择字典类型";
+                    this.HideModal = false;
+                    const that = this;
+
+                    function a() {
+                        that.message = "";
+                        that.HideModal = true;
+                    }
+
+                    setTimeout(a, 2000);
+                }
+
             },
+
+
+
             //选择那个一个
             selectList(val) {
                 if (val.length) {
@@ -175,12 +261,13 @@
             editPerson(row, column, cell, event) {
                 this.editVisible = true;
                 this.id = row.id;
-                axios.post(" " + url + "/sysconfig/personDetail", {"id": this.id})
+                axios.post(" " + url + "/sysconfig/dictionaryDetail", {"id": this.id})
                     .then((res) => {
                         this.name = res.data.name;
-                        this.pwd = res.data.pwd;
-                        this.showname = res.data.showname;
+                        this.indexno = res.data.indexno;
+                        this.showindex = res.data.showindex;
                         this.code = res.data.code;
+                        this.select=res.data.indexno;
                     })
                     .catch((err) => {
                         console.log(err)
@@ -206,22 +293,28 @@
             },
             // 保存编辑
             saveEdit() {
-                if (this.showname && this.code) {
-                    axios.post(" " + url + "/sysconfig/updatePerson",
+                if (this.name && this.select && this.indexno && this.showindex) {
+                    axios.post(" " + url + "/sysconfig/updateDictionary",
                         {
-                            "id": this.id,
-                            "showname": this.showname,
-                            "code": this.code
+                            "id":this.id,
+                            "type": this.select,
+                            "name": this.name,
+                            "indexno": this.indexno,
+                            "code": this.code,
+                            "showindex": this.showindex
                         }
                     )
                         .then((res) => {
-                            if (res.data === "1") {
+                            if (res.data == "1") {
                                 this.$message.success(`修改成功`);
                                 this.editVisible = false;
-                                this.$router.go(0)
+                                const that = this;
+                                setTimeout(function () {
+                                    that.$router.go(0)
+                                }, 1500)
                             }
                             else {
-                                this.$message.warning(`删除成功`);
+                                this.$message.warning(`修改失败`);
                             }
                         })
                         .catch((err) => {
@@ -235,16 +328,19 @@
             },
             // 确定删除
             deleteRow() {
-                axios.post(" " + url + "/sysconfig/delPerson",
+                axios.post(" " + url + "/sysconfig/delDictionary",
                     {
                         "ids": this.listData,
                     }
                 )
                     .then((res) => {
                         if (res.data === "1") {
-
                             this.$message.success('删除成功');
                             this.delVisible = false;
+                            const that = this;
+                            setTimeout(function () {
+                                that.$router.go(0)
+                            }, 1500)
                         }
                         else {
                             this.$message.warning(`删除失败`);
@@ -254,26 +350,30 @@
                         console.log(err)
                     })
             },
-            //显示新增人员
+            //显示新增字典
             showAddPerson() {
                 this.addVisible = true;
             },
-            //新增人员
+            //新增字典
             doAddPerson() {
-                if (this.name && this.pwd && this.showname && this.code) {
-                    axios.post(" " + url + "/sysconfig/userAdd",
+                if (this.name && this.select && this.indexno && this.showindex) {
+                    axios.post(" " + url + "/sysconfig/DictionaryAdd",
                         {
+                            "type": this.select,
                             "name": this.name,
-                            "pwd": this.pwd,
-                            "showname": this.showname,
-                            "code": this.code
+                            "indexno": this.indexno,
+                            "code": this.code,
+                            "showindex": this.showindex
                         }
                     )
                         .then((res) => {
                             if (res.data === "1") {
                                 this.$message.success(`新增成功`);
                                 this.editVisible = false;
-                                this.$router.go(0)
+                                const that = this;
+                                setTimeout(function () {
+                                    that.$router.go(0)
+                                }, 1500)
                             }
                             else {
                                 this.$message.warning(`新增失败`);
@@ -293,7 +393,7 @@
 <style scoped lang="less" rel="stylesheet/less">
     @import "../../assets/less/base";
 
-    .WorkingProcedure {
+    .dictionaryMaintenance {
         width: 100%;
         height: 100%;
         background-color: @color-white;
@@ -302,7 +402,7 @@
             padding-top: 20px;
             padding-left: 20px;
         }
-        .WorkingProcedure-content {
+        .dictionaryMaintenance-content {
             padding-top: 10px;
             height: 450px;
             padding-bottom: 10px;

@@ -1,61 +1,27 @@
 <template>
-    <div class="operationLog">
+    <div class="loginOutLog">
         <div class="crumbs">
             <el-breadcrumb separator="/">
                 <el-breadcrumb-item>日志管理</el-breadcrumb-item>
-                <el-breadcrumb-item>运行日志</el-breadcrumb-item>
+                <el-breadcrumb-item>系统登录退出日志</el-breadcrumb-item>
             </el-breadcrumb>
         </div>
-        <div class="operationLogContent">
-            <div class="operationLogContentTab">
-                <div class="normalTab">
-                        <el-select
-                            v-model="batch"
-                            clearable
-                            filterable
-                            allow-create
-                            default-first-option
-                            placeholder="请输入或者选择批次">
-                            <el-option
-                                v-for="item in batchOptions"
-                                :key="item.id"
-                                :label="item.name"
-                                :value="item.id">
-                            </el-option>
-                        </el-select>
-                </div>
-                <div class="batchTab">
-                    <div class="normalTab">
-                        <el-select
-                            v-model="logType"
-                            clearable
-                            filterable
-                            allow-create
-                            default-first-option
-                            placeholder="请查询的日志">
-                            <el-option
-                                v-for="item in logTypeOptions"
-                                :key="item.indexno"
-                                :label="item.name"
-                                :value="item.indexno">
-                            </el-option>
-                        </el-select>
-                    </div>
-                </div>
+        <div class="loginOutLogContent">
+            <div class="loginOutLogContentTab">
                 <div class="timeTab">
                     <el-date-picker
                         v-model="examineTime"
                         type="daterange"
-                        range-separator="至"
                         start-placeholder="开始日期"
-                        end-placeholder="结束日期">
+                        end-placeholder="结束日期"
+                        value-format="yyyy-MM-dd">
                     </el-date-picker>
                 </div>
                 <div class="operationTab">
                     <button @click="doSearch">查询</button>
                 </div>
             </div>
-            <div class="operationLogContentTable">
+            <div class="loginOutLogContentTable">
                 <el-table class="tb-edit"
                           :data="tableData"
                           :header-cell-style="{background:'#f7f7f7',color:'rgba(0, 0, 0, 1)',fontSize:'14px'}"
@@ -76,6 +42,7 @@
     import axios from 'axios'
     import url from '../../assets/js/URL'
     import Modal from '../../common/modal'
+    import {getNowTime} from '../../assets/js/api'
 
     export default {
         name: 'FactoryCalendar',
@@ -83,15 +50,9 @@
             return {
                 message: '',
                 HideModal: true,
-
-
+                username:"",
                 cols: [],
                 tableData: [],
-
-                batch: '',
-                batchOptions: [],
-                logType: "",
-                logTypeOptions: "",
                 examineTime: ""
             }
         },
@@ -109,32 +70,42 @@
             //页面加载检查用户是否登陆，没有登陆就加载登陆页面
             getAdminState() {
                 const userInfo = localStorage.getItem("userInfo");
+                const Info = JSON.stringify(userInfo);
+                this.username = Info.username;
                 if (userInfo === null) {
                     this.$router.push("/")
-                }
-                else {
+                }else {
+
+                    let time = getNowTime();
+                    let times = [];
+                    for (let i = 0; i < 2; i++) {
+                        times.push(time)
+                    }
                     let that = this;
                     axios.all([
-                        axios.post(" " + url + "/sys/getPiciList"),
-                        axios.post(" " + url + "/sys/dictionaryList", {"id": "6"})
+                        axios.post(" " + url + "/sys/showTableTitle", {"name": "login"}),
+                        axios.post(" " + url + "/log/showLoginLog", {
+                            "time": this.examineTime,
+                            "loginname": this.username
+                        })
                     ])
-                        .then(axios.spread(function (batchOptions, logTypeOptions) {
-                            that.batchOptions = batchOptions.data;
-                            that.logTypeOptions = logTypeOptions.data;
+                        .then(axios.spread(function (title, table) {
+                            that.cols = title.data;
+                            that.tableData = table.data;
                         }));
-
-
                 }
             },
 
-
             //进行查询
             doSearch() {
-                if (this.batch && this.logType &&this.examineTime) {
+                if (this.examineTime) {
                     let that = this;
                     axios.all([
-                        axios.post(" " + url + "/sys/showTableTitle", {"name": 'rizhi'}),
-                        axios.post(" " + url + "/log/showLog", {"pici": this.batch,"type":this.logType,"time":this.examineTime})
+                        axios.post(" " + url + "/sys/showTableTitle", {"name": "login"}),
+                        axios.post(" " + url + "/log/showLoginLog", {
+                            "time": this.examineTime,
+                            "loginname": this.username
+                        })
                     ])
                         .then(axios.spread(function (title, table) {
                             if (table.data !== "-1") {
@@ -147,7 +118,7 @@
                         }));
                 }
                 else {
-                    this.message = "请选择日志和批次和时间";
+                    this.message = "请选择查询时间";
                     this.HideModal = false;
                     const that = this;
 
@@ -158,7 +129,6 @@
 
                     setTimeout(a, 2000);
                 }
-
             }
 
         }
@@ -167,7 +137,7 @@
 <style scoped lang="less" rel="stylesheet/less">
     @import "../../assets/less/base";
 
-    .operationLog {
+    .loginOutLog {
         width: 100%;
         height: 100%;
         background-color: @color-white;
@@ -176,28 +146,15 @@
             padding-top: 20px;
             padding-left: 20px;
         }
-        .operationLogContent {
+        .loginOutLogContent {
             padding-top: 10px;
             height: 450px;
             padding-bottom: 10px;
             overflow-y: auto;
-            .operationLogContentTab {
+            .loginOutLogContentTab {
                 height: 100px;
                 display: flex;
                 border-bottom: 1px solid @color-background-d;
-                .normalTab {
-                    flex: 1;
-                    display: flex;
-                    align-items: center;
-                    justify-content: center;
-                }
-                .batchTab {
-                    flex: 1;
-                    display: flex;
-                    align-items: center;
-                    justify-content: center;
-
-                }
                 .timeTab {
                     flex: 2;
                     display: flex;
@@ -223,7 +180,7 @@
                     }
                 }
             }
-            .operationLogTable {
+            .loginOutLogTable {
                 padding-top: 10px;
             }
 

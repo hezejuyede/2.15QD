@@ -20,10 +20,24 @@
                 </div>
                 <div class="batchTab">
                     <div class="">
-                        <el-input v-model="batch" placeholder="请输入查询批次"></el-input>
+                        <el-select
+                            v-model="batch"
+                            clearable
+                            filterable
+                            allow-create
+                            default-first-option
+                            placeholder="请输入或者选择批次">
+                            <el-option
+                                v-for="item in batchOptions"
+                                :key="item.id"
+                                :label="item.name"
+                                :value="item.id">
+                            </el-option>
+                        </el-select>
                     </div>
                     <div class="">
                         <el-button type="primary" @click="doSearch">查询</el-button>
+                        <el-button type="danger" @click="doDelete">删除</el-button>
                     </div>
                 </div>
             </div>
@@ -66,6 +80,7 @@
 
                 num:Number,
                 batch: "",
+                batchOptions:[],
 
 
                 cols: [],
@@ -105,6 +120,13 @@
                     this.$router.push("/")
                 }
                 else {
+                    axios.post(" " + url + "/sys/getPiciList")
+                        .then((res) => {
+                            this.batchOptions = res.data;
+                        })
+                        .catch((err) => {
+                            console.log(err)
+                        })
                     axios.post(" " + url + "/sys/showTableTitle",{"name":"tablist"})
                         .then((res) => {
                             this.navBar = res.data;
@@ -120,12 +142,13 @@
                 if (this.batch && this.GJGType) {
                     let that = this;
                     axios.all([
-                        axios.post(" "+ url +"/sys/showTableTitle", {"name": this.batch}),
-                        axios.post(" "+ url +"/importother/showXiaozuliExcel", {"code": this.batch})
+                        axios.post(" "+ url +"/sys/showTableTitle", {"name":"qieduan","pici":this.batch}),
+                        axios.post(" "+ url +"/importother/showXiaozuliExcel", {"pici": this.batch,"code": "qieduan"})
                     ])
                         .then(axios.spread(function (title, table) {
                             that.cols = title.data;
                             that.tableData = table.data;
+                            that.num=0;
                         }));
                 }
                 else {
@@ -143,6 +166,7 @@
 
             },
 
+
             goToNavBar(index, prop) {
                 if(this.batch){
                     this.num = index;
@@ -154,6 +178,7 @@
                         .then(axios.spread(function (title, table) {
                             that.cols = title.data;
                             that.tableData = table.data;
+
                         }));
                 }
                 else {
@@ -169,6 +194,46 @@
                     setTimeout(a, 2000);
                 }
 
+
+            },
+
+            doDelete(){
+                if (this.batch) {
+                    axios.post(" " + url + "/delData/delQieduanExcel", {"pici": this.batch})
+                        .then((res) => {
+                            if (res.data.state === "1") {
+                                this.message = "已经删除";
+                                this.HideModal = false;
+                                const that = this;
+
+                                function a() {
+                                    that.message = "";
+                                    that.HideModal = true;
+                                }
+
+                                setTimeout(a, 2000);
+                            }
+                            else {
+                                let message = res.data.message;
+                                this.$message.warning(message);
+                            }
+                        })
+                        .catch((err) => {
+                            console.log(err)
+                        })
+                }
+                else {
+                    this.message = "请输入批次";
+                    this.HideModal = false;
+                    const that = this;
+
+                    function a() {
+                        that.message = "";
+                        that.HideModal = true;
+                    }
+
+                    setTimeout(a, 2000);
+                }
 
             }
 
@@ -216,6 +281,10 @@
                 }
             }
             .importDataQueryContentTable{
+                padding-top: 10px;
+                height: 400px;
+                padding-bottom: 10px;
+                overflow-y: auto;
                 .tabTop{
                     display: flex;
                     height: 50px;

@@ -93,8 +93,9 @@ import ForReference from '../components/materialManagement/ForReference';
 
 //系统管理
 import OperationLog from '../components/systemManagement/operationLog';
-
-
+import LoginOutLog from '../components/systemManagement/loginOutLog';
+import DictionaryMaintenance from '../components/systemManagement/dictionaryMaintenance';
+import HeaderMaintenance from '../components/systemManagement/headerMaintenance';
 
 
 
@@ -253,9 +254,20 @@ export default new Router({
                             meta: {title: '运行日志'}
                         },
                         {
-                            path: '/InformationImport',
-                            component: InformationImport,
-                            meta: {title: '信息导入'}
+                            path: '/LoginOutLog',
+                            component: LoginOutLog,
+                            meta: {title: '系统登录退出'}
+                        },
+                        {
+                            path: '/DictionaryMaintenance',
+                            component: DictionaryMaintenance,
+                            meta: {title: '字典维护'}
+                        }
+                        ,
+                        {
+                            path: '/HeaderMaintenance',
+                            component: HeaderMaintenance,
+                            meta: {title: '表头维护'}
                         }
                     ]
                 },

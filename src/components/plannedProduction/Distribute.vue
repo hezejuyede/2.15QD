@@ -20,9 +20,23 @@
                         </el-select>
                     </div>
                     <div class="batchTab">
-                        <el-input v-model="batch" placeholder="请输入查询批次"></el-input>
+                        <el-select
+                            v-model="batch"
+                            clearable
+                            filterable
+                            allow-create
+                            default-first-option
+                            placeholder="请输入或者选择批次">
+                            <el-option
+                                v-for="item in batchOptions"
+                                :key="item.id"
+                                :label="item.name"
+                                :value="item.id">
+                            </el-option>
+                        </el-select>
                         <button @click="doSearch">查询</button>
                         <button @click="showPF">派发</button>
+                        <button @click="doDeletePF" class="red">删除派发</button>
                     </div>
                 </div>
             </div>
@@ -80,6 +94,7 @@
                 ],
 
                 batch:"",
+                batchOptions: [],
 
 
                 searchTime:""
@@ -101,6 +116,15 @@
                 const userInfo = localStorage.getItem("userInfo");
                 if (userInfo === null) {
                     this.$router.push("/")
+                }
+                else {
+                    axios.post(" " + url + "/sys/getPiciList")
+                        .then((res) => {
+                            this.batchOptions = res.data;
+                        })
+                        .catch((err) => {
+                            console.log(err)
+                        })
                 }
             },
 
@@ -154,8 +178,6 @@
                     }
                     setTimeout(a, 2000);
                 }
-
-
             },
 
             doPF() {
@@ -190,6 +212,48 @@
                     .catch((err) => {
                         console.log(err)
                     })
+            },
+            //删除派发
+            doDeletePF(){
+                if (this.batch) {
+                    axios.post(" " + url + "/delData/delRealData", {"pici": this.batch})
+                        .then((res) => {
+                            if (res.data.state === "1") {
+                                this.message = "已经删除";
+                                this.HideModal = false;
+                                const that = this;
+
+                                function a() {
+                                    that.message = "";
+                                    that.HideModal = true;
+                                }
+
+                                setTimeout(a, 2000);
+
+                            }
+                            else {
+                                let message = res.data.message;
+                                this.$message.warning(message);
+                            }
+                        })
+                        .catch((err) => {
+                            console.log(err)
+                        })
+                }
+                else {
+                    this.message = "请输入批次";
+                    this.HideModal = false;
+                    const that = this;
+
+                    function a() {
+                        that.message = "";
+                        that.HideModal = true;
+                    }
+
+                    setTimeout(a, 2000);
+                }
+
+
             }
 
         }
@@ -230,7 +294,7 @@
                     align-items: center;
                     justify-content: center;
                     button {
-                        width: 100px;
+                        width: 150px;
                         height: 35px;
                         text-align: center;
                         line-height: 35px;
@@ -242,11 +306,17 @@
                         margin-left: 10px;
                         margin-right: 10px;
                     }
+                    .red{
+                        background-color: @color-bg-red;
+                    }
                 }
 
             }
             .productionContentTable{
                 padding-top: 10px;
+                height: 450px;
+                padding-bottom: 10px;
+                overflow-y: auto;
             }
         }
     }

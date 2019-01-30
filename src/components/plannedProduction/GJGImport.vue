@@ -20,6 +20,7 @@
                     </el-option>
                 </el-select>
                 <button @click="doSearch">查询</button>
+                <button @click="doDelete">删除</button>
             </div>
         </div>
         <Modal :msg="message"
@@ -85,36 +86,6 @@
             return {
                 message: '',
                 HideModal: true,
-
-
-                shipType: "",
-                shipOptions: [
-                    {
-                        value: '1',
-                        label: '条目一'
-                    },
-                    {
-                        value: '2',
-                        label: '条目二'
-                    }
-                    ,
-                    {
-                        value: '3',
-                        label: '条目三'
-                    }
-                    ,
-                    {
-                        value: '4',
-                        label: '条目四'
-                    }
-                    ,
-                    {
-                        value: '5',
-                        label: '条目五'
-                    }
-
-                ],
-
 
                 list: [],
                 pc: "",
@@ -241,11 +212,11 @@
                 if (this.pc) {
                     axios.post(" " + url + "/importother/importAllData", {"pici": this.pc})
                         .then((res) => {
-                            if (res.data === "success") {
-                                alert("已同步到数据库");
+                            if (res.data === "1") {
+                                this.$message.success(`已同步到数据库`);
                             }
                             else {
-                                alert("同步失败");
+                                this.$message.warning(`已同步到数据库`);
                             }
                         })
                         .catch((err) => {
@@ -255,6 +226,12 @@
                 else {
                     alert("请输入批次");
                 }
+
+            },
+
+
+            doDelete(){
+
 
             }
         }

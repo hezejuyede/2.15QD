@@ -481,6 +481,10 @@
             padding-left: 20px;
         }
         .WorkingProcedure-content {
+            padding-top: 10px;
+            height: 500px;
+            padding-bottom: 10px;
+            overflow-y: auto;
             .handle-box {
                 height: 80px;
                 line-height: 80px;

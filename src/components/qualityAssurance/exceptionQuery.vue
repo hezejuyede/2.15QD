@@ -320,6 +320,9 @@
             }
             .exceptionQueryTable {
                 padding-top: 10px;
+                height: 450px;
+                padding-bottom: 10px;
+                overflow-y: auto;
             }
         }
 
