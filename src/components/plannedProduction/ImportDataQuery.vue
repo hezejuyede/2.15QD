@@ -53,6 +53,7 @@
                               :data="tableData"
                               :header-cell-style="{background:'#f7f7f7',color:'rgba(0, 0, 0, 1)',fontSize:'14px'}"
                               border
+                              height="350"
                               highlight-current-row
                               style="width: 98%;margin: auto">
                         <template v-for="(col ,index) in cols">
@@ -143,7 +144,7 @@
                     let that = this;
                     axios.all([
                         axios.post(" "+ url +"/sys/showTableTitle", {"name":"qieduan","pici":this.batch}),
-                        axios.post(" "+ url +"/importother/showXiaozuliExcel", {"pici": this.batch,"code": "qieduan"})
+                        axios.post(" "+ url +"/importother/publicData", {"pici": this.batch,"code": "qieduan"})
                     ])
                         .then(axios.spread(function (title, table) {
                             that.cols = title.data;
@@ -282,9 +283,7 @@
             }
             .importDataQueryContentTable{
                 padding-top: 10px;
-                height: 400px;
-                padding-bottom: 10px;
-                overflow-y: auto;
+
                 .tabTop{
                     display: flex;
                     height: 50px;

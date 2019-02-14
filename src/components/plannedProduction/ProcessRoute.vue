@@ -19,6 +19,7 @@
                               :data="tables"
                               :header-cell-style="{background:'#f7f7f7',color:'rgba(0, 0, 0, 1)',fontSize:'18px'}"
                               border
+                              height="450"
                               highlight-current-row
                               @select='selectRow'
                               @row-dblclick="editWorkStation"
@@ -364,6 +365,7 @@
                         if (res.data === "1") {
                             this.$message.success(`新增成功`);
                             this.addVisible = false;
+                            this.$router.go(0);
                         }
                     });
             },
@@ -482,9 +484,6 @@
         }
         .WorkingProcedure-content {
             padding-top: 10px;
-            height: 500px;
-            padding-bottom: 10px;
-            overflow-y: auto;
             .handle-box {
                 height: 80px;
                 line-height: 80px;

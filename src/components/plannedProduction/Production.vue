@@ -60,6 +60,7 @@
                           :data="tableData"
                           :header-cell-style="{background:'#f7f7f7',color:'rgba(0, 0, 0, 1)',fontSize:'14px'}"
                           border
+                          height="400"
                           highlight-current-row
                           @row-dblclick="clickTable"
                           style="width: 98%;margin: auto">
@@ -191,6 +192,15 @@
                     axios.post(" " + url + "/sys/getPiciList")
                         .then((res) => {
                             this.batchOptions = res.data;
+                            let that = this;
+                            axios.all([
+                                axios.post(" " + url + "/plan/paichanTitle.html", {"pici": res.data[0].id}),
+                                axios.post(" " + url + "/plan/paichan.html", {"pici": res.data[0].id})
+                            ])
+                                .then(axios.spread(function (title, table) {
+                                    that.cols = title.data;
+                                    that.tableData = table.data;
+                                }));
                         })
                         .catch((err) => {
                             console.log(err)
@@ -453,9 +463,7 @@
             }
             .productionContentTable{
                 padding-top: 10px;
-                height: 450px;
-                padding-bottom: 10px;
-                overflow-y: auto;
+
             }
 
 

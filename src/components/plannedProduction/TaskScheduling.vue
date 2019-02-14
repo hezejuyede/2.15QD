@@ -9,7 +9,20 @@
         <div class="productionContent">
             <div class="productionContentTab">
                 <div class="batchTab">
-                    <el-input v-model="pc" placeholder="请输入批次"></el-input>
+                    <el-select
+                        v-model="batch"
+                        clearable
+                        filterable
+                        allow-create
+                        default-first-option
+                        placeholder="请输入或者选择批次">
+                        <el-option
+                            v-for="item in batchOptions"
+                            :key="item.id"
+                            :label="item.name"
+                            :value="item.id">
+                        </el-option>
+                    </el-select>
                 </div>
                 <div class="batchTab">
                     <el-input v-model="ch" placeholder="请输入船号"></el-input>
@@ -40,6 +53,7 @@
                 <el-table
                     :data="tableData"
                     :header-cell-style="{background:'#f7f7f7',color:'rgba(0, 0, 0, 1)',fontSize:'18px'}"
+                    height="400"
                     border
                     @select="selectList"
                     style="width: 95%;margin: 0 auto">
@@ -207,7 +221,8 @@
         name: 'FactoryCalendar',
         data() {
             return {
-                pc:"",
+                batch: "",
+                batchOptions: [],
                 ch: "",
                 ygh: "",
                 code: "",
@@ -253,12 +268,29 @@
                 else {
                     let that = this;
                     axios.all([
+                        axios.post(" " + url + "/sys/getPiciList"),
                         axios.post(" " + url + "/sys/dictionaryList", {"id": "4"}),
                         axios.post(" " + url + "/sys/dictionaryList", {"id": "5"})
                     ])
-                        .then(axios.spread(function (title, table) {
+                        .then(axios.spread(function (batchOptions,title, table) {
                             that.yxjOptions = title.data;
                             that.stateOptions = table.data;
+                            that.batchOptions = batchOptions.data;
+                            axios.post(" " + url + "/shengchan/getCurStatusList",
+                                {
+                                    "shipcode":that.ch,
+                                    "yiguanhao": that.ygh,
+                                    "xitong": that.code,
+                                    "hou":that.pie,
+                                    "pici": batchOptions.data[0].id
+                                }
+                            )
+                                .then((res) => {
+                                    that.tableData = res.data
+                                })
+                                .catch((err) => {
+                                    console.log(err)
+                                })
                         }));
                 }
             },
@@ -282,7 +314,7 @@
                         "yiguanhao": this.ygh,
                         "xitong": this.code,
                         "hou": this.pie,
-                        "pici": this.pc
+                        "pici": this.batch
                     }
                 )
                     .then((res) => {
@@ -554,9 +586,6 @@
             }
             .productionContentTable{
                 padding-top: 10px;
-                height: 450px;
-                padding-bottom: 10px;
-                overflow-y: auto;
 
             }
         }

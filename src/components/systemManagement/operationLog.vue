@@ -164,7 +164,7 @@
         }
     }
 </script>
-<style scoped lang="less" rel="stylesheet/less">
+<style scoped lang="less" rel="stylesheet/less"j>
     @import "../../assets/less/base";
 
     .operationLog {
