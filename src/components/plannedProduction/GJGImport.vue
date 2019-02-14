@@ -419,7 +419,7 @@
                         let that = this;
                         axios.all([
                             axios.post(" " + url + "/sys/showTableTitle", {"name": "qieduan", "pici": this.batch}),
-                            axios.post(" " + url + "/importother/publicData", {"pici": this.batch, "code": "qieduan"})
+                            axios.post(" " + url + "/fileShenpi/showFileDetail", {"id": this.listArr})
                         ])
                             .then(axios.spread(function (title, table) {
                                 that.detailsCols = title.data;
