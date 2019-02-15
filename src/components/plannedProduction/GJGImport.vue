@@ -169,10 +169,6 @@
                                    type="success"
                                    @click="submitUpload">上传到系统
                         </el-button>
-                        <el-button style="width: 150px;height: 30px;" size="small"
-                                   type="primary"
-                                   @click="synchronizationDataBase">同步到数据库
-                        </el-button>
                     </el-upload>
                 </div>
             </div>
@@ -308,7 +304,7 @@
                     let that = this;
                     axios.all([
                         axios.post(" " + url + "/sys/showTableTitle", {"name": "filelist"}),
-                        axios.post(" " + url + "/fileShenpi/getFileUploadList", {"lineNo": this.scx, "type": this.fileType, "pici": this.batch})
+                        axios.post(" " + url + "/fileShenpi/getFileUploadList", {"lineNo": this.scx, "status": this.status, "pici": this.batch})
                     ])
                         .then(axios.spread(function (title, table) {
                             that.cols = title.data;
@@ -359,29 +355,6 @@
                 this.$message.warning(`上传失败`);
             },
 
-            //同步到数据库
-            synchronizationDataBase() {
-
-                if (this.batch) {
-                    axios.post(" " + url + "/importother/importAllData", {"lineNo": this.SCX, "type": this.type, "pici": this.pc})
-                        .then((res) => {
-                            if (res.data === "1") {
-                                this.$message.success(`已同步到数据库`);
-                            }
-                            else {
-                                this.$message.warning(`已同步到数据库`);
-                            }
-                        })
-                        .catch((err) => {
-                            console.log(err)
-                        })
-                }
-                else {
-                    alert("请输入批次");
-                }
-
-            },
-
             //选择那个一个
             selectList(val) {
                 if (val.length) {
@@ -418,7 +391,7 @@
                         this.detailsVisible = true;
                         let that = this;
                         axios.all([
-                            axios.post(" " + url + "/sys/showTableTitle", {"name": "qieduan", "pici": this.batch}),
+                            axios.post(" " + url + "/fileShenpi/showFileTitle", {"id": this.listArr}),
                             axios.post(" " + url + "/fileShenpi/showFileDetail", {"id": this.listArr})
                         ])
                             .then(axios.spread(function (title, table) {

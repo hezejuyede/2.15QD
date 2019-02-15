@@ -202,7 +202,7 @@
                 else {
                     let that = this;
                     axios.all([
-                        axios.post(" " + url + "/sys/dictionaryList", {"id": "0"}),
+                        axios.post(" " + url + "/sys/dictionaryList", {"id": "-1"}),
                         axios.post(" " + url + "/sys/showTableTitle", {"name": "dictedit"}),
                         axios.post(" " + url + "/sysconfig/dictionaryList",{"type":"1"})
                     ])
