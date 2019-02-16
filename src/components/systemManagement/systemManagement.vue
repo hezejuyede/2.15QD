@@ -62,7 +62,19 @@
                     },
                     {
                         label: '接口管理',
-                        index: "3"
+                        index: "3",
+                        children: [
+                            {
+                                label: '登录安全提醒',
+                                index: "3-1",
+                                url: "/LoginSecurityAlert"
+                            },
+                            {
+                                label: '作业者要点内容',
+                                index: "3-2",
+                                url: "/OperatorMainPoints"
+                            }
+                        ]
                     },
                 ],
                 activeIndex: '1',

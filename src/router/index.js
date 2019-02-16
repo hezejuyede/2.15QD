@@ -96,8 +96,8 @@ import OperationLog from '../components/systemManagement/operationLog';
 import LoginOutLog from '../components/systemManagement/loginOutLog';
 import DictionaryMaintenance from '../components/systemManagement/dictionaryMaintenance';
 import HeaderMaintenance from '../components/systemManagement/headerMaintenance';
-
-
+import LoginSecurityAlert from '../components/systemManagement/loginSecurityAlert';
+import OperatorMainPoints from '../components/systemManagement/operatorMainPoints';
 
 Vue.use(Router);
 
@@ -262,12 +262,21 @@ export default new Router({
                             path: '/DictionaryMaintenance',
                             component: DictionaryMaintenance,
                             meta: {title: '字典维护'}
-                        }
-                        ,
+                        },
                         {
                             path: '/HeaderMaintenance',
                             component: HeaderMaintenance,
                             meta: {title: '表头维护'}
+                        },
+                        {
+                            path: '/LoginSecurityAlert',
+                            component: LoginSecurityAlert,
+                            meta: {title: '登录安全提醒'}
+                        },
+                        {
+                            path: '/OperatorMainPoints',
+                            component: OperatorMainPoints,
+                            meta: {title: '作业者要点内容'}
                         }
                     ]
                 },
