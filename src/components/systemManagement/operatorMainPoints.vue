@@ -3,7 +3,7 @@
         <div class="crumbs">
             <el-breadcrumb separator="/">
                 <el-breadcrumb-item>系统管理</el-breadcrumb-item>
-                <el-breadcrumb-item>登录安全提醒</el-breadcrumb-item>
+                <el-breadcrumb-item>作业者界面要点内容提示</el-breadcrumb-item>
             </el-breadcrumb>
         </div>
         <div class="editorTemplate-content">
@@ -24,10 +24,10 @@
                             :value="item.id">
                         </el-option>
                     </el-select>
-                    <el-button type="success" icon="delete" class="handle-del mr10" @click="doSearch">查询提醒</el-button>
-                    <el-button type="primary" icon="delete" class="handle-del mr10" @click="showAdd">新增提醒</el-button>
-                    <el-button type="warning" icon="delete" class="handle-del mr10" @click="showEdit">编辑提醒</el-button>
-                    <el-button type="danger" icon="delete" class="handle-del mr10" @click="deleteAlert">删除提醒</el-button>
+                    <el-button type="success" icon="delete" class="handle-del mr10" @click="doSearch">查询要点</el-button>
+                    <el-button type="primary" icon="delete" class="handle-del mr10" @click="showAdd">新增要点</el-button>
+                    <el-button type="warning" icon="delete" class="handle-del mr10" @click="showEdit">编辑要点</el-button>
+                    <el-button type="danger" icon="delete" class="handle-del mr10" @click="deleteAlert">删除要点</el-button>
                 </div>
                 <div class="">
                     <el-table class="tb-edit"
@@ -50,7 +50,7 @@
             </div>
         </div>
         <!--新增弹出框 -->
-        <el-dialog title="新增登录安全提醒" :visible.sync="addVisible" width="90%" top="50px">
+        <el-dialog title="新增要点内容提示" :visible.sync="addVisible" width="90%" top="50px">
             <div class="container" style="height:500px;overflow:auto">
                 <div class="containerDiv">
                     <quill-editor ref="myTextEditor" v-model="content" :options="editorOption"></quill-editor>
@@ -62,14 +62,14 @@
         </el-dialog>
 
         <!--详情弹出框 -->
-        <el-dialog title="安全详情" :visible.sync="contentVisible" width="90%" top="50px">
+        <el-dialog title="要点内容提示详情" :visible.sync="contentVisible" width="90%" top="50px">
             <div class="container" style="height:500px;overflow:auto">
                 <div class="" v-html="htmlData"></div>
             </div>
         </el-dialog>
 
         <!-- 编辑弹出框 -->
-        <el-dialog title="编辑登录安全提醒" :visible.sync="editVisible" width="90%" top="50px">
+        <el-dialog title="编辑要点内容提示" :visible.sync="editVisible" width="90%" top="50px">
             <div class="container" style="height:500px;overflow:auto">
                 <div class="containerDiv">
                     <quill-editor ref="myTextEditor" v-model="content" :options="editorOption" height="300"></quill-editor>
@@ -80,7 +80,7 @@
             </div>
         </el-dialog>
         <!-- 删除提示框 -->
-        <el-dialog title="删除登录安全提醒" :visible.sync="delVisible" width="300px" center>
+        <el-dialog title="删除要点内容提示" :visible.sync="delVisible" width="300px" center>
             <div class="del-dialog-cnt">删除不可恢复，是否确定删除？</div>
             <span slot="footer" class="dialog-footer">
                 <el-button @click="delVisible = false" style="height:30px;width:80px">取 消</el-button>
@@ -174,8 +174,8 @@
                     let that = this;
                     axios.all([
                         axios.post(" " + url + "/api/getPersonProcessList", {"name": ""}),
-                        axios.post(" " + url + "/sys/showTableTitle", {"name": "gwxz"}),
-                        axios.post(" " + url + "/sysconfig/showContextList",{"id":""})
+                        axios.post(" " + url + "/sys/showTableTitle", {"name": "zysx"}),
+                        axios.post(" " + url + "/sysconfig/showNoticeList", {"id": ""})
                     ])
                         .then(axios.spread(function (select,title, table) {
                             that.selectOptions = select.data;
@@ -231,9 +231,9 @@
             edit(row, column, cell, event) {
                 this.contentVisible = true;
                 this.id = row.id;
-                axios.post(" " + url + "/sysconfig/contextDetail", {"id": this.id})
+                axios.post(" " + url + "/sysconfig/noticeDetail", {"id": this.id})
                     .then((res) => {
-                        this.htmlData=res.data.contexthtml;
+                        this.htmlData=res.data.noticehtml;
                     })
                     .catch((err) => {
                         console.log(err)
@@ -274,9 +274,9 @@
                     }
                     else {
                         this.editVisible = true;
-                        axios.post(" " + url + "/sysconfig/contextDetail", {"id": this.listData[0]})
+                        axios.post(" " + url + "/sysconfig/noticeDetail", {"id": this.listData[0]})
                             .then((res) => {
-                                this.content=res.data.contexthtml;
+                                this.content=res.data.noticehtml;
                             })
                             .catch((err) => {
                                 console.log(err)
@@ -330,7 +330,7 @@
             },
             // 确定删除
             deleteRow() {
-                axios.post(" " + url + "/sysconfig/delContext",
+                axios.post(" " + url + "/sysconfig/delNotice",
                     {
                         "ids": this.listData,
                     }
@@ -374,10 +374,10 @@
             //进行新增
             doAdd() {
                 if (this.content) {
-                    axios.post(" " + url + "/sysconfig/contextAdd",
+                    axios.post(" " + url + "/sysconfig/noticeAdd",
                         {
                             "stationid":this.select,
-                            "contexthtml": this.content,
+                            "noticehtml": this.content,
                         }
                     )
                         .then((res) => {
