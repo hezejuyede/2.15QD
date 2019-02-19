@@ -18,6 +18,7 @@
                               :data="tables"
                               :header-cell-style="{background:'#f7f7f7',color:'rgba(0, 0, 0, 1)',fontSize:'14px'}"
                               border
+                              height="450"
                               highlight-current-row
                               style="width: 98%;margin: auto">
                         <template v-for="(col ,index) in cols">
@@ -210,10 +211,6 @@
             padding-left: 20px;
         }
         .WorkingProcedure-content {
-            padding-top: 10px;
-            height: 450px;
-            padding-bottom: 10px;
-            overflow-y: auto;
             .handle-box {
                 height: 80px;
                 line-height: 80px;

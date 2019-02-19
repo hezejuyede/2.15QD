@@ -49,31 +49,31 @@
                         index: 'PlannedProduction',
                         title: '生产管理'
                     },
-                    {
+                   /* {
                         icon: 'el-icon-lx-cartfill',
                         index: 'MaterialManagement',
                         title: '物料管理'
-                    },
+                    },*/
                     {
                         icon: 'el-icon-star-on',
                         index: 'QualityAssurance',
                         title: '质量管理'
                     },
-                    {
+                  /*  {
                         icon: 'el-icon-view',
                         index: 'ProductionMonitoring',
                         title: '设备管理'
-                    },
+                    },*/
                     {
                         icon: 'el-icon-lx-group',
                         index: 'PersonnelManagement',
                         title: '人员管理'
                     },
-                    {
+                  /*  {
                         icon: 'el-icon-share',
                         index: 'SecurityManagement',
                         title: '看板管理'
-                    },
+                    },*/
                     {
                         icon: 'el-icon-setting',
                         index: 'SystemManagement',

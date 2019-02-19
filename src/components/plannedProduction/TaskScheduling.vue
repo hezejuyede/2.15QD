@@ -52,7 +52,7 @@
             <div class="productionContentTable">
                 <el-table
                     :data="tableData"
-                    :header-cell-style="{background:'#f7f7f7',color:'rgba(0, 0, 0, 1)',fontSize:'18px'}"
+                    :header-cell-style="{background:'#A1D0FC',color:'rgba(0, 0, 0, 0.8)',fontSize:'20px'}"
                     height="400"
                     border
                     @select="selectList"
@@ -276,13 +276,14 @@
                             that.yxjOptions = title.data;
                             that.stateOptions = table.data;
                             that.batchOptions = batchOptions.data;
+                            that.batch = batchOptions.data[0].id;
                             axios.post(" " + url + "/shengchan/getCurStatusList",
                                 {
                                     "shipcode":that.ch,
                                     "yiguanhao": that.ygh,
                                     "xitong": that.code,
                                     "hou":that.pie,
-                                    "pici": batchOptions.data[0].id
+                                    "pici": ""
                                 }
                             )
                                 .then((res) => {

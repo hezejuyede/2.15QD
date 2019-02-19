@@ -10,8 +10,8 @@
             <div class="container">
                 <div class="handle-box">
                     <el-input v-model="select_word" placeholder="筛选工序" class="handle-input mr10"></el-input>
-                    <el-button type="primary" icon="delete" class="handle-del mr10" @click="addWorkStation">新增班次</el-button>
-                    <el-button type="danger" icon="delete" class="handle-del mr10" @click="deleteWorkStation">删除工序</el-button>
+                  <!--  <el-button type="primary" icon="delete" class="handle-del mr10" @click="addWorkStation">新增班次</el-button>
+                    <el-button type="danger" icon="delete" class="handle-del mr10" @click="deleteWorkStation">删除工序</el-button>-->
                 </div>
                 <div class="">
                     <el-table class="tb-edit"

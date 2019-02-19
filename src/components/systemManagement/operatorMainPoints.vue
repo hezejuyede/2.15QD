@@ -32,8 +32,9 @@
                 <div class="">
                     <el-table class="tb-edit"
                               :data="tables"
-                              :header-cell-style="{background:'#f7f7f7',color:'rgba(0, 0, 0, 1)',fontSize:'14px'}"
+                              :header-cell-style="{background:'#A1D0FC',color:' rgba(0, 0, 0, 0.8)',fontSize:'20px'}"
                               border
+                              height="400"
                               @select="selectList"
                               @row-dblclick="edit"
                               highlight-current-row
@@ -79,6 +80,7 @@
                 </div>
             </div>
         </el-dialog>
+
         <!-- 删除提示框 -->
         <el-dialog title="删除要点内容提示" :visible.sync="delVisible" width="300px" center>
             <div class="del-dialog-cnt">删除不可恢复，是否确定删除？</div>
@@ -433,10 +435,6 @@
             padding-left: 20px;
         }
         .editorTemplate-content {
-            padding-top: 10px;
-            height: 450px;
-            padding-bottom: 10px;
-            overflow-y: auto;
             .handle-box {
                 height: 80px;
                 line-height: 80px;

@@ -48,13 +48,20 @@
             <div class="productionContentTable">
                 <el-table
                     :data="tableData"
-                    :header-cell-style="{background:'#f7f7f7',color:'rgba(0, 0, 0, 1)',fontSize:'18px'}"
+                    :header-cell-style="{background:'#A1D0FC',color:'rgba(0, 0, 0, 0.8)',fontSize:'20px'}"
                     border
+                    height="400"
                     @row-click="clickTable"
                     style="width: 95%;margin: 0 auto">
                     <el-table-column
                         prop="shipcode"
                         label="船号"
+                        align="center"
+                        min-width="20%">
+                    </el-table-column>
+                    <el-table-column
+                        prop="pici"
+                        label="批次"
                         align="center"
                         min-width="20%">
                     </el-table-column>
@@ -136,13 +143,25 @@
                     this.$router.push("/")
                 }
                 else {
-                    axios.post(" " + url + "/sys/getPiciList")
-                        .then((res) => {
-                            this.batchOptions = res.data;
-                        })
-                        .catch((err) => {
-                            console.log(err)
-                        })
+                    let that = this;
+                    axios.all([
+                        axios.post(" " + url + "/sys/getPiciList"),
+                        axios.post(" " + url + "/shengchan/getCurStatusList",
+                            {
+                                "pici": this.batch,
+                                "shipcode": this.ch,
+                                "yiguanhao": this.ygh,
+                                "xitong": this.code,
+                                "hou": this.pie
+                            }
+                        )
+                    ])
+                        .then(axios.spread(function (batchOptions, list) {
+                            that.batchOptions = batchOptions.data;
+                            that.batch = batchOptions.data[0].id;
+                            that.tableData = list.data
+
+                        }));
                 }
             },
 
@@ -150,8 +169,6 @@
             clickTable(row, column, cell, event) {
                 this.showImportData = false;
                 this.id= row.id;
-
-
             },
 
             //进行查询
@@ -184,11 +201,12 @@
 </script>
 <style scoped lang="less" rel="stylesheet/less">
     @import "../../assets/less/base";
-    .production{
+
+    .production {
         width: 100%;
         height: 100%;
         background-color: @color-white;
-        .crumbs{
+        .crumbs {
             height: 50px;
             padding-top: 20px;
             padding-left: 20px;
@@ -198,7 +216,7 @@
                 height: 100px;
                 display: flex;
                 border-bottom: 1px solid @color-background-d;
-                .batchTab{
+                .batchTab {
                     flex: 1;
                     display: flex;
                     align-items: center;
@@ -223,19 +241,12 @@
                         font-size: 16px;
                         margin-left: 10px;
                         margin-right: 10px;
-                }
+                    }
                 }
             }
-            .productionContentTable{
-                padding-top: 10px;
-                height: 450px;
-                padding-bottom: 10px;
-                overflow-y: auto;
+            .productionContentTable {
 
             }
-
-
-
 
         }
 

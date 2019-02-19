@@ -52,11 +52,11 @@
                                 index: "1-4",
                                 url: "/ShiftManagement"
                             },
-                            {
+                           /* {
                                 label: '加工能力',
                                 index: "1-5",
                                 url: "/404"
-                            }
+                            }*/
                         ]
                     },
                     {
@@ -74,24 +74,24 @@
                                 index: "2-2",
                                 url: "/InformationImport"
                             },
-                            {
+                            /*{
                                 label: '特别流程管数据导入',
                                 index: "2-3",
                                 url: "/TBImport"
-                            },
+                            },*/
                             {
                                 label: '导入数据查询',
                                 index: "2-4",
                                 url: "/ImportDataQuery"
-                            },
+                            }/*,
                             {
                                 label: '计划排产',
                                 index: "2-5",
                                 url: "/Production"
-                            }
+                            }*/
                         ]
                     },
-                    {
+                   /* {
                         label: '任务派发',
                         index: "3",
                         url: "/ProcessRoute",
@@ -102,37 +102,37 @@
                                 url: "/Distribute"
                             }
                         ]
-                    },
+                    },*/
                     {
                         label: '排产分析',
                         index: "4",
                         url: "/FactoryCalendar",
                         children: [
-                            {
+                          /*  {
                                 label: '排产分析',
                                 index: "4-1",
                                 url: "/404"
-                            }
+                            }*/
                         ]
                     },
                     {
                         label: '生产调度',
-                        index: "5",
+                        index: "4",
                         url: "/ResourceModel",
                         children: [
                             {
                                 label: '任务调度',
-                                index: "5-1",
+                                index: "4-1",
                                 url: "/TaskScheduling"
                             },
-                            {
+                         /*   {
                                 label: '工位监测',
                                 index: "5-3",
                                 url: "/404"
-                            }
+                            }*/
                         ]
                     },
-                    {
+                   /* {
                         label: ' 生产监控',
                         index: "6",
                         url: "/InformationImport",
@@ -154,27 +154,27 @@
                             }
                         ]
 
-                    },
+                    },*/
                     {
                         label: '任务跟踪',
-                        index: "9",
+                        index: "5",
                         url: "/WorksheetPlanning",
                         children: [
                             {
                                 label: ' 生产进度',
-                                index: "9-1",
+                                index: "5-1",
                                 url: "/ProductionSchedule"
                             },
                             {
                                 label: '工位动态',
-                                index: "9-2",
+                                index: "5-2",
                                 url: "/WorkstationDynamics"
                             },
-                            {
+                            /*{
                                 label: ' 视频监控',
                                 index: "9-3",
                                 url: "/404"
-                            }
+                            }*/
                         ]
                     }
                 ],

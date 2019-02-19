@@ -16,8 +16,9 @@
                 <div class="">
                     <el-table class="tb-edit"
                               :data="tables"
-                              :header-cell-style="{background:'#f7f7f7',color:'rgba(0, 0, 0, 1)',fontSize:'14px'}"
+                              :header-cell-style="{background:'#A1D0FC',color:'rgba(0, 0, 0, 0.8)',fontSize:'20px'}"
                               border
+                              height="450"
                               @select="selectList"
                               @row-dblclick="editWorkStation"
                               highlight-current-row
@@ -74,7 +75,20 @@
                         <el-input v-model="personnum"></el-input>
                     </el-form-item>
                     <el-form-item label="所属生产线">
-                        <el-input v-model="line"></el-input>
+                        <el-select
+                            v-model="line"
+                            clearable
+                            filterable
+                            allow-create
+                            default-first-option
+                            placeholder="请输入或者选择批次">
+                            <el-option
+                                v-for="item in lineOptions"
+                                :key="item.indexno"
+                                :label="item.name"
+                                :value="item.indexno">
+                            </el-option>
+                        </el-select>
                     </el-form-item>
                 </el-form>
                 <span slot="footer" class="dialog-footer">
@@ -124,7 +138,8 @@
                 name: '',
                 context: '',
                 personnum: "",
-                line: ''
+                line: '',
+                lineOptions:[]
 
             }
         },
@@ -162,11 +177,13 @@
                     let that = this;
                     axios.all([
                         axios.post(" "+ url +"/sys/showTableTitle",{"name":"gongxu"}),
-                        axios.post(" "+ url +"/sysconfig/getGongxuList")
+                        axios.post(" "+ url +"/sysconfig/getGongxuList"),
+                        axios.post(" " + url + "/sys/dictionaryList", {"id": "9"}),
                     ])
-                        .then(axios.spread(function (title, table) {
+                        .then(axios.spread(function (title, table,line) {
                             that.cols = title.data;
                             that.tableData = table.data;
+                            that.lineOptions =line.data
                         }));
                 }
             },
@@ -329,10 +346,6 @@
             padding-left: 20px;
         }
         .WorkingProcedure-content {
-            padding-top: 10px;
-            height: 450px;
-            padding-bottom: 10px;
-            overflow-y: auto;
             .handle-box {
                 height: 80px;
                 line-height:80px;

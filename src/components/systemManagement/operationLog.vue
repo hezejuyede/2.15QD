@@ -58,8 +58,9 @@
             <div class="operationLogContentTable">
                 <el-table class="tb-edit"
                           :data="tableData"
-                          :header-cell-style="{background:'#f7f7f7',color:'rgba(0, 0, 0, 1)',fontSize:'14px'}"
+                          :header-cell-style="{background:'#A1D0FC',color:'rgba(0, 0, 0, 0.8)',fontSize:'20px'}"
                           border
+                          height="400"
                           highlight-current-row
                           style="width: 98%;margin: auto">
                     <template v-for="(col ,index) in cols">
@@ -76,7 +77,7 @@
     import axios from 'axios'
     import url from '../../assets/js/URL'
     import Modal from '../../common/modal'
-
+    import {getNowTime} from '../../assets/js/api'
     export default {
         name: 'FactoryCalendar',
         data() {
@@ -113,6 +114,14 @@
                     this.$router.push("/")
                 }
                 else {
+                    let time = getNowTime();
+                    let times = [];
+                    for (let i = 0; i < 2; i++) {
+                        times.push(time)
+                    }
+                    this.examineTime =times;
+
+
                     let that = this;
                     axios.all([
                         axios.post(" " + url + "/sys/getPiciList"),
@@ -121,6 +130,22 @@
                         .then(axios.spread(function (batchOptions, logTypeOptions) {
                             that.batchOptions = batchOptions.data;
                             that.logTypeOptions = logTypeOptions.data;
+                            that.batch=batchOptions.data[0].id;
+                            that.logType=logTypeOptions.data[0].indexno;
+                            axios.all([
+                                axios.post(" " + url + "/sys/showTableTitle", {"name": 'rizhi'}),
+                                axios.post(" " + url + "/log/showLog", {"pici": that.batch,"type":that.logType,"time":that.examineTime})
+                            ])
+                                .then(axios.spread(function (title, table) {
+                                    if (table.data !== "-1") {
+                                        that.cols = title.data;
+                                        that.tableData = table.data;
+                                    }
+                                    else {
+                                        that.cols = title.data;
+                                        that.tableData = [];
+                                    }
+                                }));
                         }));
 
 
@@ -140,7 +165,8 @@
                             if (table.data !== "-1") {
                                 that.cols = title.data;
                                 that.tableData = table.data;
-                            } else {
+                            }
+                            else {
                                 that.cols = title.data;
                                 that.tableData = [];
                             }
@@ -177,14 +203,9 @@
             padding-left: 20px;
         }
         .operationLogContent {
-            padding-top: 10px;
-            height: 450px;
-            padding-bottom: 10px;
-            overflow-y: auto;
             .operationLogContentTab {
                 height: 100px;
                 display: flex;
-                border-bottom: 1px solid @color-background-d;
                 .normalTab {
                     flex: 1;
                     display: flex;

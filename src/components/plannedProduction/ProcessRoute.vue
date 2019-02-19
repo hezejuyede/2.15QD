@@ -17,9 +17,9 @@
                 <div class="">
                     <el-table class="tb-edit"
                               :data="tables"
-                              :header-cell-style="{background:'#f7f7f7',color:'rgba(0, 0, 0, 1)',fontSize:'18px'}"
+                              :header-cell-style="{background:'#A1D0FC',color:'rgba(0, 0, 0, 0.8)',fontSize:'20px'}"
                               border
-                              height="450"
+                              height="430"
                               highlight-current-row
                               @select='selectRow'
                               @row-dblclick="editWorkStation"

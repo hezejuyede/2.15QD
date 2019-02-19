@@ -31,8 +31,9 @@
                 <div class="">
                     <el-table class="tb-edit"
                               :data="tables"
-                              :header-cell-style="{background:'#f7f7f7',color:'rgba(0, 0, 0, 1)',fontSize:'14px'}"
+                              :header-cell-style="{background:'#A1D0FC',color:' rgba(0, 0, 0, 0.8)',fontSize:'20px'}"
                               border
+                              height="400"
                               @select="selectList"
                               @row-dblclick="editPerson"
                               highlight-current-row
@@ -94,6 +95,7 @@
                         clearable
                         filterable
                         allow-create
+                        disabled
                         default-first-option
                         placeholder="请选择字典类型">
                         <el-option
@@ -267,7 +269,7 @@
                         this.indexno = res.data.indexno;
                         this.showindex = res.data.showindex;
                         this.code = res.data.code;
-                        this.select=res.data.indexno;
+                        this.select=res.data.type;
                     })
                     .catch((err) => {
                         console.log(err)
@@ -403,10 +405,6 @@
             padding-left: 20px;
         }
         .dictionaryMaintenance-content {
-            padding-top: 10px;
-            height: 450px;
-            padding-bottom: 10px;
-            overflow-y: auto;
             .handle-box {
                 height: 80px;
                 line-height: 80px;

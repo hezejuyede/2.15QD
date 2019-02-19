@@ -9,7 +9,13 @@
         <div class="importDataQueryContent">
             <div class="importDataQueryContentTab">
                 <div class="selectTab">
-                    <el-select v-model="GJGType" placeholder="选择管加工类型">
+                    <el-select
+                        v-model="GJGType"
+                        clearable
+                        filterable
+                        allow-create
+                        default-first-option
+                        placeholder="选择管加工类型">
                         <el-option
                             v-for="item in GJGTypeOptions"
                             :key="item.value"
@@ -51,7 +57,7 @@
                 <div class="">
                     <el-table class="tb-edit"
                               :data="tableData"
-                              :header-cell-style="{background:'#f7f7f7',color:'rgba(0, 0, 0, 1)',fontSize:'14px'}"
+                              :header-cell-style="{background:'#A1D0FC',color:'rgba(0, 0, 0, 0.8)',fontSize:'18px'}"
                               border
                               height="350"
                               highlight-current-row
@@ -121,20 +127,25 @@
                     this.$router.push("/")
                 }
                 else {
-                    axios.post(" " + url + "/sys/getPiciList")
-                        .then((res) => {
-                            this.batchOptions = res.data;
-                        })
-                        .catch((err) => {
-                            console.log(err)
-                        })
-                    axios.post(" " + url + "/sys/showTableTitle",{"name":"tablist"})
-                        .then((res) => {
-                            this.navBar = res.data;
-                        })
-                        .catch((err) => {
-                            console.log(err)
-                        })
+                    let that = this;
+                    axios.all([
+                        axios.post(" " + url + "/sys/getPiciList"),
+                        axios.post(" " + url + "/sys/showTableTitle", {"name": "tablist"})
+                    ])
+                        .then(axios.spread(function (batchOptions, list) {
+                            that.batchOptions = batchOptions.data;
+                            that.batch = batchOptions.data[0].id;
+                            that.navBar = list.data;
+                            axios.all([
+                                axios.post(" "+ url +"/sys/showTableTitle", {"name":"qieduan","pici": that.batch}),
+                                axios.post(" "+ url +"/importother/publicData", {"pici":  that.batch,"code": "qieduan"})
+                            ])
+                                .then(axios.spread(function (title, table) {
+                                    that.cols = title.data;
+                                    that.tableData = table.data;
+                                    that.num=0;
+                                }));
+                        }));
                 }
             },
 

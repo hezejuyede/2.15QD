@@ -38,7 +38,7 @@
                                 url: "/OperationLog"
                             },
                             {
-                                label: '系统登录退出日志',
+                                label: '登录日志',
                                 index: "1-2",
                                 url: "/LoginOutLog"
                             }

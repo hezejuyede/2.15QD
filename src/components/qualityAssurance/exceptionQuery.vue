@@ -9,7 +9,13 @@
         <div class="exceptionQueryContent">
             <div class="exceptionQueryContentTab">
                 <div class="selectTab">
-                    <el-select v-model="gxType" placeholder="请选择工序">
+                    <el-select
+                        v-model="gxType"
+                        clearable
+                        filterable
+                        allow-create
+                        default-first-option
+                        placeholder="请选择工序">
                         <el-option
                             v-for="item in gxTypeOptions"
                             :key="item.id"
@@ -19,7 +25,13 @@
                     </el-select>
                 </div>
                 <div class="selectTab">
-                    <el-select v-model="ycType" placeholder="请选择异常类型">
+                    <el-select
+                        v-model="ycType"
+                        clearable
+                        filterable
+                        allow-create
+                        default-first-option
+                        placeholder="请选择异常类型">
                         <el-option
                             v-for="item in ycTypeOptions"
                             :key="item.indexno"
@@ -29,7 +41,13 @@
                     </el-select>
                 </div>
                 <div class="selectTab">
-                    <el-select v-model="gzType" placeholder="选择当前管状态">
+                    <el-select
+                        v-model="gzType"
+                        clearable
+                        filterable
+                        allow-create
+                        default-first-option
+                        placeholder="选择当前管状态">
                         <el-option
                             v-for="item in gzTypeOptions"
                             :key="item.indexno"
@@ -45,8 +63,9 @@
             <div class="exceptionQueryTable">
                 <el-table
                     :data="tableData"
-                    :header-cell-style="{background:'#f7f7f7',color:'rgba(0, 0, 0, 1)',fontSize:'14px'}"
+                    :header-cell-style="{background:'#A1D0FC',color:' rgba(0, 0, 0, 0.8)',fontSize:'20px'}"
                     border
+                    height="400"
                     @row-click="clickTable"
                     style="width: 98%;margin: 0 auto">
 
@@ -207,9 +226,23 @@
                         axios.post(" " + url + "/sys/dictionaryList", {"id": 3})
                     ])
                         .then(axios.spread(function (gx, yc, gz) {
-                           that.gxTypeOptions = gx.data;
+                            that.gxTypeOptions = gx.data;
                             that.ycTypeOptions = yc.data;
                             that.gzTypeOptions = gz.data;
+                            that.gxType=gx.data[0].id;
+                            that.ycType=yc.data[0].indexno;
+                            that.gzType=gz.data[0].indexno;
+                            axios.post(" " + url + "/shengchanError/errorEventList", {
+                                "id": that.gxType,
+                                "errorId": that.ycType,
+                                "status": that.gzType
+                            })
+                                .then((res) => {
+                                    that.tableData = res.data;
+                                })
+                                .catch((err) => {
+                                    console.log(err)
+                                })
                         }));
                 }
             },
@@ -306,7 +339,6 @@
             .exceptionQueryContentTab {
                 height: 100px;
                 display: flex;
-                border-bottom: 1px solid @color-background-d;
                 .selectTab {
                     flex: 1;
                     display: flex;
@@ -319,10 +351,7 @@
                 }
             }
             .exceptionQueryTable {
-                padding-top: 10px;
-                height: 450px;
-                padding-bottom: 10px;
-                overflow-y: auto;
+
             }
         }
 

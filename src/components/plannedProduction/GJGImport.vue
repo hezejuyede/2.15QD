@@ -71,7 +71,7 @@
         <div class="productionContentTable">
             <el-table class="tb-edit"
                       :data="tableData"
-                      :header-cell-style="{background:'#f7f7f7',color:'rgba(0, 0, 0, 1)',fontSize:'14px'}"
+                      :header-cell-style="{background:'#A1D0FC',color:'rgba(0, 0, 0, 0.8)',fontSize:'14px'}"
                       height="400"
                       @select="selectList"
                       border
@@ -267,9 +267,18 @@
                     ])
                         .then(axios.spread(function (pici, scx, type, status) {
                             that.batchOptions = pici.data;
+                            that.batch = pici.data[0].id;
                             that.scxOptions = scx.data;
                             that.fileTypeOptions = type.data;
                             that.statusOptions = status.data;
+                            axios.all([
+                                axios.post(" " + url + "/sys/showTableTitle", {"name": "filelist"}),
+                                axios.post(" " + url + "/fileShenpi/getFileUploadList", {"lineNo": that.scx, "status": that.status, "pici": that.batch})
+                            ])
+                                .then(axios.spread(function (title, table) {
+                                    that.cols = title.data;
+                                    that.tableData = table.data;
+                                }));
                         }));
                 }
             },

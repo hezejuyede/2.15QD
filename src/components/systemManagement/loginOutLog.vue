@@ -3,7 +3,7 @@
         <div class="crumbs">
             <el-breadcrumb separator="/">
                 <el-breadcrumb-item>日志管理</el-breadcrumb-item>
-                <el-breadcrumb-item>系统登录退出日志</el-breadcrumb-item>
+                <el-breadcrumb-item>登录日志</el-breadcrumb-item>
             </el-breadcrumb>
         </div>
         <div class="loginOutLogContent">
@@ -24,8 +24,9 @@
             <div class="loginOutLogContentTable">
                 <el-table class="tb-edit"
                           :data="tableData"
-                          :header-cell-style="{background:'#f7f7f7',color:'rgba(0, 0, 0, 1)',fontSize:'14px'}"
+                          :header-cell-style="{background:'#A1D0FC',color:'rgba(0, 0, 0, 0.8)',fontSize:'20px'}"
                           border
+                          height="400"
                           highlight-current-row
                           style="width: 98%;margin: auto">
                     <template v-for="(col ,index) in cols">
@@ -74,13 +75,15 @@
                 this.username = Info.username;
                 if (userInfo === null) {
                     this.$router.push("/")
-                }else {
+                }
+                else {
 
                     let time = getNowTime();
                     let times = [];
                     for (let i = 0; i < 2; i++) {
                         times.push(time)
                     }
+                    this.examineTime =times;
                     let that = this;
                     axios.all([
                         axios.post(" " + url + "/sys/showTableTitle", {"name": "login"}),
@@ -147,14 +150,10 @@
             padding-left: 20px;
         }
         .loginOutLogContent {
-            padding-top: 10px;
-            height: 450px;
-            padding-bottom: 10px;
-            overflow-y: auto;
+          margin-top: 10px;
             .loginOutLogContentTab {
                 height: 100px;
                 display: flex;
-                border-bottom: 1px solid @color-background-d;
                 .timeTab {
                     flex: 2;
                     display: flex;
