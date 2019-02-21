@@ -42,7 +42,7 @@
                     <el-input v-model="pie" placeholder="请输入PIE"></el-input>
                 </div>
                 <div class="operationTab">
-                    <button   @click="doSearch">查询</button>
+                    <button @click="doSearch">查询</button>
                 </div>
             </div>
             <div class="productionContentTable">
@@ -50,7 +50,7 @@
                     :data="tableData"
                     :header-cell-style="{background:'#A1D0FC',color:'rgba(0, 0, 0, 0.8)',fontSize:'20px'}"
                     border
-                    height="400"
+                    height="450"
                     @row-click="clickTable"
                     style="width: 95%;margin: 0 auto">
                     <el-table-column
@@ -121,7 +121,7 @@
                 tableData: [],
 
                 showImportData: true,
-                id:""
+                id: ""
 
 
             }
@@ -145,21 +145,26 @@
                 else {
                     let that = this;
                     axios.all([
-                        axios.post(" " + url + "/sys/getPiciList"),
-                        axios.post(" " + url + "/shengchan/getCurStatusList",
-                            {
-                                "pici": this.batch,
-                                "shipcode": this.ch,
-                                "yiguanhao": this.ygh,
-                                "xitong": this.code,
-                                "hou": this.pie
-                            }
-                        )
+                        axios.post(" " + url + "/sys/getPiciList")
                     ])
-                        .then(axios.spread(function (batchOptions, list) {
+                        .then(axios.spread(function (batchOptions) {
                             that.batchOptions = batchOptions.data;
                             that.batch = batchOptions.data[0].id;
-                            that.tableData = list.data
+                            axios.post(" " + url + "/shengchan/getCurStatusList",
+                                {
+                                    "pici": that.batch,
+                                    "shipcode": that.ch,
+                                    "yiguanhao": that.ygh,
+                                    "xitong": that.code,
+                                    "hou": that.pie
+                                }
+                            )
+                                .then((res) => {
+                                    that.tableData = res.data
+                                })
+                                .catch((err) => {
+                                    console.log(err)
+                                })
 
                         }));
                 }
@@ -168,14 +173,14 @@
             //点击表格
             clickTable(row, column, cell, event) {
                 this.showImportData = false;
-                this.id= row.id;
+                this.id = row.id;
             },
 
             //进行查询
             doSearch() {
                 axios.post(" " + url + "/shengchan/getCurStatusList",
                     {
-                        "pici":this.batch,
+                        "pici": this.batch,
                         "shipcode": this.ch,
                         "yiguanhao": this.ygh,
                         "xitong": this.code,
@@ -183,7 +188,7 @@
                     }
                 )
                     .then((res) => {
-                        this.tableData =res.data
+                        this.tableData = res.data
                     })
                     .catch((err) => {
                         console.log(err)
@@ -215,7 +220,6 @@
             .productionContentTab {
                 height: 100px;
                 display: flex;
-                border-bottom: 1px solid @color-background-d;
                 .batchTab {
                     flex: 1;
                     display: flex;
@@ -251,7 +255,6 @@
         }
 
     }
-
 
 
 </style>

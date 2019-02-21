@@ -103,26 +103,26 @@
                             }
                         ]
                     },*/
-                    {
+                   /* {
                         label: '排产分析',
                         index: "4",
                         url: "/FactoryCalendar",
                         children: [
-                          /*  {
+                            {
                                 label: '排产分析',
                                 index: "4-1",
                                 url: "/404"
-                            }*/
+                            }
                         ]
-                    },
+                    },*/
                     {
                         label: '生产调度',
-                        index: "4",
+                        index: "3",
                         url: "/ResourceModel",
                         children: [
                             {
                                 label: '任务调度',
-                                index: "4-1",
+                                index: "3-1",
                                 url: "/TaskScheduling"
                             },
                          /*   {
@@ -157,17 +157,17 @@
                     },*/
                     {
                         label: '任务跟踪',
-                        index: "5",
+                        index: "4",
                         url: "/WorksheetPlanning",
                         children: [
                             {
                                 label: ' 生产进度',
-                                index: "5-1",
+                                index: "4-1",
                                 url: "/ProductionSchedule"
                             },
                             {
                                 label: '工位动态',
-                                index: "5-2",
+                                index: "4-2",
                                 url: "/WorkstationDynamics"
                             },
                             /*{

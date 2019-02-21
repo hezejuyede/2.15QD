@@ -283,7 +283,7 @@
                                     "yiguanhao": that.ygh,
                                     "xitong": that.code,
                                     "hou":that.pie,
-                                    "pici": ""
+                                    "pici":that.batch
                                 }
                             )
                                 .then((res) => {
@@ -325,7 +325,6 @@
                         console.log(err)
                     })
             },
-
 
             //弹出状态修改框
             editState() {
@@ -417,10 +416,6 @@
                 }
             },
 
-
-
-
-
             //弹出路线修改框
             editRoute() {
                 if (this.listData.length) {
@@ -473,10 +468,6 @@
                     setTimeout(a, 2000);
                 }
             },
-
-
-
-
 
             // 增加行
             addRow() {
@@ -590,7 +581,6 @@
 
             }
         }
-
     }
 
 

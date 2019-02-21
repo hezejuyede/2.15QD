@@ -150,6 +150,10 @@
                 </div>
                 <div class="containerUp" style="display: flex;align-items: center;justify-content: center">
                     <el-upload
+                        v-loading="loading"
+                        element-loading-text="正在上传中"
+                        element-loading-spinner="el-icon-loading"
+                        element-loading-background="rgba(0, 0, 0, 0.8)"
                         class="upload"
                         ref="upload"
                         :multiple='true'
@@ -207,11 +211,13 @@
         name: 'InformationImport',
         data() {
             return {
+                loading: false,
+
                 uploadUrl: " " + url + "/fileupload/upload",
                 message: '',
                 HideModal: true,
                 listData: "",
-                listArr:[],
+                listArr: [],
                 list: [],
 
                 Data: {},
@@ -223,6 +229,7 @@
 
                 uploadVisible: false,
                 detailsVisible: false,
+                xz: true,
 
                 pc: "",
                 batch: "",
@@ -273,7 +280,11 @@
                             that.statusOptions = status.data;
                             axios.all([
                                 axios.post(" " + url + "/sys/showTableTitle", {"name": "filelist"}),
-                                axios.post(" " + url + "/fileShenpi/getFileUploadList", {"lineNo": that.scx, "status": that.status, "pici": that.batch})
+                                axios.post(" " + url + "/fileShenpi/getFileUploadList", {
+                                    "lineNo": that.scx,
+                                    "status": that.status,
+                                    "pici": that.batch
+                                })
                             ])
                                 .then(axios.spread(function (title, table) {
                                     that.cols = title.data;
@@ -305,6 +316,7 @@
             //显示导入数据框
             showUpData() {
                 this.uploadVisible = true;
+                this.batch = "";
             },
 
             //进行查询
@@ -313,7 +325,11 @@
                     let that = this;
                     axios.all([
                         axios.post(" " + url + "/sys/showTableTitle", {"name": "filelist"}),
-                        axios.post(" " + url + "/fileShenpi/getFileUploadList", {"lineNo": this.scx, "status": this.status, "pici": this.batch})
+                        axios.post(" " + url + "/fileShenpi/getFileUploadList", {
+                            "lineNo": this.scx,
+                            "status": this.status,
+                            "pici": this.batch
+                        })
                     ])
                         .then(axios.spread(function (title, table) {
                             that.cols = title.data;
@@ -337,7 +353,9 @@
             //上传
             submitUpload() {
                 if (this.batch && this.fileType && this.scx) {
+
                     this.$refs.upload.submit();
+                    this.loading = true;
                 }
                 else {
                     this.$message.warning(`批次,类型和生产线不能为空`);
@@ -356,7 +374,24 @@
 
             //上传成功
             uploadSuccess(response, file, fileList) {
+                this.loading = false;
                 this.$message.success(`上传成功`);
+                let that = this;
+                axios.all([
+                    axios.post(" " + url + "/sys/showTableTitle", {"name": "filelist"}),
+                    axios.post(" " + url + "/fileShenpi/getFileUploadList", {
+                        "lineNo": this.scx,
+                        "status": this.status,
+                        "pici": this.batch
+                    })
+                ])
+                    .then(axios.spread(function (title, table) {
+                        that.cols = title.data;
+                        that.tableData = table.data;
+                    }));
+                setTimeout(() => {
+                    that.uploadVisible = false;
+                }, 1000)
             },
 
             //上传失败
@@ -367,7 +402,7 @@
             //选择那个一个
             selectList(val) {
                 if (val.length) {
-                    this.listArr=val[0].id;
+                    this.listArr = val[0].id;
                     let data = [];
                     for (let i = 0; i < val.length; i++) {
                         let a = val[i].id;
@@ -428,7 +463,7 @@
                 axios.post(" " + url + "/fileShenpi/updateStatus",
                     {
                         "id": this.listArr,
-                        "status":"2"
+                        "status": "2"
                     }
                 )
                     .then((res) => {
@@ -440,10 +475,10 @@
                                 that.$router.go(0)
                             }, 1500)
                         }
-                        else if (res.data === "-1"){
+                        else if (res.data === "-1") {
                             this.$message.warning(`传参错误`);
                         }
-                        else if (res.data === "-2"){
+                        else if (res.data === "-2") {
                             this.$message.warning(`已经通过审核，无需重复提交`);
                         }
                         else {
@@ -472,10 +507,10 @@
                             }, 1500)
                         }
 
-                        else if (res.data === "-1"){
+                        else if (res.data === "-1") {
                             this.$message.warning(`传参错误`);
                         }
-                        else if (res.data === "-2"){
+                        else if (res.data === "-2") {
                             this.$message.warning(`已经不通过，无需重复提交`);
                         }
                         else {
@@ -492,6 +527,7 @@
 </script>
 <style scoped lang="less" rel="stylesheet/less">
     @import "../../assets/less/base";
+
     .InformationImport {
         width: 100%;
         height: 100%;
@@ -504,7 +540,6 @@
         .importTitle {
             padding-left: 2%;
             height: 80px;
-            border-bottom: 1px solid @color-background-d;
             .upData {
                 height: 80px;
                 line-height: 80px;
@@ -546,7 +581,7 @@
 
             }
         }
-        .productionContentTable{
+        .productionContentTable {
             margin-top: 20px;
         }
         .select {
