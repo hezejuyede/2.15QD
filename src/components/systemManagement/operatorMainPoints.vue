@@ -229,6 +229,7 @@
                     this.listData = [];
                 }
             },
+
             //双击点击显示详情
             edit(row, column, cell, event) {
                 this.contentVisible = true;
@@ -241,6 +242,7 @@
                         console.log(err)
                     });
             },
+
             //选择点击删除
             deleteAlert() {
                 if (this.listData.length) {
@@ -259,6 +261,7 @@
                     setTimeout(a, 2000);
                 }
             },
+
             //显示编辑
             showEdit(){
                 if (this.listData.length) {
@@ -299,6 +302,7 @@
                 }
 
             },
+
             // 保存编辑
             saveEdit() {
                 if (this.content) {
@@ -330,6 +334,7 @@
                 }
 
             },
+
             // 确定删除
             deleteRow() {
                 axios.post(" " + url + "/sysconfig/delNotice",
@@ -354,6 +359,7 @@
                         console.log(err)
                     })
             },
+
             //显示新增
             showAdd() {
                 if (this.select) {
@@ -373,6 +379,8 @@
                 }
 
             },
+
+
             //进行新增
             doAdd() {
                 if (this.content) {
@@ -404,9 +412,11 @@
                 }
             },
 
+
             onEditorChange({ editor, html, text }) {
                 this.content = html;
             },
+
             submit(){
                 if(this.content){
                     console.log(this.content);

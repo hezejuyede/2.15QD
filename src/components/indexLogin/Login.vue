@@ -1,22 +1,31 @@
 <template>
     <div class="login-wrap">
-        <div class="ms-login">
-            <div class="ms-title">管加工生产执行系统</div>
-            <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="0px" class="ms-content">
-                <el-form-item prop="username">
-                    <el-input v-model="ruleForm.username" placeholder="username">
-                        <el-button slot="prepend" icon="el-icon-lx-people"></el-button>
-                    </el-input>
-                </el-form-item>
-                <el-form-item prop="password">
-                    <el-input type="password" placeholder="password" v-model="ruleForm.password" @keyup.enter.native="submitForm('ruleForm')">
-                        <el-button slot="prepend" icon="el-icon-lx-lock"></el-button>
-                    </el-input>
-                </el-form-item>
-                <div class="login-btn">
-                    <el-button type="primary" @click="submitForm('ruleForm')">登录</el-button>
-                </div>
-            </el-form>
+        <div class="mesLogo">
+            <div class="ms-logo">
+                <div class=""><img src="../../assets/img/logo.png" alt="" class=""></div>
+                <div class="">管加工生产执行系统</div>
+            </div>
+            <div class="ms-login">
+                <div class="ms-title"></div>
+                <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="0px" class="ms-content">
+                    <el-form-item prop="username">
+                        <el-input v-model="ruleForm.username" placeholder="username">
+                            <el-button slot="prepend" icon="el-icon-lx-people"></el-button>
+                        </el-input>
+                    </el-form-item>
+                    <el-form-item prop="password">
+                        <el-input type="password" placeholder="password" v-model="ruleForm.password" @keyup.enter.native="submitForm('ruleForm')">
+                            <el-button slot="prepend" icon="el-icon-lx-lock"></el-button>
+                        </el-input>
+                    </el-form-item>
+                    <div class="login-btn">
+                        <el-button type="primary" @click="submitForm('ruleForm')">登录</el-button>
+                    </div>
+                </el-form>
+            </div>
+            <div class="ms-bottom">
+                ©2019 南通中远海运川崎船舶工程有限公司
+            </div>
         </div>
         <Modal :msg="message"
                :isHideModal="HideModal"></Modal>
@@ -126,36 +135,61 @@
         position: relative;
         width:100%;
         height:100%;
-        background-image: url(../../assets/img/login-bg.jpg);
+        background-image: url(../../assets/img/Winlogon-bg.png);
         background-size: cover;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        .mesLogo{
+            width:350px;
+            .ms-logo{
+                height: 150px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                flex-direction: column;
+                font-size: 26px;
+            }
+            .ms-login{
+                border-radius: 15px;
+                background: rgba(255,255,255, 0.7);
+                .ms-title{
+                    width:100%;
+                    height: 50px;
+                    line-height: 50px;
+                    text-align: center;
+                    font-size:20px;
+                    color: @color-bg-hei;
+                    border-bottom: 1px solid #ddd;
+                    background-image: url(../../assets/img/top-left.jpg);
+                    background-size: cover;
+                    border-top-left-radius: 15px;
+                    border-top-right-radius: 15px;
+                }
+                .ms-content{
+                    padding: 30px 30px;
+                }
+                .login-btn{
+                    text-align: center;
+                }
+                .login-btn button{
+                    width:100%;
+                    height:36px;
+                    margin-bottom: 10px;
+                }
+                .el-button{
+                    margin-left: 0px;
+                }
+            }
+            .ms-bottom{
+                height: 100px;
+                text-align: center;
+                line-height: 100px;
+                font-size: 18px;
+                color: #f7f7f7f7;
+            }
+        }
     }
-    .ms-title{
-        width:100%;
-        line-height: 50px;
-        text-align: center;
-        font-size:20px;
-        color: @color-bg-hei;
-        border-bottom: 1px solid #ddd;
-    }
-    .ms-login{
-        position: absolute;
-        left:50%;
-        top:50%;
-        width:350px;
-        margin:-190px 0 0 -175px;
-        border-radius: 5px;
-        background: rgba(255,255,255, 0.7);
-        overflow: hidden;
-    }
-    .ms-content{
-        padding: 30px 30px;
-    }
-    .login-btn{
-        text-align: center;
-    }
-    .login-btn button{
-        width:100%;
-        height:36px;
-        margin-bottom: 10px;
-    }
+
+
 </style>

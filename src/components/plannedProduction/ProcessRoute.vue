@@ -133,9 +133,21 @@
                             :label="'路线工位' + index"
                             :key="domain.key"
                             :prop="'domains.' + index + '.value'">
-                            <el-input v-model="domain.value" style="height:30px;width:60%;margin-right: 5%"
-                                      placeholder="请输入工位">
-                            </el-input>
+                            <el-select
+                                v-model="domain.value"
+                                clearable
+                                filterable
+                                allow-create
+                                default-first-option
+                                placeholder="请选择工位">
+                                <el-option
+                                    v-for="item in domain.selectOptions"
+                                    :key="item.id"
+                                    :label="item.name"
+                                    :value="item.id">
+                                </el-option>
+                            </el-select>
+
                             <el-button
                                 type="danger"
                                 style="height:30px;width:20%"
@@ -153,15 +165,48 @@
             </el-dialog>
             <!-- 编辑弹出框 -->
             <el-dialog title="编辑工艺路线" :visible.sync="editVisible" width="60%">
-                <el-form ref="form" label-width="100px">
-                    <el-form-item label="工艺路线名称">
-                        <el-input v-model="name"></el-input>
-                    </el-form-item>
-                </el-form>
-                <span slot="footer" class="dialog-footer">
-                <el-button @click="editVisible = false" style="height:30px;width:80px">取 消</el-button>
-                <el-button type="primary" @click="saveEdit" style="height:30px;width:80px">确 定</el-button>
-            </span>
+                <div class="" style="height:450px;overflow:auto">
+                    <el-form :model="dynamicValidateForm" ref="dynamicValidateForm" label-width="120px">
+                        <el-form-item
+                            prop="id"
+                            label="工艺路线名">
+                            <el-input v-model="dynamicValidateForm.name"
+                                      style="height:30px;width:60%;margin-right: 5%"></el-input>
+                        </el-form-item>
+                        <el-form-item
+                            v-for="(domain, index) in dynamicValidateForm.domains"
+                            :label="'路线工位' + index"
+                            :key="domain.key"
+                            :prop="'domains.' + index + '.value'">
+                            <el-select
+                                v-model="domain.value"
+                                clearable
+                                filterable
+                                allow-create
+                                default-first-option
+                                placeholder="请选择工位">
+                                <el-option
+                                    v-for="item in domain.selectOptions"
+                                    :key="item.id"
+                                    :label="item.name"
+                                    :value="item.id">
+                                </el-option>
+                            </el-select>
+
+                            <el-button
+                                type="danger"
+                                style="height:30px;width:20%"
+                                @click.prevent="removeDomain(domain)">删除
+                            </el-button>
+                        </el-form-item>
+                        <el-form-item>
+                            <el-button type="primary" @click="saveEdit(dynamicValidateForm)"
+                                       style="height:30px;width:20%">提交
+                            </el-button>
+                            <el-button type="primary" @click="addDomain" style="height:30px;width:20%">新增工位</el-button>
+                        </el-form-item>
+                    </el-form>
+                </div>
             </el-dialog>
             <!-- 删除提示框 -->
             <el-dialog title="删除工艺路线" :visible.sync="delVisible" width="300px" center>
@@ -187,6 +232,7 @@
             return {
                 message: '',
                 HideModal: true,
+                id:"",
 
 
                 cols: [],
@@ -214,12 +260,13 @@
 
                 dynamicValidateForm: {
                     domains: [{
-                        value: ''
+                        value: '',
+                        selectOptions:[]
                     }],
                     name: '',
 
                 },
-
+                selectOptions:[],
 
                 tableData1: [],
                 selectlistRow: []
@@ -256,32 +303,65 @@
                     this.$router.push("/")
                 }
                 else {
-                    axios.post(" " + url + "/gongyiluxian/gongyiluxianList")
-                        .then((res) => {
-                            this.tableData = res.data
-                        });
+                    let that = this;
+                    axios.all([
+                        axios.post(" " + url + "/api/getPersonProcessList", {"name": ""}),
+                        axios.post(" " + url + "/gongyiluxian/gongyiluxianList")
+                    ])
+                        .then(axios.spread(function (select, table) {
+                            that.dynamicValidateForm.domains[0].selectOptions = select.data;
+                            that.selectOptions = select.data;
+                            that.tableData = table.data
+                        }));
                 }
             },
 
             //行内点击编辑
-            editWorkStation(index, row) {
+            editWorkStation(row, column, cell, event) {
                 this.editVisible = true;
-                let id = this.listData[0];
-                this.id = id;
-                axios.post(" " + url + "/shengchan/getShengchanguanDetail", {"id": id})
+                this.id = row.id;
+                axios.post(" " + url + "/gongyiluxian/getGongyiluxianDetail", {"id": this.id})
                     .then((res) => {
-                        let data = [];
-                        for (let i = 0; i < res.data.length; i++) {
-
-                            var list = {
-                                stationname: res.data[i].stationname,
-                                realetime: res.data[i].realetime,
-                                realbtime: res.data[i].realbtime,
-                                id: res.data[i].id
+                        this.dynamicValidateForm.name = res.data.instance.name;
+                        let arr = [];
+                        for (let i = 0; i < res.data.nodelist.length; i++) {
+                            let a = {
+                                value: res.data.nodelist[i].stationid,
+                                selectOptions: this.selectOptions
                             };
-                            data.push(list);
+                            arr.push(a)
                         }
-                        this.routeData = data
+                        this.dynamicValidateForm.domains = arr
+                    })
+                    .catch((err) => {
+                        console.log(err)
+                    });
+            },
+
+            // 保存编辑
+            saveEdit(formName) {
+                let a = JSON.stringify(formName);
+
+                axios.post(" " + url + "/gongyiluxian/saveGongyiluxian", {"name":a})
+                    .then((res) => {
+                        if (res.data === "1") {
+                            this.editVisible = false;
+                            this.$message.success(`修改成功`);
+                            let that = this;
+                            axios.all([
+                                axios.post(" " + url + "/api/getPersonProcessList", {"name": ""}),
+                                axios.post(" " + url + "/gongyiluxian/gongyiluxianList")
+                            ])
+                                .then(axios.spread(function (select, table) {
+                                    that.dynamicValidateForm.domains[0].selectOptions = select.data;
+                                    that.selectOptions = select.data;
+                                    that.tableData = table.data
+                                }));
+                        }
+                        else {
+                            this.$message.warning(`修改失败`);
+                            this.addVisible = false;
+                        }
                     })
                     .catch((err) => {
                         console.log(err)
@@ -306,19 +386,56 @@
                     setTimeout(a, 2000);
                 }
             },
-
-            // 保存编辑
-            saveEdit() {
-                this.$set(this.tableData, this.idx, this.form);
-                this.editVisible = false;
-                this.$message.success(`修改第 ${this.idx + 1} 行成功`);
-            },
             // 确定删除
             deleteRow() {
                 this.tableData.splice(this.idx, 1);
                 this.$message.success('删除成功');
                 this.delVisible = false;
             },
+            //新增工序
+            addWorkStation() {
+                this.addVisible = true;
+            },
+            //提交信息
+            submitForm(formName) {
+                let a = JSON.stringify(formName);
+                axios.post(" " + url + "/gongyiluxian/saveGongyiluxian", {"name": a})
+                    .then((res) => {
+                        if (res.data === "1") {
+                            this.$message.success(`新增成功`);
+                            this.addVisible = false;
+                            let that = this;
+                            axios.all([
+                                axios.post(" " + url + "/api/getPersonProcessList", {"name": ""}),
+                                axios.post(" " + url + "/gongyiluxian/gongyiluxianList")
+                            ])
+                                .then(axios.spread(function (select, table) {
+                                    that.dynamicValidateForm.domains[0].selectOptions = select.data;
+                                    that.selectOptions = select.data;
+                                    that.tableData = table.data
+                                }));
+                        }
+                        else {
+                            this.$message.warning(`新增失败`);
+                            this.addVisible = false;
+                        }
+                    });
+            },
+            //删除工位
+            removeDomain(item) {
+                var index = this.dynamicValidateForm.domains.indexOf(item);
+                if (index !== -1) {
+                    this.dynamicValidateForm.domains.splice(index, 1)
+                }
+            },
+            //新增工位
+            addDomain() {
+                this.dynamicValidateForm.domains.push({
+                    value: "",
+                    selectOptions: this.selectOptions
+                });
+            },
+
             //编辑约束条件
             editYs() {
                 if (this.listData.length) {
@@ -351,39 +468,6 @@
                     setTimeout(a, 2000);
                 }
             },
-
-            //新增工序
-            addWorkStation() {
-                this.addVisible = true;
-            },
-            //提交信息
-            submitForm(formName) {
-
-                let a = JSON.stringify(formName);
-                axios.post(" " + url + "/gongyiluxian/saveGongyiluxian", {"name": a})
-                    .then((res) => {
-                        if (res.data === "1") {
-                            this.$message.success(`新增成功`);
-                            this.addVisible = false;
-                            this.$router.go(0);
-                        }
-                    });
-            },
-            //删除工位
-            removeDomain(item) {
-                var index = this.dynamicValidateForm.domains.indexOf(item);
-                if (index !== -1) {
-                    this.dynamicValidateForm.domains.splice(index, 1)
-                }
-            },
-            //新增工位
-            addDomain() {
-                this.dynamicValidateForm.domains.push({
-                    value: "",
-                    key: Date.now()
-                });
-            },
-
 
             // 获取表格选中时的数据
             selectRow(val) {

@@ -153,7 +153,6 @@
                 </el-form-item>
             </el-form>
             <span slot="footer" class="dialog-footer">
-                <el-button @click="editVisible = false" style="height:30px;width:80px">取 消</el-button>
                 <el-button type="primary" @click="saveEdit" style="height:30px;width:80px">确 定</el-button>
             </span>
         </el-dialog>
