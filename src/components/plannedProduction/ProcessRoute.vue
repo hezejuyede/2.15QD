@@ -12,7 +12,7 @@
                     <el-input v-model="select_word" placeholder="筛选工艺路线" class="handle-input mr10"></el-input>
                     <button @click="addWorkStation">新增工艺路线</button>
                     <button @click="editYs" class="color">编辑约束条件</button>
-                    <button @click="deleteWorkStation" class="colorRed">删除工艺路线</button>
+                    <!-- <button @click="deleteWorkStation" class="colorRed">删除工艺路线</button>-->
                 </div>
                 <div class="">
                     <el-table class="tb-edit"
@@ -68,6 +68,118 @@
                 </div>
             </div>
 
+            <!--新增弹出框 -->
+            <el-dialog title="新增工艺路线" :visible.sync="addVisible" width="40%">
+                <div class="" style="height:450px;overflow:auto">
+                    <el-form :model="dynamicValidateForm" ref="dynamicValidateForm" label-width="120px">
+                        <el-form-item
+                            prop="id"
+                            label="工艺路线名">
+                            <el-input v-model="dynamicValidateForm.name"
+                                      style="height:30px;width:60%;margin-right: 5%"></el-input>
+                        </el-form-item>
+                        <el-form-item
+                            v-for="(domain, index) in dynamicValidateForm.domains"
+                            :key="domain.key"
+                            :prop="'domains.' + index + '.value'"
+                            :label="'路线工序' + (index+1)+''">
+                            <el-select
+                                v-model="domain.value"
+                                clearable
+                                filterable
+                                allow-create
+                                default-first-option
+                                placeholder="请选择工位">
+                                <el-option
+                                    v-for="item in domain.selectOptions"
+                                    :key="item.id"
+                                    :label="item.name"
+                                    :value="item.id">
+                                </el-option>
+                            </el-select>
+                            <el-button
+                                type="danger"
+                                style="height:30px;width:20%"
+                                @click.prevent="removeDomain(domain)">删除
+                            </el-button>
+                        </el-form-item>
+                        <el-form-item>
+                            <el-button
+                                type="primary"
+                                @click="addDomain"
+                                style="height:30px;width:20%">新增工位
+                            </el-button>
+                            <el-button
+                                type="success"
+                                @click="submitForm(dynamicValidateForm)"
+                                style="height:30px;width:20%">提交信息
+                            </el-button>
+                        </el-form-item>
+                    </el-form>
+                </div>
+            </el-dialog>
+            <!-- 编辑弹出框 -->
+            <el-dialog title="编辑工艺路线" :visible.sync="editVisible" width="40%">
+                <div class="" style="height:450px;overflow:auto">
+                    <el-form :model="dynamicValidateForm" ref="dynamicValidateForm" label-width="120px">
+                        <el-form-item
+                            prop="id"
+                            label="工艺路线名">
+                            <el-input v-model="dynamicValidateForm.name"
+                                      style="height:30px;width:60%;margin-right: 5%"></el-input>
+                        </el-form-item>
+                        <el-form-item
+                            v-for="(domain, index) in dynamicValidateForm.domains"
+                            :key="domain.key"
+                            :prop="'domains.' + index + '.value'"
+                            :label="'路线工序' + (index+1)+''">
+                            <el-select
+                                v-model="domain.value"
+                                clearable
+                                filterable
+                                allow-create
+                                default-first-option
+                                placeholder="请选择工位">
+                                <el-option
+                                    v-for="item in domain.selectOptions"
+                                    :key="item.id"
+                                    :label="item.name"
+                                    :value="item.id">
+                                </el-option>
+                            </el-select>
+
+                            <el-button
+                                type="danger"
+                                style="height:30px;width:20%"
+                                @click.prevent="removeDomain(domain)">删除
+                            </el-button>
+                        </el-form-item>
+                        <el-form-item>
+                            <el-button
+                                type="primary"
+                                @click="addDomain"
+                                style="height:30px;width:20%">
+                                新增工位
+                            </el-button>
+                            <el-button
+                                type="success"
+                                @click="saveEdit(dynamicValidateForm)"
+                                style="height:30px;width:20%">
+                                提交修改
+                            </el-button>
+                        </el-form-item>
+                    </el-form>
+                </div>
+            </el-dialog>
+            <!-- 删除提示框 -->
+            <el-dialog title="删除工艺路线" :visible.sync="delVisible" width="300px" center>
+                <div class="del-dialog-cnt">删除不可恢复，是否确定删除？</div>
+                <span slot="footer" class="dialog-footer">
+                <el-button @click="delVisible = false" style="height:30px;width:80px">取 消</el-button>
+                <el-button type="primary" @click="deleteRow" style="height:30px;width:80px">确 定</el-button>
+            </span>
+            </el-dialog>
+
             <!--编辑约束条件 -->
             <el-dialog title="编辑约束条件" :visible.sync="editYsVisible" width="60%">
                 <div class="" style="height:450px;overflow:auto">
@@ -82,25 +194,67 @@
                         </div>
                         <div class="table">
                             <el-table
-                                :data="tableData1"
+                                :data="routeData"
                                 ref="table"
                                 tooltip-effect="dark"
                                 border
                                 stripe
+                                @selection-change='tableSelectRow'
                                 style="width: 95%">
+                                <el-table-column type="selection" width="45" align="center">
+                                </el-table-column>
                                 <el-table-column label="表名" align="center">
                                     <template slot-scope="scope">
-                                        <el-input v-model="scope.row.relatable"></el-input>
+                                        <el-select
+                                            v-model="scope.row.relatable"
+                                            clearable
+                                            filterable
+                                            allow-create
+                                            default-first-option
+                                            placeholder="请选择表名">
+                                            <el-option
+                                                v-for="item in relatableOptions"
+                                                :key="item.code"
+                                                :label="item.name"
+                                                :value="item.code">
+                                            </el-option>
+                                        </el-select>
                                     </template>
                                 </el-table-column>
                                 <el-table-column label="字段名" align="center">
                                     <template slot-scope="scope">
-                                        <el-input v-model="scope.row.fieldname"></el-input>
+                                        <el-select
+                                            v-model="scope.row.fieldname"
+                                            clearable
+                                            filterable
+                                            allow-create
+                                            default-first-option
+                                            placeholder="请选择字段名">
+                                            <el-option
+                                                v-for="item in fieldnameOptions"
+                                                :key="item.code"
+                                                :label="item.name"
+                                                :value="item.code">
+                                            </el-option>
+                                        </el-select>
                                     </template>
                                 </el-table-column>
                                 <el-table-column label="条件" align="center">
                                     <template slot-scope="scope">
-                                        <el-input v-model="scope.row.condition"></el-input>
+                                        <el-select
+                                            v-model="scope.row.condition"
+                                            clearable
+                                            filterable
+                                            allow-create
+                                            default-first-option
+                                            placeholder="请选择条件">
+                                            <el-option
+                                                v-for="item in conditionOptions"
+                                                :key="item.code"
+                                                :label="item.name"
+                                                :value="item.code">
+                                            </el-option>
+                                        </el-select>
                                     </template>
                                 </el-table-column>
                                 <el-table-column label="值" align="center">
@@ -117,104 +271,6 @@
                         </el-button>
                     </div>
                 </div>
-            </el-dialog>
-            <!--新增弹出框 -->
-            <el-dialog title="新增工艺路线" :visible.sync="addVisible" width="60%">
-                <div class="" style="height:450px;overflow:auto">
-                    <el-form :model="dynamicValidateForm" ref="dynamicValidateForm" label-width="120px">
-                        <el-form-item
-                            prop="id"
-                            label="工艺路线名">
-                            <el-input v-model="dynamicValidateForm.name"
-                                      style="height:30px;width:60%;margin-right: 5%"></el-input>
-                        </el-form-item>
-                        <el-form-item
-                            v-for="(domain, index) in dynamicValidateForm.domains"
-                            :label="'路线工位' + index"
-                            :key="domain.key"
-                            :prop="'domains.' + index + '.value'">
-                            <el-select
-                                v-model="domain.value"
-                                clearable
-                                filterable
-                                allow-create
-                                default-first-option
-                                placeholder="请选择工位">
-                                <el-option
-                                    v-for="item in domain.selectOptions"
-                                    :key="item.id"
-                                    :label="item.name"
-                                    :value="item.id">
-                                </el-option>
-                            </el-select>
-
-                            <el-button
-                                type="danger"
-                                style="height:30px;width:20%"
-                                @click.prevent="removeDomain(domain)">删除
-                            </el-button>
-                        </el-form-item>
-                        <el-form-item>
-                            <el-button type="primary" @click="submitForm(dynamicValidateForm)"
-                                       style="height:30px;width:20%">提交
-                            </el-button>
-                            <el-button type="primary" @click="addDomain" style="height:30px;width:20%">新增工位</el-button>
-                        </el-form-item>
-                    </el-form>
-                </div>
-            </el-dialog>
-            <!-- 编辑弹出框 -->
-            <el-dialog title="编辑工艺路线" :visible.sync="editVisible" width="60%">
-                <div class="" style="height:450px;overflow:auto">
-                    <el-form :model="dynamicValidateForm" ref="dynamicValidateForm" label-width="120px">
-                        <el-form-item
-                            prop="id"
-                            label="工艺路线名">
-                            <el-input v-model="dynamicValidateForm.name"
-                                      style="height:30px;width:60%;margin-right: 5%"></el-input>
-                        </el-form-item>
-                        <el-form-item
-                            v-for="(domain, index) in dynamicValidateForm.domains"
-                            :label="'路线工位' + index"
-                            :key="domain.key"
-                            :prop="'domains.' + index + '.value'">
-                            <el-select
-                                v-model="domain.value"
-                                clearable
-                                filterable
-                                allow-create
-                                default-first-option
-                                placeholder="请选择工位">
-                                <el-option
-                                    v-for="item in domain.selectOptions"
-                                    :key="item.id"
-                                    :label="item.name"
-                                    :value="item.id">
-                                </el-option>
-                            </el-select>
-
-                            <el-button
-                                type="danger"
-                                style="height:30px;width:20%"
-                                @click.prevent="removeDomain(domain)">删除
-                            </el-button>
-                        </el-form-item>
-                        <el-form-item>
-                            <el-button type="primary" @click="saveEdit(dynamicValidateForm)"
-                                       style="height:30px;width:20%">提交
-                            </el-button>
-                            <el-button type="primary" @click="addDomain" style="height:30px;width:20%">新增工位</el-button>
-                        </el-form-item>
-                    </el-form>
-                </div>
-            </el-dialog>
-            <!-- 删除提示框 -->
-            <el-dialog title="删除工艺路线" :visible.sync="delVisible" width="300px" center>
-                <div class="del-dialog-cnt">删除不可恢复，是否确定删除？</div>
-                <span slot="footer" class="dialog-footer">
-                <el-button @click="delVisible = false" style="height:30px;width:80px">取 消</el-button>
-                <el-button type="primary" @click="deleteRow" style="height:30px;width:80px">确 定</el-button>
-            </span>
             </el-dialog>
         </div>
         <Modal :msg="message"
@@ -264,12 +320,17 @@
                         selectOptions:[]
                     }],
                     name: '',
-
+                    id:""
                 },
                 selectOptions:[],
 
-                tableData1: [],
-                selectlistRow: []
+                routeData: [],
+                selectlistRow: [],
+
+
+                conditionOptions: [],
+                fieldnameOptions: [],
+                relatableOptions: []
             }
         },
         computed: {
@@ -303,16 +364,7 @@
                     this.$router.push("/")
                 }
                 else {
-                    let that = this;
-                    axios.all([
-                        axios.post(" " + url + "/api/getPersonProcessList", {"name": ""}),
-                        axios.post(" " + url + "/gongyiluxian/gongyiluxianList")
-                    ])
-                        .then(axios.spread(function (select, table) {
-                            that.dynamicValidateForm.domains[0].selectOptions = select.data;
-                            that.selectOptions = select.data;
-                            that.tableData = table.data
-                        }));
+                    this.loading()
                 }
             },
 
@@ -323,6 +375,7 @@
                 axios.post(" " + url + "/gongyiluxian/getGongyiluxianDetail", {"id": this.id})
                     .then((res) => {
                         this.dynamicValidateForm.name = res.data.instance.name;
+                        this.dynamicValidateForm.id = this.id;
                         let arr = [];
                         for (let i = 0; i < res.data.nodelist.length; i++) {
                             let a = {
@@ -347,16 +400,7 @@
                         if (res.data === "1") {
                             this.editVisible = false;
                             this.$message.success(`修改成功`);
-                            let that = this;
-                            axios.all([
-                                axios.post(" " + url + "/api/getPersonProcessList", {"name": ""}),
-                                axios.post(" " + url + "/gongyiluxian/gongyiluxianList")
-                            ])
-                                .then(axios.spread(function (select, table) {
-                                    that.dynamicValidateForm.domains[0].selectOptions = select.data;
-                                    that.selectOptions = select.data;
-                                    that.tableData = table.data
-                                }));
+                            this.loading()
                         }
                         else {
                             this.$message.warning(`修改失败`);
@@ -395,32 +439,55 @@
             //新增工序
             addWorkStation() {
                 this.addVisible = true;
+                this.dynamicValidateForm.name = "";
+                this.dynamicValidateForm.id = "";
+                this.dynamicValidateForm.domains= [{
+                    value: '',
+                    selectOptions:this.selectOptions
+                }]
             },
+
             //提交信息
             submitForm(formName) {
-                let a = JSON.stringify(formName);
-                axios.post(" " + url + "/gongyiluxian/saveGongyiluxian", {"name": a})
-                    .then((res) => {
-                        if (res.data === "1") {
-                            this.$message.success(`新增成功`);
-                            this.addVisible = false;
-                            let that = this;
-                            axios.all([
-                                axios.post(" " + url + "/api/getPersonProcessList", {"name": ""}),
-                                axios.post(" " + url + "/gongyiluxian/gongyiluxianList")
-                            ])
-                                .then(axios.spread(function (select, table) {
-                                    that.dynamicValidateForm.domains[0].selectOptions = select.data;
-                                    that.selectOptions = select.data;
-                                    that.tableData = table.data
-                                }));
-                        }
-                        else {
-                            this.$message.warning(`新增失败`);
-                            this.addVisible = false;
-                        }
-                    });
+                let a = false;
+                for (let i = 0; i < formName.domains.length; i++) {
+                    if (formName.domains[i].value) {
+                        a = true;
+                    }
+                    else {
+                        a = false
+                    }
+                }
+                if(a===true){
+                    let a = JSON.stringify(formName);
+                    axios.post(" " + url + "/gongyiluxian/saveGongyiluxian", {"name": a})
+                        .then((res) => {
+                            if (res.data === "1") {
+                                this.$message.success(`新增成功`);
+                                this.addVisible = false;
+                                let that = this;
+                                axios.all([
+                                    axios.post(" " + url + "/api/getPersonProcessList", {"name": ""}),
+                                    axios.post(" " + url + "/gongyiluxian/gongyiluxianList")
+                                ])
+                                    .then(axios.spread(function (select, table) {
+                                        that.dynamicValidateForm.domains[0].selectOptions = select.data;
+                                        that.selectOptions = select.data;
+                                        that.tableData = table.data
+                                    }));
+                            }
+                            else {
+                                this.$message.warning(`新增失败`);
+                                this.addVisible = false;
+                            }
+                        });
+                }
+                else {
+                    this.$message.warning(`工序不能为空`);
+                }
+
             },
+
             //删除工位
             removeDomain(item) {
                 var index = this.dynamicValidateForm.domains.indexOf(item);
@@ -428,12 +495,29 @@
                     this.dynamicValidateForm.domains.splice(index, 1)
                 }
             },
+
             //新增工位
             addDomain() {
                 this.dynamicValidateForm.domains.push({
                     value: "",
                     selectOptions: this.selectOptions
                 });
+            },
+
+
+            // 路线获取表格选中时的数据
+            selectRow(val) {
+                if (val.length) {
+                    let data = [];
+                    for (let i = 0; i < val.length; i++) {
+                        let a = val[i].id;
+                        data.push(a)
+                    }
+                    this.listData = data;
+                }
+                else {
+                    this.listData = [];
+                }
             },
 
             //编辑约束条件
@@ -453,10 +537,40 @@
                     }
                     else {
                         this.editYsVisible = true;
+                        let that = this;
+                        axios.all([
+                            axios.post(" " + url + "/sys/dictionaryList", {"id": "14"}),
+                            axios.post(" " + url + "/sys/dictionaryList", {"id": "12"}),
+                            axios.post(" " + url + "/sys/dictionaryList", {"id": "13"})
+                        ])
+                            .then(axios.spread(function (conditionOptions, fieldnameOptions, relatableOptions) {
+                                that.conditionOptions = conditionOptions.data;
+                                that.fieldnameOptions = fieldnameOptions.data;
+                                that.relatableOptions = relatableOptions.data;
+                            }));
+
+                        axios.post(" " + url + "/condition/conditionList", {"id": this.listData[0]})
+                            .then((res) => {
+                                let data = [];
+                                for (let i = 0; i < res.data.length; i++) {
+                                    var list = {
+                                        relatable: res.data[i].relatable,
+                                        fieldname: res.data[i].fieldname,
+                                        condition: res.data[i].condition,
+                                        value: res.data[i].value,
+                                    };
+                                    data.push(list);
+                                }
+                                this.routeData = data;
+
+                            })
+                            .catch((err) => {
+                                console.log(err)
+                            });
                     }
                 }
                 else {
-                    this.message = "请选择要删除的工艺路线";
+                    this.message = "请选择要编辑的工艺路线";
                     this.HideModal = false;
                     const that = this;
 
@@ -469,19 +583,9 @@
                 }
             },
 
-            // 获取表格选中时的数据
-            selectRow(val) {
-                if (val.length) {
-                    let data = [];
-                    for (let i = 0; i < val.length; i++) {
-                        let a = val[i].id;
-                        data.push(a)
-                    }
-                    this.listData = data;
-                }
-                else {
-                    this.listData = [];
-                }
+            // 约束条件选择哪一行
+            tableSelectRow (val) {
+                this.selectlistRow = val;
             },
             // 增加行
             addRow() {
@@ -491,37 +595,37 @@
                     value: this.value,
                     condition: this.condition
                 };
-                this.tableData1.unshift(list)
+                this.routeData.push(list)
             },
-            // 删除方法
             // 删除选中行
             delData() {
                 for (let i = 0; i < this.selectlistRow.length; i++) {
                     let val = this.selectlistRow;
-
                     val.forEach((val, index) => {
-                        this.tableData1.forEach((v, i) => {
-                            if (val.rowNum === v.rowNum) {
-                                this.tableData.splice(i, 1)
+                        this.routeData.forEach((v, i) => {
+                            console.log(val.value);
+                            console.log(v.value)
+                            if (val.value === v.value) {
+                                this.routeData.splice(i, 1)
                             }
                         })
                     })
                 }
-                // 删除完数据之后清除勾选框
-                this.$refs.tableData1.clearSelection()
             },
 
+            //提交
             submitYS() {
                 if (this.listData.length) {
                     let id =this.listData[0];
-                    axios.post(" " + url + "/condition/conditionSave", {"id": id, "name": this.tableData1})
+                    axios.post(" " + url + "/condition/conditionSave", {"id": id, "name": this.routeData})
                         .then((res) => {
                             if (res.data === "1") {
-                                this.$message.success(`新增成功`);
-                                this.addVisible = false;
+                                this.$message.success(`修改成功`);
+                                this.editYsVisible = false;
+                                this.loading()
                             }
                             else {
-                                this.$message.warning(`新增失败`);
+                                this.$message.warning(`修改失败`);
                             }
                         });
                 }
@@ -529,6 +633,20 @@
 
                 }
             },
+
+            //提取初始加载是方法
+            loading() {
+                let that = this;
+                axios.all([
+                    axios.post(" " + url + "/api/getPersonProcessList", {"name": ""}),
+                    axios.post(" " + url + "/gongyiluxian/gongyiluxianList")
+                ])
+                    .then(axios.spread(function (select, table) {
+                        that.dynamicValidateForm.domains[0].selectOptions = select.data;
+                        that.selectOptions = select.data;
+                        that.tableData = table.data
+                    }));
+            }
         }
 
     }

@@ -16,7 +16,7 @@
                         filterable
                         allow-create
                         default-first-option
-                        placeholder="请选择字典类型">
+                        placeholder="请选择表头类型">
                         <el-option
                             v-for="item in selectOptions"
                             :key="item.code"

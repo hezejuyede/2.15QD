@@ -155,7 +155,7 @@
         </el-dialog>
 
         <!--编辑工艺路线-->
-        <el-dialog title="修改状态" :visible.sync="editRouteVisible" width="60%">
+        <el-dialog title="修改工艺路线" :visible.sync="editRouteVisible" width="60%">
             <div class="dialogDiv" style="height:450px;overflow:auto">
                 <div class="tableDate">
                     <div class="button" style="width:3%;float:right;">
@@ -179,12 +179,20 @@
                             <el-table-column type="selection" width="45" align="center"></el-table-column>
                             <el-table-column label="工序名" align="center">
                                 <template slot-scope="scope">
-                                    <el-input v-model="scope.row.stationname"></el-input>
-                                </template>
-                            </el-table-column>
-                            <el-table-column label="Id" align="center">
-                                <template slot-scope="scope">
-                                    <el-input v-model="scope.row.id"></el-input>
+                                    <el-select
+                                        v-model="scope.row.stationname"
+                                        clearable
+                                        filterable
+                                        allow-create
+                                        default-first-option
+                                        placeholder="请选择工位">
+                                        <el-option
+                                            v-for="item in selectOptions"
+                                            :key="item.id"
+                                            :label="item.name"
+                                            :value="item.id">
+                                        </el-option>
+                                    </el-select>
                                 </template>
                             </el-table-column>
                             <el-table-column label="开始天数" align="center">
@@ -245,7 +253,8 @@
                 yxjOptions: [],
 
                 state:"",
-                stateOptions: []
+                stateOptions: [],
+                selectOptions:[]
 
             }
         },
@@ -270,13 +279,15 @@
                     axios.all([
                         axios.post(" " + url + "/sys/getPiciList"),
                         axios.post(" " + url + "/sys/dictionaryList", {"id": "4"}),
-                        axios.post(" " + url + "/sys/dictionaryList", {"id": "5"})
+                        axios.post(" " + url + "/sys/dictionaryList", {"id": "5"}),
+                        axios.post(" " + url + "/api/getPersonProcessList", {"name": ""}),
                     ])
-                        .then(axios.spread(function (batchOptions,title, table) {
+                        .then(axios.spread(function (batchOptions,title, table,select) {
                             that.yxjOptions = title.data;
                             that.stateOptions = table.data;
                             that.batchOptions = batchOptions.data;
                             that.batch = batchOptions.data[0].id;
+                            that.selectOptions = select.data;
                             axios.post(" " + url + "/shengchan/getCurStatusList",
                                 {
                                     "shipcode":that.ch,
@@ -434,17 +445,16 @@
                     else {
                         this.editRouteVisible = true;
                         let id = this.listData[0];
-                        this.id =id
+                        this.id =id;
                         axios.post(" " + url + "/shengchan/getShengchanguanDetail", {"id": id})
                             .then((res) => {
                                     let data = [];
                                     for (let i = 0; i < res.data.length; i++) {
 
                                         var list = {
-                                            stationname: res.data[i].stationname,
+                                            stationname:res.data[i].stationid,
                                             realetime: res.data[i].realetime,
-                                            realbtime: res.data[i].realbtime,
-                                            id:res.data[i].id
+                                            realbtime: res.data[i].realbtime
                                         };
                                         data.push(list);
                                     }
@@ -502,7 +512,7 @@
                 if (this.routeData.length) {
                     let data =[];
                     for (let i =0;i<this.routeData.length;i++){
-                        let a = this.routeData[i].id;
+                        let a = this.routeData[i].stationname;
                         data.push(a)
                     }
 
@@ -515,6 +525,7 @@
                         .then((res) => {
                             if (res.data === "1") {
                                 this.$message.success(`修改成功`);
+                                this.editRouteVisible=false;
                             }
                             else {
                                 this.$message.warning(`修改失败`);
