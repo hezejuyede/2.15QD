@@ -57,6 +57,11 @@
                                 label: '表头维护',
                                 index: "2-2",
                                 url: "/HeaderMaintenance"
+                            },
+                            {
+                                label: '作业记录',
+                                index: "2-3",
+                                url: "/ListDetails"
                             }
                         ]
                     },

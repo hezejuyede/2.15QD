@@ -64,7 +64,8 @@
                 </div>
                 <div class="">
                     <button @click="doSearch">查询</button>
-                    <button @click="showExamine" style="background-color: #dd6161">审核</button>
+                    <button @click="showExamine" style="background-color: #03DD02">审核</button>
+                    <button @click="doDelete" style="background-color: #dd6161">删除</button>
                 </div>
             </div>
         </div>
@@ -181,13 +182,18 @@
         <!--导入文件详情 -->
         <el-dialog title="文件详情" :visible.sync="detailsVisible" width="90%">
             <div class="container" style="height:470px;overflow:auto">
-                <el-table class="tb-edit"
-                          :data="detailsTableData"
-                          :header-cell-style="{background:'#f7f7f7',color:'rgba(0, 0, 0, 1)',fontSize:'14px'}"
-                          border
-                          height="400"
-                          highlight-current-row
-                          style="width: 98%;margin: auto">
+                <el-table
+                    v-loading="loading"
+                    element-loading-text="审核时间较长，请耐心等待"
+                    element-loading-spinner="el-icon-loading"
+                    element-loading-background="rgba(0, 0, 0, 0.8)"
+                    class="tb-edit"
+                    :data="detailsTableData"
+                    :header-cell-style="{background:'#f7f7f7',color:'rgba(0, 0, 0, 1)',fontSize:'14px'}"
+                    border
+                    height="400"
+                    highlight-current-row
+                    style="width: 98%;margin: auto">
                     <template v-for="(col ,index) in detailsCols">
                         <el-table-column align="center" :prop="col.prop" :label="col.label"></el-table-column>
                     </template>
@@ -198,8 +204,6 @@
                 </div>
             </div>
         </el-dialog>
-
-
     </div>
 </template>
 <script type="text/ecmascript-6">
@@ -460,6 +464,7 @@
 
             //通过
             doExamine() {
+                this.loading = true;
                 axios.post(" " + url + "/fileShenpi/updateStatus",
                     {
                         "id": this.listArr,
@@ -468,12 +473,36 @@
                 )
                     .then((res) => {
                         if (res.data === "1") {
+                            this.loading = false;
                             this.$message.success('通过审核成功');
-                            this.delVisible = false;
-                            const that = this;
-                            setTimeout(function () {
-                                that.$router.go(0)
-                            }, 1500)
+
+                            let that = this;
+                            axios.all([
+                                axios.post(" " + url + "/sys/getPiciList"),
+                                axios.post(" " + url + "/sys/dictionaryList", {"id": "9"}),
+                                axios.post(" " + url + "/sys/dictionaryList", {"id": "8"}),
+                                axios.post(" " + url + "/sys/dictionaryList", {"id": "10"}),
+                            ])
+                                .then(axios.spread(function (pici, scx, type, status) {
+                                    that.batchOptions = pici.data;
+                                    that.batch = pici.data[0].id;
+                                    that.scxOptions = scx.data;
+                                    that.fileTypeOptions = type.data;
+                                    that.statusOptions = status.data;
+                                    axios.all([
+                                        axios.post(" " + url + "/sys/showTableTitle", {"name": "filelist"}),
+                                        axios.post(" " + url + "/fileShenpi/getFileUploadList", {
+                                            "lineNo": that.scx,
+                                            "status": that.status,
+                                            "pici": that.batch
+                                        })
+                                    ])
+                                        .then(axios.spread(function (title, table) {
+                                            that.cols = title.data;
+                                            that.tableData = table.data;
+                                        }));
+                                }));
+                            this.detailsVisible = false;
                         }
                         else if (res.data === "-1") {
                             this.$message.warning(`传参错误`);
@@ -520,6 +549,112 @@
                     .catch((err) => {
                         console.log(err)
                     })
+            },
+
+            //删除
+            doDelete() {
+                if (this.listData.length) {
+                    if (this.listData.length > 1) {
+                        this.message = "只能删除一个";
+                        this.HideModal = false;
+                        const that = this;
+                        function a() {
+                            that.message = "";
+                            that.HideModal = true;
+                        }
+
+                        setTimeout(a, 2000);
+
+                    }
+                    else {
+                        axios.post(" " + url + "/fileShenpi/delFile",
+                            {
+                                "id": this.listData[0],
+                            }
+                        )
+                            .then((res) => {
+                                if (res.data === "1") {
+                                    this.$message.success('删除成功');
+                                    this.delVisible = false;
+                                    let that = this;
+                                    axios.all([
+                                        axios.post(" " + url + "/sys/getPiciList"),
+                                        axios.post(" " + url + "/sys/dictionaryList", {"id": "9"}),
+                                        axios.post(" " + url + "/sys/dictionaryList", {"id": "8"}),
+                                        axios.post(" " + url + "/sys/dictionaryList", {"id": "10"}),
+                                    ])
+                                        .then(axios.spread(function (pici, scx, type, status) {
+                                            that.batchOptions = pici.data;
+                                            that.batch = pici.data[0].id;
+                                            that.scxOptions = scx.data;
+                                            that.fileTypeOptions = type.data;
+                                            that.statusOptions = status.data;
+                                            axios.all([
+                                                axios.post(" " + url + "/sys/showTableTitle", {"name": "filelist"}),
+                                                axios.post(" " + url + "/fileShenpi/getFileUploadList", {
+                                                    "lineNo": that.scx,
+                                                    "status": that.status,
+                                                    "pici": that.batch
+                                                })
+                                            ])
+                                                .then(axios.spread(function (title, table) {
+                                                    that.cols = title.data;
+                                                    that.tableData = table.data;
+                                                }));
+                                        }));
+                                }
+                                else if(res.data==="-1"){
+                                    this.$message.warning(`该文件已在数据库生成数据，无法删除`);
+                                }
+                                else {
+                                    this.$message.warning(`删除失败`);
+                                }
+                            })
+                            .catch((err) => {
+                                console.log(err)
+                            })
+                    }
+                }
+                else {
+                    this.message = "请勾选要审核文件";
+                    this.HideModal = false;
+                    const that = this;
+                    function b() {
+                        that.message = "";
+                        that.HideModal = true;
+                    }
+                    setTimeout(b, 2000);
+                }
+            },
+
+            //页面加载
+            loading(){
+                let that = this;
+                axios.all([
+                    axios.post(" " + url + "/sys/getPiciList"),
+                    axios.post(" " + url + "/sys/dictionaryList", {"id": "9"}),
+                    axios.post(" " + url + "/sys/dictionaryList", {"id": "8"}),
+                    axios.post(" " + url + "/sys/dictionaryList", {"id": "10"}),
+                ])
+                    .then(axios.spread(function (pici, scx, type, status) {
+                        that.batchOptions = pici.data;
+                        that.batch = pici.data[0].id;
+                        that.scxOptions = scx.data;
+                        that.fileTypeOptions = type.data;
+                        that.statusOptions = status.data;
+                        axios.all([
+                            axios.post(" " + url + "/sys/showTableTitle", {"name": "filelist"}),
+                            axios.post(" " + url + "/fileShenpi/getFileUploadList", {
+                                "lineNo": that.scx,
+                                "status": that.status,
+                                "pici": that.batch
+                            })
+                        ])
+                            .then(axios.spread(function (title, table) {
+                                that.cols = title.data;
+                                that.tableData = table.data;
+                            }));
+                    }));
             }
 
         }

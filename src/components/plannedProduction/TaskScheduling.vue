@@ -275,35 +275,7 @@
                     this.$router.push("/")
                 }
                 else {
-                    let that = this;
-                    axios.all([
-                        axios.post(" " + url + "/sys/getPiciList"),
-                        axios.post(" " + url + "/sys/dictionaryList", {"id": "4"}),
-                        axios.post(" " + url + "/sys/dictionaryList", {"id": "5"}),
-                        axios.post(" " + url + "/api/getPersonProcessList", {"name": ""}),
-                    ])
-                        .then(axios.spread(function (batchOptions,title, table,select) {
-                            that.yxjOptions = title.data;
-                            that.stateOptions = table.data;
-                            that.batchOptions = batchOptions.data;
-                            that.batch = batchOptions.data[0].id;
-                            that.selectOptions = select.data;
-                            axios.post(" " + url + "/shengchan/getCurStatusList",
-                                {
-                                    "shipcode":that.ch,
-                                    "yiguanhao": that.ygh,
-                                    "xitong": that.code,
-                                    "hou":that.pie,
-                                    "pici":that.batch
-                                }
-                            )
-                                .then((res) => {
-                                    that.tableData = res.data
-                                })
-                                .catch((err) => {
-                                    console.log(err)
-                                })
-                        }));
+                  this.loading()
                 }
             },
             //选择那个一个
@@ -368,6 +340,7 @@
                             if (res.data === "1") {
                                 this.$message.success(`修改成功`);
                                 this.editStateVisible =false;
+                                this.loading()
                             }
                             else {
                                 this.$message.warning(`修改失败`);
@@ -386,6 +359,7 @@
             editYxj() {
                 if (this.listData.length) {
                     this.editYxjVisible = true;
+                    this.loading()
                 }
                 else {
                     this.message = "请勾选要修改的管子";
@@ -413,6 +387,7 @@
                             if (res.data === "1") {
                                 this.$message.success(`修改成功`);
                                 this.editYxjVisible =false;
+                                this.loading()
                             }
                             else {
                                 this.$message.warning(`修改失败`);
@@ -526,6 +501,7 @@
                             if (res.data === "1") {
                                 this.$message.success(`修改成功`);
                                 this.editRouteVisible=false;
+                                this.loading()
                             }
                             else {
                                 this.$message.warning(`修改失败`);
@@ -539,6 +515,39 @@
                     this.$message.warning(`选择不能为空`);
                 }
             },
+
+            //页面加载
+            loading(){
+                let that = this;
+                axios.all([
+                    axios.post(" " + url + "/sys/getPiciList"),
+                    axios.post(" " + url + "/sys/dictionaryList", {"id": "4"}),
+                    axios.post(" " + url + "/sys/dictionaryList", {"id": "5"}),
+                    axios.post(" " + url + "/api/getPersonProcessList", {"name": ""}),
+                ])
+                    .then(axios.spread(function (batchOptions,title, table,select) {
+                        that.yxjOptions = title.data;
+                        that.stateOptions = table.data;
+                        that.batchOptions = batchOptions.data;
+                        that.batch = batchOptions.data[0].id;
+                        that.selectOptions = select.data;
+                        axios.post(" " + url + "/shengchan/getCurStatusList",
+                            {
+                                "shipcode":that.ch,
+                                "yiguanhao": that.ygh,
+                                "xitong": that.code,
+                                "hou":that.pie,
+                                "pici":that.batch
+                            }
+                        )
+                            .then((res) => {
+                                that.tableData = res.data
+                            })
+                            .catch((err) => {
+                                console.log(err)
+                            })
+                    }));
+            }
 
         }
     }
