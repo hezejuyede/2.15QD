@@ -52,27 +52,46 @@
         <!--新增弹出框 -->
         <el-dialog title="新增作业质量记录" :visible.sync="addVisible" width="60%">
             <el-form ref="form" label-width="100px">
-                <el-form-item label="下拉列表">
+                <el-form-item label="选择工位">
+                <el-select
+                    v-model="select"
+                    clearable
+                    filterable
+                    allow-create
+                    default-first-option
+                    placeholder="请选择工位">
+                    <el-option
+                        v-for="item in selectOptions"
+                        :key="item.id"
+                        :label="item.name"
+                        :value="item.id">
+                    </el-option>
+                </el-select>
+            </el-form-item>
+                <el-form-item label="选择填报类型">
                     <el-select
-                        v-model="select"
+                        v-model="selectTb"
                         clearable
                         filterable
                         allow-create
                         default-first-option
-                        placeholder="请选择工位">
+                        placeholder="请选择填报类型">
                         <el-option
-                            v-for="item in selectOptions"
-                            :key="item.id"
+                            v-for="item in selectTbOptions"
+                            :key="item.indexno"
                             :label="item.name"
-                            :value="item.id">
+                            :value="item.indexno">
                         </el-option>
                     </el-select>
+                </el-form-item>
+                <el-form-item label="编码">
+                    <el-input v-model="tbContent"></el-input>
                 </el-form-item>
                 <el-form-item label="质量内容">
                     <el-input v-model="name"></el-input>
                 </el-form-item>
                 <el-form-item label="序号">
-                    <el-input v-model="indexno"></el-input>
+                    <el-input  type="number" v-model="indexno"></el-input>
                 </el-form-item>
             </el-form>
             <span slot="footer" class="dialog-footer">
@@ -83,7 +102,7 @@
         <!-- 编辑弹出框 -->
         <el-dialog title="编辑作业质量记录" :visible.sync="editVisible" width="60%">
             <el-form ref="form" label-width="100px">
-                <el-form-item label="下拉列表">
+                <el-form-item label="选择工位">
                     <el-select
                         v-model="select"
                         clearable
@@ -100,11 +119,30 @@
                         </el-option>
                     </el-select>
                 </el-form-item>
+                <el-form-item label="选择填报类型">
+                    <el-select
+                        v-model="selectTb"
+                        clearable
+                        filterable
+                        allow-create
+                        default-first-option
+                        placeholder="请选择填报类型">
+                        <el-option
+                            v-for="item in selectTbOptions"
+                            :key="item.indexno"
+                            :label="item.name"
+                            :value="item.indexno">
+                        </el-option>
+                    </el-select>
+                </el-form-item>
+                <el-form-item label="编码">
+                    <el-input v-model="tbContent"></el-input>
+                </el-form-item>
                 <el-form-item label="质量内容">
                     <el-input v-model="name"></el-input>
                 </el-form-item>
                 <el-form-item label="序号">
-                    <el-input v-model="indexno"></el-input>
+                    <el-input type="number" v-model="indexno"></el-input>
                 </el-form-item>
             </el-form>
             <span slot="footer" class="dialog-footer">
@@ -151,11 +189,13 @@
                 select:"",
                 selectOptions: [],
 
+                selectTb:"",
+                selectTbOptions:[],
+
                 id: "",
                 name: '',
                 indexno: '',
-                showindex: '',
-                code: ""
+                tbContent: ''
 
             }
         },
@@ -244,7 +284,9 @@
                     .then((res) => {
                         this.name = res.data.context;
                         this.indexno = res.data.cindex;
-                        this.select=res.data.workstation;
+                        this.select = res.data.workstation;
+                        this.selectTb = res.data.ctype;
+                        this.tbContent = res.data.code;
                     })
                     .catch((err) => {
                         console.log(err)
@@ -259,7 +301,6 @@
                     this.message = "请勾选要删除的人员";
                     this.HideModal = false;
                     this.loading();
-
                     setTimeout(a, 2000);
                 }
             },
@@ -271,7 +312,9 @@
                             "id":this.id,
                             "workstation": this.select,
                             "context": this.name,
-                            "cindex": this.indexno
+                            "cindex": this.indexno,
+                            "ctype":this.selectTb,
+                            "code":this.tbContent
                         }
                     )
                         .then((res) => {
@@ -318,6 +361,7 @@
             showAddPerson() {
                 this.addVisible = true;
                 this.select = "";
+                this.selectTb = "";
                 this.name = "";
                 this.indexno = ""
             },
@@ -328,7 +372,9 @@
                         {
                             "workstation": this.select,
                             "context": this.name,
-                            "cindex": this.indexno
+                            "cindex": this.indexno,
+                            "ctype":this.selectTb,
+                            "code":this.tbContent
                         }
                     )
                         .then((res) => {
@@ -369,14 +415,15 @@
                             this.selectOptions = res.data;
                             this.select = res.data[0].id;
                             let that = this;
-                            console.log( this.select)
                             axios.all([
                                 axios.post(" " + url + "/sys/showTableTitle", {"name": "zuoyezhil"}),
-                                axios.post(" " + url + "/sysconfig/opreaRecordTypeList", {"station":that.select})
+                                axios.post(" " + url + "/sysconfig/opreaRecordTypeList", {"station": that.select}),
+                                axios.post(" " + url + "/sys/dictionaryList", {"id": "15"}),
                             ])
-                                .then(axios.spread(function (title, table) {
+                                .then(axios.spread(function (title, table, selectTbOptions) {
                                     that.cols = title.data;
                                     that.tableData = table.data;
+                                    that.selectTbOptions = selectTbOptions.data;
                                 }));
                         })
                         .catch((err) => {
