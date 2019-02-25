@@ -10,6 +10,21 @@
             <div class="container">
                 <div class="handle-box">
                     <el-input v-model="select_word" placeholder="筛选工序" class="handle-input mr10"></el-input>
+                    <el-select
+                        v-model="line"
+                        clearable
+                        filterable
+                        allow-create
+                        default-first-option
+                        @change="changeScx"
+                        placeholder="请输入或者选择生产线">
+                        <el-option
+                            v-for="item in lineOptions"
+                            :key="item.indexno"
+                            :label="item.name"
+                            :value="item.indexno">
+                        </el-option>
+                    </el-select>
                     <el-button type="primary" icon="delete" class="handle-del mr10" @click="addWorkStation">新增工序</el-button>
                     <el-button type="danger" icon="delete" class="handle-del mr10" @click="deleteWorkStation">删除工序</el-button>
                 </div>
@@ -36,44 +51,6 @@
             <!--新增弹出框 -->
             <el-dialog title="新增工序" :visible.sync="addVisible" width="60%">
                 <el-form ref="form"  label-width="100px">
-
-                    <el-form-item label="工序名称">
-                        <el-input v-model="name"></el-input>
-                    </el-form-item>
-                    <el-form-item label="工序代码">
-                        <el-input v-model="code"></el-input>
-                    </el-form-item>
-                    <el-form-item label="工序内容">
-                        <el-input v-model="context"></el-input>
-                    </el-form-item>
-                    <el-form-item label="饱和人数">
-                        <el-input v-model="personnum"></el-input>
-                    </el-form-item>
-                    <el-form-item label="所属生产线">
-                        <el-input v-model="line"></el-input>
-                    </el-form-item>
-                </el-form>
-                <span slot="footer" class="dialog-footer">
-                <el-button @click="addVisible = false" style="height:30px;width:80px">取 消</el-button>
-                <el-button type="primary" @click="doAddWorkStation" style="height:30px;width:80px">确 定</el-button>
-            </span>
-            </el-dialog>
-            <!-- 编辑弹出框 -->
-            <el-dialog title="编辑工序" :visible.sync="editVisible" width="60%">
-                <el-form ref="form"  label-width="100px">
-
-                    <el-form-item label="工序名称">
-                        <el-input v-model="name"></el-input>
-                    </el-form-item>
-                    <el-form-item label="工序代码">
-                        <el-input v-model="code"></el-input>
-                    </el-form-item>
-                    <el-form-item label="工序内容">
-                        <el-input v-model="context"></el-input>
-                    </el-form-item>
-                    <el-form-item label="饱和人数">
-                        <el-input v-model="personnum"></el-input>
-                    </el-form-item>
                     <el-form-item label="所属生产线">
                         <el-select
                             v-model="line"
@@ -90,6 +67,57 @@
                             </el-option>
                         </el-select>
                     </el-form-item>
+                    <el-form-item label="工序名称">
+                        <el-input v-model="name"></el-input>
+                    </el-form-item>
+                    <el-form-item label="工序代码">
+                        <el-input v-model="code"></el-input>
+                    </el-form-item>
+                    <el-form-item label="工序内容">
+                        <el-input v-model="context"></el-input>
+                    </el-form-item>
+                    <el-form-item label="饱和人数">
+                        <el-input  type="number" v-model="personnum"></el-input>
+                    </el-form-item>
+
+                </el-form>
+                <span slot="footer" class="dialog-footer">
+                <el-button @click="addVisible = false" style="height:30px;width:80px">取 消</el-button>
+                <el-button type="primary" @click="doAddWorkStation" style="height:30px;width:80px">确 定</el-button>
+            </span>
+            </el-dialog>
+            <!-- 编辑弹出框 -->
+            <el-dialog title="编辑工序" :visible.sync="editVisible" width="60%">
+                <el-form ref="form"  label-width="100px">
+                    <el-form-item label="所属生产线">
+                        <el-select
+                            v-model="line"
+                            clearable
+                            filterable
+                            allow-create
+                            default-first-option
+                            placeholder="请输入或者选择批次">
+                            <el-option
+                                v-for="item in lineOptions"
+                                :key="item.indexno"
+                                :label="item.name"
+                                :value="item.indexno">
+                            </el-option>
+                        </el-select>
+                    </el-form-item>
+                    <el-form-item label="工序名称">
+                        <el-input v-model="name"></el-input>
+                    </el-form-item>
+                    <el-form-item label="工序代码">
+                        <el-input v-model="code"></el-input>
+                    </el-form-item>
+                    <el-form-item label="工序内容">
+                        <el-input v-model="context"></el-input>
+                    </el-form-item>
+                    <el-form-item label="饱和人数">
+                        <el-input  type="number" v-model="personnum"></el-input>
+                    </el-form-item>
+
                 </el-form>
                 <span slot="footer" class="dialog-footer">
                 <el-button @click="editVisible = false" style="height:30px;width:80px">取 消</el-button>
@@ -122,6 +150,10 @@
                 message: '',
                 HideModal: true,
                 listData:[],
+
+                scx:"",
+                scxOptions:[],
+
 
 
                 cols: [],
@@ -174,17 +206,7 @@
                     this.$router.push("/")
                 }
                 else {
-                    let that = this;
-                    axios.all([
-                        axios.post(" "+ url +"/sys/showTableTitle",{"name":"gongxu"}),
-                        axios.post(" "+ url +"/sysconfig/getGongxuList"),
-                        axios.post(" " + url + "/sys/dictionaryList", {"id": "9"}),
-                    ])
-                        .then(axios.spread(function (title, table,line) {
-                            that.cols = title.data;
-                            that.tableData = table.data;
-                            that.lineOptions =line.data
-                        }));
+                   this.loading();
                 }
             },
 
@@ -258,7 +280,7 @@
                             if (res.data == "1") {
                                 this.editVisible = false;
                                 this.$message.success(`修改成功`);
-                                this.$router.go(0)
+                                this.loading();
                             }
                             else {
                                 this.$message.warning(`新增失败`);
@@ -284,7 +306,7 @@
                         if (res.data === "1") {
                             this.$message.success('删除成功');
                             this.delVisible = false;
-                            this.$router.go(0)
+                            this.loading();
                         }
                         else {
                             this.$message.warning(`删除失败`);
@@ -295,12 +317,13 @@
                     })
             },
 
-            //新增工序
+            //显示新增工序
             addWorkStation(){
                 this.addVisible =true;
+                this.line="";
             },
 
-            //新增人员
+            //新增工序
             doAddWorkStation() {
                 if (this.name && this.code && this.context &&this.personnum&&this.line) {
                     axios.post(" " + url + "/sysconfig/gongxuAdd",
@@ -316,7 +339,8 @@
                             if (res.data === "1") {
                                 this.$message.success(`新增成功`);
                                 this.editVisible = false;
-                                this.$router.go(0)
+                                this.loading();
+
                             }
                             else {
                                 this.$message.warning(`新增失败`);
@@ -329,7 +353,45 @@
                 else {
                     this.$message.warning(`输入不能为空`);
                 }
+            },
+
+            //根据生产线选择
+            changeScx() {
+                let that = this;
+                axios.all([
+                    axios.post(" " + url + "/sys/showTableTitle", {"name": "gongxu"}),
+                    axios.post(" " + url + "/sysconfig/getGongxuList", {"id": this.line})
+                ])
+                    .then(axios.spread(function (title, table) {
+                        if(table.data==="-1"){
+                            that.cols = title.data;
+                            that.tableData = [];
+                        }
+                        else {
+                            that.cols = title.data;
+                            that.tableData = table.data;
+                        }
+                    }));
+            },
+
+            //页面初始加载
+            loading(){
+                let that = this;
+                axios.all([
+                    axios.post(" "+ url +"/sys/showTableTitle",{"name":"gongxu"}),
+                    axios.post(" "+ url +"/sysconfig/getGongxuList",{"id":"1"}),
+                    axios.post(" " + url + "/sys/dictionaryList", {"id": "9"}),
+                ])
+                    .then(axios.spread(function (title, table,line) {
+                        that.cols = title.data;
+                        that.tableData = table.data;
+                        that.lineOptions =line.data;
+                        that.line=line.data[0].name
+                    }));
             }
+
+
+
         }
     }
 </script>

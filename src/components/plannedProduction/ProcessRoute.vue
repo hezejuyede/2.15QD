@@ -603,8 +603,6 @@
                     let val = this.selectlistRow;
                     val.forEach((val, index) => {
                         this.routeData.forEach((v, i) => {
-                            console.log(val.value);
-                            console.log(v.value)
                             if (val.value === v.value) {
                                 this.routeData.splice(i, 1)
                             }
