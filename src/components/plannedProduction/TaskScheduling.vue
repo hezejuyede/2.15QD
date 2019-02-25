@@ -313,6 +313,7 @@
             editState() {
                 if (this.listData.length) {
                     this.editStateVisible = true;
+                    this.state =""
                 }
                 else {
                     this.message = "请勾选要修改的管子";
@@ -359,6 +360,7 @@
             editYxj() {
                 if (this.listData.length) {
                     this.editYxjVisible = true;
+                    this.yxj = "";
                     this.loading()
                 }
                 else {
