@@ -96,7 +96,7 @@
                             filterable
                             allow-create
                             default-first-option
-                            placeholder="请输入或者选择批次">
+                            placeholder="请输入或者选择">
                             <el-option
                                 v-for="item in lineOptions"
                                 :key="item.indexno"
@@ -262,7 +262,6 @@
                 }
             },
 
-
             // 保存编辑
             saveEdit() {
                 if (this.name && this.code && this.context &&this.personnum&&this.line) {
@@ -319,8 +318,22 @@
 
             //显示新增工序
             addWorkStation(){
-                this.addVisible =true;
-                this.line="";
+
+                if (this.line) {
+                    this.addVisible = true;
+                }
+                else {
+                    this.message = "请选择生产线";
+                    this.HideModal = false;
+                    const that = this;
+
+                    function a() {
+                        that.message = "";
+                        that.HideModal = true;
+                    }
+
+                    setTimeout(a, 2000);
+                }
             },
 
             //新增工序
@@ -389,8 +402,6 @@
                         that.line=line.data[0].name
                     }));
             }
-
-
 
         }
     }

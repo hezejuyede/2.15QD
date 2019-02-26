@@ -382,13 +382,34 @@
                     axios.post(" " + url + "/shengchan/updateGuanLevelBatch",
                         {
                             "ids": this.listData,
-                            "status":this.yxj,
+                            "status": this.yxj,
                         }
                     )
                         .then((res) => {
                             if (res.data === "1") {
                                 this.$message.success(`修改成功`);
-                                this.editYxjVisible =false;
+                                this.editYxjVisible = false;
+                                this.loading()
+                            }
+                            else {
+                                this.$message.warning(`修改失败`);
+                            }
+                        })
+                        .catch((err) => {
+                            console.log(err)
+                        })
+                }
+                else if (this.yxj === 0) {
+                    axios.post(" " + url + "/shengchan/updateGuanLevelBatch",
+                        {
+                            "ids": this.listData,
+                            "status": 0,
+                        }
+                    )
+                        .then((res) => {
+                            if (res.data === "1") {
+                                this.$message.success(`修改成功`);
+                                this.editYxjVisible = false;
                                 this.loading()
                             }
                             else {

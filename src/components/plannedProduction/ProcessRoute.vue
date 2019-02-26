@@ -10,7 +10,22 @@
             <div class="container">
                 <div class="handle-box">
                     <el-input v-model="select_word" placeholder="筛选工艺路线" class="handle-input mr10"></el-input>
-                    <button @click="addWorkStation">新增工艺路线</button>
+                    <el-select
+                        v-model="line"
+                        clearable
+                        filterable
+                        allow-create
+                        default-first-option
+                        @change="changeScx"
+                        placeholder="请输入或者选择生产线">
+                        <el-option
+                            v-for="item in lineOptions"
+                            :key="item.indexno"
+                            :label="item.name"
+                            :value="item.indexno">
+                        </el-option>
+                    </el-select>
+                    <button @click="showAddWorkingProcedure">新增工艺路线</button>
                     <button @click="editYs" class="color">编辑约束条件</button>
                     <!-- <button @click="deleteWorkStation" class="colorRed">删除工艺路线</button>-->
                 </div>
@@ -43,6 +58,12 @@
                             </template>
                         </el-table-column>
                         <el-table-column
+                            prop="linestr"
+                            label="生产线"
+                            align="center"
+                            min-width="15%">
+                        </el-table-column>
+                        <el-table-column
                             prop="inst"
                             label="工艺路线名称"
                             align="center"
@@ -72,6 +93,24 @@
             <el-dialog title="新增工艺路线" :visible.sync="addVisible" width="40%">
                 <div class="" style="height:450px;overflow:auto">
                     <el-form :model="dynamicValidateForm" ref="dynamicValidateForm" label-width="120px">
+                        <el-form-item
+                            prop="scx"
+                            label="生产线">
+                            <el-select
+                                v-model="dynamicValidateForm.lineid"
+                                clearable
+                                filterable
+                                allow-create
+                                default-first-option
+                                placeholder="请选择生产线">
+                                <el-option
+                                    v-for="item in lineOptions"
+                                    :key="item.indexno"
+                                    :label="item.name"
+                                    :value="item.indexno">
+                                </el-option>
+                            </el-select>
+                        </el-form-item>
                         <el-form-item
                             prop="id"
                             label="工艺路线名">
@@ -111,7 +150,7 @@
                             </el-button>
                             <el-button
                                 type="success"
-                                @click="submitForm(dynamicValidateForm)"
+                                @click="xzSubmitForm(dynamicValidateForm)"
                                 style="height:30px;width:20%">提交信息
                             </el-button>
                         </el-form-item>
@@ -122,6 +161,24 @@
             <el-dialog title="编辑工艺路线" :visible.sync="editVisible" width="40%">
                 <div class="" style="height:450px;overflow:auto">
                     <el-form :model="dynamicValidateForm" ref="dynamicValidateForm" label-width="120px">
+                        <el-form-item
+                            prop="scx"
+                            label="生产线">
+                            <el-select
+                                v-model="dynamicValidateForm.lineid"
+                                clearable
+                                filterable
+                                allow-create
+                                default-first-option
+                                placeholder="请选择生产线">
+                                <el-option
+                                    v-for="item in lineOptions"
+                                    :key="item.indexno"
+                                    :label="item.name"
+                                    :value="item.indexno">
+                                </el-option>
+                            </el-select>
+                        </el-form-item>
                         <el-form-item
                             prop="id"
                             label="工艺路线名">
@@ -171,6 +228,7 @@
                     </el-form>
                 </div>
             </el-dialog>
+
             <!-- 删除提示框 -->
             <el-dialog title="删除工艺路线" :visible.sync="delVisible" width="300px" center>
                 <div class="del-dialog-cnt">删除不可恢复，是否确定删除？</div>
@@ -179,6 +237,7 @@
                 <el-button type="primary" @click="deleteRow" style="height:30px;width:80px">确 定</el-button>
             </span>
             </el-dialog>
+
 
             <!--编辑约束条件 -->
             <el-dialog title="编辑约束条件" :visible.sync="editYsVisible" width="60%">
@@ -289,7 +348,8 @@
                 message: '',
                 HideModal: true,
                 id:"",
-
+                line: '',
+                lineOptions:[],
 
                 cols: [],
                 tableData: [],
@@ -320,7 +380,8 @@
                         selectOptions:[]
                     }],
                     name: '',
-                    id:""
+                    id:"",
+                    lineid:""
                 },
                 selectOptions:[],
 
@@ -357,6 +418,8 @@
         },
         methods: {
 
+            deleteRow(){},
+
             //页面加载检查用户是否登陆，没有登陆就加载登陆页面
             getAdminState() {
                 const userInfo = localStorage.getItem("userInfo");
@@ -365,6 +428,91 @@
                 }
                 else {
                     this.loading()
+                }
+            },
+
+
+            //显示新增工艺路线
+            showAddWorkingProcedure() {
+                if (this.line) {
+                    this.addVisible = true;
+                    this.dynamicValidateForm.name = "";
+                    this.dynamicValidateForm.id = "";
+                    this.dynamicValidateForm.domains = [{
+                        value: '',
+                        selectOptions: this.selectOptions,
+                    }];
+                    this.dynamicValidateForm.lineid = this.line;
+                }
+                else {
+                    this.message = "请选择生产线";
+                    this.HideModal = false;
+                    const that = this;
+
+                    function a() {
+                        that.message = "";
+                        that.HideModal = true;
+                    }
+
+                    setTimeout(a, 2000);
+                }
+            },
+
+            //提交新增工艺路线
+            xzSubmitForm(formName) {
+                let a = false;
+                for (let i = 0; i < formName.domains.length; i++) {
+                    if (formName.domains[i].value) {
+                        a = true;
+                    }
+                    else {
+                        a = false
+                    }
+                }
+                if(a===true){
+                    let a = JSON.stringify(formName);
+                    axios.post(" " + url + "/gongyiluxian/saveGongyiluxian", {"name": a})
+                        .then((res) => {
+                            if (res.data === "1") {
+                                this.$message.success(`新增成功`);
+                                this.addVisible = false;
+                                let that = this;
+                                axios.all([
+                                    axios.post(" " + url + "/api/getPersonProcessList", {"name": ""}),
+                                    axios.post(" " + url + "/gongyiluxian/gongyiluxianList",
+                                        {"id":that.dynamicValidateForm.lineid})
+                                ])
+                                    .then(axios.spread(function (select, table) {
+                                        that.dynamicValidateForm.domains[0].selectOptions = select.data;
+                                        that.selectOptions = select.data;
+                                        that.tableData = table.data
+                                    }));
+                            }
+                            else {
+                                this.$message.warning(`新增失败`);
+                                this.addVisible = false;
+                            }
+                        });
+                }
+                else {
+                    this.$message.warning(`工序不能为空`);
+                }
+
+            },
+
+            //新增工位
+            addDomain() {
+                this.dynamicValidateForm.domains.push({
+                    value: "",
+                    selectOptions: this.selectOptions
+                });
+            },
+
+            //删除工位
+            removeDomain(item) {
+                var index = this.dynamicValidateForm.domains.indexOf(item);
+                if (index !== -1) {
+                    this.dynamicValidateForm.domains.splice(index, 1)
                 }
             },
 
@@ -384,7 +532,8 @@
                             };
                             arr.push(a)
                         }
-                        this.dynamicValidateForm.domains = arr
+                        this.dynamicValidateForm.domains = arr;
+
                     })
                     .catch((err) => {
                         console.log(err)
@@ -412,98 +561,6 @@
                     });
             },
 
-            //行内点击删除
-            deleteWorkStation() {
-                if (this.listData.length) {
-                    this.delVisible = true;
-                }
-                else {
-                    this.message = "请选择要删除的工艺路线";
-                    this.HideModal = false;
-                    const that = this;
-
-                    function a() {
-                        that.message = "";
-                        that.HideModal = true;
-                    }
-
-                    setTimeout(a, 2000);
-                }
-            },
-            // 确定删除
-            deleteRow() {
-                this.tableData.splice(this.idx, 1);
-                this.$message.success('删除成功');
-                this.delVisible = false;
-            },
-            //新增工序
-            addWorkStation() {
-                this.addVisible = true;
-                this.dynamicValidateForm.name = "";
-                this.dynamicValidateForm.id = "";
-                this.dynamicValidateForm.domains= [{
-                    value: '',
-                    selectOptions:this.selectOptions
-                }]
-            },
-
-            //提交信息
-            submitForm(formName) {
-                let a = false;
-                for (let i = 0; i < formName.domains.length; i++) {
-                    if (formName.domains[i].value) {
-                        a = true;
-                    }
-                    else {
-                        a = false
-                    }
-                }
-                if(a===true){
-                    let a = JSON.stringify(formName);
-                    axios.post(" " + url + "/gongyiluxian/saveGongyiluxian", {"name": a})
-                        .then((res) => {
-                            if (res.data === "1") {
-                                this.$message.success(`新增成功`);
-                                this.addVisible = false;
-                                let that = this;
-                                axios.all([
-                                    axios.post(" " + url + "/api/getPersonProcessList", {"name": ""}),
-                                    axios.post(" " + url + "/gongyiluxian/gongyiluxianList")
-                                ])
-                                    .then(axios.spread(function (select, table) {
-                                        that.dynamicValidateForm.domains[0].selectOptions = select.data;
-                                        that.selectOptions = select.data;
-                                        that.tableData = table.data
-                                    }));
-                            }
-                            else {
-                                this.$message.warning(`新增失败`);
-                                this.addVisible = false;
-                            }
-                        });
-                }
-                else {
-                    this.$message.warning(`工序不能为空`);
-                }
-
-            },
-
-            //删除工位
-            removeDomain(item) {
-                var index = this.dynamicValidateForm.domains.indexOf(item);
-                if (index !== -1) {
-                    this.dynamicValidateForm.domains.splice(index, 1)
-                }
-            },
-
-            //新增工位
-            addDomain() {
-                this.dynamicValidateForm.domains.push({
-                    value: "",
-                    selectOptions: this.selectOptions
-                });
-            },
-
 
             // 路线获取表格选中时的数据
             selectRow(val) {
@@ -519,6 +576,7 @@
                     this.listData = [];
                 }
             },
+
 
             //编辑约束条件
             editYs() {
@@ -632,17 +690,37 @@
                 }
             },
 
+            //根据生产线选择
+            changeScx() {
+                let that = this;
+                axios.all([
+                    axios.post(" " + url + "/gongyiluxian/gongyiluxianList", {"id": this.line})
+                ])
+                    .then(axios.spread(function (table) {
+                        if(table.data==="-1"){
+                            that.tableData = [];
+                        }
+                        else {
+                            that.tableData = table.data;
+                        }
+                    }));
+            },
+
+
             //提取初始加载是方法
             loading() {
                 let that = this;
                 axios.all([
                     axios.post(" " + url + "/api/getPersonProcessList", {"name": ""}),
-                    axios.post(" " + url + "/gongyiluxian/gongyiluxianList")
+                    axios.post(" " + url + "/gongyiluxian/gongyiluxianList", {"id": "1"}),
+                    axios.post(" " + url + "/sys/dictionaryList", {"id": "9"}),
                 ])
-                    .then(axios.spread(function (select, table) {
+                    .then(axios.spread(function (select, table,line) {
                         that.dynamicValidateForm.domains[0].selectOptions = select.data;
                         that.selectOptions = select.data;
-                        that.tableData = table.data
+                        that.tableData = table.data;
+                        that.lineOptions =line.data;
+                        that.line=line.data[0].indexno;
                     }));
             }
         }

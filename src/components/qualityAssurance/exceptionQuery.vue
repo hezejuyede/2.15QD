@@ -10,6 +10,22 @@
             <div class="exceptionQueryContentTab">
                 <div class="selectTab">
                     <el-select
+                        v-model="pc"
+                        clearable
+                        filterable
+                        allow-create
+                        default-first-option
+                        placeholder="请输入或者选择批次">
+                        <el-option
+                            v-for="item in pcOptions"
+                            :key="item.id"
+                            :label="item.name"
+                            :value="item.id">
+                        </el-option>
+                    </el-select>
+                </div>
+                <div class="selectTab">
+                    <el-select
                         v-model="gxType"
                         clearable
                         filterable
@@ -68,12 +84,17 @@
                     height="400"
                     @row-click="clickTable"
                     style="width: 98%;margin: 0 auto">
-
+                    <el-table-column
+                        prop="pici"
+                        label="批次"
+                        align="center"
+                        min-width="15%">
+                    </el-table-column>
                     <el-table-column
                         prop="stationname"
                         label="工序名称"
                         align="center"
-                        min-width="20%">
+                        min-width="15%">
                     </el-table-column>
                     <el-table-column
                         prop="type"
@@ -97,7 +118,7 @@
                         prop="zerenren"
                         label="责任人"
                         align="center"
-                        min-width="20%">
+                        min-width="15%">
                     </el-table-column>
                     <el-table-column
                         prop="chuliduiche"
@@ -109,7 +130,7 @@
                         prop="shunshigongsi"
                         label="损失工时"
                         align="center"
-                        min-width="20%">
+                        min-width="15%">
                     </el-table-column>
                     <el-table-column
                         prop="cailiaoqingkuang"
@@ -129,7 +150,6 @@
                         align="center"
                         min-width="20%">
                     </el-table-column>
-
                 </el-table>
             </div>
         </div>
@@ -193,7 +213,9 @@
                 zerenren: '',
                 chuliduice: '',
                 sunshigongshi: '',
-                cailiaoqingkuang: ""
+                cailiaoqingkuang: "",
+                pc:"",
+                pcOptions:[]
 
 
             }
@@ -222,16 +244,21 @@
                     axios.all([
                         axios.post(" " + url + "/api/getProcessList.html"),
                         axios.post(" " + url + "/sys/dictionaryList", {"id": 1}),
-                        axios.post(" " + url + "/sys/dictionaryList", {"id": 3})
+                        axios.post(" " + url + "/sys/dictionaryList", {"id": 3}),
+                        axios.post(" " + url + "/sys/getPiciList"),
                     ])
-                        .then(axios.spread(function (gx, yc, gz) {
+                        .then(axios.spread(function (gx, yc, gz,PC) {
                             that.gxTypeOptions = gx.data;
                             that.ycTypeOptions = yc.data;
                             that.gzTypeOptions = gz.data;
-                            that.gxType=gx.data[0].id;
-                            that.ycType=yc.data[0].indexno;
-                            that.gzType=gz.data[0].indexno;
+                            that.gxType = gx.data[0].id;
+                            that.ycType = yc.data[0].indexno;
+                            that.gzType = gz.data[0].indexno;
+                            that.pc = PC.data[0].id;
+                            that.pcOptions=PC.data;
+
                             axios.post(" " + url + "/shengchanError/errorEventList", {
+                                "pici": that.pc,
                                 "id": that.gxType,
                                 "errorId": that.ycType,
                                 "status": that.gzType
@@ -248,11 +275,12 @@
 
             //进行查询
             doSearch() {
-                if (this.gxType && this.ycType && this.gzType) {
+                if (this.gxType && this.ycType && this.gzType && this.pc) {
                     axios.post(" " + url + "/shengchanError/errorEventList", {
                         "id": this.gxType,
                         "errorId": this.ycType,
-                        "status": this.gzType
+                        "status": this.gzType,
+                        "pici": this.pc
                     })
                         .then((res) => {
                             this.tableData = res.data;
@@ -260,7 +288,6 @@
                         .catch((err) => {
                             console.log(err)
                         })
-
                 }
                 else {
                     this.message = "请完善查询信息";
@@ -277,11 +304,22 @@
 
             },
 
-            clickTable(e) {
-                this.gzId =e.id;
+            //点击显示编辑
+            clickTable(row, column, cell, event) {
+                this.gzId =row.id;
+                let data = {};
+                for (let i = 0; i < this.tableData.length; i++) {
+                    if (this.tableData[i].id === row.id) {
+                        data = this.tableData[i];
+                    }
+                }
+                this.yuanyin = data.yichangxinxi;
+                this.zerenren = data.zerenren;
+                this.chuliduice = data.chulijieguo;
+                this.sunshigongshi = parseInt(data.shunshigongsi);
+                this.cailiaoqingkuang = data.cailiaoqingkuang;
                 this.editVisible = true;
             },
-
 
             // 保存编辑
             saveEdit() {
@@ -293,6 +331,7 @@
                         "zerenren": this.zerenren,
                         "chuliduiche": this.chuliduice,
                         "shunshigongsi": this.sunshigongshi,
+                        "cailiaoqingkuang":this.cailiaoqingkuang,
                         "status":1 ,
                     })
                         .then((res) => {
