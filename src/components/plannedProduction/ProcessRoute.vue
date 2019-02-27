@@ -11,6 +11,21 @@
                 <div class="handle-box">
                     <el-input v-model="select_word" placeholder="筛选工艺路线" class="handle-input mr10"></el-input>
                     <el-select
+                        v-model="type"
+                        clearable
+                        filterable
+                        allow-create
+                        default-first-option
+                        @change="changeType"
+                        placeholder="输入或选择工艺路线类型">
+                        <el-option
+                            v-for="item in typeOptions"
+                            :key="item.indexno"
+                            :label="item.name"
+                            :value="item.indexno">
+                        </el-option>
+                    </el-select>
+                    <el-select
                         v-model="line"
                         clearable
                         filterable
@@ -61,6 +76,12 @@
                             prop="linestr"
                             label="生产线"
                             align="center"
+                            min-width="10%">
+                        </el-table-column>
+                        <el-table-column
+                            prop="typestr"
+                            label="工艺路线类型"
+                            align="center"
                             min-width="15%">
                         </el-table-column>
                         <el-table-column
@@ -94,7 +115,6 @@
                 <div class="" style="height:450px;overflow:auto">
                     <el-form :model="dynamicValidateForm" ref="dynamicValidateForm" label-width="120px">
                         <el-form-item
-                            prop="scx"
                             label="生产线">
                             <el-select
                                 v-model="dynamicValidateForm.lineid"
@@ -102,9 +122,28 @@
                                 filterable
                                 allow-create
                                 default-first-option
+                                disabled
                                 placeholder="请选择生产线">
                                 <el-option
                                     v-for="item in lineOptions"
+                                    :key="item.indexno"
+                                    :label="item.name"
+                                    :value="item.indexno">
+                                </el-option>
+                            </el-select>
+                        </el-form-item>
+                        <el-form-item
+                            label="工艺路线类型">
+                            <el-select
+                                v-model="dynamicValidateForm.typeid"
+                                clearable
+                                filterable
+                                allow-create
+                                default-first-option
+                                disabled
+                                placeholder="输入或选择工艺路线类型">
+                                <el-option
+                                    v-for="item in typeOptions"
                                     :key="item.indexno"
                                     :label="item.name"
                                     :value="item.indexno">
@@ -348,8 +387,11 @@
                 message: '',
                 HideModal: true,
                 id:"",
+
                 line: '',
-                lineOptions:[],
+                lineOptions: [],
+                type: "",
+                typeOptions: [],
 
                 cols: [],
                 tableData: [],
@@ -377,11 +419,12 @@
                 dynamicValidateForm: {
                     domains: [{
                         value: '',
-                        selectOptions:[]
+                        selectOptions: []
                     }],
                     name: '',
-                    id:"",
-                    lineid:""
+                    id: "",
+                    lineid: "",
+                    typeid: ""
                 },
                 selectOptions:[],
 
@@ -443,6 +486,7 @@
                         selectOptions: this.selectOptions,
                     }];
                     this.dynamicValidateForm.lineid = this.line;
+                    this.dynamicValidateForm.typeid = this.type;
                 }
                 else {
                     this.message = "请选择生产线";
@@ -478,14 +522,10 @@
                                 this.addVisible = false;
                                 let that = this;
                                 axios.all([
-                                    axios.post(" " + url + "/api/getPersonProcessList", {"name": ""}),
-                                    axios.post(" " + url + "/gongyiluxian/gongyiluxianList",
-                                        {"id":that.dynamicValidateForm.lineid})
+                                    axios.post(" " + url + "/gongyiluxian/gongyiluxianList", {"id": that.line, "type": that.type}),
                                 ])
-                                    .then(axios.spread(function (select, table) {
-                                        that.dynamicValidateForm.domains[0].selectOptions = select.data;
-                                        that.selectOptions = select.data;
-                                        that.tableData = table.data
+                                    .then(axios.spread(function (table) {
+                                        that.tableData = table.data;
                                     }));
                             }
                             else {
@@ -694,7 +734,23 @@
             changeScx() {
                 let that = this;
                 axios.all([
-                    axios.post(" " + url + "/gongyiluxian/gongyiluxianList", {"id": this.line})
+                    axios.post(" " + url + "/gongyiluxian/gongyiluxianList", {"id": this.line,"type":this.type})
+                ])
+                    .then(axios.spread(function (table) {
+                        if(table.data==="-1"){
+                            that.tableData = [];
+                        }
+                        else {
+                            that.tableData = table.data;
+                        }
+                    }));
+            },
+
+            //根据类型查询
+            changeType() {
+                let that = this;
+                axios.all([
+                    axios.post(" " + url + "/gongyiluxian/gongyiluxianList", {"id": this.line,"type":this.type})
                 ])
                     .then(axios.spread(function (table) {
                         if(table.data==="-1"){
@@ -712,15 +768,18 @@
                 let that = this;
                 axios.all([
                     axios.post(" " + url + "/api/getPersonProcessList", {"name": ""}),
-                    axios.post(" " + url + "/gongyiluxian/gongyiluxianList", {"id": "1"}),
+                    axios.post(" " + url + "/gongyiluxian/gongyiluxianList", {"id": "1", "type": "1"}),
                     axios.post(" " + url + "/sys/dictionaryList", {"id": "9"}),
+                    axios.post(" " + url + "/sys/dictionaryList", {"id": "17"}),
                 ])
-                    .then(axios.spread(function (select, table,line) {
+                    .then(axios.spread(function (select, table, line, type) {
                         that.dynamicValidateForm.domains[0].selectOptions = select.data;
                         that.selectOptions = select.data;
                         that.tableData = table.data;
-                        that.lineOptions =line.data;
-                        that.line=line.data[0].indexno;
+                        that.lineOptions = line.data;
+                        that.line = line.data[0].indexno;
+                        that.typeOptions = type.data;
+                        that.type = type.data[0].indexno;
                     }));
             }
         }
