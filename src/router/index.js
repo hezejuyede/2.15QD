@@ -96,8 +96,8 @@ import OperationLog from '../components/systemManagement/operationLog';
 import LoginOutLog from '../components/systemManagement/loginOutLog';
 import DictionaryMaintenance from '../components/systemManagement/dictionaryMaintenance';
 import HeaderMaintenance from '../components/systemManagement/headerMaintenance';
-import LoginSecurityAlert from '../components/systemManagement/loginSecurityAlert';
-import OperatorMainPoints from '../components/systemManagement/operatorMainPoints';
+import LoginSecurityAlert from '../components/securityManagement/loginSecurityAlert';
+import OperatorMainPoints from '../components/securityManagement/operatorMainPoints';
 import ListDetails from '../components/systemManagement/listDetails';
 
 
@@ -243,6 +243,11 @@ export default new Router({
                             path: '/ExceptionQuery',
                             component: ExceptionQuery,
                             meta: {title: '异常查询'}
+                        },
+                        {
+                            path: '/OperatorMainPoints',
+                            component: OperatorMainPoints,
+                            meta: {title: '作业者要点内容'}
                         }
                     ]
                 },
@@ -275,23 +280,20 @@ export default new Router({
                             path: '/HeaderMaintenance',
                             component: HeaderMaintenance,
                             meta: {title: '作业质量记录'}
-                        },
-                        {
-                            path: '/LoginSecurityAlert',
-                            component: LoginSecurityAlert,
-                            meta: {title: '登录安全提醒'}
-                        },
-                        {
-                            path: '/OperatorMainPoints',
-                            component: OperatorMainPoints,
-                            meta: {title: '作业者要点内容'}
                         }
                     ]
                 },
                 {
                     path: '/SecurityManagement',
                     component: SecurityManagement,
-                    meta: {title: '安全管理'}
+                    meta: {title: '安全管理'},
+                    children: [
+                        {
+                            path: '/LoginSecurityAlert',
+                            component: LoginSecurityAlert,
+                            meta: {title: '登录安全提醒'}
+                        }
+                    ]
                 },
                 {
                     path: '/404',

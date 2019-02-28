@@ -59,6 +59,7 @@
                         index: 'QualityAssurance',
                         title: '质量管理'
                     },
+
                   /*  {
                         icon: 'el-icon-view',
                         index: 'ProductionMonitoring',
@@ -74,6 +75,11 @@
                         index: 'SecurityManagement',
                         title: '看板管理'
                     },*/
+                    {
+                        icon: 'el-icon-star-off',
+                        index: 'SecurityManagement',
+                        title: '安全管理'
+                    },
                     {
                         icon: 'el-icon-setting',
                         index: 'SystemManagement',

@@ -124,13 +124,13 @@
                         label: '质量提醒推送',
                         index: "5",
                         url: "/404",
-                        /*children: [
+                        children: [
                             {
-                                label: '提醒内容制作与发布',
+                                label: '作业者要点内容',
                                 index: "5-1",
-                                url: "/404"
+                                url: "/OperatorMainPoints"
                             },
-                            {
+                           /* {
                                 label: '质量提醒查阅',
                                 index: "5-2",
                                 url: "/404"
@@ -145,8 +145,8 @@
                                 label: '质量提醒的查询与统计',
                                 index: "5-4",
                                 url: "/404"
-                            }
-                        ]*/
+                            }*/
+                        ]
                     },
                     {
                         label: '质量基准学习',

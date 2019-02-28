@@ -321,6 +321,11 @@
 
                 if (this.line) {
                     this.addVisible = true;
+                    this.name="";
+                    this.code="";
+                    this.context="";
+                    this.personnum="";
+
                 }
                 else {
                     this.message = "请选择生产线";
@@ -339,6 +344,8 @@
             //新增工序
             doAddWorkStation() {
                 if (this.name && this.code && this.context &&this.personnum&&this.line) {
+
+
                     axios.post(" " + url + "/sysconfig/gongxuAdd",
                         {
                             "name": this.name,
@@ -351,8 +358,16 @@
                         .then((res) => {
                             if (res.data === "1") {
                                 this.$message.success(`新增成功`);
-                                this.editVisible = false;
-                                this.loading();
+                                this.addVisible = false;
+                                let that = this;
+                                axios.all([
+                                    axios.post(" "+ url +"/sys/showTableTitle",{"name":"gongxu"}),
+                                    axios.post(" "+ url +"/sysconfig/getGongxuList",{"id":this.line}),
+                                ])
+                                    .then(axios.spread(function (title, table) {
+                                        that.cols = title.data;
+                                        that.tableData = table.data;
+                                    }));
 
                             }
                             else {

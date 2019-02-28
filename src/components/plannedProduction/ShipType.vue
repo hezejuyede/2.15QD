@@ -3,15 +3,15 @@
         <div class="crumbs">
             <el-breadcrumb separator="/">
                 <el-breadcrumb-item>资源模型</el-breadcrumb-item>
-                <el-breadcrumb-item>船型设置</el-breadcrumb-item>
+                <el-breadcrumb-item>船号设置</el-breadcrumb-item>
             </el-breadcrumb>
         </div>
         <div class="WorkingProcedure-content">
             <div class="container">
                 <div class="handle-box">
-                    <el-input v-model="select_word" placeholder="筛选工序" class="handle-input mr10"></el-input>
-                   <!-- <el-button type="primary" icon="delete" class="handle-del mr10" @click="addWorkStation">新增船型</el-button>
-                    <el-button type="danger" icon="delete" class="handle-del mr10" @click="deleteWorkStation">删除船型</el-button>-->
+                    <el-input v-model="select_word" placeholder="筛选船号" class="handle-input mr10"></el-input>
+                    <el-button type="primary" icon="delete" class="handle-del mr10" @click="addWorkStation">新增船号</el-button>
+                    <el-button type="danger" icon="delete" class="handle-del mr10" @click="deleteWorkStation">删除船号</el-button>
                 </div>
                 <div class="">
                     <el-table class="tb-edit"

@@ -111,7 +111,7 @@
             </div>
 
             <!--新增弹出框 -->
-            <el-dialog title="新增工艺路线" :visible.sync="addVisible" width="40%">
+            <el-dialog title="新增工艺路线" :visible.sync="addVisible" width="90%">
                 <div class="" style="height:450px;overflow:auto">
                     <el-form :model="dynamicValidateForm" ref="dynamicValidateForm" label-width="120px">
                         <el-form-item
@@ -160,26 +160,57 @@
                             v-for="(domain, index) in dynamicValidateForm.domains"
                             :key="domain.key"
                             :prop="'domains.' + index + '.value'"
-                            :label="'路线工序' + (index+1)+''">
-                            <el-select
-                                v-model="domain.value"
-                                clearable
-                                filterable
-                                allow-create
-                                default-first-option
-                                placeholder="请选择工位">
-                                <el-option
-                                    v-for="item in domain.selectOptions"
-                                    :key="item.id"
-                                    :label="item.name"
-                                    :value="item.id">
-                                </el-option>
-                            </el-select>
-                            <el-button
-                                type="danger"
-                                style="height:30px;width:20%"
-                                @click.prevent="removeDomain(domain)">删除
-                            </el-button>
+                            :label="'工序' + (index+1)+''">
+                            <div class="appendDiv">
+                                <div class="appendDivTemplate">
+                                    <el-select
+                                        v-model="domain.lineValue"
+                                        clearable
+                                        filterable
+                                        allow-create
+                                        default-first-option
+                                        @change="changeAddStation(domain.lineValue,index)"
+                                        placeholder="请选择生产线">
+                                        <el-option
+                                            v-for="item in domain.lineOptions"
+                                            :key="item.indexno"
+                                            :label="item.name"
+                                            :value="item.indexno">
+                                        </el-option>
+                                    </el-select>
+                                </div>
+                                <div class="appendDivTemplate">
+                                    <el-select
+                                        v-model="domain.stationValue"
+                                        clearable
+                                        filterable
+                                        allow-create
+                                        default-first-option
+                                        placeholder="请选择工位">
+                                        <el-option
+                                            v-for="item in domain.stationOptions"
+                                            :key="item.id"
+                                            :label="item.name"
+                                            :value="item.id">
+                                        </el-option>
+                                    </el-select>
+                                </div>
+                                <div class="appendDivTemplate">
+                                    <el-input  type="number" v-model="domain.startTime" placeholder="开始时间"></el-input>
+                                </div>
+                                <div class="appendDivTemplate">
+                                    <el-input  type="number" v-model="domain.endTime" placeholder="结束时间"></el-input>
+                                </div>
+                                <div class="appendDivTemplate">
+                                    <el-button
+                                        type="danger"
+                                        style="height:30px;width:20%"
+                                        @click.prevent="removeDomain(domain)">删除
+                                    </el-button>
+                                </div>
+                            </div>
+
+
                         </el-form-item>
                         <el-form-item>
                             <el-button
@@ -197,11 +228,10 @@
                 </div>
             </el-dialog>
             <!-- 编辑弹出框 -->
-            <el-dialog title="编辑工艺路线" :visible.sync="editVisible" width="40%">
+            <el-dialog title="编辑工艺路线" :visible.sync="editVisible" width="90%">
                 <div class="" style="height:450px;overflow:auto">
                     <el-form :model="dynamicValidateForm" ref="dynamicValidateForm" label-width="120px">
                         <el-form-item
-                            prop="scx"
                             label="生产线">
                             <el-select
                                 v-model="dynamicValidateForm.lineid"
@@ -209,9 +239,28 @@
                                 filterable
                                 allow-create
                                 default-first-option
+                                disabled
                                 placeholder="请选择生产线">
                                 <el-option
                                     v-for="item in lineOptions"
+                                    :key="item.indexno"
+                                    :label="item.name"
+                                    :value="item.indexno">
+                                </el-option>
+                            </el-select>
+                        </el-form-item>
+                        <el-form-item
+                            label="工艺路线类型">
+                            <el-select
+                                v-model="dynamicValidateForm.typeid"
+                                clearable
+                                filterable
+                                allow-create
+                                default-first-option
+                                disabled
+                                placeholder="输入或选择工艺路线类型">
+                                <el-option
+                                    v-for="item in typeOptions"
                                     :key="item.indexno"
                                     :label="item.name"
                                     :value="item.indexno">
@@ -228,27 +277,57 @@
                             v-for="(domain, index) in dynamicValidateForm.domains"
                             :key="domain.key"
                             :prop="'domains.' + index + '.value'"
-                            :label="'路线工序' + (index+1)+''">
-                            <el-select
-                                v-model="domain.value"
-                                clearable
-                                filterable
-                                allow-create
-                                default-first-option
-                                placeholder="请选择工位">
-                                <el-option
-                                    v-for="item in domain.selectOptions"
-                                    :key="item.id"
-                                    :label="item.name"
-                                    :value="item.id">
-                                </el-option>
-                            </el-select>
+                            :label="'工序' + (index+1)+''">
+                            <div class="appendDiv">
+                                <div class="appendDivTemplate">
+                                    <el-select
+                                        v-model="domain.lineValue"
+                                        clearable
+                                        filterable
+                                        allow-create
+                                        default-first-option
+                                        @change="changeAddStation(domain.lineValue,index)"
+                                        placeholder="请选择生产线">
+                                        <el-option
+                                            v-for="item in domain.lineOptions"
+                                            :key="item.indexno"
+                                            :label="item.name"
+                                            :value="item.indexno">
+                                        </el-option>
+                                    </el-select>
+                                </div>
+                                <div class="appendDivTemplate">
+                                    <el-select
+                                        v-model="domain.stationValue"
+                                        clearable
+                                        filterable
+                                        allow-create
+                                        default-first-option
+                                        placeholder="请选择工位">
+                                        <el-option
+                                            v-for="item in domain.stationOptions"
+                                            :key="item.id"
+                                            :label="item.name"
+                                            :value="item.id">
+                                        </el-option>
+                                    </el-select>
+                                </div>
+                                <div class="appendDivTemplate">
+                                    <el-input v-model="domain.startTime" placeholder="开始时间"></el-input>
+                                </div>
+                                <div class="appendDivTemplate">
+                                    <el-input v-model="domain.endTime" placeholder="结束时间"></el-input>
+                                </div>
+                                <div class="appendDivTemplate">
+                                    <el-button
+                                        type="danger"
+                                        style="height:30px;width:20%"
+                                        @click.prevent="removeDomain(domain)">删除
+                                    </el-button>
+                                </div>
+                            </div>
 
-                            <el-button
-                                type="danger"
-                                style="height:30px;width:20%"
-                                @click.prevent="removeDomain(domain)">删除
-                            </el-button>
+
                         </el-form-item>
                         <el-form-item>
                             <el-button
@@ -418,8 +497,12 @@
 
                 dynamicValidateForm: {
                     domains: [{
-                        value: '',
-                        selectOptions: []
+                        lineValue: '',
+                        stationValue: '',
+                        startTime: '',
+                        endTime: '',
+                        lineOptions: [],
+                        stationOptions: [],
                     }],
                     name: '',
                     id: "",
@@ -434,7 +517,10 @@
 
                 conditionOptions: [],
                 fieldnameOptions: [],
-                relatableOptions: []
+                relatableOptions: [],
+
+
+                addStationOptions:[]
             }
         },
         computed: {
@@ -477,19 +563,34 @@
 
             //显示新增工艺路线
             showAddWorkingProcedure() {
-                if (this.line) {
+                if (this.line && this.type) {
+                    this.dynamicValidateForm.domains = [{
+                        lineValue: '',
+                        stationValue: '',
+                        startTime: '',
+                        endTime: '',
+                        lineOptions: [],
+                        stationOptions: [],
+                    }];
+
+                    let that = this;
+                    axios.all([
+                        axios.post(" " + url + "/gongyiluxian/getSelectType", {"typeId": this.type, "id": this.line}),
+                    ])
+                        .then(axios.spread(function (select) {
+                            that.dynamicValidateForm.domains[0].stationOptions = select.data;
+                            that.addStationOptions =select.data
+                        }));
                     this.addVisible = true;
+                    this.dynamicValidateForm.domains[0].lineValue = this.line;
+                    this.dynamicValidateForm.domains[0].lineOptions = this.lineOptions;
                     this.dynamicValidateForm.name = "";
                     this.dynamicValidateForm.id = "";
-                    this.dynamicValidateForm.domains = [{
-                        value: '',
-                        selectOptions: this.selectOptions,
-                    }];
                     this.dynamicValidateForm.lineid = this.line;
                     this.dynamicValidateForm.typeid = this.type;
                 }
                 else {
-                    this.message = "请选择生产线";
+                    this.message = "必须选择生产线和类型";
                     this.HideModal = false;
                     const that = this;
 
@@ -506,14 +607,14 @@
             xzSubmitForm(formName) {
                 let a = false;
                 for (let i = 0; i < formName.domains.length; i++) {
-                    if (formName.domains[i].value) {
+                    if (formName.domains[i].lineValue && formName.domains[i].stationValue && formName.domains[i].startTime && formName.domains[i].endTime) {
                         a = true;
                     }
                     else {
                         a = false
                     }
                 }
-                if(a===true){
+                if (a === true) {
                     let a = JSON.stringify(formName);
                     axios.post(" " + url + "/gongyiluxian/saveGongyiluxian", {"name": a})
                         .then((res) => {
@@ -522,7 +623,10 @@
                                 this.addVisible = false;
                                 let that = this;
                                 axios.all([
-                                    axios.post(" " + url + "/gongyiluxian/gongyiluxianList", {"id": that.line, "type": that.type}),
+                                    axios.post(" " + url + "/gongyiluxian/gongyiluxianList", {
+                                        "id": that.line,
+                                        "type": that.type
+                                    }),
                                 ])
                                     .then(axios.spread(function (table) {
                                         that.tableData = table.data;
@@ -535,7 +639,7 @@
                         });
                 }
                 else {
-                    this.$message.warning(`工序不能为空`);
+                    this.$message.warning(`新增内容不能为空值`);
                 }
 
             },
@@ -543,8 +647,12 @@
             //新增工位
             addDomain() {
                 this.dynamicValidateForm.domains.push({
-                    value: "",
-                    selectOptions: this.selectOptions
+                    lineValue: this.line,
+                    stationValue: '',
+                    startTime: '',
+                    endTime: '',
+                    lineOptions: this.lineOptions,
+                    stationOptions: this.addStationOptions,
                 });
             },
 
@@ -556,6 +664,20 @@
                 }
             },
 
+
+            //新增时修改工艺路线后工位的联动
+            changeAddStation(lineValue,index){
+                let that = this;
+                axios.all([
+                    axios.post(" " + url + "/sysconfig/getGongxuList", {"id": lineValue}),
+                ])
+                    .then(axios.spread(function (select) {
+                        that.dynamicValidateForm.domains[index].stationOptions = select.data;
+                        that.addStationOptions = select.data
+                    }));
+            },
+
+
             //行内点击编辑
             editWorkStation(row, column, cell, event) {
                 this.editVisible = true;
@@ -563,17 +685,24 @@
                 axios.post(" " + url + "/gongyiluxian/getGongyiluxianDetail", {"id": this.id})
                     .then((res) => {
                         this.dynamicValidateForm.name = res.data.instance.name;
+                        this.dynamicValidateForm.lineid = res.data.instance.line;
+                        this.dynamicValidateForm.typeid = res.data.instance.type;
                         this.dynamicValidateForm.id = this.id;
+                        //先定义一个空数据
                         let arr = [];
+                        //将返回的值遍历一遍动态添加dynamicValidateForm.domains里面的值
                         for (let i = 0; i < res.data.nodelist.length; i++) {
-                            let a = {
-                                value: res.data.nodelist[i].stationid,
-                                selectOptions: this.selectOptions
+                            let stationJson = {
+                                lineValue: res.data.nodelist[i].lineid,
+                                stationValue: res.data.nodelist[i].stationid,
+                                startTime: res.data.nodelist[i].startday,
+                                endTime: res.data.nodelist[i].endday,
+                                lineOptions: this.lineOptions,
+                                stationOptions: JSON.parse(res.data.nodelist[i].optionsstr),
                             };
-                            arr.push(a)
+                            arr.push(stationJson)
                         }
                         this.dynamicValidateForm.domains = arr;
-
                     })
                     .catch((err) => {
                         console.log(err)
@@ -862,7 +991,17 @@
             }
 
         }
+        .appendDiv{
+            width: 100%;
+            display: flex;
+            .appendDivTemplate{
+                flex: 1;
+                margin-right:  2%;
+
+            }
+        }
     }
+
 
 
 </style>

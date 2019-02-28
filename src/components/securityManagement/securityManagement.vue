@@ -1,162 +1,150 @@
 <template>
-  <div class="securityManagement">
-    <main ref="indexDiv" id="indexDiv">
-      <div class="indexDiv-top ">
-        <div class="indexDiv-top-left fl"></div>
-        <div class="indexDiv-top-center fl">看板管理</div>
-        <div class="indexDiv-top-right fl"></div>
-      </div>
-      <div class="indexDiv-bottom clearfix">
-        <div class="nav-div fl"  v-for="(item,index) in navBarData" @click="goToNavBar(index,item.url)">
-          <div class="indexDivText">
-            <i :class=" item.icon"></i>
-            <span>{{item.label}}</span>
-          </div>
+    <div class="plannedProduction">
+        <div class="plannedProduction-nav">
+            <el-menu :default-active="activeIndex" class="el-menu-demo" mode="horizontal">
+                <div  v-for="(item,index) in navBarData"  :class="{'navDivColor':index === num}">
+                    <el-submenu :index="item.index">
+                        <template slot="title">{{item.label}}</template>
+                        <div class="" v-for="(item ,index) in item.children" @click=" handleSelect(item.index,item.url)">
+                            <el-menu-item :index="item.index">{{item.label}}</el-menu-item>
+                        </div>
+                    </el-submenu>
+                </div>
+            </el-menu>
         </div>
-      </div>
-    </main>
-  </div>
+        <div class="plannedProduction-content">
+            <keep-alive>
+                <router-view></router-view>
+            </keep-alive>
+        </div>
+    </div>
 </template>
 <script type="text/ecmascript-6">
 
-  export default {
-    name: 'securityManagement',
-    data() {
-      return {
-        navBarData: [
-          {
-            icon:"iconfont icon-xinxi",
-            label: '推送信息',
-            id: "2",
-            url:"/404"
-          },
-          {
-            icon:"iconfont icon-chaxun",
-            label: '信息查询',
-            id: "4",
-            url:"/404"
-          }
-        ]
 
-      }
-    },
-    components: {},
-    mounted() {
+    export default {
+        name: 'plannedProduction',
+        data() {
+            return {
+                num:0,
+                navBarData: [
+                    {
+                        label: '上岗离岗提醒',
+                        index: "1",
+                        children: [
+                            {
+                                label: '登录安全提醒',
+                                index: "1-1",
+                                url: "/LoginSecurityAlert"
+                            }
+                        ]
+                    },
+                    {
+                        label: '安全提醒推送',
+                        index: "2",
+                        children: []
+                    },
+                    {
+                        label: '安全基准学习',
+                        index: "3",
+                        children: []
+                    },
+                    {
+                        label: '安全记录',
+                        index: "4",
+                        children: []
+                    },
+                    {
+                        label: '安全报表',
+                        index: "4",
+                        children: []
+                    },
+                ],
+                activeIndex: '1',
+            }
+        },
+        components: {},
+        mounted() {
+
+        },
+
+        created() {
+            this.getAdminState()
+        },
+        methods: {
+
+            //页面加载检查用户是否登陆，没有登陆就加载登陆页面
+            getAdminState() {
+                const userInfo = sessionStorage.getItem("userInfo");
+                if (userInfo === null) {
+
+                }
+                else {
 
 
-    },
-    created() {
+                }
+            },
+            //点击前往那个子组件
+            goToNavBar(index, url) {
+                this.$router.push(url);
+            },
 
+            //点击导航前往哪一个页面
+            handleSelect(index, url) {
+                let Num = parseInt(index.substr(0,1));
+                this.num = Num-1;
+                this.$router.push(url);
+            }
 
-    },
-    methods: {
-
-      //页面加载检查用户是否登陆，没有登陆就加载登陆页面
-      getAdminState() {
-        const userInfo = sessionStorage.getItem("userInfo");
-        if (userInfo === null) {
 
         }
-        else {
-
-
-        }
-      },
-
-
     }
-  }
 </script>
 <style scoped lang="less" rel="stylesheet/less">
-  @import "../../assets/less/base";
-  .securityManagement{
-      width: 100%;
-      height: 100%;
-      background-color: @color-white;
-  }
+    @import "../../assets/less/base";
 
-  .indexDiv-top {
-    height: 50px;
-    margin-bottom: 20px;
-    .indexDiv-top-left {
-      height: 1px;
-      width: 5%;
-      margin-top: 25px;
-      background-color: #303133;
-    }
-    .indexDiv-top-center {
-      width: 10%;
-      margin-top: 15px;
-      text-align: center;
-    }
-    .indexDiv-top-right {
-      height: 1px;
-      width: 85%;
-      margin-top: 25px;
-      background-color: #303133;
-    }
-  }
-  .indexDiv-bottom{
-      width: 70%;
-      margin-top: 20px;
-    .nav-div{
-      width:15%;
-      margin-left: 6%;
-      height: 100px;
-      margin-bottom: 5%;
-      text-align: center;
-      cursor: pointer;
-        border:1px solid @color-background-dd;
-        box-shadow: 2px 2px 1px @color-background-dd;
-        border-radius: 10%;
-      .indexDivText{
-        margin-top: 20px;
+    .plannedProduction {
         width: 100%;
-        height: 60px;
-        line-height: 30px;
-      }
-      i{
-        display: block;
-        font-size: 200%;
-        margin-bottom: 5px;
-      }
-      span{
-        display: block;
-      }
-      .icon-anquan-copy{
-          display: block;
-          font-size: 400%;
-          margin-bottom: 20px;
-        color: #3EC455;
+        height: 100%;
+        background-color: @color-white;
+        .plannedProduction-nav {
+            width: 100%;
+            height: 10%;
+            .el-menu-demo {
+                display: flex;
+                > div {
+                    flex: 1;
+                    text-align: center;
 
-      }
-      .icon-xinxi{
-          display: block;
-          font-size: 400%;
-          margin-bottom: 20px;
-        color: #d93f30;
+                }
 
-      }
-      .icon-tubiaozhizuomoban{
-          display: block;
-          font-size: 400%;
-          margin-bottom: 20px;
-        color: deeppink;
 
-      }
-      .icon-chaxun{
-          display: block;
-          font-size: 400%;
-          margin-bottom: 20px;
-        color: brown;
+            }
 
-      }
-
+        }
+        .plannedProduction-content{
+            margin-bottom: 50px;
+        }
 
     }
-  }
 
 
+    .navDivColor {
+        background-color: @color-background-d;
+    }
+
+    @media only screen and (max-width: 1200px) {
+        .plannedProduction {
+            width: 1200px;
+            .plannedProduction-nav{
+                width: 1200px;
+            }
+            .plannedProduction-content{
+                width: 1200px;
+            }
+        }
+
+    }
 
 
 </style>
