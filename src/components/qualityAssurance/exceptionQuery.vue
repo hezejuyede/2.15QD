@@ -9,68 +9,86 @@
         <div class="exceptionQueryContent">
             <div class="exceptionQueryContentTab">
                 <div class="selectTab">
-                    <el-select
-                        v-model="pc"
-                        clearable
-                        filterable
-                        allow-create
-                        default-first-option
-                        placeholder="请输入或者选择批次">
-                        <el-option
-                            v-for="item in pcOptions"
-                            :key="item.id"
-                            :label="item.name"
-                            :value="item.id">
-                        </el-option>
-                    </el-select>
+                    <label style="margin-right: 10px;margin-left: 10px">
+                        <span>批次</span>
+                        <span>:</span>
+                        <el-select
+                            v-model="pc"
+                            clearable
+                            filterable
+                            allow-create
+                            default-first-option
+                            placeholder="请输入或者选择批次">
+                            <el-option
+                                v-for="item in pcOptions"
+                                :key="item.id"
+                                :label="item.name"
+                                :value="item.id">
+                            </el-option>
+                        </el-select>
+                    </label>
                 </div>
                 <div class="selectTab">
-                    <el-select
-                        v-model="gxType"
-                        clearable
-                        filterable
-                        allow-create
-                        default-first-option
-                        placeholder="请选择工序">
-                        <el-option
-                            v-for="item in gxTypeOptions"
-                            :key="item.id"
-                            :label="item.name"
-                            :value="item.id">
-                        </el-option>
-                    </el-select>
+                    <label style="margin-right: 10px;margin-left: 10px">
+                        <span>工序</span>
+                        <span>:</span>
+                        <el-select
+                            v-model="gxType"
+                            clearable
+                            filterable
+                            allow-create
+                            default-first-option
+                            placeholder="请选择工序">
+                            <el-option
+                                v-for="item in gxTypeOptions"
+                                :key="item.id"
+                                :label="item.name"
+                                :value="item.id">
+                            </el-option>
+                        </el-select>
+                    </label>
                 </div>
                 <div class="selectTab">
-                    <el-select
-                        v-model="ycType"
-                        clearable
-                        filterable
-                        allow-create
-                        default-first-option
-                        placeholder="请选择异常类型">
-                        <el-option
-                            v-for="item in ycTypeOptions"
-                            :key="item.indexno"
-                            :label="item.name"
-                            :value="item.indexno">
-                        </el-option>
-                    </el-select>
+                    <label style="margin-right: 10px;margin-left: 10px">
+                        <span>异常类型</span>
+                        <span>:</span>
+                        <el-select
+                            v-model="ycType"
+                            clearable
+                            filterable
+                            allow-create
+                            default-first-option
+                            placeholder="请选择异常类型">
+                            <el-option
+                                v-for="item in ycTypeOptions"
+                                :key="item.indexno"
+                                :label="item.name"
+                                :value="item.indexno">
+                            </el-option>
+                        </el-select>
+                    </label>
+
                 </div>
                 <div class="selectTab">
-                    <el-select
-                        v-model="gzType"
-                        clearable
-                        filterable
-                        allow-create
-                        default-first-option
-                        placeholder="选择当前管状态">
-                        <el-option
-                            v-for="item in gzTypeOptions"
-                            :key="item.indexno"
-                            :label="item.name"
-                            :value="item.indexno">
-                        </el-option>
-                    </el-select>
+                    <label style="margin-right: 10px;margin-left: 10px">
+                        <span>前管状态</span>
+                        <span>:</span>
+                        <el-select
+                            v-model="gzType"
+                            clearable
+                            filterable
+                            allow-create
+                            default-first-option
+                            placeholder="选择当前管状态">
+                            <el-option
+                                v-for="item in gzTypeOptions"
+                                :key="item.indexno"
+                                :label="item.name"
+                                :value="item.indexno">
+                            </el-option>
+                        </el-select>
+                    </label>
+
                 </div>
                 <div class="selectTab">
                     <el-button type="primary" @click="doSearch">查询</el-button>

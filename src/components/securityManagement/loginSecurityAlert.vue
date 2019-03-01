@@ -10,12 +10,12 @@
             <div class="container">
                 <div class="handle-box">
                     <label style="margin-right: 10px">
-                        <sapn>筛选岗位提醒</sapn>
+                        <span>筛选岗位提醒</span>
                         <span>:</span>
                         <el-input v-model="select_word" placeholder="筛选提醒" class="handle-input mr10"></el-input>
                     </label>
                     <label style="margin-right: 10px;margin-left: 10px">
-                        <sapn>工位</sapn>
+                        <span>工位</span>
                         <span>:</span>
                         <el-select
                             v-model="select"

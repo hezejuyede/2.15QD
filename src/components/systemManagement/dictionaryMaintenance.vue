@@ -10,12 +10,12 @@
             <div class="container">
                 <div class="handle-box">
                     <label style="margin-right: 10px;margin-left: 10px">
-                        <sapn>筛选字典</sapn>
+                        <span>筛选字典</span>
                         <span>:</span>
                         <el-input v-model="select_word" placeholder="筛选字典" class="handle-input mr10"></el-input>
                     </label>
                     <label style="margin-right: 10px;margin-left: 10px">
-                        <sapn>字典类型</sapn>
+                        <span>字典类型</span>
                         <span>:</span>
                         <el-select
                             v-model="select"

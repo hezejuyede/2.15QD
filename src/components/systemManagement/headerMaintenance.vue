@@ -10,12 +10,12 @@
             <div class="container">
                 <div class="handle-box">
                     <label style="margin-right: 10px;margin-left: 10px">
-                        <sapn>检索表头</sapn>
+                        <span>检索表头</span>
                         <span>:</span>
                         <el-input v-model="select_word" placeholder="筛选表头" class="handle-input mr10"></el-input>
                     </label>
                     <label style="margin-right: 10px;margin-left: 10px">
-                        <sapn>表头类型</sapn>
+                        <span>表头类型</span>
                         <span>:</span>
                         <el-select
                             v-model="select"

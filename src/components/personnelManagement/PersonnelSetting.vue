@@ -10,7 +10,7 @@
             <div class="container">
                 <div class="handle-box">
                     <label style="margin-right: 10px">
-                        <sapn>筛选人员</sapn>
+                        <span>筛选人员</span>
                         <span>:</span>
                         <el-input v-model="select_word" placeholder="筛选人员" class="handle-input mr10"></el-input>
                     </label>

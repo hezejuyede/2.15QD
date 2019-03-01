@@ -10,7 +10,7 @@
             <div class="operationLogContentTab">
                 <div class="normalTab">
                     <label style="margin-right: 10px;margin-left: 10px">
-                        <sapn>批次</sapn>
+                        <span>批次</span>
                         <span>:</span>
                         <el-select
                             v-model="batch"
@@ -32,7 +32,7 @@
                 <div class="batchTab">
                     <div class="normalTab">
                         <label style="margin-right: 10px;margin-left: 10px">
-                            <sapn>日志类型</sapn>
+                            <span>日志类型</span>
                             <span>:</span>
                             <el-select
                                 v-model="logType"
@@ -54,7 +54,7 @@
                 </div>
                 <div class="timeTab">
                     <label style="margin-right: 10px;margin-left: 10px">
-                        <sapn>选择查询时间</sapn>
+                        <span>选择查询时间</span>
                         <span>:</span>
                         <el-date-picker
                             v-model="examineTime"
