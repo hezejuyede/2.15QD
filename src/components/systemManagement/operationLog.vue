@@ -9,6 +9,9 @@
         <div class="operationLogContent">
             <div class="operationLogContentTab">
                 <div class="normalTab">
+                    <label style="margin-right: 10px;margin-left: 10px">
+                        <sapn>批次</sapn>
+                        <span>:</span>
                         <el-select
                             v-model="batch"
                             clearable
@@ -23,33 +26,44 @@
                                 :value="item.id">
                             </el-option>
                         </el-select>
+                    </label>
+
                 </div>
                 <div class="batchTab">
                     <div class="normalTab">
-                        <el-select
-                            v-model="logType"
-                            clearable
-                            filterable
-                            allow-create
-                            default-first-option
-                            placeholder="请查询的日志">
-                            <el-option
-                                v-for="item in logTypeOptions"
-                                :key="item.indexno"
-                                :label="item.name"
-                                :value="item.indexno">
-                            </el-option>
-                        </el-select>
+                        <label style="margin-right: 10px;margin-left: 10px">
+                            <sapn>日志类型</sapn>
+                            <span>:</span>
+                            <el-select
+                                v-model="logType"
+                                clearable
+                                filterable
+                                allow-create
+                                default-first-option
+                                placeholder="请查询的日志">
+                                <el-option
+                                    v-for="item in logTypeOptions"
+                                    :key="item.indexno"
+                                    :label="item.name"
+                                    :value="item.indexno">
+                                </el-option>
+                            </el-select>
+                        </label>
+
                     </div>
                 </div>
                 <div class="timeTab">
-                    <el-date-picker
-                        v-model="examineTime"
-                        type="daterange"
-                        range-separator="至"
-                        start-placeholder="开始日期"
-                        end-placeholder="结束日期">
-                    </el-date-picker>
+                    <label style="margin-right: 10px;margin-left: 10px">
+                        <sapn>选择查询时间</sapn>
+                        <span>:</span>
+                        <el-date-picker
+                            v-model="examineTime"
+                            type="daterange"
+                            range-separator="至"
+                            start-placeholder="开始日期"
+                            end-placeholder="结束日期">
+                        </el-date-picker>
+                    </label>
                 </div>
                 <div class="operationTab">
                     <button @click="doSearch">查询</button>

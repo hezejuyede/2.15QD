@@ -12,6 +12,8 @@
             </div>
             <div class="search fl">
                 <div class="">
+                    <span>审批状态</span>
+                    <span>:</span>
                     <el-select
                         v-model="status"
                         clearable
@@ -28,6 +30,8 @@
                     </el-select>
                 </div>
                 <div class="">
+                    <span>批次</span>
+                    <span>:</span>
                     <el-select
                         v-model="batch"
                         clearable
@@ -44,23 +48,23 @@
                     </el-select>
                 </div>
                 <div class="">
-                    <div class="select">
-                        <el-select
-                            v-model="scx"
-                            @input="setScx(scx)"
-                            clearable
-                            filterable
-                            allow-create
-                            default-first-option
-                            placeholder="请输入或者选择生产线">
-                            <el-option
-                                v-for="item in scxOptions"
-                                :key="item.indexno"
-                                :label="item.name"
-                                :value="item.indexno">
-                            </el-option>
-                        </el-select>
-                    </div>
+                    <span>生产线</span>
+                    <span>:</span>
+                    <el-select
+                        v-model="scx"
+                        @input="setScx(scx)"
+                        clearable
+                        filterable
+                        allow-create
+                        default-first-option
+                        placeholder="请输入或者选择生产线">
+                        <el-option
+                            v-for="item in scxOptions"
+                            :key="item.indexno"
+                            :label="item.name"
+                            :value="item.indexno">
+                        </el-option>
+                    </el-select>
                 </div>
                 <div class="">
                     <button @click="doSearch">查询</button>
@@ -90,7 +94,7 @@
         <Modal :msg="message"
                :isHideModal="HideModal"></Modal>
         <!--新增弹出框 -->
-        <el-dialog title="导入数据" :visible.sync="uploadVisible" width="50%">
+        <el-dialog title="导入数据" :visible.sync="uploadVisible" width="60%">
             <div class="container" style="height:450px;overflow:auto">
                 <div class="containerSelect"
                      style="height: 80px;
@@ -98,55 +102,67 @@
                      align-items: center;
                      justify-content: center">
                     <div class="select">
-                        <el-select
-                            v-model="fileType"
-                            @input="setType(fileType)"
-                            clearable
-                            filterable
-                            allow-create
-                            default-first-option
-                            placeholder="请输入或者选择文件类型">
-                            <el-option
-                                v-for="item in fileTypeOptions"
-                                :key="item.indexno"
-                                :label="item.name"
-                                :value="item.indexno">
-                            </el-option>
-                        </el-select>
+                        <label style="margin-right: 5px;margin-left: 5px">
+                            <span>文件类型</span>
+                            <span>:</span>
+                            <el-select
+                                v-model="fileType"
+                                @input="setType(fileType)"
+                                clearable
+                                filterable
+                                allow-create
+                                default-first-option
+                                placeholder="请输入或者选择文件类型">
+                                <el-option
+                                    v-for="item in fileTypeOptions"
+                                    :key="item.indexno"
+                                    :label="item.name"
+                                    :value="item.indexno">
+                                </el-option>
+                            </el-select>
+                        </label>
                     </div>
                     <div class="select">
-                        <el-select
-                            v-model="batch"
-                            @input="setPc(batch)"
-                            clearable
-                            filterable
-                            allow-create
-                            default-first-option
-                            placeholder="请输入或者选择批次">
-                            <el-option
-                                v-for="item in batchOptions"
-                                :key="item.id"
-                                :label="item.name"
-                                :value="item.id">
-                            </el-option>
-                        </el-select>
+                        <label style="margin-right: 5px;margin-left: 5px">
+                            <span>批次</span>
+                            <span>:</span>
+                            <el-select
+                                v-model="batch"
+                                @input="setPc(batch)"
+                                clearable
+                                filterable
+                                allow-create
+                                default-first-option
+                                placeholder="请输入或者选择批次">
+                                <el-option
+                                    v-for="item in batchOptions"
+                                    :key="item.id"
+                                    :label="item.name"
+                                    :value="item.id">
+                                </el-option>
+                            </el-select>
+                        </label>
                     </div>
                     <div class="select">
-                        <el-select
-                            v-model="scx"
-                            @input="setScx(scx)"
-                            clearable
-                            filterable
-                            allow-create
-                            default-first-option
-                            placeholder="请输入或者选择生产线">
-                            <el-option
-                                v-for="item in scxOptions"
-                                :key="item.indexno"
-                                :label="item.name"
-                                :value="item.indexno">
-                            </el-option>
-                        </el-select>
+                        <label style="margin-right: 5px;margin-left: 5px">
+                            <span>生产线</span>
+                            <span>:</span>
+                            <el-select
+                                v-model="scx"
+                                @input="setScx(scx)"
+                                clearable
+                                filterable
+                                allow-create
+                                default-first-option
+                                placeholder="请输入或者选择生产线">
+                                <el-option
+                                    v-for="item in scxOptions"
+                                    :key="item.indexno"
+                                    :label="item.name"
+                                    :value="item.indexno">
+                                </el-option>
+                            </el-select>
+                        </label>
                     </div>
                 </div>
                 <div class="containerUp" style="display: flex;align-items: center;justify-content: center">
@@ -269,32 +285,7 @@
                     this.$router.push("/")
                 }
                 else {
-                    let that = this;
-                    axios.all([
-                        axios.post(" " + url + "/sys/getPiciList"),
-                        axios.post(" " + url + "/sys/dictionaryList", {"id": "9"}),
-                        axios.post(" " + url + "/sys/dictionaryList", {"id": "8"}),
-                        axios.post(" " + url + "/sys/dictionaryList", {"id": "10"}),
-                    ])
-                        .then(axios.spread(function (pici, scx, type, status) {
-                            that.batchOptions = pici.data;
-                            that.batch = pici.data[0].id;
-                            that.scxOptions = scx.data;
-                            that.fileTypeOptions = type.data;
-                            that.statusOptions = status.data;
-                            axios.all([
-                                axios.post(" " + url + "/sys/showTableTitle", {"name": "filelist"}),
-                                axios.post(" " + url + "/fileShenpi/getFileUploadList", {
-                                    "lineNo": that.scx,
-                                    "status": that.status,
-                                    "pici": that.batch
-                                })
-                            ])
-                                .then(axios.spread(function (title, table) {
-                                    that.cols = title.data;
-                                    that.tableData = table.data;
-                                }));
-                        }));
+                   this.loadingShow();
                 }
             },
 
@@ -628,7 +619,7 @@
             },
 
             //页面加载
-            loading(){
+            loadingShow(){
                 let that = this;
                 axios.all([
                     axios.post(" " + url + "/sys/getPiciList"),
@@ -676,11 +667,11 @@
             padding-left: 2%;
             height: 80px;
             .upData {
+                width: 10%;
                 height: 80px;
                 line-height: 80px;
-                margin-right: 2%;
                 button {
-                    width: 150px;
+                    width: 100%;
                     height: 35px;
                     text-align: center;
                     line-height: 35px;
@@ -693,13 +684,17 @@
                 }
             }
             .search {
+                width: 90%;
                 height: 80px;
                 display: flex;
                 align-items: center;
                 justify-content: center;
                 div {
+                    flex: 1;
                     display: flex;
-                    margin-left: 10px;
+                    line-height: 80px;
+                    margin-right: 2%;
+                    margin-left: 1%;
                     button {
                         width: 80px;
                         height: 35px;

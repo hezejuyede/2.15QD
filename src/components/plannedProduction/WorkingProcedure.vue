@@ -9,22 +9,30 @@
         <div class="WorkingProcedure-content">
             <div class="container">
                 <div class="handle-box">
-                    <el-input v-model="select_word" placeholder="筛选工序" class="handle-input mr10"></el-input>
-                    <el-select
-                        v-model="line"
-                        clearable
-                        filterable
-                        allow-create
-                        default-first-option
-                        @change="changeScx"
-                        placeholder="请输入或者选择生产线">
-                        <el-option
-                            v-for="item in lineOptions"
-                            :key="item.indexno"
-                            :label="item.name"
-                            :value="item.indexno">
-                        </el-option>
-                    </el-select>
+                    <label style="margin-right: 10px">
+                        <span>检索工序</span>
+                        <span>:</span>
+                        <el-input v-model="select_word" placeholder="筛选工序" class="handle-input mr10"></el-input>
+                    </label>
+                    <label style="margin-right: 10px;margin-left: 10px">
+                        <span> 加工线选择</span>
+                        <span>:</span>
+                        <el-select
+                            v-model="line"
+                            clearable
+                            filterable
+                            allow-create
+                            default-first-option
+                            @change="changeScx"
+                            placeholder="请输入或者选择生产线">
+                            <el-option
+                                v-for="item in lineOptions"
+                                :key="item.indexno"
+                                :label="item.name"
+                                :value="item.indexno">
+                            </el-option>
+                        </el-select>
+                    </label>
                     <el-button type="primary" icon="delete" class="handle-del mr10" @click="addWorkStation">新增工序</el-button>
                     <el-button type="danger" icon="delete" class="handle-del mr10" @click="deleteWorkStation">删除工序</el-button>
                 </div>
@@ -79,6 +87,9 @@
                     <el-form-item label="饱和人数">
                         <el-input  type="number" v-model="personnum"></el-input>
                     </el-form-item>
+                    <el-form-item label="加工能力">
+                        <el-input  type="number" v-model="jgnl"></el-input>
+                    </el-form-item>
 
                 </el-form>
                 <span slot="footer" class="dialog-footer">
@@ -116,6 +127,9 @@
                     </el-form-item>
                     <el-form-item label="饱和人数">
                         <el-input  type="number" v-model="personnum"></el-input>
+                    </el-form-item>
+                    <el-form-item label="加工能力">
+                        <el-input  type="number" v-model="jgnl"></el-input>
                     </el-form-item>
 
                 </el-form>
@@ -170,6 +184,7 @@
                 name: '',
                 context: '',
                 personnum: "",
+                jgnl:"",
                 line: '',
                 lineOptions:[]
 
@@ -235,6 +250,7 @@
                         this.name = res.data.name;
                         this.context = res.data.context;
                         this.personnum = res.data.personnum;
+                        this.jgnl = res.data.jiagongnengli;
                         this.line = res.data.line;
                         this.code = res.data.code;
                     })
@@ -272,14 +288,24 @@
                             "code": this.code,
                             "context": this.context,
                             "personnum": this.personnum,
-                            "line": this.line
+                            "line": this.line,
+                            "jiagongnengli":this.jgnl
                         }
                     )
                         .then((res) => {
                             if (res.data == "1") {
                                 this.editVisible = false;
                                 this.$message.success(`修改成功`);
-                                this.loading();
+                                let that = this;
+                                axios.all([
+                                    axios.post(" "+ url +"/sys/showTableTitle",{"name":"gongxu"}),
+                                    axios.post(" "+ url +"/sysconfig/getGongxuList",{"id":this.line}),
+                                ])
+                                    .then(axios.spread(function (title, table) {
+                                        that.cols = title.data;
+                                        that.tableData = table.data;
+                                    }));
+
                             }
                             else {
                                 this.$message.warning(`新增失败`);
@@ -325,6 +351,7 @@
                     this.code="";
                     this.context="";
                     this.personnum="";
+                    this.jgnl="";
 
                 }
                 else {
@@ -352,7 +379,8 @@
                             "code": this.code,
                             "context": this.context,
                             "personnum": this.personnum,
-                            "line": this.line
+                            "line": this.line,
+                            "jiagongnengli":this.jgnl,
                         }
                     )
                         .then((res) => {

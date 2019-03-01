@@ -9,21 +9,29 @@
         <div class="editorTemplate-content">
             <div class="container">
                 <div class="handle-box">
-                    <el-input v-model="select_word" placeholder="筛选内容" class="handle-input mr10"></el-input>
-                    <el-select
-                        v-model="select"
-                        clearable
-                        filterable
-                        allow-create
-                        default-first-option
-                        placeholder="请选择工位">
-                        <el-option
-                            v-for="item in selectOptions"
-                            :key="item.id"
-                            :label="item.name"
-                            :value="item.id">
-                        </el-option>
-                    </el-select>
+                    <label style="margin-right: 10px">
+                        <sapn>筛选要点</sapn>
+                        <span>:</span>
+                        <el-input v-model="select_word" placeholder="筛选要点" class="handle-input mr10"></el-input>
+                    </label>
+                    <label style="margin-right: 10px;margin-left: 10px">
+                        <sapn>工位</sapn>
+                        <span>:</span>
+                        <el-select
+                            v-model="select"
+                            clearable
+                            filterable
+                            allow-create
+                            default-first-option
+                            placeholder="请选择工位">
+                            <el-option
+                                v-for="item in selectOptions"
+                                :key="item.id"
+                                :label="item.name"
+                                :value="item.id">
+                            </el-option>
+                        </el-select>
+                    </label>
                     <el-button type="success" icon="delete" class="handle-del mr10" @click="doSearch">查询要点</el-button>
                     <el-button type="primary" icon="delete" class="handle-del mr10" @click="showAdd">新增要点</el-button>
                     <el-button type="warning" icon="delete" class="handle-del mr10" @click="showEdit">编辑要点</el-button>
@@ -192,8 +200,8 @@
                 if (this.select) {
                     let that = this;
                     axios.all([
-                        axios.post(" " + url + "/sys/showTableTitle", {"name": "gwxz"}),
-                        axios.post(" " + url + "/sysconfig/showContextList",{"id":this.select})
+                        axios.post(" " + url + "/sys/showTableTitle", {"name": "zysx"}),
+                        axios.post(" " + url + "/sysconfig/showNoticeList",{"id":this.select})
                     ])
                         .then(axios.spread(function (title, table) {
                             that.cols = title.data;

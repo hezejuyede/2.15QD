@@ -9,37 +9,50 @@
         <div class="WorkingProcedure-content">
             <div class="container">
                 <div class="handle-box">
-                    <el-input v-model="select_word" placeholder="筛选工艺路线" class="handle-input mr10"></el-input>
-                    <el-select
-                        v-model="type"
-                        clearable
-                        filterable
-                        allow-create
-                        default-first-option
-                        @change="changeType"
-                        placeholder="输入或选择工艺路线类型">
-                        <el-option
-                            v-for="item in typeOptions"
-                            :key="item.indexno"
-                            :label="item.name"
-                            :value="item.indexno">
-                        </el-option>
-                    </el-select>
-                    <el-select
-                        v-model="line"
-                        clearable
-                        filterable
-                        allow-create
-                        default-first-option
-                        @change="changeScx"
-                        placeholder="请输入或者选择生产线">
-                        <el-option
-                            v-for="item in lineOptions"
-                            :key="item.indexno"
-                            :label="item.name"
-                            :value="item.indexno">
-                        </el-option>
-                    </el-select>
+                    <label style="margin-right: 5px">
+                        <span>检索工艺路线</span>
+                        <span>:</span>
+                        <el-input v-model="select_word" placeholder="筛选工艺路线" class="handle-input mr10" style="width: 150px"></el-input>
+                    </label>
+                    <label style="margin-right: 5px;margin-left: 5px">
+                        <span> 工艺路线类型</span>
+                        <span>:</span>
+                        <el-select
+                            v-model="type"
+                            clearable
+                            filterable
+                            allow-create
+                            default-first-option
+                            @change="changeType"
+                            placeholder="输入或选择工艺路线类型">
+                            <el-option
+                                v-for="item in typeOptions"
+                                :key="item.indexno"
+                                :label="item.name"
+                                :value="item.indexno">
+                            </el-option>
+                        </el-select>
+                    </label>
+                    <label style="margin-right: 5px;margin-left: 5px">
+                        <span> 加工线</span>
+                        <span>:</span>
+                        <el-select
+                            v-model="line"
+                            clearable
+                            filterable
+                            allow-create
+                            default-first-option
+                            @change="changeScx"
+                            placeholder="请输入或者选择生产线">
+                            <el-option
+                                v-for="item in lineOptions"
+                                :key="item.indexno"
+                                :label="item.name"
+                                :value="item.indexno">
+                            </el-option>
+                        </el-select>
+                    </label>
+
                     <button @click="showAddWorkingProcedure">新增工艺路线</button>
                     <button @click="editYs" class="color">编辑约束条件</button>
                     <!-- <button @click="deleteWorkStation" class="colorRed">删除工艺路线</button>-->
@@ -151,10 +164,16 @@
                             </el-select>
                         </el-form-item>
                         <el-form-item
-                            prop="id"
                             label="工艺路线名">
                             <el-input v-model="dynamicValidateForm.name"
+                                      placeholder="工艺路线名"
                                       style="height:30px;width:60%;margin-right: 5%"></el-input>
+                        </el-form-item>
+                        <el-form-item
+                            label="约束条件名称">
+                            <el-input v-model="dynamicValidateForm.yuesu"
+                                      style="height:30px;width:60%;margin-right: 5%"
+                                      placeholder="约束条件名称"></el-input>
                         </el-form-item>
                         <el-form-item
                             v-for="(domain, index) in dynamicValidateForm.domains"
@@ -204,7 +223,7 @@
                                 <div class="appendDivTemplate">
                                     <el-button
                                         type="danger"
-                                        style="height:30px;width:20%"
+                                        style="height:30px;width:120px"
                                         @click.prevent="removeDomain(domain)">删除
                                     </el-button>
                                 </div>
@@ -268,9 +287,14 @@
                             </el-select>
                         </el-form-item>
                         <el-form-item
-                            prop="id"
                             label="工艺路线名">
                             <el-input v-model="dynamicValidateForm.name"
+                                      placeholder="工艺路线名"
+                                      style="height:30px;width:60%;margin-right: 5%"></el-input>
+                        </el-form-item>
+                        <el-form-item
+                            label="约束条件名称">
+                            <el-input v-model="dynamicValidateForm.yuesu"
                                       style="height:30px;width:60%;margin-right: 5%"></el-input>
                         </el-form-item>
                         <el-form-item
@@ -321,7 +345,7 @@
                                 <div class="appendDivTemplate">
                                     <el-button
                                         type="danger"
-                                        style="height:30px;width:20%"
+                                        style="height:30px;width:120px"
                                         @click.prevent="removeDomain(domain)">删除
                                     </el-button>
                                 </div>
@@ -503,9 +527,11 @@
                         endTime: '',
                         lineOptions: [],
                         stationOptions: [],
+
                     }],
                     name: '',
                     id: "",
+                    yuesu:"",
                     lineid: "",
                     typeid: ""
                 },
@@ -585,6 +611,7 @@
                     this.dynamicValidateForm.domains[0].lineValue = this.line;
                     this.dynamicValidateForm.domains[0].lineOptions = this.lineOptions;
                     this.dynamicValidateForm.name = "";
+                    this.dynamicValidateForm.yuesu = "";
                     this.dynamicValidateForm.id = "";
                     this.dynamicValidateForm.lineid = this.line;
                     this.dynamicValidateForm.typeid = this.type;
@@ -669,7 +696,7 @@
             changeAddStation(lineValue,index){
                 let that = this;
                 axios.all([
-                    axios.post(" " + url + "/sysconfig/getGongxuList", {"id": lineValue}),
+                    axios.post(" " + url + "/gongyiluxian/getSelectType", {"id": lineValue,"typeId":this.type}),
                 ])
                     .then(axios.spread(function (select) {
                         that.dynamicValidateForm.domains[index].stationOptions = select.data;
@@ -687,6 +714,7 @@
                         this.dynamicValidateForm.name = res.data.instance.name;
                         this.dynamicValidateForm.lineid = res.data.instance.line;
                         this.dynamicValidateForm.typeid = res.data.instance.type;
+                        this.dynamicValidateForm.yuesu = res.data.instance.yuesu;
                         this.dynamicValidateForm.id = this.id;
                         //先定义一个空数据
                         let arr = [];
@@ -718,7 +746,16 @@
                         if (res.data === "1") {
                             this.editVisible = false;
                             this.$message.success(`修改成功`);
-                            this.loading()
+                            let that = this;
+                            axios.all([
+                                axios.post(" " + url + "/gongyiluxian/gongyiluxianList", {
+                                    "id": that.line,
+                                    "type": that.type
+                                }),
+                            ])
+                                .then(axios.spread(function (table) {
+                                    that.tableData = table.data;
+                                }));
                         }
                         else {
                             this.$message.warning(`修改失败`);

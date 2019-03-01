@@ -97,7 +97,7 @@ import LoginOutLog from '../components/systemManagement/loginOutLog';
 import DictionaryMaintenance from '../components/systemManagement/dictionaryMaintenance';
 import HeaderMaintenance from '../components/systemManagement/headerMaintenance';
 import LoginSecurityAlert from '../components/securityManagement/loginSecurityAlert';
-import OperatorMainPoints from '../components/securityManagement/operatorMainPoints';
+import OperatorMainPoints from '../components/qualityAssurance/operatorMainPoints';
 import ListDetails from '../components/systemManagement/listDetails';
 
 

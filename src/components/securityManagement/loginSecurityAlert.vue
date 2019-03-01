@@ -9,21 +9,29 @@
         <div class="editorTemplate-content">
             <div class="container">
                 <div class="handle-box">
-                    <el-input v-model="select_word" placeholder="筛选内容" class="handle-input mr10"></el-input>
-                    <el-select
-                        v-model="select"
-                        clearable
-                        filterable
-                        allow-create
-                        default-first-option
-                        placeholder="请选择工位">
-                        <el-option
-                            v-for="item in selectOptions"
-                            :key="item.id"
-                            :label="item.name"
-                            :value="item.id">
-                        </el-option>
-                    </el-select>
+                    <label style="margin-right: 10px">
+                        <sapn>筛选岗位提醒</sapn>
+                        <span>:</span>
+                        <el-input v-model="select_word" placeholder="筛选提醒" class="handle-input mr10"></el-input>
+                    </label>
+                    <label style="margin-right: 10px;margin-left: 10px">
+                        <sapn>工位</sapn>
+                        <span>:</span>
+                        <el-select
+                            v-model="select"
+                            clearable
+                            filterable
+                            allow-create
+                            default-first-option
+                            placeholder="请选择工位">
+                            <el-option
+                                v-for="item in selectOptions"
+                                :key="item.id"
+                                :label="item.name"
+                                :value="item.id">
+                            </el-option>
+                        </el-select>
+                    </label>
                     <el-button type="success" icon="delete" class="handle-del mr10" @click="doSearch">查询提醒</el-button>
                     <el-button type="primary" icon="delete" class="handle-del mr10" @click="showAdd">新增提醒</el-button>
                     <el-button type="warning" icon="delete" class="handle-del mr10" @click="showEdit">编辑提醒</el-button>

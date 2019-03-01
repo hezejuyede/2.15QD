@@ -9,13 +9,17 @@
         <div class="loginOutLogContent">
             <div class="loginOutLogContentTab">
                 <div class="timeTab">
-                    <el-date-picker
-                        v-model="examineTime"
-                        type="daterange"
-                        start-placeholder="开始日期"
-                        end-placeholder="结束日期"
-                        value-format="yyyy-MM-dd">
-                    </el-date-picker>
+                    <label style="margin-right: 10px;margin-left: 10px">
+                        <sapn>选择查询时间</sapn>
+                        <span>:</span>
+                        <el-date-picker
+                            v-model="examineTime"
+                            type="daterange"
+                            start-placeholder="开始日期"
+                            end-placeholder="结束日期"
+                            value-format="yyyy-MM-dd">
+                        </el-date-picker>
+                    </label>
                 </div>
                 <div class="operationTab">
                     <button @click="doSearch">查询</button>

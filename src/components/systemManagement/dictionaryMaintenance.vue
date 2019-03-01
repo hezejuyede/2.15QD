@@ -9,21 +9,29 @@
         <div class="dictionaryMaintenance-content">
             <div class="container">
                 <div class="handle-box">
-                    <el-input v-model="select_word" placeholder="筛选字典" class="handle-input mr10"></el-input>
-                    <el-select
-                        v-model="select"
-                        clearable
-                        filterable
-                        allow-create
-                        default-first-option
-                        placeholder="请选择字典类型">
-                        <el-option
-                            v-for="item in selectOptions"
-                            :key="item.indexno"
-                            :label="item.name"
-                            :value="item.indexno">
-                        </el-option>
-                    </el-select>
+                    <label style="margin-right: 10px;margin-left: 10px">
+                        <sapn>筛选字典</sapn>
+                        <span>:</span>
+                        <el-input v-model="select_word" placeholder="筛选字典" class="handle-input mr10"></el-input>
+                    </label>
+                    <label style="margin-right: 10px;margin-left: 10px">
+                        <sapn>字典类型</sapn>
+                        <span>:</span>
+                        <el-select
+                            v-model="select"
+                            clearable
+                            filterable
+                            allow-create
+                            default-first-option
+                            placeholder="请选择字典类型">
+                            <el-option
+                                v-for="item in selectOptions"
+                                :key="item.indexno"
+                                :label="item.name"
+                                :value="item.indexno">
+                            </el-option>
+                        </el-select>
+                    </label>
                     <el-button type="success" icon="delete" class="handle-del mr10" @click="doSearch">查询字典</el-button>
                     <el-button type="primary" icon="delete" class="handle-del mr10" @click="showAddPerson">新增字典</el-button>
                     <el-button type="danger" icon="delete" class="handle-del mr10" @click="deletePerson">删除字典</el-button>

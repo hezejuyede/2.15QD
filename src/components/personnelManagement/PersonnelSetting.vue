@@ -9,7 +9,11 @@
         <div class="WorkingProcedure-content">
             <div class="container">
                 <div class="handle-box">
-                    <el-input v-model="select_word" placeholder="筛选工序" class="handle-input mr10"></el-input>
+                    <label style="margin-right: 10px">
+                        <sapn>筛选人员</sapn>
+                        <span>:</span>
+                        <el-input v-model="select_word" placeholder="筛选人员" class="handle-input mr10"></el-input>
+                    </label>
                     <el-button type="primary" icon="delete" class="handle-del mr10" @click="showAddPerson">新增人员</el-button>
                     <el-button type="danger" icon="delete" class="handle-del mr10" @click="deletePerson">删除人员</el-button>
                 </div>

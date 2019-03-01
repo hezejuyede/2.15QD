@@ -65,7 +65,7 @@
                         url: "/WorkingProcedure",
                         children: [
                             {
-                                label: '船型设置',
+                                label: '船号设置',
                                 index: "2-1",
                                 url: "/ShipType"
                             },
