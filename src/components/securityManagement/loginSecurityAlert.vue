@@ -183,29 +183,33 @@
                     let that = this;
                     axios.all([
                         axios.post(" " + url + "/api/getPersonProcessList", {"name": ""}),
-                        axios.post(" " + url + "/sys/showTableTitle", {"name": "gwxz"}),
-                        axios.post(" " + url + "/sysconfig/showContextList",{"id":""})
                     ])
-                        .then(axios.spread(function (select,title, table) {
+                        .then(axios.spread(function (select) {
+                            that.select = select.data[0].id;
                             that.selectOptions = select.data;
-                            that.cols = title.data;
-                            that.tableData = table.data;
+                            that.loadingShowData(1);
                         }));
                 }
             },
+
+            //根据下拉显示数据
+            loadingShowData(data){
+                let that = this;
+                axios.all([
+                    axios.post(" " + url + "/sys/showTableTitle", {"name": "gwxz"}),
+                    axios.post(" " + url + "/sysconfig/showContextList",{"id":data})
+                ])
+                    .then(axios.spread(function (title, table) {
+                        that.cols = title.data;
+                        that.tableData = table.data;
+                    }));
+            },
+
+
             //查询
             doSearch(){
-                console.log(this.select);
                 if (this.select) {
-                    let that = this;
-                    axios.all([
-                        axios.post(" " + url + "/sys/showTableTitle", {"name": "gwxz"}),
-                        axios.post(" " + url + "/sysconfig/showContextList",{"id":this.select})
-                    ])
-                        .then(axios.spread(function (title, table) {
-                            that.cols = title.data;
-                            that.tableData = table.data;
-                        }));
+                    this.loadingShowData(this.select)
                 }
                 else {
                     this.message = "请选择要查询的工位";
@@ -319,10 +323,7 @@
                             if (res.data == "1") {
                                 this.$message.success(`修改成功`);
                                 this.editVisible = false;
-                                const that = this;
-                                setTimeout(function () {
-                                    that.$router.go(0)
-                                }, 1500)
+                                this.loadingShowData(this.select)
                             }
                             else {
                                 this.$message.warning(`修改失败`);
@@ -348,10 +349,7 @@
                         if (res.data === "1") {
                             this.$message.success('删除成功');
                             this.delVisible = false;
-                            const that = this;
-                            setTimeout(function () {
-                                that.$router.go(0)
-                            }, 1500)
+                            this.loadingShowData(this.select)
                         }
                         else {
                             this.$message.warning(`删除失败`);
@@ -365,6 +363,8 @@
             showAdd() {
                 if (this.select) {
                     this.addVisible = true;
+                    this.content="";
+
                 }
                 else {
                     this.message = "请选择要新增的工位";
@@ -393,10 +393,7 @@
                             if (res.data === "1") {
                                 this.$message.success(`新增成功`);
                                 this.addVisible = false;
-                                const that = this;
-                                setTimeout(function () {
-                                    that.$router.go(0)
-                                }, 1500)
+                                this.loadingShowData(this.select)
                             }
                             else {
                                 this.$message.warning(`新增失败`);
@@ -414,6 +411,7 @@
             onEditorChange({ editor, html, text }) {
                 this.content = html;
             },
+
             submit(){
                 if(this.content){
                     console.log(this.content);
