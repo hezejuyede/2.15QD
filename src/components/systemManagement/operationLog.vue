@@ -18,6 +18,7 @@
                             filterable
                             allow-create
                             default-first-option
+                            style="width: 150px"
                             placeholder="请输入或者选择批次">
                             <el-option
                                 v-for="item in batchOptions"
@@ -40,7 +41,8 @@
                                 filterable
                                 allow-create
                                 default-first-option
-                                placeholder="请查询的日志">
+                                style="width: 150px"
+                                placeholder="查询的日志">
                                 <el-option
                                     v-for="item in logTypeOptions"
                                     :key="item.indexno"

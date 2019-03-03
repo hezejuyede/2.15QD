@@ -66,6 +66,7 @@
                         clearable
                         filterable
                         allow-create
+                        disabled
                         default-first-option
                         placeholder="请选择字典类型">
                         <el-option
@@ -80,13 +81,13 @@
                     <el-input v-model="name"></el-input>
                 </el-form-item>
                 <el-form-item label="序号">
-                    <el-input v-model="indexno"></el-input>
+                    <el-input type="number" v-model="indexno"></el-input>
                 </el-form-item>
                 <el-form-item label="代码">
                     <el-input v-model="code"></el-input>
                 </el-form-item>
                 <el-form-item label="顺序号">
-                    <el-input v-model="showindex"></el-input>
+                    <el-input type="number" v-model="showindex"></el-input>
                 </el-form-item>
             </el-form>
             <span slot="footer" class="dialog-footer">
@@ -118,13 +119,13 @@
                     <el-input v-model="name"></el-input>
                 </el-form-item>
                 <el-form-item label="序号">
-                    <el-input v-model="indexno"></el-input>
+                    <el-input type="number" v-model="indexno"></el-input>
                 </el-form-item>
                 <el-form-item label="代码">
                     <el-input v-model="code"></el-input>
                 </el-form-item>
                 <el-form-item label="顺序号">
-                    <el-input v-model="showindex"></el-input>
+                    <el-input type="number" v-model="showindex"></el-input>
                 </el-form-item>
             </el-form>
             <span slot="footer" class="dialog-footer">
@@ -202,6 +203,19 @@
             this.getAdminState();
         },
         methods: {
+            //增删改查瞬间显示数据
+            loadingShowData(data){
+                let that = this;
+                axios.all([
+                    axios.post(" " + url + "/sys/showTableTitle", {"name": "dictedit"}),
+                    axios.post(" " + url + "/sysconfig/dictionaryList",{"type":data})
+                ])
+                    .then(axios.spread(function (title, table) {
+                        that.cols = title.data;
+                        that.tableData = table.data;
+                    }));
+            },
+
 
             //页面加载检查用户是否登陆，没有登陆就加载登陆页面
             getAdminState() {
@@ -213,28 +227,19 @@
                     let that = this;
                     axios.all([
                         axios.post(" " + url + "/sys/dictionaryList", {"id": "-1"}),
-                        axios.post(" " + url + "/sys/showTableTitle", {"name": "dictedit"}),
-                        axios.post(" " + url + "/sysconfig/dictionaryList",{"type":"1"})
                     ])
-                        .then(axios.spread(function (select,title, table) {
+                        .then(axios.spread(function (select) {
                             that.selectOptions = select.data;
-                            that.cols = title.data;
-                            that.tableData = table.data;
+                            that.select =select.data[1].indexno;
+                            that.loadingShowData(1)
+
                         }));
                 }
             },
             //查询字典
             doSearch(){
                 if (this.select) {
-                    let that = this;
-                    axios.all([
-                        axios.post(" " + url + "/sys/showTableTitle", {"name": "dictedit"}),
-                        axios.post(" " + url + "/sysconfig/dictionaryList",{"type":this.select})
-                    ])
-                        .then(axios.spread(function (title, table) {
-                            that.cols = title.data;
-                            that.tableData = table.data;
-                        }));
+                   this.loadingShowData(this.select)
                 }
                 else {
                     this.message = "请选择字典类型";
@@ -287,6 +292,7 @@
             deletePerson() {
                 if (this.listData.length) {
                     this.delVisible = true;
+
                 }
                 else {
                     this.message = "请勾选要删除的人员";
@@ -318,10 +324,7 @@
                             if (res.data == "1") {
                                 this.$message.success(`修改成功`);
                                 this.editVisible = false;
-                                const that = this;
-                                setTimeout(function () {
-                                    that.$router.go(0)
-                                }, 1500)
+                                this.loadingShowData(this.select)
                             }
                             else {
                                 this.$message.warning(`修改失败`);
@@ -347,10 +350,7 @@
                         if (res.data === "1") {
                             this.$message.success('删除成功');
                             this.delVisible = false;
-                            const that = this;
-                            setTimeout(function () {
-                                that.$router.go(0)
-                            }, 1500)
+                            this.loadingShowData(this.select)
                         }
                         else {
                             this.$message.warning(`删除失败`);
@@ -363,6 +363,10 @@
             //显示新增字典
             showAddPerson() {
                 this.addVisible = true;
+                this.name = '';
+                this.indexno = '';
+                this.showindex = '';
+                this.code = "";
             },
             //新增字典
             doAddPerson() {
@@ -379,11 +383,8 @@
                         .then((res) => {
                             if (res.data === "1") {
                                 this.$message.success(`新增成功`);
-                                this.editVisible = false;
-                                const that = this;
-                                setTimeout(function () {
-                                    that.$router.go(0)
-                                }, 1500)
+                                this.addVisible = false;
+                                this.loadingShowData(this.select)
                             }
                             else {
                                 this.$message.warning(`新增失败`);
