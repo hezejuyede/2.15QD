@@ -349,7 +349,9 @@
             submitUpload() {
                 if (this.batch && this.fileType && this.scx) {
 
-                    this.$refs.upload.submit();
+                    this.$refs.upload.submit((data)=>{
+                        console.log(data)
+                    });
                     this.loading = true;
                 }
                 else {
@@ -369,28 +371,54 @@
 
             //上传成功
             uploadSuccess(response, file, fileList) {
-                this.loading = false;
-                this.$message.success(`上传成功`);
-                let that = this;
-                axios.all([
-                    axios.post(" " + url + "/sys/showTableTitle", {"name": "filelist"}),
-                    axios.post(" " + url + "/fileShenpi/getFileUploadList", {
-                        "lineNo": this.scx,
-                        "status": this.status,
-                        "pici": this.batch
-                    })
-                ])
-                    .then(axios.spread(function (title, table) {
-                        that.cols = title.data;
-                        that.tableData = table.data;
-                    }));
-                setTimeout(() => {
-                    that.uploadVisible = false;
-                }, 1000)
+                if (response.state === "-1") {
+                    this.$message.warning(response.message)
+                    this.loading = false;
+                    let that = this;
+                    axios.all([
+                        axios.post(" " + url + "/sys/showTableTitle", {"name": "filelist"}),
+                        axios.post(" " + url + "/fileShenpi/getFileUploadList", {
+                            "lineNo": this.scx,
+                            "status": this.status,
+                            "pici": this.batch
+                        })
+                    ])
+                        .then(axios.spread(function (title, table) {
+                            that.cols = title.data;
+                            that.tableData = table.data;
+                        }));
+                    setTimeout(() => {
+                        that.uploadVisible = false;
+                    }, 1000)
+                }
+                else {
+
+                    this.$message.success(`上传成功`);
+                    this.loading = false;
+                    let that = this;
+                    axios.all([
+                        axios.post(" " + url + "/sys/showTableTitle", {"name": "filelist"}),
+                        axios.post(" " + url + "/fileShenpi/getFileUploadList", {
+                            "lineNo": this.scx,
+                            "status": this.status,
+                            "pici": this.batch
+                        })
+                    ])
+                        .then(axios.spread(function (title, table) {
+                            that.cols = title.data;
+                            that.tableData = table.data;
+                        }));
+                    setTimeout(() => {
+                        that.uploadVisible = false;
+                    }, 1000)
+                }
+
+
             },
 
             //上传失败
             uploadFailure(err, file, fileList) {
+                console.log(err);
                 this.$message.warning(`上传失败`);
             },
 

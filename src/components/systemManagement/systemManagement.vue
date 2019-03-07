@@ -62,6 +62,21 @@
                                 label: '作业记录',
                                 index: "2-3",
                                 url: "/ListDetails"
+                            },
+                            {
+                                label: '按钮配置',
+                                index: "2-3",
+                                url: "/ButtonConfiguration"
+                            },
+                            {
+                                label: '详情头部配置',
+                                index: "2-3",
+                                url: "/DetailsTextConfiguration"
+                            },
+                            {
+                                label: '筛选条件配置',
+                                index: "2-3",
+                                url: "/ScreeningConditionsConfiguration"
                             }
                         ]
                     },

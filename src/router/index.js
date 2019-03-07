@@ -101,6 +101,9 @@ import OperatorMainPoints from '../components/qualityAssurance/operatorMainPoint
 import ListDetails from '../components/systemManagement/listDetails';
 
 
+import ButtonConfiguration from '../components/systemManagement/ButtonConfiguration'
+import DetailsTextConfiguration from '../components/systemManagement/DetailsTextConfiguration'
+import ScreeningConditionsConfiguration from '../components/systemManagement/ScreeningConditionsConfiguration'
 
 Vue.use(Router);
 
@@ -272,14 +275,24 @@ export default new Router({
                             meta: {title: '字典维护'}
                         },
                         {
-                            path: '/ListDetails',
-                            component: ListDetails,
+                            path: '/HeaderMaintenance',
+                            component: HeaderMaintenance,
                             meta: {title: '表头维护'}
                         },
                         {
-                            path: '/HeaderMaintenance',
-                            component: HeaderMaintenance,
-                            meta: {title: '作业质量记录'}
+                            path: '/ButtonConfiguration',
+                            component: ButtonConfiguration,
+                            meta: {title: '按钮配置'}
+                        },
+                        {
+                            path: '/DetailsTextConfiguration',
+                            component: DetailsTextConfiguration,
+                            meta: {title: '详情头部配置'}
+                        },
+                        {
+                            path: '/ScreeningConditionsConfiguration',
+                            component: ScreeningConditionsConfiguration,
+                            meta: {title: '筛选条件配置'}
                         }
                     ]
                 },
@@ -319,6 +332,5 @@ export default new Router({
             path: '/DigitalSignage',
             component: DigitalSignage
         }
-
     ]
 })
