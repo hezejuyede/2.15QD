@@ -23,6 +23,7 @@
                             filterable
                             allow-create
                             default-first-option
+                            @change="changeSelect"
                             placeholder="请选择工位">
                             <el-option
                                 v-for="item in workStationOptions"
@@ -321,7 +322,7 @@
                 ])
                     .then(axios.spread(function (title, table) {
                         that.cols = title.data;
-                        that.tableData = table.data;
+                        that.tableData = table.data.data;
                     }));
             },
 
@@ -375,7 +376,7 @@
                 if (this.name && this.type && this.disabled &&this.backgroundColor&&this.showHide) {
                     axios.post(" " + url + "/padShow/buttonAdd",
                         {
-                            "gongweiid": this.workStation,
+                            "gongxuid": this.workStation,
                             "name": this.name,
                             "type": this.type,
                             "disabled": this.disabled,
@@ -384,7 +385,7 @@
                         }
                     )
                         .then((res) => {
-                            if (res.data === "1") {
+                            if (res.data.state === "1") {
                                 this.$message.success(`新增成功`);
                                 this.addVisible = false;
                                 this.loadingShowData(this.workStation)
@@ -409,12 +410,12 @@
                 this.id = row.id;
                 axios.post(" " + url + "/padShow/buttonDetail", {"id": this.id})
                     .then((res) => {
-                        this.workStation = res.data.gongxuid;
-                        this.name = res.data.name;
-                        this.type = res.data.type;
-                        this.disabled = res.data.disabled;
-                        this.backgroundColor = res.data.backgroundcolor;
-                        this.showHide = res.data.show;
+                        this.workStation = res.data.data.gongxuid;
+                        this.name = res.data.data.name;
+                        this.type = res.data.data.type;
+                        this.disabled = res.data.data.disabled;
+                        this.backgroundColor = res.data.data.backgroundcolor;
+                        this.showHide = res.data.data.show;
                     })
                     .catch((err) => {
                         console.log(err)
@@ -436,7 +437,7 @@
                         }
                     )
                         .then((res) => {
-                            if (res.data == "1") {
+                            if (res.data.state === "1") {
                                 this.editVisible = false;
                                 this.$message.success(`修改成功`);
                                 this.loadingShowData(this.workStation)
@@ -482,7 +483,7 @@
                     }
                 )
                     .then((res) => {
-                        if (res.data === "1") {
+                        if (res.data.state === "1") {
                             this.$message.success('删除成功');
                             this.delVisible = false;
                             this.loadingShowData(this.workStation);

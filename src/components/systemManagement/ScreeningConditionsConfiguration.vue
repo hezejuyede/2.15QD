@@ -3,16 +3,16 @@
         <div class="crumbs">
             <el-breadcrumb separator="/">
                 <el-breadcrumb-item>资源模型</el-breadcrumb-item>
-                <el-breadcrumb-item>详情头部配置</el-breadcrumb-item>
+                <el-breadcrumb-item>筛选条件配置</el-breadcrumb-item>
             </el-breadcrumb>
         </div>
         <div class="template-content">
             <div class="container">
                 <div class="handle-box">
                     <label style="margin-right: 10px">
-                        <span>智能检索文本详情</span>
+                        <span>智能检索文本条件</span>
                         <span>:</span>
-                        <el-input v-model="select_word" placeholder="智能检索文本" class="handle-input mr10"></el-input>
+                        <el-input v-model="select_word" placeholder="智能检索条件" class="handle-input mr10"></el-input>
                     </label>
                     <label style="margin-right: 10px;margin-left: 10px">
                         <span>工位</span>
@@ -23,6 +23,7 @@
                             filterable
                             allow-create
                             default-first-option
+                            @change="changeSelect"
                             placeholder="请选择工位">
                             <el-option
                                 v-for="item in workStationOptions"
@@ -32,8 +33,8 @@
                             </el-option>
                         </el-select>
                     </label>
-                    <el-button type="primary" icon="delete" class="handle-del mr10" @click="showAdd">新增文本</el-button>
-                    <el-button type="danger" icon="delete" class="handle-del mr10" @click="showDelete">删除文本</el-button>
+                    <el-button type="primary" icon="delete" class="handle-del mr10" @click="showAdd">新增条件</el-button>
+                    <el-button type="danger" icon="delete" class="handle-del mr10" @click="showDelete">删除条件</el-button>
                 </div>
                 <div class="">
                     <el-table class="tb-edit"
@@ -56,7 +57,7 @@
                 </div>
             </div>
             <!--新增弹出框 -->
-            <el-dialog title="新增内容" :visible.sync="addVisible" width="40%">
+            <el-dialog title="新增条件" :visible.sync="addVisible" width="40%">
                 <el-form ref="form"  label-width="100px">
                     <el-form-item label="工位名称">
                         <el-select
@@ -75,17 +76,11 @@
                             </el-option>
                         </el-select>
                     </el-form-item>
-                    <el-form-item label="文本名称">
+                    <el-form-item label="文本code">
                         <el-input v-model="name" style="width: 200px"></el-input>
                     </el-form-item>
-                    <el-form-item label="文本编码">
-                        <el-input v-model="text" style="width: 200px"></el-input>
-                    </el-form-item>
-                    <el-form-item label="文本宽度">
-                        <el-input v-model="width" type="number" style="width: 200px"></el-input>
-                    </el-form-item>
-                    <el-form-item label="序号">
-                        <el-input v-model="sortnum" type="number" style="width: 200px"></el-input>
+                    <el-form-item label="选择框名称">
+                        <el-input v-model="type" style="width: 200px"></el-input>
                     </el-form-item>
                     <el-form-item label="是否显示">
                         <el-select
@@ -110,7 +105,7 @@
             </span>
             </el-dialog>
             <!-- 编辑弹出框 -->
-            <el-dialog title="编辑内容" :visible.sync="editVisible" width="40%">
+            <el-dialog title="编辑条件" :visible.sync="editVisible" width="40%">
                 <el-form ref="form"  label-width="100px">
                     <el-form-item label="工位名称">
                         <el-select
@@ -129,17 +124,11 @@
                             </el-option>
                         </el-select>
                     </el-form-item>
-                    <el-form-item label="文本名称">
+                    <el-form-item label="文本code">
                         <el-input v-model="name" style="width: 200px"></el-input>
                     </el-form-item>
-                    <el-form-item label="文本编码">
-                        <el-input v-model="text" style="width: 200px"></el-input>
-                    </el-form-item>
-                    <el-form-item label="文本宽度">
-                        <el-input v-model="width" type="number" style="width: 200px"></el-input>
-                    </el-form-item>
-                    <el-form-item label="序号">
-                        <el-input v-model="sortnum" type="number" style="width: 200px"></el-input>
+                    <el-form-item label="选择框名称">
+                        <el-input v-model="type" style="width: 200px"></el-input>
                     </el-form-item>
                     <el-form-item label="是否显示">
                         <el-select
@@ -164,7 +153,7 @@
             </span>
             </el-dialog>
             <!-- 删除提示框 -->
-            <el-dialog title="删除内容" :visible.sync="delVisible" width="300px" center>
+            <el-dialog title="删除条件" :visible.sync="delVisible" width="300px" center>
                 <div class="del-dialog-cnt">删除不可恢复，是否确定删除？</div>
                 <span slot="footer" class="dialog-footer">
                 <el-button @click="delVisible = false" style="height:30px;width:80px">取 消</el-button>
@@ -189,6 +178,7 @@
                 message: '',
                 HideModal: true,
                 listData:[],
+                id:"",
 
 
                 cols: [],
@@ -204,11 +194,9 @@
                 workStation:"",
                 workStationOptions:[],
                 name: "",
-                text:"",
-                width:"",
-                sortnum:"",
+                type:"",
                 showHide: "",
-                showHideOptions: [{"name": "显示", "id": "1"}, {"name": "隐藏", "id": "0"}],
+                showHideOptions: [{"name": "显示", "id": "1"}, {"name": "隐藏", "id":"0"}],
 
             }
         },
@@ -259,12 +247,12 @@
             loadingShowData(data) {
                 let that = this;
                 axios.all([
-                    axios.post(" " + url + "/sys/showTableTitle", {"name": "jgxqybt"}),
-                    axios.post(" " + url + "/padShow/textList", {"id": data})
+                    axios.post(" " + url + "/sys/showTableTitle", {"name": "tjsxpz"}),
+                    axios.post(" " + url + "/padShow/selectList", {"id": data})
                 ])
                     .then(axios.spread(function (title, table) {
                         that.cols = title.data;
-                        that.tableData = table.data;
+                        that.tableData = table.data.data;
                     }));
             },
 
@@ -294,9 +282,7 @@
                 if (this.workStation) {
                     this.addVisible=true;
                     this.name= "";
-                    this.text= "";
-                    this.width= "";
-                    this.sortnum="";
+                    this.type= "";
                     this.showHide= "";
                 }
                 else {
@@ -313,29 +299,27 @@
                 }
             },
 
-            //新增工序
+            //进行新增
             doAdd() {
-                if (this.name && this.width && this.text &&this.sortnum&&this.showHide) {
-                    let width = this.width+"%";
-                    axios.post(" " + url + "/padShow/textAdd",
+                if (this.name && this.type &&this.showHide) {
+
+                    axios.post(" " + url + "/padShow/selectAdd",
                         {
                             "gongweiid": this.workStation,
                             "name": this.name,
-                            "width": width,
-                            "text": this.text,
-                            "sortnum": this.sortnum,
-                            "showtext": this.showHide,
+                            "type": this.type,
+                            "value": this.showHide,
                         }
                     )
                         .then((res) => {
-                            if (res.data === "1") {
+                            if (res.data.state  === "1") {
                                 this.$message.success(`新增成功`);
                                 this.addVisible = false;
                                 this.loadingShowData(this.workStation)
-
                             }
                             else {
-                                this.$message.warning(`新增失败`);
+                                let message=res.data.message;
+                                this.$message.warning(message);
                             }
                         })
                         .catch((err) => {
@@ -351,13 +335,12 @@
             edit(row, column, cell, event) {
                 this.editVisible = true;
                 this.id = row.id;
-                axios.post(" " + url + "/padShow/textDetail", {"id": this.id})
+                axios.post(" " + url + "/padShow/selectDetail", {"id": this.id})
                     .then((res) => {
-                        this.name = res.data.name;
-                        this.width = res.data.width;
-                        this.text = res.data.text;
-                        this.sortnum = res.data.sortnum;
-                        this.showHide = res.data.showtext;
+                        this.name = res.data.data.name;
+                        this.type = res.data.data.type;
+                        this.gongweiid = res.data.data.gongweiid;
+                        this.showHide = res.data.data.value;
                     })
                     .catch((err) => {
                         console.log(err)
@@ -366,25 +349,25 @@
 
             // 保存编辑
             saveEdit() {
-                if (this.name && this.width && this.text &&this.sortnum&&this.showHide) {
-                    axios.post(" " + url + "/padShow/textUpdate",
+                if (this.name && this.type &&this.showHide) {
+                    axios.post(" " + url + "/padShow/selectUpdate",
                         {
+                            "id": this.id,
                             "gongweiid": this.workStation,
                             "name": this.name,
-                            "width": width,
-                            "text": this.text,
-                            "sortnum": this.sortnum,
-                            "showtext": this.showHide,
+                            "type": this.type,
+                            "value": this.showHide,
                         }
                     )
                         .then((res) => {
-                            if (res.data === "1") {
+                            if (res.data.state  === "1") {
                                 this.editVisible = false;
                                 this.$message.success(`修改成功`);
                                 this.loadingShowData(this.workStation)
                             }
                             else {
-                                this.$message.warning(`新增失败`);
+                                let message=res.data.message;
+                                this.$message.warning(message);
                             }
                         })
                         .catch((err) => {
@@ -418,19 +401,20 @@
 
             // 确定删除
             deleteRow() {
-                axios.post(" " + url + "/padShow/textDel",
+                axios.post(" " + url + "/padShow/selectDel",
                     {
                         "id": this.listData[0],
                     }
                 )
                     .then((res) => {
-                        if (res.data === "1") {
+                        if (res.data.state === "1") {
                             this.$message.success('删除成功');
                             this.delVisible = false;
                             this.loadingShowData(this.workStation);
                         }
                         else {
-                            this.$message.warning(`删除失败`);
+                            let message=res.data.message;
+                            this.$message.warning(message);
                         }
                     })
                     .catch((err) => {
