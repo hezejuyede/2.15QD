@@ -104,6 +104,7 @@ import ListDetails from '../components/systemManagement/listDetails';
 import ButtonConfiguration from '../components/systemManagement/ButtonConfiguration'
 import DetailsTextConfiguration from '../components/systemManagement/DetailsTextConfiguration'
 import ScreeningConditionsConfiguration from '../components/systemManagement/ScreeningConditionsConfiguration'
+import ExecuteHeaderConfiguration from '../components/systemManagement/ExecuteHeaderConfiguration'
 
 Vue.use(Router);
 
@@ -293,6 +294,16 @@ export default new Router({
                             path: '/ScreeningConditionsConfiguration',
                             component: ScreeningConditionsConfiguration,
                             meta: {title: '筛选条件配置'}
+                        },
+                        {
+                            path: '/ListDetails',
+                            component: ListDetails,
+                            meta: {title: '作业记录'}
+                        },
+                        {
+                            path: '/ExecuteHeaderConfiguration',
+                            component: ExecuteHeaderConfiguration,
+                            meta: {title: '执行端表头配置'}
                         }
                     ]
                 },

@@ -70,13 +70,18 @@
                             },
                             {
                                 label: '详情头部配置',
-                                index: "2-3",
+                                index: "2-4",
                                 url: "/DetailsTextConfiguration"
                             },
                             {
                                 label: '筛选条件配置',
-                                index: "2-3",
+                                index: "2-5",
                                 url: "/ScreeningConditionsConfiguration"
+                            },
+                            {
+                                label: '执行端表头配置',
+                                index: "2-6",
+                                url: "/ExecuteHeaderConfiguration"
                             }
                         ]
                     },

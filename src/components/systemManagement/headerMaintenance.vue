@@ -21,8 +21,10 @@
                             v-model="select"
                             clearable
                             filterable
+
                             allow-create
                             default-first-option
+                            @change="changeSelect"
                             placeholder="请选择表头类型">
                             <el-option
                                 v-for="item in selectOptions"
@@ -32,7 +34,6 @@
                             </el-option>
                         </el-select>
                     </label>
-                    <el-button type="success" icon="delete" class="handle-del mr10" @click="doSearch">查询表头</el-button>
                     <el-button type="primary" icon="delete" class="handle-del mr10" @click="showAddPerson">新增表头</el-button>
                     <el-button type="danger" icon="delete" class="handle-del mr10" @click="deletePerson">删除表头</el-button>
                 </div>
@@ -58,7 +59,7 @@
             </div>
         </div>
         <!--新增弹出框 -->
-        <el-dialog title="新增表头" :visible.sync="addVisible" width="60%">
+        <el-dialog title="新增表头" :visible.sync="addVisible" width="40%">
             <el-form ref="form" label-width="100px">
                 <el-form-item label="表头代码">
                     <el-select
@@ -67,7 +68,8 @@
                         filterable
                         allow-create
                         default-first-option
-                        placeholder="请选择字典类型">
+                        disabled
+                        placeholder="请选择表头类型">
                         <el-option
                             v-for="item in selectOptions"
                             :key="item.code"
@@ -83,7 +85,7 @@
                     <el-input v-model="label"></el-input>
                 </el-form-item>
                 <el-form-item label="顺序号">
-                    <el-input v-model="sortnum"></el-input>
+                    <el-input v-model="sortnum" type="number"></el-input>
                 </el-form-item>
             </el-form>
             <span slot="footer" class="dialog-footer">
@@ -92,7 +94,7 @@
             </span>
         </el-dialog>
         <!-- 编辑弹出框 -->
-        <el-dialog title="编辑表头" :visible.sync="editVisible" width="60%">
+        <el-dialog title="编辑表头" :visible.sync="editVisible" width="40%">
             <el-form ref="form" label-width="100px">
                 <el-form-item label="表头代码">
                     <el-select
@@ -100,6 +102,7 @@
                         clearable
                         filterable
                         allow-create
+                        disabled
                         default-first-option
                         placeholder="请选择字典类型">
                         <el-option
@@ -117,7 +120,7 @@
                     <el-input v-model="label"></el-input>
                 </el-form-item>
                 <el-form-item label="顺序号">
-                    <el-input v-model="sortnum"></el-input>
+                    <el-input v-model="sortnum" type="number"></el-input>
                 </el-form-item>
             </el-form>
             <span slot="footer" class="dialog-footer">
@@ -196,6 +199,7 @@
         },
         methods: {
 
+
             //页面加载检查用户是否登陆，没有登陆就加载登陆页面
             getAdminState() {
                 const userInfo = localStorage.getItem("userInfo");
@@ -206,31 +210,38 @@
                     let that = this;
                     axios.all([
                         axios.post(" " + url + "/sys/dictionaryList", {"id": "7"}),
-                        axios.post(" " + url + "/sys/showTableTitle", {"name": "tabletitle"}),
-                        axios.post(" " + url + "/sysconfig/tableTitleList",{"code":"qieduan"})
+
                     ])
-                        .then(axios.spread(function (select,title, table) {
+                        .then(axios.spread(function (select) {
                             that.selectOptions = select.data;
-                            that.cols = title.data;
-                            that.tableData = table.data;
+                            that.select=select.data[0].code;
+                            console.log(that.select)
+                            that.loadingShowData(that.select)
+
                         }));
                 }
             },
+
+            //瞬间加载数据
+            loadingShowData(data) {
+                let that = this;
+                axios.all([
+                    axios.post(" " + url + "/sys/showTableTitle", {"name": "tabletitle"}),
+                    axios.post(" " + url + "/sysconfig/tableTitleList",{"code":data})
+                ])
+                    .then(axios.spread(function (title, table) {
+                        that.cols = title.data;
+                        that.tableData = table.data;
+                    }));
+            },
+
             //查询表头
-            doSearch(){
+            changeSelect(){
                 if (this.select) {
-                    let that = this;
-                    axios.all([
-                        axios.post(" " + url + "/sys/showTableTitle", {"name": "tabletitle"}),
-                        axios.post(" " + url + "/sysconfig/tableTitleList",{"code":this.select})
-                    ])
-                        .then(axios.spread(function (title, table) {
-                            that.cols = title.data;
-                            that.tableData = table.data;
-                        }));
+                    this.loadingShowData(this.select)
                 }
                 else {
-                    this.message = "请选择字典类型";
+                    this.message = "请选择表头类型";
                     this.HideModal = false;
                     const that = this;
 
@@ -243,7 +254,6 @@
                 }
 
             },
-
 
 
             //选择那个一个
@@ -274,24 +284,7 @@
                         console.log(err)
                     });
             },
-            //选择点击删除
-            deletePerson() {
-                if (this.listData.length) {
-                    this.delVisible = true;
-                }
-                else {
-                    this.message = "请勾选要删除的人员";
-                    this.HideModal = false;
-                    const that = this;
 
-                    function a() {
-                        that.message = "";
-                        that.HideModal = true;
-                    }
-
-                    setTimeout(a, 2000);
-                }
-            },
             // 保存编辑
             saveEdit() {
                 if (this.pro && this.label && this.select && this.sortnum) {
@@ -305,13 +298,10 @@
                         }
                     )
                         .then((res) => {
-                            if (res.data == "1") {
+                            if (res.data === "1") {
                                 this.$message.success(`修改成功`);
                                 this.editVisible = false;
-                                const that = this;
-                                setTimeout(function () {
-                                    that.$router.go(0)
-                                }, 1500)
+                                this.loadingShowData(this.select)
                             }
                             else {
                                 this.$message.warning(`修改失败`);
@@ -326,6 +316,18 @@
                 }
 
             },
+            //选择点击删除
+            deletePerson() {
+                if (this.listData.length) {
+                    this.delVisible = true;
+                }
+                else {
+                    this.message = "请勾选要删除的表头";
+                    this.HideModal = false;
+
+                }
+            },
+
             // 确定删除
             deleteRow() {
                 axios.post(" " + url + "/sysconfig/delTableTitle",
@@ -337,10 +339,7 @@
                         if (res.data === "1") {
                             this.$message.success('删除成功');
                             this.delVisible = false;
-                            let that =this;
-                            setTimeout(function () {
-                                that.$router.go(0)
-                            }, 1500)
+                            this.loadingShowData(this.select)
                         }
                         else {
                             this.$message.warning(`删除失败`);
@@ -352,7 +351,25 @@
             },
             //显示新增表头
             showAddPerson() {
-                this.addVisible = true;
+                if (this.select) {
+                    this.addVisible = true;
+                    this.pro = "";
+                    this.label = "";
+                    this.sortnum = "";
+                }
+                else {
+                    this.message = "请选择表头类型";
+                    this.HideModal = false;
+                    const that = this;
+
+                    function a() {
+                        that.message = "";
+                        that.HideModal = true;
+                    }
+
+                    setTimeout(a, 2000);
+                }
+
             },
             //新增表头
             doAddPerson() {
@@ -368,11 +385,8 @@
                         .then((res) => {
                             if (res.data === "1") {
                                 this.$message.success(`新增成功`);
-                                this.editVisible = false;
-                                let that = this;
-                                setTimeout(function () {
-                                    that.$router.go(0)
-                                }, 1500)
+                                this.addVisible = false;
+                                this.loadingShowData(this.select)
                             }
                             else {
                                 this.$message.warning(`新增失败`);
