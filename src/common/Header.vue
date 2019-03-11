@@ -39,7 +39,7 @@
 </template>
 <script type="text/ecmascript-6">
     import bus from '../assets/js/bus';
-
+    import { disableHistory } from '../assets/js/api'
 
     export default {
         data() {
@@ -65,7 +65,15 @@
 
             }
         },
+        created() {
+            //禁用浏览器后退事件
+            this.beforeCreate();
+        },
         methods: {
+            beforeCreate () {
+                disableHistory(document.URL)
+            },
+
             // 用户名下拉菜单选择事件
             handleCommand(command) {
                 if (command == 'loginout') {

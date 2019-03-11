@@ -1,12 +1,12 @@
 <template>
-    <div class="WorkingProcedure">
+    <div class="template">
         <div class="crumbs">
             <el-breadcrumb separator="/">
                 <el-breadcrumb-item>人员管理</el-breadcrumb-item>
                 <el-breadcrumb-item>人员管理</el-breadcrumb-item>
             </el-breadcrumb>
         </div>
-        <div class="WorkingProcedure-content">
+        <div class="template-content">
             <div class="container">
                 <div class="handle-box">
                     <label style="margin-right: 10px">
@@ -14,8 +14,10 @@
                         <span>:</span>
                         <el-input v-model="select_word" placeholder="筛选人员" class="handle-input mr10"></el-input>
                     </label>
-                    <el-button type="primary" icon="delete" class="handle-del mr10" @click="showAddPerson">新增人员</el-button>
-                    <el-button type="danger" icon="delete" class="handle-del mr10" @click="deletePerson">删除人员</el-button>
+                    <el-button type="primary" icon="delete" class="handle-del mr10" @click="showAddPerson">新增人员
+                    </el-button>
+                    <el-button type="danger" icon="delete" class="handle-del mr10" @click="deletePerson">删除人员
+                    </el-button>
                 </div>
                 <div class="">
                     <el-table class="tb-edit"
@@ -64,7 +66,7 @@
         <el-dialog title="编辑人员" :visible.sync="editVisible" width="60%">
             <el-form ref="form" label-width="100px">
                 <el-form-item label="登陆名">
-                    <el-input v-model="name"  :disabled="true"></el-input>
+                    <el-input v-model="name" :disabled="true"></el-input>
                 </el-form-item>
                 <el-form-item label="显示名">
                     <el-input v-model="showname"></el-input>
@@ -94,6 +96,7 @@
     import axios from 'axios'
     import url from '../../assets/js/URL'
     import Modal from '../../common/modal'
+
     export default {
         name: 'WorkingProcedure',
         data() {
@@ -112,7 +115,7 @@
                 editVisible: false,
                 delVisible: false,
 
-                id:"",
+                id: "",
                 name: '',
                 pwd: '',
                 showname: '',
@@ -151,17 +154,23 @@
                     this.$router.push("/")
                 }
                 else {
-                    let that = this;
-                    axios.all([
-                        axios.post(" " + url + "/sys/showTableTitle", {"name": "renyuan"}),
-                        axios.post(" " + url + "/sysconfig/personList")
-                    ])
-                        .then(axios.spread(function (title, table) {
-                            that.cols = title.data;
-                            that.tableData = table.data;
-                        }));
+                    this.loadingShowData()
                 }
             },
+
+            //瞬间加载数据
+            loadingShowData() {
+                let that = this;
+                axios.all([
+                    axios.post(" " + url + "/sys/showTableTitle", {"name": "renyuan"}),
+                    axios.post(" " + url + "/sysconfig/personList")
+                ])
+                    .then(axios.spread(function (title, table) {
+                        that.cols = title.data;
+                        that.tableData = table.data;
+                    }));
+            },
+
             //选择那个一个
             selectList(val) {
                 if (val.length) {
@@ -223,7 +232,7 @@
                             if (res.data === "1") {
                                 this.$message.success(`修改成功`);
                                 this.editVisible = false;
-                                this.$router.go(0)
+                                this.loadingShowData()
                             }
                             else {
                                 this.$message.warning(`删除成功`);
@@ -250,6 +259,7 @@
 
                             this.$message.success('删除成功');
                             this.delVisible = false;
+                            this.loadingShowData()
                         }
                         else {
                             this.$message.warning(`删除失败`);
@@ -262,6 +272,11 @@
             //显示新增人员
             showAddPerson() {
                 this.addVisible = true;
+                this.id = "";
+                this.name = "";
+                this.pwd = "";
+                this.showname = "";
+                this.code = "";
             },
             //新增人员
             doAddPerson() {
@@ -277,8 +292,8 @@
                         .then((res) => {
                             if (res.data === "1") {
                                 this.$message.success(`新增成功`);
-                                this.editVisible = false;
-                                this.$router.go(0)
+                                this.addVisible = false;
+                                this.loadingShowData()
                             }
                             else {
                                 this.$message.warning(`新增失败`);
@@ -298,7 +313,7 @@
 <style scoped lang="less" rel="stylesheet/less">
     @import "../../assets/less/base";
 
-    .WorkingProcedure {
+    .template {
         width: 100%;
         height: 100%;
         background-color: @color-white;
@@ -307,7 +322,7 @@
             padding-top: 20px;
             padding-left: 20px;
         }
-        .WorkingProcedure-content {
+        .template-content {
             .handle-box {
                 height: 80px;
                 line-height: 80px;
@@ -332,9 +347,6 @@
             .red {
                 color: #ff0000;
             }
-
         }
     }
-
-
 </style>

@@ -146,9 +146,10 @@
             getAdminState() {
                 const userInfo = localStorage.getItem("userInfo");
                 if (userInfo === null) {
-                    this.$router.push("/")
+
                 }
                 else {
+                    this.$router.push(this.navBarData[0].children[0].url);
 
                 }
             },
