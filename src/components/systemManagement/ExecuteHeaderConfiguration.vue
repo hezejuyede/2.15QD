@@ -274,7 +274,7 @@
 
                 workStation:"",
                 workStationOptions:[],
-                station:"1",
+                station:1,
                 stationOptions:[{"name": "可作业", "id": 1}, {"name": "总清单", "id": 2}],
                 type: "1",
                 typeOptions: [{"name": "1", "id": 1}, {"name": "2", "id": 2}, {"name": "3", "id": 3},{"name": "4", "id": 4}],
@@ -360,7 +360,7 @@
             //进行查询
             doSearch() {
                 if (this.workStation &&this.type &&this.station) {
-                    this.loadingShowData(this.workStation, this.station, this.type)
+                    this.loadingShowData(this.workStation, this.type,this.station )
                 }
                 else {
                     this.message = "三个下拉不能有空";

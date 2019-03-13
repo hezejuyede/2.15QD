@@ -84,10 +84,6 @@
 
                 }
             },
-            //点击前往那个子组件
-            goToNavBar(index, url) {
-                this.$router.push(url);
-            },
 
             //点击导航前往哪一个页面
             handleSelect(index, url) {
