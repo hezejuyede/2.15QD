@@ -89,9 +89,9 @@
                             placeholder="请输入或者选择">
                             <el-option
                                 v-for="item in typeOptions"
-                                :key="item.id"
+                                :key="item.indexno"
                                 :label="item.name"
-                                :value="item.id">
+                                :value="item.indexno">
                             </el-option>
                         </el-select>
                     </el-form-item>
