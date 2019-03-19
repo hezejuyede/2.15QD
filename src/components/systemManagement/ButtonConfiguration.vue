@@ -412,7 +412,7 @@
                     .then((res) => {
                         this.workStation = res.data.data.gongxuid;
                         this.name = res.data.data.name;
-                        this.type = res.data.data.type;
+                        this.type = Number(res.data.data.type);
                         this.disabled = res.data.data.disabled;
                         this.backgroundColor = res.data.data.backgroundcolor;
                         this.showHide = res.data.data.show;
