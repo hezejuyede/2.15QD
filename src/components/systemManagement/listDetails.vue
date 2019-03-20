@@ -22,7 +22,9 @@
                             clearable
                             filterable
                             allow-create
+                            @change="changeSelect"
                             default-first-option
+
                             placeholder="请选择工位">
                             <el-option
                                 v-for="item in selectOptions"
@@ -32,7 +34,6 @@
                             </el-option>
                         </el-select>
                     </label>
-                    <el-button type="success" icon="delete" class="handle-del mr10" @click="doSearch">查询记录</el-button>
                     <el-button type="primary" icon="delete" class="handle-del mr10" @click="showAddPerson">新增记录</el-button>
                     <el-button type="danger" icon="delete" class="handle-del mr10" @click="deletePerson">删除记录</el-button>
                 </div>
@@ -43,6 +44,7 @@
                               border
                               height="400"
                               @select="selectList"
+                              @select-all="selectAll"
                               @row-dblclick="editPerson"
                               highlight-current-row
                               style="width: 98%;margin: auto">
@@ -238,22 +240,37 @@
                     this.$router.push("/")
                 }
                 else {
-
-                   this.loading();
-                }
-            },
-            //查询字典
-            doSearch(){
-                if (this.select) {
                     let that = this;
                     axios.all([
-                        axios.post(" " + url + "/sys/showTableTitle", {"name": "zuoyezhil"}),
-                        axios.post(" " + url + "/sysconfig/opreaRecordTypeList", {"station": that.select})
+                        axios.post(" " + url + "/api/getPersonProcessList", {"name": ""}),
+                        axios.post(" " + url + "/sys/dictionaryList", {"id": "15"}),
                     ])
-                        .then(axios.spread(function (title, table) {
-                            that.cols = title.data;
-                            that.tableData = table.data;
+                        .then(axios.spread(function (selectOptions, selectTbOptions) {
+                            that.selectOptions = selectOptions.data;
+                            that.select = selectOptions.data[0].id;
+                            that.selectTbOptions = selectTbOptions.data;
+                            that.loadingShowData(1)
                         }));
+                }
+            },
+
+            //瞬间加载数据
+            loadingShowData(data) {
+                let that = this;
+                axios.all([
+                    axios.post(" " + url + "/sys/showTableTitle", {"name": "zuoyezhil"}),
+                    axios.post(" " + url + "/sysconfig/opreaRecordTypeList", {"station": data})
+                ])
+                    .then(axios.spread(function (title, table) {
+                        that.cols = title.data;
+                        that.tableData = table.data;
+                    }));
+            },
+
+            //下拉查询
+            changeSelect(){
+                if (this.select) {
+                    this.loadingShowData(this.select)
                 }
                 else {
                     this.message = "请选择查询工位";
@@ -267,7 +284,6 @@
 
                     setTimeout(a, 2000);
                 }
-
             },
 
             //选择那个一个
@@ -284,94 +300,43 @@
                     this.listData = [];
                 }
             },
-            //双击点击行内编辑
-            editPerson(row, column, cell, event) {
-                this.editVisible = true;
-                this.id = row.id;
-                axios.post(" " + url + "/sysconfig/opreaRecordTypeDetail", {"id": this.id})
-                    .then((res) => {
-                        this.name = res.data.context;
-                        this.indexno = res.data.cindex;
-                        this.select = res.data.workstation;
-                        this.selectTb = res.data.ctype;
-                        this.tbContent = res.data.code;
-                    })
-                    .catch((err) => {
-                        console.log(err)
-                    });
-            },
-            //选择点击删除
-            deletePerson() {
-                if (this.listData.length) {
-                    this.delVisible = true;
-                }
-                else {
-                    this.message = "请勾选要删除的人员";
-                    this.HideModal = false;
-                    this.loading();
-                    setTimeout(a, 2000);
-                }
-            },
-            // 保存编辑
-            saveEdit() {
-                if (this.name && this.select && this.indexno) {
-                    axios.post(" " + url + "/sysconfig/opreaRecordTypeUpdate",
-                        {
-                            "id":this.id,
-                            "workstation": this.select,
-                            "context": this.name,
-                            "cindex": this.indexno,
-                            "ctype":this.selectTb,
-                            "code":this.tbContent
-                        }
-                    )
-                        .then((res) => {
-                            if (res.data == "1") {
-                                this.$message.success(`修改成功`);
-                                this.editVisible = false;
-                                this.loading();
-                            }
-                            else {
-                                this.$message.warning(`修改失败`);
-                            }
-                        })
-                        .catch((err) => {
-                            console.log(err)
-                        })
-                }
-                else {
-                    this.$message.warning(`输入不能为空`);
-                }
 
-            },
-            // 确定删除
-            deleteRow() {
-                axios.post(" " + url + "/sysconfig/opreaRecordTypeDel",
-                    {
-                        "ids": this.listData,
+            //列表全部选择
+            selectAll(val) {
+                if (val.length) {
+                    let data = [];
+                    for (let i = 0; i < val.length; i++) {
+                        let a = val[i].id;
+                        data.push(a)
                     }
-                )
-                    .then((res) => {
-                        if (res.data === "1") {
-                            this.$message.success('删除成功');
-                            this.delVisible = false;
-                            this.loading();
-                        }
-                        else {
-                            this.$message.warning(`删除失败`);
-                        }
-                    })
-                    .catch((err) => {
-                        console.log(err)
-                    })
+                    this.listData = data;
+                }
+                else {
+                    this.listData = [];
+                }
             },
+
             //显示新增字典
             showAddPerson() {
-                this.addVisible = true;
-                this.select = "";
-                this.selectTb = "";
-                this.name = "";
-                this.indexno = ""
+                if(this.select){
+                    this.addVisible = true;
+                    this.selectTb = "";
+                    this.name = "";
+                    this.indexno = "";
+                    this.tbContent = "";
+                }
+                else {
+                    this.message = "请选择新增的工位";
+                    this.HideModal = false;
+                    const that = this;
+
+                    function a() {
+                        that.message = "";
+                        that.HideModal = true;
+                    }
+
+                    setTimeout(a, 2000);
+                }
             },
             //新增字典
             doAddPerson() {
@@ -389,7 +354,7 @@
                             if (res.data === "1") {
                                 this.$message.success(`新增成功`);
                                 this.addVisible = false;
-                                this.loading();
+                                this.loadingShowData(this.select);
                             }
                             else {
                                 this.$message.warning(`新增失败`);
@@ -404,46 +369,96 @@
                 }
             },
 
-            //公共作业质量加载
-            loading(){
-                if(this.select){
-                    let that = this;
-                    axios.all([
-                        axios.post(" " + url + "/sys/showTableTitle", {"name": "zuoyezhil"}),
-                        axios.post(" " + url + "/sysconfig/opreaRecordTypeList", {"station": that.select})
-                    ])
-                        .then(axios.spread(function (title, table) {
-                            that.cols = title.data;
-                            that.tableData = table.data;
-                        }));
+
+            //双击点击行内编辑
+            editPerson(row, column, cell, event) {
+                this.editVisible = true;
+                this.id = row.id;
+                axios.post(" " + url + "/sysconfig/opreaRecordTypeDetail", {"id": this.id})
+                    .then((res) => {
+                        this.name = res.data.context;
+                        this.indexno = res.data.cindex;
+                        this.select = res.data.workstation;
+                        this.selectTb = res.data.ctype;
+                        this.tbContent = res.data.code;
+                    })
+                    .catch((err) => {
+                        console.log(err)
+                    });
+            },
+
+            //选择点击删除
+            deletePerson() {
+                if (this.listData.length>0) {
+                    this.delVisible = true;
                 }
                 else {
-                    axios.post(" " + url + "/api/getPersonProcessList", {"name": ""})
+                    this.message = "请勾选要删除的内容";
+                    this.HideModal = false;
+                    const that = this;
+                    function a() {
+                        that.message = "";
+                        that.HideModal = true;
+                    }
+
+                    setTimeout(a, 2000);
+                }
+            },
+
+            // 保存编辑
+            saveEdit() {
+                if (this.name && this.select && this.indexno) {
+                    axios.post(" " + url + "/sysconfig/opreaRecordTypeUpdate",
+                        {
+                            "id":this.id,
+                            "workstation": this.select,
+                            "context": this.name,
+                            "cindex": this.indexno,
+                            "ctype":this.selectTb,
+                            "code":this.tbContent
+                        }
+                    )
                         .then((res) => {
-                            this.selectOptions = res.data;
-                            this.select = res.data[0].id;
-                            let that = this;
-                            axios.all([
-                                axios.post(" " + url + "/sys/showTableTitle", {"name": "zuoyezhil"}),
-                                axios.post(" " + url + "/sysconfig/opreaRecordTypeList", {"station": that.select}),
-                                axios.post(" " + url + "/sys/dictionaryList", {"id": "15"}),
-                            ])
-                                .then(axios.spread(function (title, table, selectTbOptions) {
-                                    that.cols = title.data;
-                                    that.tableData = table.data;
-                                    that.selectTbOptions = selectTbOptions.data;
-                                }));
+                            if (res.data == "1") {
+                                this.$message.success(`修改成功`);
+                                this.editVisible = false;
+                                this.loadingShowData(this.select);
+                            }
+                            else {
+                                this.$message.warning(`修改失败`);
+                            }
                         })
                         .catch((err) => {
                             console.log(err)
-                        });
+                        })
+                }
+                else {
+                    this.$message.warning(`输入不能为空`);
                 }
 
+            },
 
-
-
-
-            }
+            // 确定删除
+            deleteRow() {
+                axios.post(" " + url + "/sysconfig/opreaRecordTypeDel",
+                    {
+                        "ids": this.listData,
+                    }
+                )
+                    .then((res) => {
+                        if (res.data === "1") {
+                            this.$message.success('删除成功');
+                            this.delVisible = false;
+                            this.loadingShowData(this.select);
+                        }
+                        else {
+                            this.$message.warning(`删除失败`);
+                        }
+                    })
+                    .catch((err) => {
+                        console.log(err)
+                    })
+            },
 
 
         }

@@ -24,6 +24,7 @@
                             allow-create
                             default-first-option
                             @change="changeSelect"
+                            @select-all="selectAll"
                             placeholder="请选择工位">
                             <el-option
                                 v-for="item in workStationOptions"
@@ -343,6 +344,21 @@
                 }
                 else {
                     this.listData=[];
+                }
+            },
+
+            //列表全部选择
+            selectAll(val) {
+                if (val.length) {
+                    let data = [];
+                    for (let i = 0; i < val.length; i++) {
+                        let a = val[i].id;
+                        data.push(a)
+                    }
+                    this.listData = data;
+                }
+                else {
+                    this.listData = [];
                 }
             },
 
