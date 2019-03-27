@@ -81,9 +81,20 @@ import PersonnelManagement from '../components/personnelManagement/personnelMana
 import ExceptionQuery from '../components/qualityAssurance/exceptionQuery';
 
 
+//部门管理
+import DepartmentManagement from '../components/personnelManagement/departmentManagement';
 
 //人员管理
 import PersonnelSetting from '../components/personnelManagement/PersonnelSetting';
+
+//权限管理
+import PrivilegeManagement from '../components/personnelManagement/personnelManagement';
+
+//角色管理
+import RoleManagement from '../components/personnelManagement/roleManagement';
+
+
+
 
 
 //人员管理
@@ -232,9 +243,24 @@ export default new Router({
                     meta: {title: '人员管理'},
                     children: [
                         {
+                            path: '/DepartmentManagement',
+                            component: DepartmentManagement,
+                            meta: {title: '部门管理'}
+                        },
+                        {
                             path: '/PersonnelSetting',
                             component: PersonnelSetting,
                             meta: {title: '人员设定'}
+                        },
+                        {
+                            path: '/PrivilegeManagement',
+                            component: PrivilegeManagement,
+                            meta: {title: '权限管理'}
+                        },
+                        {
+                            path: '/RoleManagement',
+                            component: RoleManagement,
+                            meta: {title: '角色管理'}
                         }
                     ]
                 },

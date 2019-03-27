@@ -33,16 +33,26 @@
                         label: '人员权限设置',
                         index: "1",
                         children: [
-                           /* {
-                                label: '定义权限类型',
+                            {
+                                label: '部门管理',
                                 index: "1-1",
-                                url: "/404"
-                            },*/
+                                url: "/DepartmentManagement"
+                            },
                             {
                                 label: '人员管理',
                                 index: "1-2",
                                 url: "/PersonnelSetting"
-                            }
+                            },
+                            {
+                                label: '角色管理',
+                                index: "1-3",
+                                url: "/RoleManagement"
+                            },
+                            {
+                                label: '权限管理',
+                                index: "1-4",
+                                url: "/PrivilegeManagement"
+                            },
                         ]
                     },
                     {
