@@ -9,11 +9,75 @@
         <div class="template-content">
             <div class="container">
                 <div class="handle-box">
-                    <label style="margin-right: 10px">
+                    <label style="margin-right: 5px">
                         <span>筛选人员</span>
                         <span>:</span>
-                        <el-input v-model="select_word" placeholder="筛选人员" class="handle-input mr10"></el-input>
+                        <el-input v-model="select_word" placeholder="筛选人员" style="width: 150px"></el-input>
                     </label>
+                    <label style="margin-right: 5px;margin-left: 5px">
+                        <span>部门</span>
+                        <span>:</span>
+                        <el-select
+                            v-model="dept"
+                            style="width: 150px"
+                            clearable
+                            filterable
+                            allow-create
+                            default-first-option
+                            @change="changeSelect"
+                            placeholder="请选择部门">
+                            <el-option
+                                v-for="item in deptOptions"
+                                :key="item.id"
+                                :label="item.name"
+                                :value="item.id">
+                            </el-option>
+                        </el-select>
+                    </label>
+                    <label style="margin-right: 5px;margin-left: 5px">
+                        <span>角色</span>
+                        <span>:</span>
+                        <el-select
+                            v-model="role"
+                            style="width: 150px"
+                            clearable
+                            filterable
+                            allow-create
+                            default-first-option
+                            @change="changeSelect"
+
+                            placeholder="请选择角色">
+                            <el-option
+                                v-for="item in roleOptions"
+                                :key="item.id"
+                                :label="item.name"
+                                :value="item.id">
+                            </el-option>
+                        </el-select>
+                    </label>
+                    <label style="margin-right: 5px;margin-left: 5px">
+                        <span>岗位</span>
+                        <span>:</span>
+                        <el-select
+                            v-model="post"
+                            style="width: 150px"
+                            clearable
+                            filterable
+                            allow-create
+                            default-first-option
+                            @change="changeSelect"
+
+                            placeholder="请选择岗位">
+                            <el-option
+                                v-for="item in postOptions"
+                                :key="item.id"
+                                :label="item.name"
+                                :value="item.id">
+                            </el-option>
+                        </el-select>
+                    </label>
+                    <el-button type="success" icon="delete" class="handle-del mr10" @click="doSearchPerson">查询人员
+                    </el-button>
                     <el-button type="primary" icon="delete" class="handle-del mr10" @click="showAddPerson">新增人员
                     </el-button>
                     <el-button type="danger" icon="delete" class="handle-del mr10" @click="deletePerson">删除人员
@@ -42,8 +106,65 @@
 
         </div>
         <!--新增弹出框 -->
-        <el-dialog title="新增人员" :visible.sync="addVisible" width="60%">
+        <el-dialog title="新增人员" :visible.sync="addVisible" width="40%">
+
             <el-form ref="form" label-width="100px">
+                <el-form-item label="部门">
+                    <el-select
+                        v-model="dept"
+                        style="width:200px"
+                        clearable
+                        filterable
+                        allow-create
+                        default-first-option
+                        @change="changeSelect"
+                        placeholder="请选择部门">
+                        <el-option
+                            v-for="item in deptOptions"
+                            :key="item.id"
+                            :label="item.name"
+                            :value="item.id">
+                        </el-option>
+                    </el-select>
+                </el-form-item>
+                <el-form-item label="角色">
+                    <el-select
+                        v-model="role"
+                        style="width:200px"
+                        clearable
+                        filterable
+                        allow-create
+                        default-first-option
+                        @change="changeSelect"
+
+                        placeholder="请选择角色">
+                        <el-option
+                            v-for="item in roleOptions"
+                            :key="item.id"
+                            :label="item.name"
+                            :value="item.id">
+                        </el-option>
+                    </el-select>
+                </el-form-item>
+                <el-form-item label="岗位">
+                    <el-select
+                        v-model="post"
+                        style="width:200px"
+                        clearable
+                        filterable
+                        allow-create
+                        default-first-option
+                        @change="changeSelect"
+
+                        placeholder="请选择岗位">
+                        <el-option
+                            v-for="item in postOptions"
+                            :key="item.id"
+                            :label="item.name"
+                            :value="item.id">
+                        </el-option>
+                    </el-select>
+                </el-form-item>
                 <el-form-item label="登陆名">
                     <el-input v-model="name"></el-input>
                 </el-form-item>
@@ -65,8 +186,67 @@
         <!-- 编辑弹出框 -->
         <el-dialog title="编辑人员" :visible.sync="editVisible" width="60%">
             <el-form ref="form" label-width="100px">
+                <el-form-item label="部门">
+                    <el-select
+                        v-model="dept"
+                        style="width:200px"
+                        clearable
+                        filterable
+                        allow-create
+                        default-first-option
+                        @change="changeSelect"
+                        placeholder="请选择部门">
+                        <el-option
+                            v-for="item in deptOptions"
+                            :key="item.id"
+                            :label="item.name"
+                            :value="item.id">
+                        </el-option>
+                    </el-select>
+                </el-form-item>
+                <el-form-item label="角色">
+                    <el-select
+                        v-model="role"
+                        style="width:200px"
+                        clearable
+                        filterable
+                        allow-create
+                        default-first-option
+                        @change="changeSelect"
+
+                        placeholder="请选择角色">
+                        <el-option
+                            v-for="item in roleOptions"
+                            :key="item.id"
+                            :label="item.name"
+                            :value="item.id">
+                        </el-option>
+                    </el-select>
+                </el-form-item>
+                <el-form-item label="岗位">
+                    <el-select
+                        v-model="post"
+                        style="width:200px"
+                        clearable
+                        filterable
+                        allow-create
+                        default-first-option
+                        @change="changeSelect"
+
+                        placeholder="请选择岗位">
+                        <el-option
+                            v-for="item in postOptions"
+                            :key="item.id"
+                            :label="item.name"
+                            :value="item.id">
+                        </el-option>
+                    </el-select>
+                </el-form-item>
                 <el-form-item label="登陆名">
                     <el-input v-model="name" :disabled="true"></el-input>
+                </el-form-item>
+                <el-form-item label="密码">
+                    <el-input v-model="pwd"></el-input>
                 </el-form-item>
                 <el-form-item label="显示名">
                     <el-input v-model="showname"></el-input>
@@ -108,6 +288,14 @@
 
                 cols: [],
                 tableData: [],
+
+                deptOptions: [],
+                dept: "",
+                roleOptions: [],
+                role: "",
+                postOptions: [],
+                post: "",
+
 
                 select_word: '',
 
@@ -154,16 +342,30 @@
                     this.$router.push("/")
                 }
                 else {
-                    this.loadingShowData()
+                    let that = this;
+                    axios.all([
+                        axios.post(" " + url + "/sysconfig/deptList"),
+                        axios.post(" " + url + "/sysconfig/roleList"),
+                        axios.post(" " + url + "/sysconfig/postList")
+                    ])
+                        .then(axios.spread(function (dept, role, post) {
+                            that.deptOptions = dept.data;
+                            that.roleOptions = role.data;
+                            that.postOptions = post.data;
+                            this.loadingShowData(1, 1, 1)
+
+                        }));
+
+
                 }
             },
 
             //瞬间加载数据
-            loadingShowData() {
+            loadingShowData(data1, data2, data3) {
                 let that = this;
                 axios.all([
                     axios.post(" " + url + "/sys/showTableTitle", {"name": "renyuan"}),
-                    axios.post(" " + url + "/sysconfig/personList")
+                    axios.post(" " + url + "/sysconfig/personList", {"dept": data1, "role": data2, "post": data3})
                 ])
                     .then(axios.spread(function (title, table) {
                         that.cols = title.data;
@@ -185,12 +387,68 @@
                     this.listData = [];
                 }
             },
+
+
+            //进行人员查询
+            doSearchPerson() {
+                this.loadingShowData(this.dept, this.role, this.post)
+            },
+
+
+            //显示新增人员
+            showAddPerson() {
+                this.post = "";
+                this.role = "";
+                this.dept = "";
+                this.addVisible = true;
+                this.id = "";
+                this.name = "";
+                this.pwd = "";
+                this.showname = "";
+                this.code = "";
+            },
+            //新增人员
+            doAddPerson() {
+                if (this.name && this.pwd && this.showname && this.code && this.post && this.dept && this.role) {
+                    axios.post(" " + url + "/sysconfig/userAdd",
+                        {
+                            "post": this.post,
+                            "dept": this.dept,
+                            "role": this.role,
+                            "name": this.name,
+                            "pwd": this.pwd,
+                            "showname": this.showname,
+                            "code": this.code
+                        }
+                    )
+                        .then((res) => {
+                            if (res.data === "1") {
+                                this.$message.success(`新增成功`);
+                                this.addVisible = false;
+                                this.loadingShowData(this.dept, this.role, this.post)
+                            }
+                            else {
+                                this.$message.warning(`新增失败`);
+                            }
+                        })
+                        .catch((err) => {
+                            console.log(err)
+                        })
+                }
+                else {
+                    this.$message.warning(`输入不能为空`);
+                }
+            },
+
             //双击点击行内编辑
             editPerson(row, column, cell, event) {
                 this.editVisible = true;
                 this.id = row.id;
                 axios.post(" " + url + "/sysconfig/personDetail", {"id": this.id})
                     .then((res) => {
+                        this.post = res.data.post;
+                        this.dept = res.data.dept;
+                        this.role = res.data.role;
                         this.name = res.data.name;
                         this.pwd = res.data.pwd;
                         this.showname = res.data.showname;
@@ -200,6 +458,42 @@
                         console.log(err)
                     });
             },
+
+            // 保存编辑
+            saveEdit() {
+                if (this.showname && this.code) {
+                    axios.post(" " + url + "/sysconfig/updatePerson",
+                        {
+
+                            "id": this.id,
+                            "post": this.post,
+                            "dept": this.dept,
+                            "role": this.role,
+                            "pwd": this.pwd,
+                            "showname": this.showname,
+                            "code": this.code
+                        }
+                    )
+                        .then((res) => {
+                            if (res.data === "1") {
+                                this.$message.success(`修改成功`);
+                                this.editVisible = false;
+                                this.loadingShowData(this.dept, this.role, this.post)
+                            }
+                            else {
+                                this.$message.warning(`删除成功`);
+                            }
+                        })
+                        .catch((err) => {
+                            console.log(err)
+                        })
+                }
+                else {
+                    this.$message.warning(`输入不能为空`);
+                }
+
+            },
+
             //选择点击删除
             deletePerson() {
                 if (this.listData.length) {
@@ -218,35 +512,7 @@
                     setTimeout(a, 2000);
                 }
             },
-            // 保存编辑
-            saveEdit() {
-                if (this.showname && this.code) {
-                    axios.post(" " + url + "/sysconfig/updatePerson",
-                        {
-                            "id": this.id,
-                            "showname": this.showname,
-                            "code": this.code
-                        }
-                    )
-                        .then((res) => {
-                            if (res.data === "1") {
-                                this.$message.success(`修改成功`);
-                                this.editVisible = false;
-                                this.loadingShowData()
-                            }
-                            else {
-                                this.$message.warning(`删除成功`);
-                            }
-                        })
-                        .catch((err) => {
-                            console.log(err)
-                        })
-                }
-                else {
-                    this.$message.warning(`输入不能为空`);
-                }
 
-            },
             // 确定删除
             deleteRow() {
                 axios.post(" " + url + "/sysconfig/delPerson",
@@ -259,7 +525,7 @@
 
                             this.$message.success('删除成功');
                             this.delVisible = false;
-                            this.loadingShowData()
+                            this.loadingShowData(this.dept, this.role, this.post)
                         }
                         else {
                             this.$message.warning(`删除失败`);
@@ -269,44 +535,7 @@
                         console.log(err)
                     })
             },
-            //显示新增人员
-            showAddPerson() {
-                this.addVisible = true;
-                this.id = "";
-                this.name = "";
-                this.pwd = "";
-                this.showname = "";
-                this.code = "";
-            },
-            //新增人员
-            doAddPerson() {
-                if (this.name && this.pwd && this.showname && this.code) {
-                    axios.post(" " + url + "/sysconfig/userAdd",
-                        {
-                            "name": this.name,
-                            "pwd": this.pwd,
-                            "showname": this.showname,
-                            "code": this.code
-                        }
-                    )
-                        .then((res) => {
-                            if (res.data === "1") {
-                                this.$message.success(`新增成功`);
-                                this.addVisible = false;
-                                this.loadingShowData()
-                            }
-                            else {
-                                this.$message.warning(`新增失败`);
-                            }
-                        })
-                        .catch((err) => {
-                            console.log(err)
-                        })
-                }
-                else {
-                    this.$message.warning(`输入不能为空`);
-                }
-            }
+
         }
     }
 </script>

@@ -39,19 +39,19 @@
                                 url: "/DepartmentManagement"
                             },
                             {
-                                label: '人员设定',
-                                index: "1-2",
-                                url: "/PersonnelSetting"
-                            },
-                            {
                                 label: '角色设定',
-                                index: "1-3",
+                                index: "1-2",
                                 url: "/RoleManagement"
                             },
                             {
                                 label: '岗位设定',
-                                index: "1-4",
+                                index: "1-3",
                                 url: "/PostManagement"
+                            },
+                            {
+                                label: '人员设定',
+                                index: "1-4",
+                                url: "/PersonnelSetting"
                             },
                         ]
                     },
