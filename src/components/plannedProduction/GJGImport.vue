@@ -224,8 +224,9 @@
         <!-- 失败信息返回框 -->
         <el-dialog title="导入失败信息提示" :visible.sync="errVisible" width="60%">
             <div class="container" style="height:450px;overflow:auto">
-                <div class="containerErr"  v-for="(item,index) in errList">
-                    {{item}}
+                <div class="containerErr">
+                    <div class="">{{errList}}</div>
+                    <div class="" v-for="(item,index) in errListData">{{item}}</div>
                 </div>
             </div>
         </el-dialog>
@@ -260,6 +261,7 @@
                 detailsVisible: false,
                 errVisible:false,
                 errList:"",
+                errListData:[],
 
 
                 xz: true,
@@ -325,6 +327,8 @@
             showUpData() {
                 this.uploadVisible = true;
                 this.batch = "";
+                this.type="";
+                this.list=[];
             },
 
             //进行查询
@@ -387,6 +391,7 @@
             {
                 if (response.state === "-1") {
                     this.errList=response.message;
+                    this.errListData=response.errorList;
                     this.errVisible =true;
                     this.loading = false;
                     let that = this;
@@ -783,6 +788,7 @@
         .containerErr{
             width: 100%;
             font-size: @font-size-large;
+            color: @color-bg-red;
         }
     }
 
