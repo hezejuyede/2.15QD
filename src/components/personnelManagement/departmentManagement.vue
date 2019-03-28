@@ -10,9 +10,9 @@
             <div class="container">
                 <div class="handle-box">
                     <label style="margin-right: 10px">
-                        <span>智能检索按钮</span>
+                        <span>智能检索部门</span>
                         <span>:</span>
-                        <el-input v-model="select_word" placeholder="智能检索按钮" class="handle-input mr10"></el-input>
+                        <el-input v-model="select_word" placeholder="智能检索部门" class="handle-input mr10"></el-input>
                     </label>
                     <el-button type="primary" icon="delete" class="handle-del mr10" @click="showAdd">新增部门</el-button>
                     <el-button type="danger" icon="delete" class="handle-del mr10" @click="showDelete">删除部门</el-button>
@@ -25,6 +25,7 @@
                               height="450"
                               @select="selectList"
                               @select-all="selectAll"
+                              @selection-change="selectionChange"
                               ref="moviesTable"
                               @row-dblclick="edit"
                               highlight-current-row
@@ -147,20 +148,20 @@
                     this.$router.push("/")
                 }
                 else {
-                      this.loadingShowData(1);
+                    this.loadingShowData();
                 }
             },
 
             //瞬间加载数据
-            loadingShowData(data) {
+            loadingShowData() {
                 let that = this;
                 axios.all([
-                    axios.post(" " + url + "/sys/showTableTitle", {"name": "jgxqan"}),
-                    axios.post(" " + url + "/padShow/buttonList", {"id": data})
+                    axios.post(" " + url + "/sys/showTableTitle", {"name": "dept"}),
+                    axios.post(" " + url + "/sysconfig/deptList")
                 ])
                     .then(axios.spread(function (title, table) {
                         that.cols = title.data;
-                        that.tableData = table.data.data;
+                        that.tableData = table.data;
                     }));
             },
 
@@ -179,26 +180,22 @@
                         data.push(a)
                     }
                     this.listData = data;
+
                 }
                 else {
                     this.listData=[];
+
                 }
             },
 
             //列表全部选择
             selectAll(val) {
-                this.val =val;
-                if (val.length) {
-                    let data = [];
-                    for (let i = 0; i < val.length; i++) {
-                        let a = val[i].id;
-                        data.push(a)
-                    }
-                    this.listData = data;
-                }
-                else {
-                    this.listData = [];
-                }
+                this.selectList(val)
+            },
+
+            //选择改变
+            selectionChange(val) {
+                this.selectList(val)
             },
 
             //显示新增
@@ -209,19 +206,14 @@
 
             //进行新增
             doAdd() {
-                if (this.name && this.type && this.disabled &&this.backgroundColor&&this.showHide) {
-                    axios.post(" " + url + "/padShow/buttonAdd",
+                if (this.name ) {
+                    axios.post(" " + url + "/sysconfig/deptAdd",
                         {
-                            "gongxuid": this.workStation,
-                            "name": this.name,
-                            "type": this.type,
-                            "disabled": this.disabled,
-                            "backgroundcolor": this.backgroundColor,
-                            "show": this.showHide,
+                            "name": this.name
                         }
                     )
                         .then((res) => {
-                            if (res.data.state === "1") {
+                            if (res.data === "1") {
                                 this.$message.success(`新增成功`);
                                 this.addVisible = false;
                                 this.loadingShowData(this.workStation)
@@ -244,14 +236,9 @@
             edit(row, column, cell, event) {
                 this.editVisible = true;
                 this.id = row.id;
-                axios.post(" " + url + "/padShow/buttonDetail", {"id": this.id})
+                axios.post(" " + url + "/sysconfig/deptDetail", {"id": this.id})
                     .then((res) => {
-                        this.workStation = res.data.data.gongxuid;
-                        this.name = res.data.data.name;
-                        this.type = Number(res.data.data.type);
-                        this.disabled = res.data.data.disabled;
-                        this.backgroundColor = res.data.data.backgroundcolor;
-                        this.showHide = res.data.data.show;
+                        this.name = res.data.name;
                     })
                     .catch((err) => {
                         console.log(err)
@@ -260,23 +247,18 @@
 
             // 保存编辑
             saveEdit() {
-                if (this.name && this.type && this.disabled &&this.backgroundColor&&this.showHide) {
-                    axios.post(" " + url + "/padShow/buttonUpdate",
+                if (this.name) {
+                    axios.post(" " + url + "/sysconfig/updateDept",
                         {
-                            "id":this.id,
-                            "gongweiid": this.workStation,
+                            "id": this.id,
                             "name": this.name,
-                            "type": this.type,
-                            "disabled": this.disabled,
-                            "backgroundcolor": this.backgroundColor,
-                            "show": this.showHide,
                         }
                     )
                         .then((res) => {
-                            if (res.data.state === "1") {
+                            if (res.data === "1") {
                                 this.editVisible = false;
                                 this.$message.success(`修改成功`);
-                                this.loadingShowData(this.workStation)
+                                this.loadingShowData()
                             }
                             else {
                                 this.$message.warning(`新增失败`);
@@ -315,23 +297,26 @@
             cancelDelete() {
                 this.delVisible = false;
                 this.listData = [];
-                for (let i = 0, l = this.val.length; i < l; i++) {
-                    this.$refs.moviesTable.toggleRowSelection(this.val[i]);
+                if (this.val.length === 1) {
+                    for (let i = 0, l = this.val.length; i < l; i++) {
+                        this.$refs.moviesTable.toggleRowSelection(this.val[i]);
+                    }
                 }
+
             },
 
             // 确定删除
             deleteRow() {
-                axios.post(" " + url + "/padShow/buttonDel",
+                axios.post(" " + url + "/sysconfig/delDept",
                     {
-                        "id": this.listData[0],
+                        "ids": this.listData,
                     }
                 )
                     .then((res) => {
-                        if (res.data.state === "1") {
+                        if (res.data === "1") {
                             this.$message.success('删除成功');
                             this.delVisible = false;
-                            this.loadingShowData(this.workStation);
+                            this.loadingShowData();
                         }
                         else {
                             this.$message.warning(`删除失败`);

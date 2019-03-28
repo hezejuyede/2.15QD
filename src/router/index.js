@@ -87,8 +87,8 @@ import DepartmentManagement from '../components/personnelManagement/departmentMa
 //人员管理
 import PersonnelSetting from '../components/personnelManagement/PersonnelSetting';
 
-//权限管理
-import PrivilegeManagement from '../components/personnelManagement/personnelManagement';
+//岗位管理
+import PostManagement from '../components/personnelManagement/postManagement';
 
 //角色管理
 import RoleManagement from '../components/personnelManagement/roleManagement';
@@ -253,9 +253,9 @@ export default new Router({
                             meta: {title: '人员设定'}
                         },
                         {
-                            path: '/PrivilegeManagement',
-                            component: PrivilegeManagement,
-                            meta: {title: '权限管理'}
+                            path: '/PostManagement',
+                            component: PostManagement,
+                            meta: {title: '岗位管理'}
                         },
                         {
                             path: '/RoleManagement',

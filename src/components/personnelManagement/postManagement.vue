@@ -3,19 +3,19 @@
         <div class="crumbs">
             <el-breadcrumb separator="/">
                 <el-breadcrumb-item>人员管理</el-breadcrumb-item>
-                <el-breadcrumb-item>角色设定</el-breadcrumb-item>
+                <el-breadcrumb-item>岗位设定</el-breadcrumb-item>
             </el-breadcrumb>
         </div>
         <div class="template-content">
             <div class="container">
                 <div class="handle-box">
                     <label style="margin-right: 10px">
-                        <span>智能检索角色</span>
+                        <span>智能检索岗位</span>
                         <span>:</span>
-                        <el-input v-model="select_word" placeholder="智能检索角色" class="handle-input mr10"></el-input>
+                        <el-input v-model="select_word" placeholder="智能检索岗位" class="handle-input mr10"></el-input>
                     </label>
-                    <el-button type="primary" icon="delete" class="handle-del mr10" @click="showAdd">新增角色</el-button>
-                    <el-button type="danger" icon="delete" class="handle-del mr10" @click="showDelete">删除角色</el-button>
+                    <el-button type="primary" icon="delete" class="handle-del mr10" @click="showAdd">新增岗位</el-button>
+                    <el-button type="danger" icon="delete" class="handle-del mr10" @click="showDelete">删除岗位</el-button>
                 </div>
                 <div class="">
                     <el-table class="tb-edit"
@@ -42,9 +42,9 @@
             </div>
 
             <!--新增弹出框 -->
-            <el-dialog title="新增角色" :visible.sync="addVisible" width="40%">
+            <el-dialog title="新增岗位" :visible.sync="addVisible" width="40%">
                 <el-form ref="form"  label-width="100px">
-                    <el-form-item label="角色名称">
+                    <el-form-item label="岗位名称">
                         <el-input v-model="name" style="width: 200px"></el-input>
                     </el-form-item>
                 </el-form>
@@ -55,9 +55,9 @@
             </el-dialog>
 
             <!-- 编辑弹出框 -->
-            <el-dialog title="编辑角色" :visible.sync="editVisible" width="40%">
+            <el-dialog title="编辑岗位" :visible.sync="editVisible" width="40%">
                 <el-form ref="form"  label-width="100px">
-                    <el-form-item label="角色名称">
+                    <el-form-item label="岗位名称">
                         <el-input v-model="name" style="width: 200px"></el-input>
                     </el-form-item>
                 </el-form>
@@ -68,7 +68,7 @@
             </el-dialog>
 
             <!-- 删除提示框 -->
-            <el-dialog title="删除角色" :visible.sync="delVisible" width="300px" center>
+            <el-dialog title="删除岗位" :visible.sync="delVisible" width="300px" center>
                 <div class="del-dialog-cnt">删除不可恢复，是否确定删除？</div>
                 <span slot="footer" class="dialog-footer">
                 <el-button @click="cancelDelete" style="height:30px;width:80px">取 消</el-button>
@@ -157,8 +157,8 @@
             loadingShowData() {
                 let that = this;
                 axios.all([
-                    axios.post(" " + url + "/sys/showTableTitle", {"name": "role"}),
-                    axios.post(" " + url + "/sysconfig/roleList")
+                    axios.post(" " + url + "/sys/showTableTitle", {"name": "post"}),
+                    axios.post(" " + url + "/sysconfig/postList")
                 ])
                     .then(axios.spread(function (title, table) {
                         that.cols = title.data;
@@ -208,7 +208,7 @@
             //进行新增
             doAdd() {
                 if (this.name ) {
-                    axios.post(" " + url + "/sysconfig/roleAdd",
+                    axios.post(" " + url + "/sysconfig/postAdd",
                         {
                             "name": this.name
                         }
@@ -237,7 +237,7 @@
             edit(row, column, cell, event) {
                 this.editVisible = true;
                 this.id = row.id;
-                axios.post(" " + url + "/sysconfig/roleDetail", {"id": this.id})
+                axios.post(" " + url + "/sysconfig/postDetail", {"id": this.id})
                     .then((res) => {
                         this.name = res.data.name;
                     })
@@ -249,7 +249,7 @@
             // 保存编辑
             saveEdit() {
                 if (this.name) {
-                    axios.post(" " + url + "/sysconfig/updateRole",
+                    axios.post(" " + url + "/sysconfig/updatePost",
                         {
                             "id": this.id,
                             "name": this.name,
@@ -308,7 +308,7 @@
 
             // 确定删除
             deleteRow() {
-                axios.post(" " + url + "/sysconfig/delRole",
+                axios.post(" " + url + "/sysconfig/delPost",
                     {
                         "ids": this.listData,
                     }

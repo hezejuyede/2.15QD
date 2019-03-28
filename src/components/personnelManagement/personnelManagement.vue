@@ -34,24 +34,24 @@
                         index: "1",
                         children: [
                             {
-                                label: '部门管理',
+                                label: '部门设定',
                                 index: "1-1",
                                 url: "/DepartmentManagement"
                             },
                             {
-                                label: '人员管理',
+                                label: '人员设定',
                                 index: "1-2",
                                 url: "/PersonnelSetting"
                             },
                             {
-                                label: '角色管理',
+                                label: '角色设定',
                                 index: "1-3",
                                 url: "/RoleManagement"
                             },
                             {
-                                label: '权限管理',
+                                label: '岗位设定',
                                 index: "1-4",
-                                url: "/PrivilegeManagement"
+                                url: "/PostManagement"
                             },
                         ]
                     },
