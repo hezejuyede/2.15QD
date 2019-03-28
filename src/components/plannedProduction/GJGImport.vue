@@ -224,9 +224,8 @@
         <!-- 失败信息返回框 -->
         <el-dialog title="导入失败信息提示" :visible.sync="errVisible" width="60%">
             <div class="container" style="height:450px;overflow:auto">
-                <div class="containerErr" >
-                    {{errList}}
-
+                <div class="containerErr"  v-for="(item,index) in errList">
+                    {{item}}
                 </div>
             </div>
         </el-dialog>
@@ -259,8 +258,8 @@
 
                 uploadVisible: false,
                 detailsVisible: false,
-                errVisible:true,
-                errList:"ffffffff",
+                errVisible:false,
+                errList:"",
 
 
                 xz: true,
@@ -384,7 +383,8 @@
             },
 
             //上传成功
-            uploadSuccess(response, file, fileList) {
+            uploadSuccess(response, file, fileList)
+            {
                 if (response.state === "-1") {
                     this.errList=response.message;
                     this.errVisible =true;
