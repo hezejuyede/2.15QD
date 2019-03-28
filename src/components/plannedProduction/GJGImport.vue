@@ -220,6 +220,16 @@
                 </div>
             </div>
         </el-dialog>
+
+        <!-- 失败信息返回框 -->
+        <el-dialog title="导入失败信息提示" :visible.sync="errVisible" width="60%">
+            <div class="container" style="height:450px;overflow:auto">
+                <div class="containerErr" >
+                    {{errList}}
+
+                </div>
+            </div>
+        </el-dialog>
     </div>
 </template>
 <script type="text/ecmascript-6">
@@ -249,6 +259,10 @@
 
                 uploadVisible: false,
                 detailsVisible: false,
+                errVisible:true,
+                errList:"ffffffff",
+
+
                 xz: true,
 
                 pc: "",
@@ -372,7 +386,8 @@
             //上传成功
             uploadSuccess(response, file, fileList) {
                 if (response.state === "-1") {
-                    this.$message.warning(response.message)
+                    this.errList=response.message;
+                    this.errVisible =true;
                     this.loading = false;
                     let that = this;
                     axios.all([
@@ -763,6 +778,11 @@
                 margin-left: 5%;
                 cursor: pointer;
             }
+        }
+
+        .containerErr{
+            width: 100%;
+            font-size: @font-size-large;
         }
     }
 
