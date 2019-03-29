@@ -352,7 +352,7 @@
                             that.deptOptions = dept.data;
                             that.roleOptions = role.data;
                             that.postOptions = post.data;
-                            this.loadingShowData(1, 1, 1)
+                            that.loadingShowData();
 
                         }));
 
