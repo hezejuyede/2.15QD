@@ -412,9 +412,9 @@
                 if (this.name && this.pwd && this.showname && this.code && this.post && this.dept && this.role) {
                     axios.post(" " + url + "/sysconfig/userAdd",
                         {
-                            "post": this.post,
-                            "dept": this.dept,
-                            "role": this.role,
+                            "postid": this.post,
+                            "deptid": this.dept,
+                            "roleid": this.role,
                             "name": this.name,
                             "pwd": this.pwd,
                             "showname": this.showname,
@@ -446,9 +446,9 @@
                 this.id = row.id;
                 axios.post(" " + url + "/sysconfig/personDetail", {"id": this.id})
                     .then((res) => {
-                        this.post = res.data.post;
-                        this.dept = res.data.dept;
-                        this.role = res.data.role;
+                        this.post = res.data.postid;
+                        this.dept = res.data.deptid;
+                        this.role = res.data.roleid;
                         this.name = res.data.name;
                         this.pwd = res.data.pwd;
                         this.showname = res.data.showname;
@@ -466,9 +466,9 @@
                         {
 
                             "id": this.id,
-                            "post": this.post,
-                            "dept": this.dept,
-                            "role": this.role,
+                            "postid": this.post,
+                            "deptid": this.dept,
+                            "roleid": this.role,
                             "pwd": this.pwd,
                             "showname": this.showname,
                             "code": this.code
