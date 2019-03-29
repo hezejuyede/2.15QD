@@ -215,10 +215,12 @@
                                     </el-select>
                                 </div>
                                 <div class="appendDivTemplate">
-                                    <el-input  type="number" v-model="domain.startTime" placeholder="开始时间"></el-input>
+                                    <span>开工（工作日偏移）</span>
+                                    <el-input  type="number" v-model="domain.startTime"  style="width: 80px"></el-input>
                                 </div>
                                 <div class="appendDivTemplate">
-                                    <el-input  type="number" v-model="domain.endTime" placeholder="结束时间"></el-input>
+                                    <span>完工（工作日偏移）</span>
+                                    <el-input  type="number" v-model="domain.endTime"  style="width: 80px"></el-input>
                                 </div>
                                 <div class="appendDivTemplate">
                                     <el-button
@@ -337,10 +339,12 @@
                                     </el-select>
                                 </div>
                                 <div class="appendDivTemplate">
-                                    <el-input v-model="domain.startTime" placeholder="开始时间"></el-input>
+                                    <span>开工（工作日偏移）</span>
+                                    <el-input v-model="domain.startTime" style="width: 80px"></el-input>
                                 </div>
                                 <div class="appendDivTemplate">
-                                    <el-input v-model="domain.endTime" placeholder="结束时间"></el-input>
+                                    <span>完工（工作日偏移）</span>
+                                    <el-input v-model="domain.endTime" placeholder="结束时间" style="width: 80px"></el-input>
                                 </div>
                                 <div class="appendDivTemplate">
                                     <el-button
