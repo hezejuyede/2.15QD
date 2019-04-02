@@ -8,14 +8,14 @@
         </div>
         <div class="productionContent">
             <div class="productionContentTab">
-                <div class="batchTab">
+                <div class="batchTab1">
                     <el-select
                         v-model="batch"
                         clearable
                         filterable
                         allow-create
                         default-first-option
-                        placeholder="请输入或者选择批次">
+                        placeholder="批次">
                         <el-option
                             v-for="item in batchOptions"
                             :key="item.id"
@@ -25,16 +25,16 @@
                     </el-select>
                 </div>
                 <div class="batchTab">
-                    <el-input v-model="ch" placeholder="请输入船号"></el-input>
+                    <el-input v-model="ch" placeholder="船号" style="width: 100px"></el-input>
                 </div>
                 <div class="batchTab">
-                    <el-input v-model="ygh" placeholder="请输入一贯号"></el-input>
+                    <el-input v-model="ygh" placeholder="一贯号" style="width: 100px"></el-input>
                 </div>
                 <div class="batchTab">
-                    <el-input v-model="code" placeholder="请输入CODE号"></el-input>
+                    <el-input v-model="code" placeholder="CODE号" style="width: 100px"></el-input>
                 </div>
                 <div class="batchTab">
-                    <el-input v-model="pie" placeholder="请输入PIE"></el-input>
+                    <el-input v-model="pie" placeholder="PIE" style="width: 100px"></el-input>
                 </div>
                 <div class="operationTab">
                     <button   @click="doSearch">查询</button>
@@ -48,6 +48,7 @@
                 <div class="operationTab">
                     <button   @click="editRoute">修改工艺路线</button>
                 </div>
+                <div class="operationTabRight"></div>
             </div>
             <div class="productionContentTable">
                 <el-table
@@ -608,16 +609,22 @@
                 height: 100px;
                 display: flex;
                 border-bottom: 1px solid @color-background-d;
-                .batchTab{
-                    flex: 1;
+                .batchTab1{
+                    flex:1;
                     display: flex;
                     align-items: center;
                     justify-content: center;
                     margin-left: 1%;
-
+                }
+                .batchTab{
+                    flex: 0.5;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    margin-left: 1%;
                 }
                 .operationTab {
-                    flex: 0.7;
+                    flex: 0.8;
                     display: flex;
                     align-items: center;
                     justify-content: center;
@@ -635,10 +642,12 @@
                         margin-right: 10px;
                     }
                 }
+                .operationTabRight{
+                    flex: 2;
+                }
             }
             .productionContentTable{
                 padding-top: 10px;
-
             }
         }
     }
