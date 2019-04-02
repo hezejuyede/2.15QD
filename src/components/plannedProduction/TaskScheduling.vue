@@ -45,9 +45,9 @@
                 <div class="operationTab">
                     <button   @click="editYxj">修改优先级</button>
                 </div>
-                <div class="operationTab">
+               <!-- <div class="operationTab">
                     <button   @click="editRoute">修改工艺路线</button>
-                </div>
+                </div>-->
                 <div class="operationTabRight"></div>
             </div>
             <div class="productionContentTable">
@@ -637,7 +637,7 @@
                         border-radius: 10%;
                         background-color: @color-blue;
                         color: @color-white;
-                        font-size: 16px;
+                        font-size: 12px;
                         margin-left: 10px;
                         margin-right: 10px;
                     }
