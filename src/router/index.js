@@ -25,6 +25,11 @@ import ImportDataQuery from '../components/plannedProduction/ImportDataQuery'
 
 //工序管理
 import WorkingProcedure from '../components/plannedProduction/WorkingProcedure'
+
+//工位负荷监测
+import LoadMonitoring from '../components/plannedProduction/LoadMonitoring'
+
+
 //工艺路线管理路由
 import ProcessRoute from '../components/plannedProduction/ProcessRoute'
 //工作日历路由
@@ -164,6 +169,11 @@ export default new Router({
                             path: '/WorkingProcedure',
                             component: WorkingProcedure,
                             meta: {title: '工序管理'}
+                        },
+                        {
+                            path: '/LoadMonitoring',
+                            component: LoadMonitoring,
+                            meta: {title: '工位负荷监测'}
                         },
                         {
                             path: '/ProcessRoute',

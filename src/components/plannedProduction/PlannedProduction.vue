@@ -55,11 +55,11 @@
                                 index: "1-4",
                                 url: "/ShiftManagement"
                             },
-                           /* {
-                                label: '加工能力',
+                            {
+                                label: '工位负荷监测',
                                 index: "1-5",
-                                url: "/404"
-                            }*/
+                                url: "/LoadMonitoring"
+                            }
                         ]
                     },
                     {
