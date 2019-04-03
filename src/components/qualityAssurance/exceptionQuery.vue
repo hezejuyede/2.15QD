@@ -14,11 +14,12 @@
                         <span>:</span>
                         <el-select
                             v-model="pc"
+                            style="width: 150px;"
                             clearable
                             filterable
                             allow-create
                             default-first-option
-                            placeholder="请输入或者选择批次">
+                            placeholder="批次">
                             <el-option
                                 v-for="item in pcOptions"
                                 :key="item.id"
@@ -34,11 +35,12 @@
                         <span>:</span>
                         <el-select
                             v-model="gxType"
+                            style="width: 150px;"
                             clearable
                             filterable
                             allow-create
                             default-first-option
-                            placeholder="请选择工序">
+                            placeholder="工序">
                             <el-option
                                 v-for="item in gxTypeOptions"
                                 :key="item.id"
@@ -54,11 +56,12 @@
                         <span>:</span>
                         <el-select
                             v-model="ycType"
+                            style="width: 150px;"
                             clearable
                             filterable
                             allow-create
                             default-first-option
-                            placeholder="请选择异常类型">
+                            placeholder="异常类型">
                             <el-option
                                 v-for="item in ycTypeOptions"
                                 :key="item.indexno"
@@ -75,11 +78,12 @@
                         <span>:</span>
                         <el-select
                             v-model="gzType"
+                            style="width: 150px;"
                             clearable
                             filterable
                             allow-create
                             default-first-option
-                            placeholder="选择当前管状态">
+                            placeholder="当前管状态">
                             <el-option
                                 v-for="item in gzTypeOptions"
                                 :key="item.indexno"
@@ -97,7 +101,7 @@
             <div class="exceptionQueryTable">
                 <el-table
                     :data="tableData"
-                    :header-cell-style="{background:'#A1D0FC',color:' rgba(0, 0, 0, 0.8)',fontSize:'20px'}"
+                    :header-cell-style="{background:'#A1D0FC',color:' rgba(0, 0, 0, 0.8)',fontSize:'18px'}"
                     border
                     height="400"
                     @row-click="clickTable"

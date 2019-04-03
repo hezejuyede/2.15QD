@@ -313,12 +313,17 @@
             //选择那个一个
             selectList(val) {
                 if (val.length) {
+                    this.state = val[0].status;
+                    this.yxj = val[0].level;
                     let data = [];
                     for (let i = 0; i < val.length; i++) {
                         let a = val[i].id;
                         data.push(a)
                     }
                     this.listData = data;
+                }
+                else {
+                    this.listData=[];
                 }
             },
 
@@ -345,7 +350,6 @@
             editState() {
                 if (this.listData.length) {
                     this.editStateVisible = true;
-                    this.state =""
                 }
                 else {
                     this.message = "请勾选要修改的管子";
@@ -392,7 +396,7 @@
             editYxj() {
                 if (this.listData.length) {
                     this.editYxjVisible = true;
-                    this.yxj = "";
+
 
                 }
                 else {
