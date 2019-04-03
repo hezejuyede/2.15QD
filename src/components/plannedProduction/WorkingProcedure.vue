@@ -90,6 +90,12 @@
                     <el-form-item label="加工能力">
                         <el-input  type="number" v-model="jgnl"></el-input>
                     </el-form-item>
+                    <el-form-item label="负荷上限">
+                        <el-input  type="number" v-model="shangxian"></el-input>
+                    </el-form-item>
+                    <el-form-item label="负荷下限">
+                        <el-input  type="number" v-model="xiaxian"></el-input>
+                    </el-form-item>
 
                 </el-form>
                 <span slot="footer" class="dialog-footer">
@@ -131,7 +137,12 @@
                     <el-form-item label="加工能力">
                         <el-input  type="number" v-model="jgnl"></el-input>
                     </el-form-item>
-
+                    <el-form-item label="负荷上限">
+                        <el-input  type="number" v-model="shangxian"></el-input>
+                    </el-form-item>
+                    <el-form-item label="负荷下限">
+                        <el-input  type="number" v-model="xiaxian"></el-input>
+                    </el-form-item>
                 </el-form>
                 <span slot="footer" class="dialog-footer">
                 <el-button @click="editVisible = false" style="height:30px;width:80px">取 消</el-button>
@@ -186,6 +197,8 @@
                 personnum: "",
                 jgnl:"",
                 line: '',
+                shangxian:"",
+                xiaxian:"",
                 lineOptions:[]
 
             }
@@ -221,7 +234,7 @@
                     this.$router.push("/")
                 }
                 else {
-                   this.loading();
+                    this.loading();
                 }
             },
 
@@ -236,7 +249,7 @@
                     this.listData = data;
                 }
                 else {
-                    this.listData=[];
+                    this.listData = [];
                 }
             },
 
@@ -253,6 +266,9 @@
                         this.jgnl = res.data.jiagongnengli;
                         this.line = res.data.line;
                         this.code = res.data.code;
+                        this.shangxian = res.data.shangxian;
+                        this.xiaxian = res.data.xiaxian;
+
                     })
                     .catch((err) => {
                         console.log(err)
@@ -280,16 +296,18 @@
 
             // 保存编辑
             saveEdit() {
-                if (this.name && this.code && this.context &&this.personnum&&this.line) {
+                if (this.name && this.code && this.context && this.personnum && this.line) {
                     axios.post(" " + url + "/sysconfig/gongxuUpdate",
                         {
-                            "id":this.id,
+                            "id": this.id,
                             "name": this.name,
                             "code": this.code,
                             "context": this.context,
                             "personnum": this.personnum,
                             "line": this.line,
-                            "jiagongnengli":this.jgnl
+                            "jiagongnengli": this.jgnl,
+                            "shangxian": this.shangxian,
+                            "xiaxian": this.xiaxian
                         }
                     )
                         .then((res) => {
@@ -298,8 +316,8 @@
                                 this.$message.success(`修改成功`);
                                 let that = this;
                                 axios.all([
-                                    axios.post(" "+ url +"/sys/showTableTitle",{"name":"gongxu"}),
-                                    axios.post(" "+ url +"/sysconfig/getGongxuList",{"id":this.line}),
+                                    axios.post(" " + url + "/sys/showTableTitle", {"name": "gongxu"}),
+                                    axios.post(" " + url + "/sysconfig/getGongxuList", {"id": this.line}),
                                 ])
                                     .then(axios.spread(function (title, table) {
                                         that.cols = title.data;
@@ -343,15 +361,17 @@
             },
 
             //显示新增工序
-            addWorkStation(){
+            addWorkStation() {
 
                 if (this.line) {
                     this.addVisible = true;
-                    this.name="";
-                    this.code="";
-                    this.context="";
-                    this.personnum="";
-                    this.jgnl="";
+                    this.name = "";
+                    this.code = "";
+                    this.context = "";
+                    this.personnum = "";
+                    this.jgnl = "";
+                    this.shangxian = "";
+                    this.xiaxian = "";
 
                 }
                 else {
@@ -370,7 +390,7 @@
 
             //新增工序
             doAddWorkStation() {
-                if (this.name && this.code && this.context &&this.personnum&&this.line) {
+                if (this.name && this.code && this.context && this.personnum && this.line) {
 
 
                     axios.post(" " + url + "/sysconfig/gongxuAdd",
@@ -380,7 +400,9 @@
                             "context": this.context,
                             "personnum": this.personnum,
                             "line": this.line,
-                            "jiagongnengli":this.jgnl,
+                            "jiagongnengli": this.jgnl,
+                            "shangxian": this.shangxian,
+                            "xiaxian": this.xiaxian
                         }
                     )
                         .then((res) => {
@@ -389,8 +411,8 @@
                                 this.addVisible = false;
                                 let that = this;
                                 axios.all([
-                                    axios.post(" "+ url +"/sys/showTableTitle",{"name":"gongxu"}),
-                                    axios.post(" "+ url +"/sysconfig/getGongxuList",{"id":this.line}),
+                                    axios.post(" " + url + "/sys/showTableTitle", {"name": "gongxu"}),
+                                    axios.post(" " + url + "/sysconfig/getGongxuList", {"id": this.line}),
                                 ])
                                     .then(axios.spread(function (title, table) {
                                         that.cols = title.data;
@@ -419,7 +441,7 @@
                     axios.post(" " + url + "/sysconfig/getGongxuList", {"id": this.line})
                 ])
                     .then(axios.spread(function (title, table) {
-                        if(table.data==="-1"){
+                        if (table.data === "-1") {
                             that.cols = title.data;
                             that.tableData = [];
                         }
@@ -431,18 +453,18 @@
             },
 
             //页面初始加载
-            loading(){
+            loading() {
                 let that = this;
                 axios.all([
-                    axios.post(" "+ url +"/sys/showTableTitle",{"name":"gongxu"}),
-                    axios.post(" "+ url +"/sysconfig/getGongxuList",{"id":"1"}),
+                    axios.post(" " + url + "/sys/showTableTitle", {"name": "gongxu"}),
+                    axios.post(" " + url + "/sysconfig/getGongxuList", {"id": "1"}),
                     axios.post(" " + url + "/sys/dictionaryList", {"id": "9"}),
                 ])
-                    .then(axios.spread(function (title, table,line) {
+                    .then(axios.spread(function (title, table, line) {
                         that.cols = title.data;
                         that.tableData = table.data;
-                        that.lineOptions =line.data;
-                        that.line=line.data[0].name
+                        that.lineOptions = line.data;
+                        that.line = line.data[0].name
                     }));
             }
 
