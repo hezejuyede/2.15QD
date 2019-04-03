@@ -253,7 +253,6 @@
                 }
             },
 
-
             //双击点击行内编辑
             editWorkStation(row, column, cell, event) {
                 this.editVisible = true;
