@@ -39,6 +39,8 @@ import ResourceModel from '../components/plannedProduction/ResourceModel'
 //班次管理
 import ShiftManagement from '../components/plannedProduction/ShiftManagement'
 
+//生产调度日志
+import ProductionSchedulingLog  from '../components/plannedProduction/ProductionSchedulingLog';
 
 //排产路由
 import Production from '../components/plannedProduction/Production'
@@ -80,6 +82,8 @@ import SecurityManagement from '../components/securityManagement/securityManagem
 
 
 import PersonnelManagement from '../components/personnelManagement/personnelManagement';
+
+
 
 
 //质量管理
@@ -173,6 +177,11 @@ export default new Router({
                         {
                             path: '/LoadMonitoring',
                             component: LoadMonitoring,
+                            meta: {title: '工位负荷监测'}
+                        },
+                        {
+                            path: '/ProductionSchedulingLog',
+                            component: ProductionSchedulingLog,
                             meta: {title: '工位负荷监测'}
                         },
                         {

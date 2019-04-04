@@ -128,11 +128,11 @@
                                 index: "3-1",
                                 url: "/TaskScheduling"
                             },
-                         /*   {
-                                label: '工位监测',
-                                index: "5-3",
-                                url: "/404"
-                            }*/
+                            {
+                                label: '生产调度日志',
+                                index: "3-2",
+                                url: "/ProductionSchedulingLog"
+                            }
                         ]
                     },
                    /* {
