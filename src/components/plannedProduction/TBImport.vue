@@ -17,10 +17,29 @@
                 <div class="tabBottom">
                     <div class="tabBottomTemplate" v-if="this.num===0">
                         <div class="handle-box">
-                            <label style="margin-right: 10px">
+                            <label style="margin-right: 5px">
                                 <span>智能检索</span>
                                 <span>:</span>
                                 <el-input v-model="select_word"  style="width: 150px" placeholder="智能检索"></el-input>
+                            </label>
+                            <label style="margin-right: 10px">
+                                <span>批次</span>
+                                <span>:</span>
+                                <el-select
+                                    v-model="batch"
+                                    style="width: 150px"
+                                    clearable
+                                    filterable
+                                    allow-create
+                                    default-first-option
+                                    placeholder="优先级">
+                                    <el-option
+                                        v-for="item in batchOptions"
+                                        :key="item.id"
+                                        :label="item.name"
+                                        :value="item.id">
+                                    </el-option>
+                                </el-select>
                             </label>
                             <label style="margin-right: 10px">
                                 <span>区划</span>
@@ -289,8 +308,8 @@
                     {"name":"较急","id":1},
                     {"name":"紧急","id":2},
                 ],
-
-
+                batch:"",
+                batchOptions:[],
 
 
                 code:"",
@@ -306,7 +325,7 @@
                 jieshouriqi:"",
                 jiaofuriqi:"",
                 beizhu:"",
-                batch:""
+
             }
         },
         components: {Modal},
@@ -348,6 +367,21 @@
                         axios.post(" " + url + "/sys/showTableTitle", {"name": "tablist"})
                     ])
                         .then(axios.spread(function (batchOptions, list) {
+                            that.batchOptions =batchOptions.data
+                            if(that.num ===0){
+                                let that = this;
+                                axios.all([
+                                    axios.post(" " + url + "/sys/showTableTitle", {"name": "jgxqan"}),
+                                    axios.post(" " + url + "/padShow/buttonList", {"id": data})
+                                ])
+                                    .then(axios.spread(function (title, table) {
+                                        that.cols = title.data;
+                                        that.tableData = table.data.data;
+                                    }));
+
+                            }
+
+
 
                         }));
                 }
