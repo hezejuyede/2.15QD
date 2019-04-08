@@ -293,8 +293,6 @@
                 }
             }
             .importDataQueryContentTable{
-                padding-top: 10px;
-
                 .tabTop{
                     display: flex;
                     height: 50px;

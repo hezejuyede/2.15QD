@@ -73,15 +73,15 @@
                                 url: "/ShipType"
                             },
                             {
-                                label: '管加工数据导入',
+                                label: '管加工数据导入(正常)',
                                 index: "2-2",
                                 url: "/InformationImport"
                             },
-                            /*{
-                                label: '特别流程管数据导入',
+                            {
+                                label: '管加工数据导入(特别)',
                                 index: "2-3",
                                 url: "/TBImport"
-                            },*/
+                            },
                             {
                                 label: '导入数据查询',
                                 index: "2-4",
