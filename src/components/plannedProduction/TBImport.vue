@@ -20,7 +20,7 @@
                             <label style="margin-right: 5px">
                                 <span>智能检索</span>
                                 <span>:</span>
-                                <el-input v-model="select_word"  style="width: 150px" placeholder="智能检索"></el-input>
+                                <el-input v-model="select_word"  style="width: 100px" placeholder="智能检索"></el-input>
                             </label>
                             <label style="margin-right: 10px">
                                 <span>批次</span>
@@ -44,17 +44,22 @@
                             <label style="margin-right: 10px">
                                 <span>区划</span>
                                 <span>:</span>
-                                <el-input v-model="quHua"  style="width: 150px" placeholder="区划"></el-input>
+                                <el-input v-model="quHua"  style="width: 100px" placeholder="区划"></el-input>
                             </label>
                             <label style="margin-right: 10px">
                                 <span>系统号</span>
                                 <span>:</span>
-                                <el-input v-model="systemNumber"  style="width: 150px" placeholder="系统号"></el-input>
+                                <el-input v-model="systemNumber"  style="width: 100px" placeholder="系统号"></el-input>
                             </label>
                             <label style="margin-right: 10px">
-                                <span>智能检索</span>
+                                <span>一贯号</span>
                                 <span>:</span>
-                                <el-input v-model="codeNumber"  style="width: 150px" placeholder="code"></el-input>
+                                <el-input v-model="yiguanhao"  style="width: 100px" placeholder="code"></el-input>
+                            </label>
+                            <label style="margin-right: 10px">
+                                <span>code号</span>
+                                <span>:</span>
+                                <el-input v-model="codeNumber"  style="width: 100px" placeholder="code"></el-input>
                             </label>
                             <el-button type="primary"  @click="showAdd(num)">新增</el-button>
                             <el-button type="success"  @click="doSearch(num)">查询</el-button>
@@ -332,6 +337,7 @@
         mounted() {
 
 
+
         },
         computed: {
             //模糊检索
@@ -368,18 +374,7 @@
                     ])
                         .then(axios.spread(function (batchOptions, list) {
                             that.batchOptions =batchOptions.data
-                            if(that.num ===0){
-                                let that = this;
-                                axios.all([
-                                    axios.post(" " + url + "/sys/showTableTitle", {"name": "jgxqan"}),
-                                    axios.post(" " + url + "/padShow/buttonList", {"id": data})
-                                ])
-                                    .then(axios.spread(function (title, table) {
-                                        that.cols = title.data;
-                                        that.tableData = table.data.data;
-                                    }));
-
-                            }
+                            that.getList()
 
 
 
@@ -391,6 +386,30 @@
             goToNavBar(index) {
                 this.num = index;
             },
+
+            //请求列表
+            getList(){
+                if (this.num === 0) {
+                    let that = this;
+                    axios.all([
+                        axios.post(" " + url + "/sys/showTableTitle", {"name": "jgxqan"}),
+                        axios.post(" " + url + "/teshu/helongList",{
+                            "pici":"",
+                            "quhua":"",
+                            "code":"",
+                            "yiguanhao":"",
+                            "xitonghao":""})
+                    ])
+                        .then(axios.spread(function (title, table) {
+                            that.cols = title.data;
+                            that.tableData = table.data.data;
+                        }));
+
+                }
+
+            },
+
+
 
             //显示新增
             showAdd(index) {
