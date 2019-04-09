@@ -70,7 +70,7 @@
                                 :data="tables"
                                 :header-cell-style="{background:'#A1D0FC',color:'rgba(0, 0, 0, 0.8)',fontSize:'12px'}"
                                 border
-                                height="400"
+                                height="380"
                                 highlight-current-row
                                 @row-dblclick="showEdit"
                                 style="width: 98%;margin: auto">
@@ -100,7 +100,7 @@
                                     filterable
                                     allow-create
                                     default-first-option
-                                    placeholder="优先级">
+                                    placeholder="批次">
                                     <el-option
                                         v-for="item in batchOptions"
                                         :key="item.id"
@@ -114,15 +114,73 @@
                             <el-button type="danger"  @click="showDelete()">删除</el-button>
                         </div>
                         <div class="">
+                            <el-table class="tb-edit"
+                                      :data="tables"
+                                      :header-cell-style="{background:'#A1D0FC',color:'rgba(0, 0, 0, 0.8)',fontSize:'12px'}"
+                                      border
+                                      height="380"
+                                      @select-all="selectAll"
+                                      @select="selectList"
+                                      @row-dblclick="showEdit"
+                                      highlight-current-row
+                                      style="width: 98%;margin: auto">
+                                <el-table-column
+                                    type="selection"
+                                    width="30">
+                                </el-table-column>
+                                <template v-for="(col ,index) in cols">
+                                    <el-table-column align="center" :prop="col.prop" :label="col.label"></el-table-column>
+                                </template>
+                            </el-table>
+                        </div>
+                    </div>
+                    <div class="tabBottomTemplate" v-if="this.num===3">
+                        <div class="handle-box">
+                            <label style="margin-right: 10px">
+                                <span>智能检索</span>
+                                <span>:</span>
+                                <el-input v-model="select_word"  style="width: 200px" placeholder="智能检索"></el-input>
+                            </label>
+                            <label style="margin-right:10px">
+                                <span>补做管类型</span>
+                                <span>:</span>
+                                <el-select
+                                    v-model="pipeType"
+                                    style="width: 150px"
+                                    clearable
+                                    filterable
+                                    allow-create
+                                    default-first-option
+                                    placeholder="补做管类型">
+                                    <el-option
+                                        v-for="item in pipeTypeOptions"
+                                        :key="item.id"
+                                        :label="item.name"
+                                        :value="item.id">
+                                    </el-option>
+                                </el-select>
+                            </label>
+                            <label style="margin-right: 10px">
+                                <span>一贯号</span>
+                                <span>:</span>
+                                <el-input v-model="yiguanhao"  style="width: 120px" placeholder="一贯号"></el-input>
+                            </label>
+                            <label style="margin-right:10px">
+                                <span>code号</span>
+                                <span>:</span>
+                                <el-input v-model="codeNumber"  style="width: 120px" placeholder="code"></el-input>
+                            </label>
+                            <el-button type="success"  @click="doSearch(num)">查询</el-button>
+                            <el-button type="primary"  @click="showAdd(num)">新增</el-button>
+                        </div>
+                        <div class="">
                             <el-table
                                 class="tb-edit"
                                 :data="tables"
                                 :header-cell-style="{background:'#A1D0FC',color:'rgba(0, 0, 0, 0.8)',fontSize:'12px'}"
                                 border
-                                height="400"
+                                height="380"
                                 highlight-current-row
-                                @select-all="selectAll"
-                                @select="selectList"
                                 @row-dblclick="showEdit"
                                 style="width: 98%;margin: auto">
                                 <template v-for="(col ,index) in cols">
@@ -131,19 +189,13 @@
                             </el-table>
                         </div>
                     </div>
-                    <div class="tabBottomTemplate" v-if="this.num===3">
-                       3
-                    </div>
-                    <div class="tabBottomTemplate" v-if="this.num===4">
-                       4
-                    </div>
                 </div>
             </div>
         </div>
 
 
         <!--新增弹出框 -->
-        <el-dialog title="新增" :visible.sync="addVisible" width="40%">
+        <el-dialog title="新增" :visible.sync="addVisible" width="40%" @close='closeDialog' >
             <div class="" v-if="this.num===0" style="height: 90%;overflow-y: auto">
                 <el-form ref="form" label-width="100px">
                     <el-form-item label="数据查询">
@@ -160,7 +212,7 @@
                         </div>
                     </el-form-item>
                     <el-form-item label="查看一品图">
-                        <el-button type="danger" @click="seeYpt" style="width: 150px;height: 35px">查看一品图
+                        <el-button type="danger" @click="seeYpt" style="width: 150px;height: 35px" >查看一品图
                         </el-button>
                     </el-form-item>
                     <el-form-item label="优先级">
@@ -180,83 +232,212 @@
                         </el-select>
                     </el-form-item>
                     <el-form-item label="CODE">
-                        <el-input v-model="code" style="width: 200px">CODE</el-input>
+                        <el-input v-model="code" style="width: 200px"  placeholder="CODE"></el-input>
                     </el-form-item>
                     <el-form-item label="一贯号">
-                        <el-input v-model="yiguanhao" style="width: 200px">一贯号</el-input>
+                        <el-input v-model="yiguanhao" style="width: 200px" placeholder="一贯号"></el-input>
                     </el-form-item>
                     <el-form-item label="涂装番号">
-                        <el-input v-model="tuzhuangfanhao" style="width: 200px">涂装番号</el-input>
+                        <el-input v-model="tuzhuangfanhao" style="width: 200px" placeholder="涂装番号"></el-input>
                     </el-form-item>
                     <el-form-item label="水试">
-                        <el-input v-model="shuishi" style="width: 200px">水试</el-input>
+                        <el-input v-model="shuishi" style="width: 200px" placeholder="水试"></el-input>
                     </el-form-item>
                     <el-form-item label="处理方式">
-                        <el-input v-model="chulifangshi" style="width: 200px">水试</el-input>
+                        <el-input v-model="chulifangshi" style="width: 200px" placeholder="处理方式"></el-input>
                     </el-form-item>
                     <el-form-item label="管种">
-                        <el-input v-model="guanzhong" style="width: 200px">水试</el-input>
+                        <el-input v-model="guanzhong" style="width: 200px" placeholder="管种"></el-input>
                     </el-form-item>
                     <el-form-item label="船号">
-                        <el-input v-model="chuanhao" style="width: 200px"> 船号</el-input>
+                        <el-input v-model="chuanhao" style="width: 200px" placeholder="船号"> </el-input>
                     </el-form-item>
                     <el-form-item label="批次">
-                        <el-input v-model="batch" style="width: 200px"> 批次</el-input>
+                        <el-select
+                            v-model="batch"
+                            style="width: 200px"
+                            clearable
+                            filterable
+                            allow-create
+                            default-first-option
+                            placeholder="批次">
+                            <el-option
+                                v-for="item in batchOptions"
+                                :key="item.id"
+                                :label="item.name"
+                                :value="item.id">
+                            </el-option>
+                        </el-select>
                     </el-form-item>
                     <el-form-item label="口径">
-                        <el-input v-model="koujing" style="width: 200px">口径</el-input>
+                        <el-input v-model="koujing" style="width: 200px" placeholder="口径"></el-input>
                     </el-form-item>
                     <el-form-item label="联系人">
-                        <el-input v-model="lianxiren" style="width: 200px">联系人</el-input>
+                        <el-input v-model="lianxiren" style="width: 200px" placeholder="联系人"></el-input>
                     </el-form-item>
-                    <el-form-item label="接受日期">
-                        <el-input v-model="jieshouriqi" style="width: 200px">接受日期</el-input>
+                    <el-form-item label="接收日期">
+                        <el-date-picker
+                            v-model="jieshouriqi"
+                            align="right"
+                            type="date"
+                            style="width: 200px"
+                            placeholder="接收日期"
+                            value-format="yyyy-MM-dd">
+                        </el-date-picker>
                     </el-form-item>
                     <el-form-item label="交付日期">
-                        <el-input v-model="jiaofuriqi" style="width: 200px">交付日期</el-input>
+                        <el-date-picker
+                            v-model="jiaofuriqi"
+                            align="right"
+                            type="date"
+                            style="width: 200px"
+                            placeholder="交付日期"
+                            value-format="yyyy-MM-dd">
+                        </el-date-picker>
                     </el-form-item>
                     <el-form-item label="备注">
-                        <el-input v-model="beizhu" style="width: 200px">备注</el-input>
+                        <el-input v-model="beizhu" style="width: 200px" placeholder="备注"></el-input>
                     </el-form-item>
                 </el-form>
             </div>
             <div class="" v-if="this.num===2" style="height: 90%;overflow-y: auto">
                 <el-form ref="form" label-width="100px">
                     <el-form-item label="船号">
-                        <el-input v-model="chuanhao" style="width: 200px"> 船号</el-input>
+                        <el-input v-model="chuanhao" style="width: 200px" placeholder="船号"></el-input>
                     </el-form-item>
                     <el-form-item label="单元名称">
-                        <el-input v-model="danyuanmingcheng" style="width: 200px">CODE</el-input>
+                        <el-input v-model="danyuanmingcheng" style="width: 200px" placeholder="单元名称"></el-input>
                     </el-form-item>
-                    <el-form-item label="材质">
-                        <el-input v-model="caizhi" style="width: 200px">一贯号</el-input>
+                    <el-form-item label="一贯号">
+                        <el-input v-model="caizhi" style="width: 200px" placeholder="一贯号"></el-input>
                     </el-form-item>
                     <el-form-item label="外径">
-                        <el-input v-model="waijing" style="width: 200px">涂装番号</el-input>
+                        <el-input v-model="waijing" style="width: 200px" placeholder="外径"></el-input>
                     </el-form-item>
                     <el-form-item label="壁厚">
-                        <el-input v-model="bihou" style="width: 200px">水试</el-input>
+                        <el-input v-model="bihou" style="width: 200px" placeholder="壁厚"></el-input>
                     </el-form-item>
                     <el-form-item label="根数">
-                        <el-input v-model="genshu" style="width: 200px">水试</el-input>
+                        <el-input v-model="genshu" style="width: 200px" placeholder="根数"></el-input>
                     </el-form-item>
                     <el-form-item label="长度">
-                        <el-input v-model="changdu" style="width: 200px">水试</el-input>
-                    </el-form-item>
-                    <el-form-item label="预定日">
-                        <el-input v-model="yudingri" style="width: 200px">联系人</el-input>
+                        <el-input v-model="changdu" style="width: 200px"  placeholder="长度"></el-input>
                     </el-form-item>
                     <el-form-item label="图纸">
-                        <el-input v-model="tuzhi" style="width: 200px">口径</el-input>
+                        <el-input v-model="tuzhi" style="width: 200px" placeholder="图纸"></el-input>
+                    </el-form-item>
+                    <el-form-item label="预定日">
+                        <el-date-picker
+                            v-model="yudingri"
+                            align="right"
+                            type="date"
+                            style="width: 200px"
+                            placeholder="交付日期"
+                            value-format="yyyy-MM-dd">
+                        </el-date-picker>
                     </el-form-item>
                     <el-form-item label="拿图日">
-                        <el-input v-model="naturi" style="width: 200px">联系人</el-input>
+                        <el-date-picker
+                            v-model="naturi"
+                            align="right"
+                            type="date"
+                            style="width: 200px"
+                            placeholder="交付日期"
+                            value-format="yyyy-MM-dd">
+                        </el-date-picker>
                     </el-form-item>
                     <el-form-item label="完成日">
-                        <el-input v-model="wanchengri" style="width: 200px">接受日期</el-input>
+                        <el-date-picker
+                            v-model="wanchengri"
+                            align="right"
+                            type="date"
+                            style="width: 200px"
+                            placeholder="交付日期"
+                            value-format="yyyy-MM-dd">
+                        </el-date-picker>
                     </el-form-item>
                     <el-form-item label="送出日">
-                        <el-input v-model="songchuri" style="width: 200px">交付日期</el-input>
+                        <el-date-picker
+                            v-model="songchuri"
+                            align="right"
+                            type="date"
+                            style="width: 200px"
+                            placeholder="交付日期"
+                            value-format="yyyy-MM-dd">
+                        </el-date-picker>
+                    </el-form-item>
+                </el-form>
+            </div>
+            <div class="" v-if="this.num===3" style="height: 90%;overflow-y: auto">
+                <el-form ref="form" label-width="100px">
+                    <el-form-item label="管类型">
+                        <el-select
+                            v-model="pipeType"
+                            style="width: 150px"
+                            clearable
+                            filterable
+                            allow-create
+                            default-first-option
+                            placeholder="补做管类型">
+                            <el-option
+                                v-for="item in pipeTypeOptions"
+                                :key="item.id"
+                                :label="item.name"
+                                :value="item.id">
+                            </el-option>
+                        </el-select>
+                    </el-form-item>
+                    <el-form-item label="批次">
+                        <el-select
+                            v-model="batch"
+                            style="width: 120px"
+                            clearable
+                            filterable
+                            allow-create
+                            default-first-option
+                            placeholder="批次">
+                            <el-option
+                                v-for="item in batchOptions"
+                                :key="item.id"
+                                :label="item.name"
+                                :value="item.id">
+                            </el-option>
+                        </el-select>
+                    </el-form-item>
+                    <el-form-item label="一贯号">
+                        <el-input v-model="yiguanhao" style="width: 200px"  placeholder="一贯号"></el-input>
+                    </el-form-item>
+                    <el-form-item label="code">
+                        <el-input v-model="code" style="width: 200px"  placeholder="code"></el-input>
+                    </el-form-item>
+                    <el-form-item label="申请人">
+                        <el-input v-model="shenqingren" style="width: 200px" placeholder="申请人"></el-input>
+                    </el-form-item>
+                    <el-form-item label="紧急程度">
+                        <el-select
+                            v-model="yxj"
+                            clearable
+                            filterable
+                            allow-create
+                            default-first-option
+                            placeholder="优先级">
+                            <el-option
+                                v-for="item in yxjOptions"
+                                :key="item.id"
+                                :label="item.name"
+                                :value="item.id">
+                            </el-option>
+                        </el-select>
+                    </el-form-item>
+                    <el-form-item label="申请时间">
+                        <el-date-picker
+                            v-model="shenqingshijian"
+                            align="right"
+                            type="date"
+                            style="width: 200px"
+                            placeholder="交付日期"
+                            value-format="yyyy-MM-dd">
+                        </el-date-picker>
                     </el-form-item>
                 </el-form>
             </div>
@@ -267,7 +448,7 @@
         </el-dialog>
 
         <!-- 编辑弹出框 -->
-        <el-dialog title="编辑按钮" :visible.sync="editVisible" width="40%">
+        <el-dialog title="编辑按钮" :visible.sync="editVisible" width="40%" @close='closeDialog' >
             <div class="" v-if="this.num===0" style="height: 90%;overflow-y: auto">
                 <el-form ref="form" label-width="100px">
                     <el-form-item label="数据查询">
@@ -284,7 +465,7 @@
                         </div>
                     </el-form-item>
                     <el-form-item label="查看一品图">
-                        <el-button type="danger" @click="seeYpt" style="width: 150px;height: 35px">查看一品图
+                        <el-button type="danger" @click="seeYpt" style="width: 150px;height: 35px" >查看一品图
                         </el-button>
                     </el-form-item>
                     <el-form-item label="优先级">
@@ -304,80 +485,212 @@
                         </el-select>
                     </el-form-item>
                     <el-form-item label="CODE">
-                        <el-input v-model="code" style="width: 200px">CODE</el-input>
+                        <el-input v-model="code" style="width: 200px"  placeholder="CODE"></el-input>
                     </el-form-item>
                     <el-form-item label="一贯号">
-                        <el-input v-model="yiguanhao" style="width: 200px">一贯号</el-input>
+                        <el-input v-model="yiguanhao" style="width: 200px" placeholder="一贯号"></el-input>
                     </el-form-item>
                     <el-form-item label="涂装番号">
-                        <el-input v-model="tuzhuangfanhao" style="width: 200px">涂装番号</el-input>
+                        <el-input v-model="tuzhuangfanhao" style="width: 200px" placeholder="涂装番号"></el-input>
                     </el-form-item>
                     <el-form-item label="水试">
-                        <el-input v-model="shuishi" style="width: 200px">水试</el-input>
+                        <el-input v-model="shuishi" style="width: 200px" placeholder="水试"></el-input>
                     </el-form-item>
                     <el-form-item label="处理方式">
-                        <el-input v-model="chulifangshi" style="width: 200px">水试</el-input>
+                        <el-input v-model="chulifangshi" style="width: 200px" placeholder="处理方式"></el-input>
                     </el-form-item>
                     <el-form-item label="管种">
-                        <el-input v-model="guanzhong" style="width: 200px">水试</el-input>
+                        <el-input v-model="guanzhong" style="width: 200px" placeholder="管种"></el-input>
                     </el-form-item>
                     <el-form-item label="船号">
-                        <el-input v-model="chuanhao" style="width: 200px"> 船号</el-input>
+                        <el-input v-model="chuanhao" style="width: 200px" placeholder="船号"> </el-input>
+                    </el-form-item>
+                    <el-form-item label="批次">
+                        <el-select
+                            v-model="batch"
+                            style="width: 200px"
+                            clearable
+                            filterable
+                            allow-create
+                            default-first-option
+                            placeholder="批次">
+                            <el-option
+                                v-for="item in batchOptions"
+                                :key="item.id"
+                                :label="item.name"
+                                :value="item.id">
+                            </el-option>
+                        </el-select>
                     </el-form-item>
                     <el-form-item label="口径">
-                        <el-input v-model="koujing" style="width: 200px">口径</el-input>
+                        <el-input v-model="koujing" style="width: 200px" placeholder="口径"></el-input>
                     </el-form-item>
                     <el-form-item label="联系人">
-                        <el-input v-model="lianxiren" style="width: 200px">联系人</el-input>
+                        <el-input v-model="lianxiren" style="width: 200px" placeholder="联系人"></el-input>
                     </el-form-item>
-                    <el-form-item label="接受日期">
-                        <el-input v-model="jieshouriqi" style="width: 200px">接受日期</el-input>
+                    <el-form-item label="接收日期">
+                        <el-date-picker
+                            v-model="jieshouriqi"
+                            align="right"
+                            type="date"
+                            style="width: 200px"
+                            placeholder="接收日期"
+                            value-format="yyyy-MM-dd">
+                        </el-date-picker>
                     </el-form-item>
                     <el-form-item label="交付日期">
-                        <el-input v-model="jiaofuriqi" style="width: 200px">交付日期</el-input>
+                        <el-date-picker
+                            v-model="jiaofuriqi"
+                            align="right"
+                            type="date"
+                            style="width: 200px"
+                            placeholder="交付日期"
+                            value-format="yyyy-MM-dd">
+                        </el-date-picker>
                     </el-form-item>
                     <el-form-item label="备注">
-                        <el-input v-model="beizhu" style="width: 200px">备注</el-input>
+                        <el-input v-model="beizhu" style="width: 200px" placeholder="备注"></el-input>
                     </el-form-item>
                 </el-form>
             </div>
             <div class="" v-if="this.num===2" style="height: 90%;overflow-y: auto">
                 <el-form ref="form" label-width="100px">
                     <el-form-item label="船号">
-                        <el-input v-model="chuanhao" style="width: 200px"> 船号</el-input>
+                        <el-input v-model="chuanhao" style="width: 200px" placeholder="船号"></el-input>
                     </el-form-item>
                     <el-form-item label="单元名称">
-                        <el-input v-model="danyuanmingcheng" style="width: 200px">CODE</el-input>
+                        <el-input v-model="danyuanmingcheng" style="width: 200px" placeholder="单元名称"></el-input>
                     </el-form-item>
-                    <el-form-item label="材质">
-                        <el-input v-model="caizhi" style="width: 200px">一贯号</el-input>
+                    <el-form-item label="一贯号">
+                        <el-input v-model="caizhi" style="width: 200px" placeholder="一贯号"></el-input>
                     </el-form-item>
                     <el-form-item label="外径">
-                        <el-input v-model="waijing" style="width: 200px">涂装番号</el-input>
+                        <el-input v-model="waijing" style="width: 200px" placeholder="外径"></el-input>
                     </el-form-item>
                     <el-form-item label="壁厚">
-                        <el-input v-model="bihou" style="width: 200px">水试</el-input>
+                        <el-input v-model="bihou" style="width: 200px" placeholder="壁厚"></el-input>
                     </el-form-item>
                     <el-form-item label="根数">
-                        <el-input v-model="genshu" style="width: 200px">水试</el-input>
+                        <el-input v-model="genshu" style="width: 200px" placeholder="根数"></el-input>
                     </el-form-item>
                     <el-form-item label="长度">
-                        <el-input v-model="changdu" style="width: 200px">水试</el-input>
-                    </el-form-item>
-                    <el-form-item label="预定日">
-                        <el-input v-model="yudingri" style="width: 200px">联系人</el-input>
+                        <el-input v-model="changdu" style="width: 200px"  placeholder="长度"></el-input>
                     </el-form-item>
                     <el-form-item label="图纸">
-                        <el-input v-model="tuzhi" style="width: 200px">口径</el-input>
+                        <el-input v-model="tuzhi" style="width: 200px" placeholder="图纸"></el-input>
+                    </el-form-item>
+                    <el-form-item label="预定日">
+                        <el-date-picker
+                            v-model="yudingri"
+                            align="right"
+                            type="date"
+                            style="width: 200px"
+                            placeholder="交付日期"
+                            value-format="yyyy-MM-dd">
+                        </el-date-picker>
                     </el-form-item>
                     <el-form-item label="拿图日">
-                        <el-input v-model="naturi" style="width: 200px">联系人</el-input>
+                        <el-date-picker
+                            v-model="naturi"
+                            align="right"
+                            type="date"
+                            style="width: 200px"
+                            placeholder="交付日期"
+                            value-format="yyyy-MM-dd">
+                        </el-date-picker>
                     </el-form-item>
                     <el-form-item label="完成日">
-                        <el-input v-model="wanchengri" style="width: 200px">接受日期</el-input>
+                        <el-date-picker
+                            v-model="wanchengri"
+                            align="right"
+                            type="date"
+                            style="width: 200px"
+                            placeholder="交付日期"
+                            value-format="yyyy-MM-dd">
+                        </el-date-picker>
                     </el-form-item>
                     <el-form-item label="送出日">
-                        <el-input v-model="songchuri" style="width: 200px">交付日期</el-input>
+                        <el-date-picker
+                            v-model="songchuri"
+                            align="right"
+                            type="date"
+                            style="width: 200px"
+                            placeholder="交付日期"
+                            value-format="yyyy-MM-dd">
+                        </el-date-picker>
+                    </el-form-item>
+                </el-form>
+            </div>
+            <div class="" v-if="this.num===3" style="height: 90%;overflow-y: auto">
+                <el-form ref="form" label-width="100px">
+                    <el-form-item label="管类型">
+                        <el-select
+                            v-model="pipeType"
+                            style="width: 150px"
+                            clearable
+                            filterable
+                            allow-create
+                            default-first-option
+                            placeholder="补做管类型">
+                            <el-option
+                                v-for="item in pipeTypeOptions"
+                                :key="item.id"
+                                :label="item.name"
+                                :value="item.id">
+                            </el-option>
+                        </el-select>
+                    </el-form-item>
+                    <el-form-item label="批次">
+                        <el-select
+                            v-model="batch"
+                            style="width: 120px"
+                            clearable
+                            filterable
+                            allow-create
+                            default-first-option
+                            placeholder="批次">
+                            <el-option
+                                v-for="item in batchOptions"
+                                :key="item.id"
+                                :label="item.name"
+                                :value="item.id">
+                            </el-option>
+                        </el-select>
+                    </el-form-item>
+                    <el-form-item label="一贯号">
+                        <el-input v-model="yiguanhao" style="width: 200px"  placeholder="一贯号"></el-input>
+                    </el-form-item>
+                    <el-form-item label="code">
+                        <el-input v-model="code" style="width: 200px"  placeholder="code"></el-input>
+                    </el-form-item>
+                    <el-form-item label="申请人">
+                        <el-input v-model="shenqingren" style="width: 200px" placeholder="申请人"></el-input>
+                    </el-form-item>
+                    <el-form-item label="紧急程度">
+                        <el-select
+                            v-model="yxj"
+                            clearable
+                            filterable
+                            allow-create
+                            default-first-option
+                            placeholder="优先级">
+                            <el-option
+                                v-for="item in yxjOptions"
+                                :key="item.id"
+                                :label="item.name"
+                                :value="item.id">
+                            </el-option>
+                        </el-select>
+                    </el-form-item>
+                    <el-form-item label="申请时间">
+                        <el-date-picker
+                            v-model="shenqingshijian"
+                            align="right"
+                            type="date"
+                            style="width: 200px"
+                            placeholder="交付日期"
+                            value-format="yyyy-MM-dd">
+                        </el-date-picker>
                     </el-form-item>
                 </el-form>
             </div>
@@ -413,7 +726,6 @@
                     {"text": "合拢管"},
                     {"text": "导入管"},
                     {"text": "支架管"},
-                    {"text": "未出图船号导入"},
                     {"text": "补做管"},
                 ],          //显示导航栏的数据
 
@@ -438,8 +750,18 @@
                     {"name":"较急","id":"1"},
                     {"name":"紧急","id":"2"},
                 ],
+                pipeType:"",
+                pipeTypeOptions:[
+                    {"name":"客补管","id":"0"},
+                    {"name":"厂补管","id":"1"},
+                    {"name":"再加工管","id":"2"}
+                ],
                 batch:"",
-                batchOptions:[],
+                batchOptions:[
+                    {"name":"一般","id":"0"},
+                    {"name":"较急","id":"1"},
+                    {"name":"紧急","id":"2"}
+                ],
 
 
                 //合拢管字段
@@ -471,6 +793,11 @@
                 wanchengri:"",
                 songchuri:"",
 
+
+
+                //补做管字段
+                shenqingren:"",
+                shenqingshijian:"",
 
             }
         },
@@ -516,9 +843,6 @@
                         .then(axios.spread(function (batchOptions, list) {
                             that.batchOptions =batchOptions.data;
                             that.getList()
-
-
-
                         }));
                 }
             },
@@ -526,6 +850,8 @@
             //底部导航跳转
             goToNavBar(index) {
                 this.num = index;
+                this.cols=[];
+                this.getList();
 
             },
 
@@ -536,18 +862,30 @@
                     axios.all([
                         axios.post(" " + url + "/sys/showTableTitle", {"name": "hlg"}),
                         axios.post(" " + url + "/teshu/helongList", {
-                            "pici": this.pici,
+                            "pici": this.batch,
                             "quhua": this.quHua,
-                            "code": this.code,
+                            "code": this.codeNumber,
                             "yiguanhao": this.yiguanhao,
-                            "xitonghao": this.xitonghao
+                            "xitonghao": this.systemNumber
                         })
+                    ])
+                        .then(axios.spread(function (title, table) {
+                            that.cols = title.data;
+                            that.tableData = table.data;
+                            console.log(that.tableData)
+                        }));
+
+                }
+                else if (this.num === 1) {
+                    let that = this;
+                    axios.all([
+                        axios.post(" " + url + "/sys/showTableTitle", {"name": "zjg"}),
+                        axios.post(" " + url + "/teshu/zhijiaList", {"pici": this.pici,})
                     ])
                         .then(axios.spread(function (title, table) {
                             that.cols = title.data;
                             that.tableData = table.data.data;
                         }));
-
                 }
                 else if (this.num === 2) {
                     let that = this;
@@ -560,7 +898,17 @@
                             that.tableData = table.data.data;
                         }));
                 }
-
+                else if (this.num === 3) {
+                    let that = this;
+                    axios.all([
+                        axios.post(" " + url + "/sys/showTableTitle", {"name": "bzg"}),
+                        axios.post(" " + url + "/teshu/zhijiaList", {"pici": this.pici,})
+                    ])
+                        .then(axios.spread(function (title, table) {
+                            that.cols = title.data;
+                            that.tableData = table.data.data;
+                        }));
+                }
             },
 
             //选择那个一个
@@ -636,13 +984,22 @@
             showAdd(index) {
                 this.addVisible = true;
                 if (index === 0) {
-                    this.code = "";
-                    this.yiguanhao = "";
-                    this.yptUrl = "";
-                    this.tuzhuangfanhao = "";
-                    this.shuishi = "";
-                    this.chulifangshi = "";
-                    this.guanzhong = "";
+                    this.quHua = "";
+                    this.systemNumber =  "";
+                    this.yxj =  "";
+                    this.code =  "";
+                    this.yiguanhao =  "";
+                    this.tuzhuangfanhao =  "";
+                    this.shuishi =  "";
+                    this.chulifangshi =  "";
+                    this.guanzhong =  "";
+                    this.chuanhao =  "";
+                    this.koujing = "";
+                    this.batch =  "";
+                    this.lianxiren =  "";
+                    this.jieshouriqi =  "";
+                    this.jiaofuriqi =  "";
+                    this.beizhu =  "";
                 }
                 else if (index === 2) {
                     this.chuanhao="";
@@ -688,8 +1045,13 @@
                             .then((res) => {
                                 if (res.data.state === "1") {
                                     this.$message.success(`新增成功`);
-                                    this.addVisible = true;
-                                    this.getList()
+                                    this.addVisible = false;
+                                    this.batch = "";
+                                    this.quHua = "";
+                                    this.codeNumber = "";
+                                    this.yiguanhao = "";
+                                    this.systemNumber = "";
+                                    this.getList();
                                 }
                                 else {
                                     this.$message.warning(res.data.message);
@@ -726,7 +1088,7 @@
                             .then((res) => {
                                 if (res.data.state === "1") {
                                     this.$message.success(`新增成功`);
-                                    this.addVisible = true;
+                                    this.addVisible = false;
                                     this.getList()
                                 }
                                 else {
@@ -753,6 +1115,9 @@
                     axios.post(" " + url + "/teshu/helongDetail", {"id":this.id})
                         .then((res) => {
                             if (res.data.state === "1") {
+                                this.quHua = res.data.data.quhua;
+                                this.systemNumber = res.data.data.xitonghao;
+                                this.yxj = res.data.data.level;
                                 this.code = res.data.data.codeno;
                                 this.yiguanhao = res.data.data.yiguanhao;
                                 this.tuzhuangfanhao = res.data.data.tuzhuangfanhao;
@@ -761,6 +1126,7 @@
                                 this.guanzhong = res.data.data.guanzhong;
                                 this.chuanhao = res.data.data.chuanhao;
                                 this.koujing = res.data.data.koujing;
+                                this.batch = res.data.data.pici;
                                 this.lianxiren = res.data.data.lianxiren;
                                 this.jieshouriqi = res.data.data.wanchengriqi;
                                 this.jiaofuriqi = res.data.data.jiaofuriqi;
@@ -832,6 +1198,11 @@
                                 if (res.data.state === "1") {
                                     this.$message.success(`修改成功`);
                                     this.editVisible = false;
+                                    this.batch = "";
+                                    this.quHua = "";
+                                    this.codeNumber = "";
+                                    this.yiguanhao = "";
+                                    this.systemNumber = "";
                                     this.getList()
                                 }
                                 else {
@@ -869,8 +1240,8 @@
                             })
                             .then((res) => {
                                 if (res.data.state === "1") {
-                                    this.$message.success(`新增成功`);
-                                    this.addVisible = true;
+                                    this.$message.success(`修改成功`);
+                                    this.editVisible = false;
                                     this.getList()
                                 }
                                 else {
@@ -944,6 +1315,17 @@
 
 
             },
+
+            // 关闭对话框后清空数据
+            closeDialog(){
+               if(this.num===0){
+                   this.batch = "";
+                   this.quHua = "";
+                   this.codeNumber = "";
+                   this.yiguanhao = "";
+                   this.systemNumber = "";
+               }
+            }
 
         }
     }
