@@ -72,6 +72,7 @@
                                 border
                                 height="450"
                                 highlight-current-row
+                                @row-dblclick="showEdit"
                                 style="width: 98%;margin: auto">
                                 <template v-for="(col ,index) in cols">
                                     <el-table-column align="center" :prop="col.prop" :label="col.label"></el-table-column>
@@ -258,7 +259,7 @@
             </div>
             <span slot="footer" class="dialog-footer">
                 <el-button @click="editVisible = false" style="height:30px;width:80px">取 消</el-button>
-                <el-button type="primary" @click="saveEdit" style="height:30px;width:80px">确 定</el-button>
+                <el-button type="primary" @click="saveEdit(num)" style="height:30px;width:80px">确 定</el-button>
             </span>
         </el-dialog>
 
@@ -300,7 +301,7 @@
 
                 cols: [],                //表头
                 tableData: [],           //表数据
-
+                id: "",                   //列表中的id
 
                 addVisible: false,      //新增弹出框
                 editVisible: false,     //编辑弹出框
@@ -373,7 +374,7 @@
                         axios.post(" " + url + "/sys/showTableTitle", {"name": "tablist"})
                     ])
                         .then(axios.spread(function (batchOptions, list) {
-                            that.batchOptions =batchOptions.data
+                            that.batchOptions =batchOptions.data;
                             that.getList()
 
 
@@ -394,11 +395,11 @@
                     axios.all([
                         axios.post(" " + url + "/sys/showTableTitle", {"name": "jgxqan"}),
                         axios.post(" " + url + "/teshu/helongList",{
-                            "pici":"",
-                            "quhua":"",
-                            "code":"",
-                            "yiguanhao":"",
-                            "xitonghao":""})
+                            "pici":this.pici,
+                            "quhua":this.quHua,
+                            "code":this.code,
+                            "yiguanhao":this.yiguanhao,
+                            "xitonghao":this.xitonghao})
                     ])
                         .then(axios.spread(function (title, table) {
                             that.cols = title.data;
@@ -410,6 +411,45 @@
             },
 
 
+            //进行查询
+            doSearch(index) {
+                if (index === 0) {
+                    this.getList()
+                }
+
+
+            },
+
+            //合拢管查询
+            doSearchHLG() {
+                if (this.quHua && this.systemNumber) {
+                    axios.post(" " + url + "/teshu/getHelongDetailByXitong",{
+                        "quhua":this.quHua,
+                        "xitonghao":this.systemNumber
+                    })
+                        .then((res) => {
+                            if (res.data.state === "1") {
+                                this.code = res.data.data.codeno;
+                                this.yiguanhao = res.data.data.yiguanhao;
+                                this.yptUrl = url + "/" + res.data.data.yipintu;
+                                this.tuzhuangfanhao = res.data.data.tuzhuangfanhao;
+                                this.shuishi = res.data.data.shuishi;
+                                this.chulifangshi = res.data.data.chulifangshi;
+                                this.guanzhong = res.data.data.guanzhong;
+                            }
+                            else{
+                                this.$message.warning(res.data.message);
+                            }
+                        })
+                        .catch((err) => {
+                            this.$message.warning(err);
+                        })
+                }
+                else {
+                    this.$message.warning(`区划和系统号不能为空`);
+                }
+
+            },
 
             //显示新增
             showAdd(index) {
@@ -473,56 +513,28 @@
                 }
             },
 
-            //进行查询
-            doSearch(index) {
+
+            showEdit(row, column, cell, event){
+                this.editVisible = true;
+                this.id = row.id;
                 if (index === 0) {
-                    if (this.batch && this.GJGType) {
-                        let that = this;
-                        axios.all([
-                            axios.post(" " + url + "/sys/showTableTitle", {"name": "qieduan", "pici": this.batch}),
-                            axios.post(" " + url + "/importother/publicData", {"pici": this.batch, "code": "qieduan"})
-                        ])
-                            .then(axios.spread(function (title, table) {
-                                that.cols = title.data;
-                                that.tableData = table.data;
-                                that.num = 0;
-                            }));
-                    }
-                    else {
-                        this.message = "请选择加工类型和批次";
-                        this.HideModal = false;
-                        const that = this;
-
-                        function a() {
-                            that.message = "";
-                            that.HideModal = true;
-                        }
-
-                        setTimeout(a, 2000);
-                    }
-                }
-
-
-            },
-
-            //合拢管查询
-            doSearchHLG() {
-                if (this.quHua && this.systemNumber) {
-                    axios.post(" " + url + "/teshu/getHelongDetailByXitong",{
-                        "quhua":this.quHua,
-                        "xitonghao":this.systemNumber
-                    })
+                    axios.post(" " + url + "/teshu/helongDetail", {"id":this.id})
                         .then((res) => {
                             if (res.data.state === "1") {
                                 this.code = res.data.data.codeno;
                                 this.yiguanhao = res.data.data.yiguanhao;
-                                this.yptUrl = url + "/" + res.data.data.yipintu;
                                 this.tuzhuangfanhao = res.data.data.tuzhuangfanhao;
                                 this.shuishi = res.data.data.shuishi;
                                 this.chulifangshi = res.data.data.chulifangshi;
                                 this.guanzhong = res.data.data.guanzhong;
+                                this.chuanhao = res.data.data.chuanhao;
+                                this.koujing = res.data.data.koujing;
+                                this.lianxiren = res.data.data.lianxiren;
+                                this.jieshouriqi = res.data.data.wanchengriqi;
+                                this.jiaofuriqi = res.data.data.jiaofuriqi;
+                                this.beizhu = res.data.data.beizhu;
                             }
-                            else{
+                            else {
                                 this.$message.warning(res.data.message);
                             }
                         })
@@ -530,11 +542,68 @@
                             this.$message.warning(err);
                         })
                 }
-                else {
-                    this.$message.warning(`区划和系统号不能为空`);
-                }
+
+
+
 
             },
+
+            //进行修改
+            saveEdit(index){
+                if (index === 0) {
+                    if (this.chuanhao && this.quHua && this.systemNumber && this.lianxiren && this.batch && this.jiaofuriqi &&
+                        this.beizhu && this.yiguanhao && this.code && this.tuzhuangfanhao && this.shuishi && this.chulifangshi &&
+                        this.guanzhong && this.jieshouriqi && this.yxj && this.koujing) {
+                        axios.post(" " + url + "/teshu/updateHelong",
+                            {
+                                "id":this.id,
+                                "chuanhao": this.chuanhao,
+                                "quhua": this.quHua,
+                                "xitonghao": this.systemNumber,
+                                "lianxiren": this.lianxiren,
+                                "pici": this.batch,
+                                "jiaofuriqi": this.jiaofuriqi,
+                                "beizhu": this.beizhu,
+                                "yiguanhao": this.yiguanhao,
+                                "codeno": this.code,
+                                "tuzhuangfanhao": this.tuzhuangfanhao,
+                                "shuishi": this.shuishi,
+                                "chulifangshi": this.chulifangshi,
+                                "guanzhong": this.guanzhong,
+                                "wanchengriqi": this.jieshouriqi,
+                                "level": this.yxj,
+                                "koujing": this.koujing
+                            })
+                            .then((res) => {
+                                if (res.data.state === "1") {
+                                    this.$message.success(`修改成功`);
+                                    this.editVisible = false;
+                                    this.getList()
+                                }
+                                else {
+                                    this.$message.warning(res.data.message);
+                                }
+
+                            })
+                            .catch((err) => {
+                                this.$message.warning(err);
+                            })
+                    }
+                    else {
+                        this.$message.warning(`信息填写不完整`);
+                    }
+
+                }
+
+
+
+            },
+
+
+
+
+
+
 
             //删除
             doDelete(index) {
@@ -550,10 +619,6 @@
 
             },
 
-            //保存
-            saveEdit() {
-
-            },
 
             //删除
             deleteRow() {
