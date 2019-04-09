@@ -81,7 +81,91 @@
                         </div>
                     </div>
                     <div class="tabBottomTemplate" v-if="this.num===1">
-                        1
+                        <div class="handle-box">
+                            <label style="margin-right: 5px">
+                                <el-button type="warning"  @click="showTBImport()">特别流程导入</el-button>
+                            </label>
+                            <label style="margin-right: 5px">
+                                <span>智能检索</span>
+                                <span>:</span>
+                                <el-input v-model="select_word"  style="width: 100px" placeholder="智能检索"></el-input>
+                            </label>
+                            <label style="margin-right: 10px">
+                                <span>审批状态</span>
+                                <span>:</span>
+                                <el-select
+                                    v-model="status"
+                                    style="width: 120px"
+                                    clearable
+                                    filterable
+                                    allow-create
+                                    default-first-option
+                                    placeholder="审批状态">
+                                    <el-option
+                                        v-for="item in statusOptions"
+                                        :key="item.id"
+                                        :label="item.name"
+                                        :value="item.id">
+                                    </el-option>
+                                </el-select>
+                            </label>
+                            <label style="margin-right:10px">
+                                <span>批次</span>
+                                <span>:</span>
+                                <el-select
+                                    v-model="batch"
+                                    style="width: 120px"
+                                    clearable
+                                    filterable
+                                    allow-create
+                                    default-first-option
+                                    placeholder="批次">
+                                    <el-option
+                                        v-for="item in batchOptions"
+                                        :key="item.id"
+                                        :label="item.name"
+                                        :value="item.id">
+                                    </el-option>
+                                </el-select>
+                            </label>
+                            <label style="margin-right: 10px">
+                                <span>生产线</span>
+                                <span>:</span>
+                                <el-select
+                                    v-model="scx"
+                                    style="width: 100px"
+                                    clearable
+                                    filterable
+                                    allow-create
+                                    default-first-option
+                                    placeholder="生产线">
+                                    <el-option
+                                        v-for="item in scxOptions"
+                                        :key="item.id"
+                                        :label="item.name"
+                                        :value="item.id">
+                                    </el-option>
+                                </el-select>
+                            </label>
+                            <el-button type="success"  @click="doSearch(num)">查询</el-button>
+                            <el-button type="primary"  @click="showAdd(num)">导入</el-button>
+                            <el-button type="danger"  @click="showDelete()">删除</el-button>
+                        </div>
+                        <div class="">
+                            <el-table
+                                class="tb-edit"
+                                :data="tables"
+                                :header-cell-style="{background:'#A1D0FC',color:'rgba(0, 0, 0, 0.8)',fontSize:'12px'}"
+                                border
+                                height="380"
+                                highlight-current-row
+                                @row-dblclick="showEdit"
+                                style="width: 98%;margin: auto">
+                                <template v-for="(col ,index) in cols">
+                                    <el-table-column align="center" :prop="col.prop" :label="col.label"></el-table-column>
+                                </template>
+                            </el-table>
+                        </div>
                     </div>
                     <div class="tabBottomTemplate" v-if="this.num===2">
                         <div class="handle-box">
@@ -110,7 +194,7 @@
                                 </el-select>
                             </label>
                             <el-button type="success"  @click="doSearch(num)">查询</el-button>
-                            <el-button type="primary"  @click="showAdd(num)">新增</el-button>
+                            <el-button type="primary"  @click="showAdd(num)">录入</el-button>
                             <el-button type="danger"  @click="showDelete()">删除</el-button>
                         </div>
                         <div class="">
@@ -195,8 +279,8 @@
 
 
         <!--新增弹出框 -->
-        <el-dialog title="新增" :visible.sync="addVisible" width="40%" @close='closeDialog' >
-            <div class="" v-if="this.num===0" style="height: 90%;overflow-y: auto">
+        <el-dialog title="新增" :visible.sync="addVisible" width="50%" @close='closeDialog' >
+            <div class="" v-if="this.num===0" style="height: 450px;overflow-y: auto">
                 <el-form ref="form" label-width="100px">
                     <el-form-item label="数据查询">
                         <div class="" style="display: flex">
@@ -300,7 +384,7 @@
                     </el-form-item>
                 </el-form>
             </div>
-            <div class="" v-if="this.num===2" style="height: 90%;overflow-y: auto">
+            <div class="" v-if="this.num===2" style="height: 450px;overflow-y: auto">
                 <el-form ref="form" label-width="100px">
                     <el-form-item label="船号">
                         <el-input v-model="chuanhao" style="width: 200px" placeholder="船号"></el-input>
@@ -368,7 +452,7 @@
                     </el-form-item>
                 </el-form>
             </div>
-            <div class="" v-if="this.num===3" style="height: 90%;overflow-y: auto">
+            <div class="" v-if="this.num===3" style="height: 450px;overflow-y: auto">
                 <el-form ref="form" label-width="100px">
                     <el-form-item label="管类型">
                         <el-select
@@ -448,8 +532,8 @@
         </el-dialog>
 
         <!-- 编辑弹出框 -->
-        <el-dialog title="编辑按钮" :visible.sync="editVisible" width="40%" @close='closeDialog' >
-            <div class="" v-if="this.num===0" style="height: 90%;overflow-y: auto">
+        <el-dialog title="编辑按钮" :visible.sync="editVisible" width="50%" @close='closeDialog' >
+            <div class="" v-if="this.num===0" style="height: 450px;overflow-y: auto">
                 <el-form ref="form" label-width="100px">
                     <el-form-item label="数据查询">
                         <div class="" style="display: flex">
@@ -553,7 +637,7 @@
                     </el-form-item>
                 </el-form>
             </div>
-            <div class="" v-if="this.num===2" style="height: 90%;overflow-y: auto">
+            <div class="" v-if="this.num===2" style="height: 450px;overflow-y: auto">
                 <el-form ref="form" label-width="100px">
                     <el-form-item label="船号">
                         <el-input v-model="chuanhao" style="width: 200px" placeholder="船号"></el-input>
@@ -621,7 +705,7 @@
                     </el-form-item>
                 </el-form>
             </div>
-            <div class="" v-if="this.num===3" style="height: 90%;overflow-y: auto">
+            <div class="" v-if="this.num===3" style="height: 450px;overflow-y: auto">
                 <el-form ref="form" label-width="100px">
                     <el-form-item label="管类型">
                         <el-select
@@ -708,6 +792,146 @@
                 <el-button type="primary" @click="deleteRow" style="height:30px;width:80px">确 定</el-button>
             </span>
         </el-dialog>
+
+
+        <!--新增弹出框 -->
+        <el-dialog title="导入数据" :visible.sync="uploadVisible" width="60%">
+            <div class="container" style="height:450px;overflow:auto">
+                <div class="containerSelect"
+                     style="height: 80px;
+                     display: flex;
+                     align-items: center;
+                     justify-content: center">
+                    <div class="select">
+                        <label style="margin-right: 5px;margin-left: 5px">
+                            <span>文件类型</span>
+                            <span>:</span>
+                            <el-select
+                                v-model="fileType"
+                                @input="setType(fileType)"
+                                clearable
+                                filterable
+                                allow-create
+                                default-first-option
+                                style="width: 150px"
+                                placeholder="文件类型">
+                                <el-option
+                                    v-for="item in fileTypeOptions"
+                                    :key="item.indexno"
+                                    :label="item.name"
+                                    :value="item.indexno">
+                                </el-option>
+                            </el-select>
+                        </label>
+                    </div>
+                    <div class="select">
+                        <label style="margin-right: 5px;margin-left: 5px">
+                            <span>文件类型</span>
+                            <span>:</span>
+                            <el-select
+                                v-model="fileType"
+                                @input="setType(fileType)"
+                                clearable
+                                filterable
+                                allow-create
+                                default-first-option
+                                style="width: 150px"
+                                placeholder="文件类型">
+                                <el-option
+                                    v-for="item in fileTypeOptions"
+                                    :key="item.indexno"
+                                    :label="item.name"
+                                    :value="item.indexno">
+                                </el-option>
+                            </el-select>
+                        </label>
+                    </div>
+                    <div class="select">
+                        <label style="margin-right: 5px;margin-left: 5px">
+                            <span>批次</span>
+                            <span>:</span>
+                            <el-select
+                                v-model="batch"
+                                @input="setPc(batch)"
+                                clearable
+                                filterable
+                                allow-create
+                                default-first-option
+                                style="width: 150px"
+                                placeholder="批次">
+                                <el-option
+                                    v-for="item in batchOptions"
+                                    :key="item.id"
+                                    :label="item.name"
+                                    :value="item.id">
+                                </el-option>
+                            </el-select>
+                        </label>
+                    </div>
+                    <div class="select">
+                        <label style="margin-right: 5px;margin-left: 5px">
+                            <span>生产线</span>
+                            <span>:</span>
+                            <el-select
+                                v-model="scx"
+                                @input="setScx(scx)"
+                                clearable
+                                filterable
+                                allow-create
+                                default-first-option
+                                style="width: 150px"
+                                placeholder="生产线">
+                                <el-option
+                                    v-for="item in scxOptions"
+                                    :key="item.indexno"
+                                    :label="item.name"
+                                    :value="item.indexno">
+                                </el-option>
+                            </el-select>
+                        </label>
+                    </div>
+                </div>
+                <div class="containerUp" style="display: flex;align-items: center;justify-content: center">
+                    <el-upload
+                        v-loading="loading"
+                        element-loading-text="正在上传中"
+                        element-loading-spinner="el-icon-loading"
+                        element-loading-background="rgba(0, 0, 0, 0.8)"
+                        class="upload"
+                        ref="upload"
+                        :multiple='true'
+                        :drag='true'
+                        :data="Data"
+                        :action="uploadUrl"
+                        :on-preview="handlePreview"
+                        :on-remove="handleRemove"
+                        :on-success="uploadSuccess"
+                        :on-error="uploadFailure"
+                        :file-list="list"
+                        :auto-upload="false">
+                        <el-button style="margin:80px 0 0 0;width: 150px;height: 30px;" slot="trigger" size="small"
+                                   type="primary">选取文件
+                        </el-button>
+                        <el-button style="width: 150px;height: 30px;" size="small"
+                                   type="success"
+                                   @click="submitUpload">上传到系统
+                        </el-button>
+                    </el-upload>
+                </div>
+            </div>
+        </el-dialog>
+
+        <!--导入文件详情 -->
+        <el-dialog title="文件详情" :visible.sync="detailsVisible" width="90%">
+            <div class="container" style="height:470px;overflow:auto">
+
+            </div>
+        </el-dialog>
+
+        <!-- 失败信息返回框 -->
+        <el-dialog title="导入失败信息提示" :visible.sync="errVisible" width="60%">
+
+        </el-dialog>
     </div>
 </template>
 <script type="text/ecmascript-6">
@@ -735,6 +959,11 @@
                 systemNumber:"",         //系统号
                 codeNumber:"",           //区划
 
+                uploadUrl: " " + url + "/fileupload/upload",
+                Data: {},
+                list: [],
+                loading: false,
+
                 cols: [],                //表头
                 tableData: [],           //表数据
                 id: "",                   //列表中的id
@@ -743,25 +972,37 @@
                 editVisible: false,     //编辑弹出框
                 delVisible: false,      //删除弹出框
 
+                uploadVisible: false,        //上传弹框
+                detailsVisible: false,      //详情弹框
+                errVisible:false,           //错误弹框
 
-                yxj:"",
+                scx:"",                    //生产线
+                scxOptions:[],             //生产线下拉列表
+
+                status:"",                    //审批状态
+                statusOptions:[],             //审批状态下拉列表
+
+                fileType: "",                  //文件类型
+                fileTypeOptions: [],           //文件类型下拉列表
+
+                yxj:"",                    //优先级
                 yxjOptions:[
                     {"name":"一般","id":"0"},
                     {"name":"较急","id":"1"},
                     {"name":"紧急","id":"2"},
-                ],
-                pipeType:"",
+                ],                            //优先级下拉列表
+                pipeType:"",                  //管子种类
                 pipeTypeOptions:[
                     {"name":"客补管","id":"0"},
                     {"name":"厂补管","id":"1"},
                     {"name":"再加工管","id":"2"}
-                ],
-                batch:"",
+                ],                             //管子种类下拉列表
+                batch:"",                      //批次
                 batchOptions:[
                     {"name":"一般","id":"0"},
                     {"name":"较急","id":"1"},
                     {"name":"紧急","id":"2"}
-                ],
+                ],                            //批次下拉列表
 
 
                 //合拢管字段
@@ -838,10 +1079,15 @@
                     let that = this;
                     axios.all([
                         axios.post(" " + url + "/sys/getPiciList"),
-                        axios.post(" " + url + "/sys/showTableTitle", {"name": "tablist"})
+                        axios.post(" " + url + "/sys/dictionaryList", {"id": "9"}),
+                        axios.post(" " + url + "/sys/dictionaryList", {"id": "8"}),
+                        axios.post(" " + url + "/sys/dictionaryList", {"id": "10"}),
                     ])
-                        .then(axios.spread(function (batchOptions, list) {
+                        .then(axios.spread(function (batchOptions, scxOptions,typeOptions,statusOptions) {
                             that.batchOptions =batchOptions.data;
+                            that.scxOptions =scxOptions.data;
+                            that.fileTypeOptions = typeOptions.data;
+                            that.statusOptions =statusOptions.data;
                             that.getList()
                         }));
                 }
@@ -872,7 +1118,6 @@
                         .then(axios.spread(function (title, table) {
                             that.cols = title.data;
                             that.tableData = table.data;
-                            console.log(that.tableData)
                         }));
 
                 }
@@ -1299,6 +1544,10 @@
 
             },
 
+            //显示特别流程导入
+            showTBImport(){
+                this.uploadVisible=true
+            },
 
 
             //删除
@@ -1325,7 +1574,105 @@
                    this.yiguanhao = "";
                    this.systemNumber = "";
                }
-            }
+            },
+
+
+            //设置批次
+            setPc(batch) {
+                this.pc = this.batch;
+                this.Data = {"lineNo": this.SCX, "type": this.type, "pici": this.pc}
+            },
+
+            //设置类型
+            setType(fileType) {
+                this.type = this.fileType;
+                this.Data = {"lineNo": this.SCX, "type": this.type, "pici": this.pc}
+            },
+
+            //设置生产线
+            setScx(scx) {
+                this.SCX = this.scx;
+                this.Data = {"lineNo": this.SCX, "type": this.type, "pici": this.pc}
+            },
+            //上传
+            submitUpload() {
+                if (this.batch && this.fileType && this.scx) {
+
+                    this.$refs.upload.submit((data)=>{
+                        console.log(data)
+                    });
+                    this.loading = true;
+                }
+                else {
+                    this.$message.warning(`批次,类型和生产线不能为空`);
+                }
+            },
+
+            //文件列表移除文件时的钩子
+            handleRemove(file, fileList) {
+                console.log(file);
+            },
+
+            //点击文件列表中已上传的文件
+            handlePreview(file) {
+                console.log(file);
+            },
+
+            //上传成功
+            uploadSuccess(response, file, fileList)
+            {
+                if (response.state === "-1") {
+                    this.errList=response.message;
+                    this.errListData=response.errorList;
+                    this.errVisible =true;
+                    this.loading = false;
+                    let that = this;
+                    axios.all([
+                        axios.post(" " + url + "/sys/showTableTitle", {"name": "filelist"}),
+                        axios.post(" " + url + "/fileShenpi/getFileUploadList", {
+                            "lineNo": this.scx,
+                            "status": this.status,
+                            "pici": this.batch
+                        })
+                    ])
+                        .then(axios.spread(function (title, table) {
+                            that.cols = title.data;
+                            that.tableData = table.data;
+                        }));
+                    setTimeout(() => {
+                        that.uploadVisible = false;
+                    }, 1000)
+                }
+                else {
+
+                    this.$message.success(`上传成功`);
+                    this.loading = false;
+                    let that = this;
+                    axios.all([
+                        axios.post(" " + url + "/sys/showTableTitle", {"name": "filelist"}),
+                        axios.post(" " + url + "/fileShenpi/getFileUploadList", {
+                            "lineNo": this.scx,
+                            "status": this.status,
+                            "pici": this.batch
+                        })
+                    ])
+                        .then(axios.spread(function (title, table) {
+                            that.cols = title.data;
+                            that.tableData = table.data;
+                        }));
+                    setTimeout(() => {
+                        that.uploadVisible = false;
+                    }, 1000)
+                }
+
+
+            },
+
+            //上传失败
+            uploadFailure(err, file, fileList) {
+                console.log(err);
+                this.$message.warning(`上传失败`);
+            },
 
         }
     }
