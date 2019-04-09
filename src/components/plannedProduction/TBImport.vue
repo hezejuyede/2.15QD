@@ -68,9 +68,9 @@
                             <el-table
                                 class="tb-edit"
                                 :data="tables"
-                                :header-cell-style="{background:'#A1D0FC',color:'rgba(0, 0, 0, 0.8)',fontSize:'20px'}"
+                                :header-cell-style="{background:'#A1D0FC',color:'rgba(0, 0, 0, 0.8)',fontSize:'12px'}"
                                 border
-                                height="450"
+                                height="400"
                                 highlight-current-row
                                 @row-dblclick="showEdit"
                                 style="width: 98%;margin: auto">
@@ -84,7 +84,52 @@
                         1
                     </div>
                     <div class="tabBottomTemplate" v-if="this.num===2">
-                        2
+                        <div class="handle-box">
+                            <label style="margin-right: 5px">
+                                <span>智能检索</span>
+                                <span>:</span>
+                                <el-input v-model="select_word"  style="width: 300px" placeholder="智能检索"></el-input>
+                            </label>
+                            <label style="margin-right: 10px">
+                                <span>批次</span>
+                                <span>:</span>
+                                <el-select
+                                    v-model="batch"
+                                    style="width: 200px"
+                                    clearable
+                                    filterable
+                                    allow-create
+                                    default-first-option
+                                    placeholder="优先级">
+                                    <el-option
+                                        v-for="item in batchOptions"
+                                        :key="item.id"
+                                        :label="item.name"
+                                        :value="item.id">
+                                    </el-option>
+                                </el-select>
+                            </label>
+                            <el-button type="success"  @click="doSearch(num)">查询</el-button>
+                            <el-button type="primary"  @click="showAdd(num)">新增</el-button>
+                            <el-button type="danger"  @click="showDelete()">删除</el-button>
+                        </div>
+                        <div class="">
+                            <el-table
+                                class="tb-edit"
+                                :data="tables"
+                                :header-cell-style="{background:'#A1D0FC',color:'rgba(0, 0, 0, 0.8)',fontSize:'12px'}"
+                                border
+                                height="400"
+                                highlight-current-row
+                                @select-all="selectAll"
+                                @select="selectList"
+                                @row-dblclick="showEdit"
+                                style="width: 98%;margin: auto">
+                                <template v-for="(col ,index) in cols">
+                                    <el-table-column align="center" :prop="col.prop" :label="col.label"></el-table-column>
+                                </template>
+                            </el-table>
+                        </div>
                     </div>
                     <div class="tabBottomTemplate" v-if="this.num===3">
                        3
@@ -175,7 +220,46 @@
                     </el-form-item>
                 </el-form>
             </div>
-
+            <div class="" v-if="this.num===2" style="height: 90%;overflow-y: auto">
+                <el-form ref="form" label-width="100px">
+                    <el-form-item label="船号">
+                        <el-input v-model="chuanhao" style="width: 200px"> 船号</el-input>
+                    </el-form-item>
+                    <el-form-item label="单元名称">
+                        <el-input v-model="danyuanmingcheng" style="width: 200px">CODE</el-input>
+                    </el-form-item>
+                    <el-form-item label="材质">
+                        <el-input v-model="caizhi" style="width: 200px">一贯号</el-input>
+                    </el-form-item>
+                    <el-form-item label="外径">
+                        <el-input v-model="waijing" style="width: 200px">涂装番号</el-input>
+                    </el-form-item>
+                    <el-form-item label="壁厚">
+                        <el-input v-model="bihou" style="width: 200px">水试</el-input>
+                    </el-form-item>
+                    <el-form-item label="根数">
+                        <el-input v-model="genshu" style="width: 200px">水试</el-input>
+                    </el-form-item>
+                    <el-form-item label="长度">
+                        <el-input v-model="changdu" style="width: 200px">水试</el-input>
+                    </el-form-item>
+                    <el-form-item label="预定日">
+                        <el-input v-model="yudingri" style="width: 200px">联系人</el-input>
+                    </el-form-item>
+                    <el-form-item label="图纸">
+                        <el-input v-model="tuzhi" style="width: 200px">口径</el-input>
+                    </el-form-item>
+                    <el-form-item label="拿图日">
+                        <el-input v-model="naturi" style="width: 200px">联系人</el-input>
+                    </el-form-item>
+                    <el-form-item label="完成日">
+                        <el-input v-model="wanchengri" style="width: 200px">接受日期</el-input>
+                    </el-form-item>
+                    <el-form-item label="送出日">
+                        <el-input v-model="songchuri" style="width: 200px">交付日期</el-input>
+                    </el-form-item>
+                </el-form>
+            </div>
             <span slot="footer" class="dialog-footer">
                 <el-button @click="addVisible = false" style="height:30px;width:80px">取 消</el-button>
                 <el-button type="primary" @click="doAdd(num)" style="height:30px;width:80px">确 定</el-button>
@@ -257,6 +341,46 @@
                     </el-form-item>
                 </el-form>
             </div>
+            <div class="" v-if="this.num===2" style="height: 90%;overflow-y: auto">
+                <el-form ref="form" label-width="100px">
+                    <el-form-item label="船号">
+                        <el-input v-model="chuanhao" style="width: 200px"> 船号</el-input>
+                    </el-form-item>
+                    <el-form-item label="单元名称">
+                        <el-input v-model="danyuanmingcheng" style="width: 200px">CODE</el-input>
+                    </el-form-item>
+                    <el-form-item label="材质">
+                        <el-input v-model="caizhi" style="width: 200px">一贯号</el-input>
+                    </el-form-item>
+                    <el-form-item label="外径">
+                        <el-input v-model="waijing" style="width: 200px">涂装番号</el-input>
+                    </el-form-item>
+                    <el-form-item label="壁厚">
+                        <el-input v-model="bihou" style="width: 200px">水试</el-input>
+                    </el-form-item>
+                    <el-form-item label="根数">
+                        <el-input v-model="genshu" style="width: 200px">水试</el-input>
+                    </el-form-item>
+                    <el-form-item label="长度">
+                        <el-input v-model="changdu" style="width: 200px">水试</el-input>
+                    </el-form-item>
+                    <el-form-item label="预定日">
+                        <el-input v-model="yudingri" style="width: 200px">联系人</el-input>
+                    </el-form-item>
+                    <el-form-item label="图纸">
+                        <el-input v-model="tuzhi" style="width: 200px">口径</el-input>
+                    </el-form-item>
+                    <el-form-item label="拿图日">
+                        <el-input v-model="naturi" style="width: 200px">联系人</el-input>
+                    </el-form-item>
+                    <el-form-item label="完成日">
+                        <el-input v-model="wanchengri" style="width: 200px">接受日期</el-input>
+                    </el-form-item>
+                    <el-form-item label="送出日">
+                        <el-input v-model="songchuri" style="width: 200px">交付日期</el-input>
+                    </el-form-item>
+                </el-form>
+            </div>
             <span slot="footer" class="dialog-footer">
                 <el-button @click="editVisible = false" style="height:30px;width:80px">取 消</el-button>
                 <el-button type="primary" @click="saveEdit(num)" style="height:30px;width:80px">确 定</el-button>
@@ -302,7 +426,7 @@
                 cols: [],                //表头
                 tableData: [],           //表数据
                 id: "",                   //列表中的id
-
+                listData:[],             //Id的数组
                 addVisible: false,      //新增弹出框
                 editVisible: false,     //编辑弹出框
                 delVisible: false,      //删除弹出框
@@ -310,14 +434,15 @@
 
                 yxj:"",
                 yxjOptions:[
-                    {"name":"一般","id":0},
-                    {"name":"较急","id":1},
-                    {"name":"紧急","id":2},
+                    {"name":"一般","id":"0"},
+                    {"name":"较急","id":"1"},
+                    {"name":"紧急","id":"2"},
                 ],
                 batch:"",
                 batchOptions:[],
 
 
+                //合拢管字段
                 code:"",
                 yiguanhao:"",
                 yptUrl:"",
@@ -331,6 +456,21 @@
                 jieshouriqi:"",
                 jiaofuriqi:"",
                 beizhu:"",
+
+
+                //支架管字段
+                danyuanmingcheng:"",
+                caizhi:"",
+                waijing:"",
+                bihou:"",
+                changdu:"",
+                genshu:"",
+                yudingri:"",
+                tuzhi:"",
+                naturi:"",
+                wanchengri:"",
+                songchuri:"",
+
 
             }
         },
@@ -386,6 +526,7 @@
             //底部导航跳转
             goToNavBar(index) {
                 this.num = index;
+
             },
 
             //请求列表
@@ -393,7 +534,7 @@
                 if (this.num === 0) {
                     let that = this;
                     axios.all([
-                        axios.post(" " + url + "/sys/showTableTitle", {"name": "jgxqan"}),
+                        axios.post(" " + url + "/sys/showTableTitle", {"name": "hlg"}),
                         axios.post(" " + url + "/teshu/helongList",{
                             "pici":this.pici,
                             "quhua":this.quHua,
@@ -407,17 +548,56 @@
                         }));
 
                 }
+                else if (this.num === 2) {
+                    let that = this;
+                    axios.all([
+                        axios.post(" " + url + "/sys/showTableTitle", {"name": "zjg"}),
+                        axios.post(" " + url + "/teshu/zhijiaList", {"pici": this.pici,})
+                    ])
+                        .then(axios.spread(function (title, table) {
+                            that.cols = title.data;
+                            that.tableData = table.data.data;
+                        }));
+                }
 
             },
 
+            //选择那个一个
+            selectList(val) {
+                if (val.length) {
+                    let data = [];
+                    for (let i = 0; i < val.length; i++) {
+                        let a = val[i].id;
+                        data.push(a)
+                    }
+                    this.listData = data;
+                }
+                else {
+                    this.listData=[];
+                }
+            },
+
+            //列表全部选择
+            selectAll(val) {
+                if (val.length) {
+                    let data = [];
+                    for (let i = 0; i < val.length; i++) {
+                        let a = val[i].id;
+                        data.push(a)
+                    }
+                    this.listData = data;
+                }
+                else {
+                    this.listData = [];
+                }
+            },
+
+
+
 
             //进行查询
-            doSearch(index) {
-                if (index === 0) {
-                    this.getList()
-                }
-
-
+            doSearch() {
+                this.getList()
             },
 
             //合拢管查询
@@ -453,8 +633,8 @@
 
             //显示新增
             showAdd(index) {
+                this.addVisible = true;
                 if (index === 0) {
-                    this.addVisible = true;
                     this.code = "";
                     this.yiguanhao = "";
                     this.yptUrl = "";
@@ -462,6 +642,20 @@
                     this.shuishi = "";
                     this.chulifangshi = "";
                     this.guanzhong = "";
+                }
+                else if (index === 2) {
+                    this.chuanhao="";
+                    this.danyuanmingcheng = "";
+                    this.caizhi = "";
+                    this.waijing = "";
+                    this.bihou = "";
+                    this.changdu = "";
+                    this.genshu = "";
+                    this.yudingri = "";
+                    this.tuzhi = "";
+                    this.naturi = "";
+                    this.wanchengri = "";
+                    this.songchuri = "";
                 }
 
 
@@ -494,6 +688,9 @@
                             })
                             .then((res) => {
                                 if (res.data.state === "1") {
+                                    this.$message.success(`新增成功`);
+                                    this.addVisible = true;
+                                    this.getList()
 
 
                                 }
@@ -511,13 +708,51 @@
                     }
 
                 }
+                else if (index ===2){
+                    if (this.chuanhao && this.danyuanmingcheng && this.caizhi && this.waijing && this.bihou && this.changdu &&
+                        this.genshu && this.yudingri && this.tuzhi && this.naturi && this.wanchengri && this.songchuri ) {
+                        axios.post(" " + url + "/teshu/addZhijia",
+                            {
+                                "chuanhao": this.chuanhao,
+                                "danyuanmingcheng": this.danyuanmingcheng,
+                                "caizhi": this.caizhi,
+                                "waijing": this.waijing,
+                                "bihou": this.bihou,
+                                "changdu": this.changdu,
+                                "genshu": this.genshu,
+                                "yudingri": this.yudingri,
+                                "tuzhi": this.tuzhi,
+                                "naturi": this.naturi,
+                                "wanchengri": this.wanchengri,
+                                "songchuri": this.songchuri
+                            })
+                            .then((res) => {
+                                if (res.data.state === "1") {
+                                    this.$message.success(`新增成功`);
+                                    this.addVisible = true;
+                                    this.getList()
+                                }
+                                else {
+                                    this.$message.warning(res.data.message);
+                                }
+
+                            })
+                            .catch((err) => {
+                                this.$message.warning(err);
+                            })
+                    }
+                    else {
+                        this.$message.warning(`信息填写不完整`);
+                    }
+                }
             },
 
 
+            //显示修改
             showEdit(row, column, cell, event){
                 this.editVisible = true;
                 this.id = row.id;
-                if (index === 0) {
+                if (this.num === 0) {
                     axios.post(" " + url + "/teshu/helongDetail", {"id":this.id})
                         .then((res) => {
                             if (res.data.state === "1") {
@@ -542,9 +777,31 @@
                             this.$message.warning(err);
                         })
                 }
-
-
-
+                else if (this.num === 2) {
+                    axios.post(" " + url + "/teshu/zhijiaDetail", {"id": this.id})
+                        .then((res) => {
+                            if (res.data.state === "1") {
+                                this.chuanhao = res.data.data.chuanhao;
+                                this.danyuanmingcheng = res.data.data.danyuanmingcheng;
+                                this.caizhi = res.data.data.caizhi;
+                                this.waijing = res.data.data.waijing;
+                                this.bihou = res.data.data.bihou;
+                                this.changdu = res.data.data.changdu;
+                                this.genshu = res.data.data.genshu;
+                                this.yudingri = res.data.data.yudingri;
+                                this.tuzhi = res.data.data.tuzhi;
+                                this.naturi = res.data.data.naturi;
+                                this.wanchengri = res.data.data.wanchengri;
+                                this.songchuri = res.data.data.songchuri;
+                            }
+                            else {
+                                this.$message.warning(res.data.message);
+                            }
+                        })
+                        .catch((err) => {
+                            this.$message.warning(err);
+                        })
+                }
 
             },
 
@@ -594,14 +851,85 @@
                     }
 
                 }
+                else if(index ===2){
+                    if (this.chuanhao && this.danyuanmingcheng && this.caizhi && this.waijing && this.bihou && this.changdu &&
+                        this.genshu && this.yudingri && this.tuzhi && this.naturi && this.wanchengri && this.songchuri ) {
+                        axios.post(" " + url + "/teshu/updateZhijia",
+                            {
+                                "id":this.id,
+                                "chuanhao": this.chuanhao,
+                                "danyuanmingcheng": this.danyuanmingcheng,
+                                "caizhi": this.caizhi,
+                                "waijing": this.waijing,
+                                "bihou": this.bihou,
+                                "changdu": this.changdu,
+                                "genshu": this.genshu,
+                                "yudingri": this.yudingri,
+                                "tuzhi": this.tuzhi,
+                                "naturi": this.naturi,
+                                "wanchengri": this.wanchengri,
+                                "songchuri": this.songchuri
+                            })
+                            .then((res) => {
+                                if (res.data.state === "1") {
+                                    this.$message.success(`新增成功`);
+                                    this.addVisible = true;
+                                    this.getList()
+                                }
+                                else {
+                                    this.$message.warning(res.data.message);
+                                }
 
-
-
+                            })
+                            .catch((err) => {
+                                this.$message.warning(err);
+                            })
+                    }
+                    else {
+                        this.$message.warning(`信息填写不完整`);
+                    }
+                }
             },
 
 
 
+            //选择点击显示删除
+            showDelete() {
+                if (this.listData.length) {
+                    this.delVisible = true;
+                    alert("1")
+                }
+                else {
+                    this.$message.warning(`选择要勾选的信息`);
+                }
+            },
 
+            // 确定删除
+            deleteRow() {
+                if(this.num===2){
+                    axios.post(" " + url + "/teshu/zhijiaDel",
+                        {
+                            "id": this.listData[0],
+                        }
+                    )
+                        .then((res) => {
+                            if (res.data.state === "1") {
+                                this.$message.success('删除成功');
+                                this.delVisible = false;
+                                this.loadingShowData(this.workStation);
+                            }
+                            else {
+                                this.$message.warning(`删除失败`);
+                            }
+                        })
+                        .catch((err) => {
+                            console.log(err)
+                        })
+                }
+
+
+
+            },
 
 
 
@@ -617,13 +945,9 @@
             //查看一品图
             seeYpt() {
 
+
             },
 
-
-            //删除
-            deleteRow() {
-
-            }
         }
     }
 </script>
