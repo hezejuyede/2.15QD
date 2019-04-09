@@ -535,12 +535,13 @@
                     let that = this;
                     axios.all([
                         axios.post(" " + url + "/sys/showTableTitle", {"name": "hlg"}),
-                        axios.post(" " + url + "/teshu/helongList",{
-                            "pici":this.pici,
-                            "quhua":this.quHua,
-                            "code":this.code,
-                            "yiguanhao":this.yiguanhao,
-                            "xitonghao":this.xitonghao})
+                        axios.post(" " + url + "/teshu/helongList", {
+                            "pici": this.pici,
+                            "quhua": this.quHua,
+                            "code": this.code,
+                            "yiguanhao": this.yiguanhao,
+                            "xitonghao": this.xitonghao
+                        })
                     ])
                         .then(axios.spread(function (title, table) {
                             that.cols = title.data;
@@ -657,8 +658,6 @@
                     this.wanchengri = "";
                     this.songchuri = "";
                 }
-
-
             },
 
             //进行新增
@@ -691,8 +690,6 @@
                                     this.$message.success(`新增成功`);
                                     this.addVisible = true;
                                     this.getList()
-
-
                                 }
                                 else {
                                     this.$message.warning(res.data.message);
@@ -897,7 +894,7 @@
             showDelete() {
                 if (this.listData.length) {
                     this.delVisible = true;
-                    alert("1")
+
                 }
                 else {
                     this.$message.warning(`选择要勾选的信息`);
@@ -916,7 +913,7 @@
                             if (res.data.state === "1") {
                                 this.$message.success('删除成功');
                                 this.delVisible = false;
-                                this.loadingShowData(this.workStation);
+                                this.getList()
                             }
                             else {
                                 this.$message.warning(`删除失败`);
