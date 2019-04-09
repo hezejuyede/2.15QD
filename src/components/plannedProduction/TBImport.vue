@@ -22,17 +22,17 @@
                                 <span>:</span>
                                 <el-input v-model="select_word"  style="width: 100px" placeholder="智能检索"></el-input>
                             </label>
-                            <label style="margin-right: 10px">
+                            <label style="margin-right:5px">
                                 <span>批次</span>
                                 <span>:</span>
                                 <el-select
                                     v-model="batch"
-                                    style="width: 150px"
+                                    style="width: 120px"
                                     clearable
                                     filterable
                                     allow-create
                                     default-first-option
-                                    placeholder="优先级">
+                                    placeholder="批次">
                                     <el-option
                                         v-for="item in batchOptions"
                                         :key="item.id"
@@ -41,25 +41,25 @@
                                     </el-option>
                                 </el-select>
                             </label>
-                            <label style="margin-right: 10px">
+                            <label style="margin-right: 5px">
                                 <span>区划</span>
                                 <span>:</span>
-                                <el-input v-model="quHua"  style="width: 100px" placeholder="区划"></el-input>
+                                <el-input v-model="quHua"  style="width: 80px" placeholder="区划"></el-input>
                             </label>
-                            <label style="margin-right: 10px">
+                            <label style="margin-right: 5px">
                                 <span>系统号</span>
                                 <span>:</span>
-                                <el-input v-model="systemNumber"  style="width: 100px" placeholder="系统号"></el-input>
+                                <el-input v-model="systemNumber"  style="width:80px" placeholder="系统号"></el-input>
                             </label>
-                            <label style="margin-right: 10px">
+                            <label style="margin-right: 5px">
                                 <span>一贯号</span>
                                 <span>:</span>
-                                <el-input v-model="yiguanhao"  style="width: 100px" placeholder="code"></el-input>
+                                <el-input v-model="yiguanhao"  style="width: 80px" placeholder="一贯号"></el-input>
                             </label>
-                            <label style="margin-right: 10px">
+                            <label style="margin-right: 5px">
                                 <span>code号</span>
                                 <span>:</span>
-                                <el-input v-model="codeNumber"  style="width: 100px" placeholder="code"></el-input>
+                                <el-input v-model="codeNumber"  style="width: 80px" placeholder="code"></el-input>
                             </label>
                             <el-button type="primary"  @click="showAdd(num)">新增</el-button>
                             <el-button type="success"  @click="doSearch(num)">查询</el-button>
@@ -983,7 +983,7 @@
                     .handle-box {
                         height: 80px;
                         line-height: 80px;
-                        padding-left: 50px;
+                        padding-left: 20px;
                         .handle-input {
                             width: 300px;
                             display: inline-block;
