@@ -20,7 +20,7 @@
                             <label style="margin-right: 5px">
                                 <span>智能检索</span>
                                 <span>:</span>
-                                <el-input v-model="select_word"  style="width: 100px" placeholder="智能检索"></el-input>
+                                <el-input v-model="select_word" style="width: 100px" placeholder="智能检索"></el-input>
                             </label>
                             <label style="margin-right:5px">
                                 <span>批次</span>
@@ -44,30 +44,31 @@
                             <label style="margin-right: 5px">
                                 <span>区划</span>
                                 <span>:</span>
-                                <el-input v-model="quHua"  style="width: 80px" placeholder="区划"></el-input>
+                                <el-input v-model="quHua" style="width: 80px" placeholder="区划"></el-input>
                             </label>
                             <label style="margin-right: 5px">
                                 <span>系统号</span>
                                 <span>:</span>
-                                <el-input v-model="systemNumber"  style="width:80px" placeholder="系统号"></el-input>
+                                <el-input v-model="systemNumber" style="width:80px" placeholder="系统号"></el-input>
                             </label>
                             <label style="margin-right: 5px">
                                 <span>一贯号</span>
                                 <span>:</span>
-                                <el-input v-model="yiguanhao"  style="width: 80px" placeholder="一贯号"></el-input>
+                                <el-input v-model="yiguanhao" style="width: 80px" placeholder="一贯号"></el-input>
                             </label>
                             <label style="margin-right: 5px">
                                 <span>code号</span>
                                 <span>:</span>
-                                <el-input v-model="codeNumber"  style="width: 80px" placeholder="code"></el-input>
+                                <el-input v-model="codeNumber" style="width: 80px" placeholder="code"></el-input>
                             </label>
-                            <el-button type="primary"  @click="showAdd(num)">新增</el-button>
-                            <el-button type="success"  @click="doSearch(num)">查询</el-button>
+                            <el-button type="primary" @click="showAdd(num)">新增</el-button>
+                            <el-button type="success" @click="doSearch(num)">查询</el-button>
                         </div>
                         <div class="">
                             <el-table
                                 class="tb-edit"
                                 :data="tables"
+                                :key="0"
                                 :header-cell-style="{background:'#A1D0FC',color:'rgba(0, 0, 0, 0.8)',fontSize:'12px'}"
                                 border
                                 height="380"
@@ -75,7 +76,8 @@
                                 @row-dblclick="showEdit"
                                 style="width: 98%;margin: auto">
                                 <template v-for="(col ,index) in cols">
-                                    <el-table-column align="center" :prop="col.prop" :label="col.label"></el-table-column>
+                                    <el-table-column align="center" :prop="col.prop"
+                                                     :label="col.label"></el-table-column>
                                 </template>
                             </el-table>
                         </div>
@@ -83,12 +85,9 @@
                     <div class="tabBottomTemplate" v-if="this.num===1">
                         <div class="handle-box">
                             <label style="margin-right: 5px">
-                                <el-button type="warning"  @click="showTBImport()">特别流程导入</el-button>
-                            </label>
-                            <label style="margin-right: 5px">
                                 <span>智能检索</span>
                                 <span>:</span>
-                                <el-input v-model="select_word"  style="width: 100px" placeholder="智能检索"></el-input>
+                                <el-input v-model="select_word" style="width: 100px" placeholder="智能检索"></el-input>
                             </label>
                             <label style="margin-right: 10px">
                                 <span>审批状态</span>
@@ -147,22 +146,29 @@
                                     </el-option>
                                 </el-select>
                             </label>
-                            <el-button type="success"  @click="doSearch(num)">查询</el-button>
-                            <el-button type="primary"  @click="showAdd(num)">导入</el-button>
-                            <el-button type="danger"  @click="showDelete()">删除</el-button>
+                            <el-button type="success" @click="doSearch(num)">查询</el-button>
+                            <el-button type="primary" @click="showTBImport()">导入数据</el-button>
+                            <el-button type="danger" @click="showDelete()">删除</el-button>
                         </div>
                         <div class="">
-                            <el-table
-                                class="tb-edit"
-                                :data="tables"
-                                :header-cell-style="{background:'#A1D0FC',color:'rgba(0, 0, 0, 0.8)',fontSize:'12px'}"
-                                border
-                                height="380"
-                                highlight-current-row
-                                @row-dblclick="showEdit"
-                                style="width: 98%;margin: auto">
+                            <el-table class="tb-edit"
+                                      :data="tables"
+                                      :key="2"
+                                      :header-cell-style="{background:'#A1D0FC',color:'rgba(0, 0, 0, 0.8)',fontSize:'12px'}"
+                                      border
+                                      height="380"
+                                      @select-all="selectAll"
+                                      @select="selectList"
+                                      @row-dblclick="showEdit"
+                                      highlight-current-row
+                                      style="width: 98%;margin: auto">
+                                <el-table-column
+                                    type="selection"
+                                    width="30">
+                                </el-table-column>
                                 <template v-for="(col ,index) in cols">
-                                    <el-table-column align="center" :prop="col.prop" :label="col.label"></el-table-column>
+                                    <el-table-column align="center" :prop="col.prop"
+                                                     :label="col.label"></el-table-column>
                                 </template>
                             </el-table>
                         </div>
@@ -172,7 +178,7 @@
                             <label style="margin-right: 5px">
                                 <span>智能检索</span>
                                 <span>:</span>
-                                <el-input v-model="select_word"  style="width: 300px" placeholder="智能检索"></el-input>
+                                <el-input v-model="select_word" style="width: 300px" placeholder="智能检索"></el-input>
                             </label>
                             <label style="margin-right: 10px">
                                 <span>批次</span>
@@ -193,13 +199,14 @@
                                     </el-option>
                                 </el-select>
                             </label>
-                            <el-button type="success"  @click="doSearch(num)">查询</el-button>
-                            <el-button type="primary"  @click="showAdd(num)">录入</el-button>
-                            <el-button type="danger"  @click="showDelete()">删除</el-button>
+                            <el-button type="success" @click="doSearch(num)">查询</el-button>
+                            <el-button type="primary" @click="showAdd(num)">录入</el-button>
+                            <el-button type="danger" @click="showDelete()">删除</el-button>
                         </div>
                         <div class="">
                             <el-table class="tb-edit"
                                       :data="tables"
+                                      :key="2"
                                       :header-cell-style="{background:'#A1D0FC',color:'rgba(0, 0, 0, 0.8)',fontSize:'12px'}"
                                       border
                                       height="380"
@@ -213,7 +220,8 @@
                                     width="30">
                                 </el-table-column>
                                 <template v-for="(col ,index) in cols">
-                                    <el-table-column align="center" :prop="col.prop" :label="col.label"></el-table-column>
+                                    <el-table-column align="center" :prop="col.prop"
+                                                     :label="col.label"></el-table-column>
                                 </template>
                             </el-table>
                         </div>
@@ -223,42 +231,24 @@
                             <label style="margin-right: 10px">
                                 <span>智能检索</span>
                                 <span>:</span>
-                                <el-input v-model="select_word"  style="width: 200px" placeholder="智能检索"></el-input>
-                            </label>
-                            <label style="margin-right:10px">
-                                <span>补做管类型</span>
-                                <span>:</span>
-                                <el-select
-                                    v-model="pipeType"
-                                    style="width: 150px"
-                                    clearable
-                                    filterable
-                                    allow-create
-                                    default-first-option
-                                    placeholder="补做管类型">
-                                    <el-option
-                                        v-for="item in pipeTypeOptions"
-                                        :key="item.id"
-                                        :label="item.name"
-                                        :value="item.id">
-                                    </el-option>
-                                </el-select>
+                                <el-input v-model="select_word" style="width: 200px" placeholder="智能检索"></el-input>
                             </label>
                             <label style="margin-right: 10px">
                                 <span>一贯号</span>
                                 <span>:</span>
-                                <el-input v-model="yiguanhao"  style="width: 120px" placeholder="一贯号"></el-input>
+                                <el-input v-model="yiguanhao" style="width: 120px" placeholder="一贯号"></el-input>
                             </label>
                             <label style="margin-right:10px">
                                 <span>code号</span>
                                 <span>:</span>
-                                <el-input v-model="codeNumber"  style="width: 120px" placeholder="code"></el-input>
+                                <el-input v-model="codeNumber" style="width: 120px" placeholder="code"></el-input>
                             </label>
-                            <el-button type="success"  @click="doSearch(num)">查询</el-button>
-                            <el-button type="primary"  @click="showAdd(num)">新增</el-button>
+                            <el-button type="success" @click="doSearch(num)">查询</el-button>
+                            <el-button type="primary" @click="showAdd(num)">新增</el-button>
                         </div>
                         <div class="">
                             <el-table
+                                :key="3"
                                 class="tb-edit"
                                 :data="tables"
                                 :header-cell-style="{background:'#A1D0FC',color:'rgba(0, 0, 0, 0.8)',fontSize:'12px'}"
@@ -268,7 +258,175 @@
                                 @row-dblclick="showEdit"
                                 style="width: 98%;margin: auto">
                                 <template v-for="(col ,index) in cols">
-                                    <el-table-column align="center" :prop="col.prop" :label="col.label"></el-table-column>
+                                    <el-table-column align="center" :prop="col.prop"
+                                                     :label="col.label"></el-table-column>
+                                </template>
+                            </el-table>
+                        </div>
+                    </div>
+                    <div class="tabBottomTemplate" v-if="this.num===4">
+                        <div class="handle-box">
+                            <label style="margin-right: 10px">
+                                <span>智能检索</span>
+                                <span>:</span>
+                                <el-input v-model="select_word" style="width: 200px" placeholder="智能检索"></el-input>
+                            </label>
+                            <label style="margin-right: 10px">
+                                <span>一贯号</span>
+                                <span>:</span>
+                                <el-input v-model="yiguanhao" style="width: 120px" placeholder="一贯号"></el-input>
+                            </label>
+                            <label style="margin-right:10px">
+                                <span>code号</span>
+                                <span>:</span>
+                                <el-input v-model="codeNumber" style="width: 120px" placeholder="code"></el-input>
+                            </label>
+                            <el-button type="success" @click="doSearch(num)">查询</el-button>
+                            <el-button type="primary" @click="showAdd(num)">新增</el-button>
+                        </div>
+                        <div class="">
+                            <el-table
+                                :key="3"
+                                class="tb-edit"
+                                :data="tables"
+                                :header-cell-style="{background:'#A1D0FC',color:'rgba(0, 0, 0, 0.8)',fontSize:'12px'}"
+                                border
+                                height="380"
+                                highlight-current-row
+                                @row-dblclick="showEdit"
+                                style="width: 98%;margin: auto">
+                                <template v-for="(col ,index) in cols">
+                                    <el-table-column align="center" :prop="col.prop"
+                                                     :label="col.label"></el-table-column>
+                                </template>
+                            </el-table>
+                        </div>
+                    </div>
+                    <div class="tabBottomTemplate" v-if="this.num===5">
+                        <div class="handle-box">
+                            <label style="margin-right: 10px">
+                                <span>智能检索</span>
+                                <span>:</span>
+                                <el-input v-model="select_word" style="width: 200px" placeholder="智能检索"></el-input>
+                            </label>
+                            <label style="margin-right: 10px">
+                                <span>一贯号</span>
+                                <span>:</span>
+                                <el-input v-model="yiguanhao" style="width: 120px" placeholder="一贯号"></el-input>
+                            </label>
+                            <label style="margin-right:10px">
+                                <span>code号</span>
+                                <span>:</span>
+                                <el-input v-model="codeNumber" style="width: 120px" placeholder="code"></el-input>
+                            </label>
+                            <el-button type="success" @click="doSearch(num)">查询</el-button>
+                            <el-button type="primary" @click="showAdd(num)">新增</el-button>
+                        </div>
+                        <div class="">
+                            <el-table
+                                :key="3"
+                                class="tb-edit"
+                                :data="tables"
+                                :header-cell-style="{background:'#A1D0FC',color:'rgba(0, 0, 0, 0.8)',fontSize:'12px'}"
+                                border
+                                height="380"
+                                highlight-current-row
+                                @row-dblclick="showEdit"
+                                style="width: 98%;margin: auto">
+                                <template v-for="(col ,index) in cols">
+                                    <el-table-column align="center" :prop="col.prop"
+                                                     :label="col.label"></el-table-column>
+                                </template>
+                            </el-table>
+                        </div>
+                    </div>
+                    <div class="tabBottomTemplate" v-if="this.num===6">
+                        <div class="handle-box">
+                            <label style="margin-right: 5px">
+                                <span>智能检索</span>
+                                <span>:</span>
+                                <el-input v-model="select_word" style="width: 100px" placeholder="智能检索"></el-input>
+                            </label>
+                            <label style="margin-right: 10px">
+                                <span>审批状态</span>
+                                <span>:</span>
+                                <el-select
+                                    v-model="status"
+                                    style="width: 120px"
+                                    clearable
+                                    filterable
+                                    allow-create
+                                    default-first-option
+                                    placeholder="审批状态">
+                                    <el-option
+                                        v-for="item in statusOptions"
+                                        :key="item.id"
+                                        :label="item.name"
+                                        :value="item.id">
+                                    </el-option>
+                                </el-select>
+                            </label>
+                            <label style="margin-right:10px">
+                                <span>批次</span>
+                                <span>:</span>
+                                <el-select
+                                    v-model="batch"
+                                    style="width: 120px"
+                                    clearable
+                                    filterable
+                                    allow-create
+                                    default-first-option
+                                    placeholder="批次">
+                                    <el-option
+                                        v-for="item in batchOptions"
+                                        :key="item.id"
+                                        :label="item.name"
+                                        :value="item.id">
+                                    </el-option>
+                                </el-select>
+                            </label>
+                            <label style="margin-right: 10px">
+                                <span>生产线</span>
+                                <span>:</span>
+                                <el-select
+                                    v-model="scx"
+                                    style="width: 100px"
+                                    clearable
+                                    filterable
+                                    allow-create
+                                    default-first-option
+                                    placeholder="生产线">
+                                    <el-option
+                                        v-for="item in scxOptions"
+                                        :key="item.id"
+                                        :label="item.name"
+                                        :value="item.id">
+                                    </el-option>
+                                </el-select>
+                            </label>
+                            <el-button type="success" @click="doSearch(num)">查询</el-button>
+                            <el-button type="primary" @click="showTBImport()">导入数据</el-button>
+                            <el-button type="danger" @click="showDelete()">删除</el-button>
+                        </div>
+                        <div class="">
+                            <el-table class="tb-edit"
+                                      :data="tables"
+                                      :key="2"
+                                      :header-cell-style="{background:'#A1D0FC',color:'rgba(0, 0, 0, 0.8)',fontSize:'12px'}"
+                                      border
+                                      height="380"
+                                      @select-all="selectAll"
+                                      @select="selectList"
+                                      @row-dblclick="showEdit"
+                                      highlight-current-row
+                                      style="width: 98%;margin: auto">
+                                <el-table-column
+                                    type="selection"
+                                    width="30">
+                                </el-table-column>
+                                <template v-for="(col ,index) in cols">
+                                    <el-table-column align="center" :prop="col.prop"
+                                                     :label="col.label"></el-table-column>
                                 </template>
                             </el-table>
                         </div>
@@ -279,7 +437,7 @@
 
 
         <!--新增弹出框 -->
-        <el-dialog title="新增" :visible.sync="addVisible" width="50%" @close='closeDialog' >
+        <el-dialog title="新增" :visible.sync="addVisible" width="50%" @close='closeDialog'>
             <div class="" v-if="this.num===0" style="height: 450px;overflow-y: auto">
                 <el-form ref="form" label-width="100px">
                     <el-form-item label="数据查询">
@@ -291,12 +449,13 @@
                                 <el-input v-model="systemNumber" style="width: 150px" placeholder="系统号"></el-input>
                             </div>
                             <div class="" style="flex: 1">
-                                <el-button type="success" @click="doSearchHLG" style="width: 70px;height: 35px">查询</el-button>
+                                <el-button type="success" @click="doSearchHLG" style="width: 70px;height: 35px">查询
+                                </el-button>
                             </div>
                         </div>
                     </el-form-item>
                     <el-form-item label="查看一品图">
-                        <el-button type="danger" @click="seeYpt" style="width: 150px;height: 35px" >查看一品图
+                        <el-button type="danger" @click="seeYpt" style="width: 150px;height: 35px">查看一品图
                         </el-button>
                     </el-form-item>
                     <el-form-item label="优先级">
@@ -316,7 +475,7 @@
                         </el-select>
                     </el-form-item>
                     <el-form-item label="CODE">
-                        <el-input v-model="code" style="width: 200px"  placeholder="CODE"></el-input>
+                        <el-input v-model="code" style="width: 200px" placeholder="CODE"></el-input>
                     </el-form-item>
                     <el-form-item label="一贯号">
                         <el-input v-model="yiguanhao" style="width: 200px" placeholder="一贯号"></el-input>
@@ -334,7 +493,7 @@
                         <el-input v-model="guanzhong" style="width: 200px" placeholder="管种"></el-input>
                     </el-form-item>
                     <el-form-item label="船号">
-                        <el-input v-model="chuanhao" style="width: 200px" placeholder="船号"> </el-input>
+                        <el-input v-model="chuanhao" style="width: 200px" placeholder="船号"></el-input>
                     </el-form-item>
                     <el-form-item label="批次">
                         <el-select
@@ -405,7 +564,7 @@
                         <el-input v-model="genshu" style="width: 200px" placeholder="根数"></el-input>
                     </el-form-item>
                     <el-form-item label="长度">
-                        <el-input v-model="changdu" style="width: 200px"  placeholder="长度"></el-input>
+                        <el-input v-model="changdu" style="width: 200px" placeholder="长度"></el-input>
                     </el-form-item>
                     <el-form-item label="图纸">
                         <el-input v-model="tuzhi" style="width: 200px" placeholder="图纸"></el-input>
@@ -452,11 +611,12 @@
                     </el-form-item>
                 </el-form>
             </div>
-            <div class="" v-if="this.num===3" style="height: 450px;overflow-y: auto">
+            <div class="" v-if="this.num===3 || this.num===4 || this.num===5" style="height: 450px;overflow-y: auto">
                 <el-form ref="form" label-width="100px">
                     <el-form-item label="管类型">
                         <el-select
                             v-model="pipeType"
+                            disabled
                             style="width: 150px"
                             clearable
                             filterable
@@ -470,6 +630,9 @@
                                 :value="item.id">
                             </el-option>
                         </el-select>
+                    </el-form-item>
+                    <el-form-item label="船号">
+                        <el-input v-model="chuanhao" style="width: 200px" placeholder="船号"></el-input>
                     </el-form-item>
                     <el-form-item label="批次">
                         <el-select
@@ -489,10 +652,10 @@
                         </el-select>
                     </el-form-item>
                     <el-form-item label="一贯号">
-                        <el-input v-model="yiguanhao" style="width: 200px"  placeholder="一贯号"></el-input>
+                        <el-input v-model="yiguanhao" style="width: 200px" placeholder="一贯号"></el-input>
                     </el-form-item>
                     <el-form-item label="code">
-                        <el-input v-model="code" style="width: 200px"  placeholder="code"></el-input>
+                        <el-input v-model="code" style="width: 200px" placeholder="code"></el-input>
                     </el-form-item>
                     <el-form-item label="申请人">
                         <el-input v-model="shenqingren" style="width: 200px" placeholder="申请人"></el-input>
@@ -515,7 +678,7 @@
                     </el-form-item>
                     <el-form-item label="申请时间">
                         <el-date-picker
-                            v-model="shenqingshijian"
+                            v-model="shenqingtime"
                             align="right"
                             type="date"
                             style="width: 200px"
@@ -532,7 +695,7 @@
         </el-dialog>
 
         <!-- 编辑弹出框 -->
-        <el-dialog title="编辑按钮" :visible.sync="editVisible" width="50%" @close='closeDialog' >
+        <el-dialog title="编辑按钮" :visible.sync="editVisible" width="50%" @close='closeDialog'>
             <div class="" v-if="this.num===0" style="height: 450px;overflow-y: auto">
                 <el-form ref="form" label-width="100px">
                     <el-form-item label="数据查询">
@@ -544,12 +707,13 @@
                                 <el-input v-model="systemNumber" style="width: 150px" placeholder="系统号"></el-input>
                             </div>
                             <div class="" style="flex: 1">
-                                <el-button type="success" @click="doSearchHLG" style="width: 70px;height: 35px">查询</el-button>
+                                <el-button type="success" @click="doSearchHLG" style="width: 70px;height: 35px">查询
+                                </el-button>
                             </div>
                         </div>
                     </el-form-item>
                     <el-form-item label="查看一品图">
-                        <el-button type="danger" @click="seeYpt" style="width: 150px;height: 35px" >查看一品图
+                        <el-button type="danger" @click="seeYpt" style="width: 150px;height: 35px">查看一品图
                         </el-button>
                     </el-form-item>
                     <el-form-item label="优先级">
@@ -569,7 +733,7 @@
                         </el-select>
                     </el-form-item>
                     <el-form-item label="CODE">
-                        <el-input v-model="code" style="width: 200px"  placeholder="CODE"></el-input>
+                        <el-input v-model="code" style="width: 200px" placeholder="CODE"></el-input>
                     </el-form-item>
                     <el-form-item label="一贯号">
                         <el-input v-model="yiguanhao" style="width: 200px" placeholder="一贯号"></el-input>
@@ -587,7 +751,7 @@
                         <el-input v-model="guanzhong" style="width: 200px" placeholder="管种"></el-input>
                     </el-form-item>
                     <el-form-item label="船号">
-                        <el-input v-model="chuanhao" style="width: 200px" placeholder="船号"> </el-input>
+                        <el-input v-model="chuanhao" style="width: 200px" placeholder="船号"></el-input>
                     </el-form-item>
                     <el-form-item label="批次">
                         <el-select
@@ -658,7 +822,7 @@
                         <el-input v-model="genshu" style="width: 200px" placeholder="根数"></el-input>
                     </el-form-item>
                     <el-form-item label="长度">
-                        <el-input v-model="changdu" style="width: 200px"  placeholder="长度"></el-input>
+                        <el-input v-model="changdu" style="width: 200px" placeholder="长度"></el-input>
                     </el-form-item>
                     <el-form-item label="图纸">
                         <el-input v-model="tuzhi" style="width: 200px" placeholder="图纸"></el-input>
@@ -705,11 +869,12 @@
                     </el-form-item>
                 </el-form>
             </div>
-            <div class="" v-if="this.num===3" style="height: 450px;overflow-y: auto">
+            <div class="" v-if="this.num===3 || this.num===4 || this.num===5" style="height: 450px;overflow-y: auto">
                 <el-form ref="form" label-width="100px">
                     <el-form-item label="管类型">
                         <el-select
                             v-model="pipeType"
+                            disabled
                             style="width: 150px"
                             clearable
                             filterable
@@ -724,9 +889,13 @@
                             </el-option>
                         </el-select>
                     </el-form-item>
+                    <el-form-item label="船号">
+                        <el-input v-model="chuanhao" disabled style="width: 200px" placeholder="船号"></el-input>
+                    </el-form-item>
                     <el-form-item label="批次">
                         <el-select
                             v-model="batch"
+                            disabled
                             style="width: 120px"
                             clearable
                             filterable
@@ -742,10 +911,10 @@
                         </el-select>
                     </el-form-item>
                     <el-form-item label="一贯号">
-                        <el-input v-model="yiguanhao" style="width: 200px"  placeholder="一贯号"></el-input>
+                        <el-input v-model="yiguanhao" disabled style="width: 200px" placeholder="一贯号"></el-input>
                     </el-form-item>
                     <el-form-item label="code">
-                        <el-input v-model="code" style="width: 200px"  placeholder="code"></el-input>
+                        <el-input v-model="code" disabled style="width: 200px" placeholder="code"></el-input>
                     </el-form-item>
                     <el-form-item label="申请人">
                         <el-input v-model="shenqingren" style="width: 200px" placeholder="申请人"></el-input>
@@ -768,7 +937,7 @@
                     </el-form-item>
                     <el-form-item label="申请时间">
                         <el-date-picker
-                            v-model="shenqingshijian"
+                            v-model="shenqingtime"
                             align="right"
                             type="date"
                             style="width: 200px"
@@ -785,7 +954,7 @@
         </el-dialog>
 
         <!-- 删除提示框 -->
-        <el-dialog title="删除按钮" :visible.sync="delVisible" width="300px" center>
+        <el-dialog title="删除按钮" :visible.sync="delVisible" width="300px" center @close='closeDialog'>
             <div class="del-dialog-cnt">删除不可恢复，是否确定删除？</div>
             <span slot="footer" class="dialog-footer">
                 <el-button @click="delVisible = false" style="height:30px;width:80px">取 消</el-button>
@@ -795,7 +964,7 @@
 
 
         <!--新增弹出框 -->
-        <el-dialog title="导入数据" :visible.sync="uploadVisible" width="60%">
+        <el-dialog title="导入数据" :visible.sync="uploadVisible" width="60%" @close='closeDialog'>
             <div class="container" style="height:450px;overflow:auto">
                 <div class="containerSelect"
                      style="height: 80px;
@@ -804,11 +973,11 @@
                      justify-content: center">
                     <div class="select">
                         <label style="margin-right: 5px;margin-left: 5px">
-                            <span>文件类型</span>
+                            <span>管类型</span>
                             <span>:</span>
                             <el-select
-                                v-model="fileType"
-                                @input="setType(fileType)"
+                                v-model="importPipeType"
+                                @input="setImportPipeType(importPipeType)"
                                 clearable
                                 filterable
                                 allow-create
@@ -816,7 +985,7 @@
                                 style="width: 150px"
                                 placeholder="文件类型">
                                 <el-option
-                                    v-for="item in fileTypeOptions"
+                                    v-for="item in importPipeTypeOptions"
                                     :key="item.indexno"
                                     :label="item.name"
                                     :value="item.indexno">
@@ -922,14 +1091,14 @@
         </el-dialog>
 
         <!--导入文件详情 -->
-        <el-dialog title="文件详情" :visible.sync="detailsVisible" width="90%">
+        <el-dialog title="文件详情" :visible.sync="detailsVisible" width="90%" @close='closeDialog'>
             <div class="container" style="height:470px;overflow:auto">
 
             </div>
         </el-dialog>
 
         <!-- 失败信息返回框 -->
-        <el-dialog title="导入失败信息提示" :visible.sync="errVisible" width="60%">
+        <el-dialog title="导入失败信息提示" :visible.sync="errVisible" width="60%" @close='closeDialog'>
 
         </el-dialog>
     </div>
@@ -938,6 +1107,7 @@
     import axios from 'axios'
     import Modal from '../../common/modal'
     import url from '../../assets/js/URL'
+
     export default {
         name: 'InformationImport',
         data() {
@@ -945,19 +1115,22 @@
                 message: '',          //弹出框信息
                 HideModal: true,      //弹出框是否显示
 
-                num:0,                 //显示导航栏的index
+                num: 0,                 //显示导航栏的index
                 navBar: [
                     {"text": "合拢管"},
-                    {"text": "导入管"},
+                    {"text": "售后管"},
                     {"text": "支架管"},
-                    {"text": "补做管"},
+                    {"text": "客补管"},
+                    {"text": "厂补管"},
+                    {"text": "再加工管"},
+                    {"text": "未出图"},
                 ],          //显示导航栏的数据
 
 
                 select_word: "",         //智能检索
                 quHua: "",               //区划
-                systemNumber:"",         //系统号
-                codeNumber:"",           //区划
+                systemNumber: "",         //系统号
+                codeNumber: "",           //区划
 
                 uploadUrl: " " + url + "/fileupload/upload",
                 Data: {},
@@ -967,84 +1140,89 @@
                 cols: [],                //表头
                 tableData: [],           //表数据
                 id: "",                   //列表中的id
-                listData:[],             //Id的数组
+                listData: [],             //Id的数组
                 addVisible: false,      //新增弹出框
                 editVisible: false,     //编辑弹出框
                 delVisible: false,      //删除弹出框
 
                 uploadVisible: false,        //上传弹框
                 detailsVisible: false,      //详情弹框
-                errVisible:false,           //错误弹框
+                errVisible: false,           //错误弹框
 
-                scx:"",                    //生产线
-                scxOptions:[],             //生产线下拉列表
+                scx: "",                    //生产线
+                scxOptions: [],             //生产线下拉列表
 
-                status:"",                    //审批状态
-                statusOptions:[],             //审批状态下拉列表
+                status: "",                    //审批状态
+                statusOptions: [],             //审批状态下拉列表
 
                 fileType: "",                  //文件类型
                 fileTypeOptions: [],           //文件类型下拉列表
 
-                yxj:"",                    //优先级
-                yxjOptions:[
-                    {"name":"一般","id":"0"},
-                    {"name":"较急","id":"1"},
-                    {"name":"紧急","id":"2"},
+                yxj: "",                    //优先级
+                yxjOptions: [
+                    {"name": "一般", "id": "0"},
+                    {"name": "较急", "id": "1"},
+                    {"name": "紧急", "id": "2"},
                 ],                            //优先级下拉列表
-                pipeType:"",                  //管子种类
-                pipeTypeOptions:[
-                    {"name":"客补管","id":"0"},
-                    {"name":"厂补管","id":"1"},
-                    {"name":"再加工管","id":"2"}
-                ],                             //管子种类下拉列表
-                batch:"",                      //批次
-                batchOptions:[
-                    {"name":"一般","id":"0"},
-                    {"name":"较急","id":"1"},
-                    {"name":"紧急","id":"2"}
+                pipeType: "",                  //管子种类
+                pipeTypeOptions: [
+                    {"name": "客补管", "id": "3"},
+                    {"name": "厂补管", "id": "5"},
+                    {"name": "再加工管", "id": "4"}
+                ],       //管子种类下拉列表
+
+                importPipeType: "",                  //管子种类
+                importPipeTypeOptions: [
+                    {"name": "未出图", "id": "0"},
+                    {"name": "售后管", "id": "1"}
+                ],       //管子种类下拉列表
+
+                batch: "",                      //批次
+                batchOptions: [
+                    {"name": "一般", "id": "0"},
+                    {"name": "较急", "id": "1"},
+                    {"name": "紧急", "id": "2"}
                 ],                            //批次下拉列表
 
 
                 //合拢管字段
-                code:"",
-                yiguanhao:"",
-                yptUrl:"",
-                tuzhuangfanhao:"",
-                shuishi:"",
-                chulifangshi:"",
-                guanzhong:"",
-                chuanhao:"",
-                koujing:"",
-                lianxiren:"",
-                jieshouriqi:"",
-                jiaofuriqi:"",
-                beizhu:"",
+                code: "",
+                yiguanhao: "",
+                yptUrl: "",
+                tuzhuangfanhao: "",
+                shuishi: "",
+                chulifangshi: "",
+                guanzhong: "",
+                chuanhao: "",
+                koujing: "",
+                lianxiren: "",
+                jieshouriqi: "",
+                jiaofuriqi: "",
+                beizhu: "",
 
 
                 //支架管字段
-                danyuanmingcheng:"",
-                caizhi:"",
-                waijing:"",
-                bihou:"",
-                changdu:"",
-                genshu:"",
-                yudingri:"",
-                tuzhi:"",
-                naturi:"",
-                wanchengri:"",
-                songchuri:"",
-
+                danyuanmingcheng: "",
+                caizhi: "",
+                waijing: "",
+                bihou: "",
+                changdu: "",
+                genshu: "",
+                yudingri: "",
+                tuzhi: "",
+                naturi: "",
+                wanchengri: "",
+                songchuri: "",
 
 
                 //补做管字段
-                shenqingren:"",
-                shenqingshijian:"",
+                shenqingren: "",
+                shenqingtime: "",
 
             }
         },
         components: {Modal},
         mounted() {
-
 
 
         },
@@ -1083,11 +1261,11 @@
                         axios.post(" " + url + "/sys/dictionaryList", {"id": "8"}),
                         axios.post(" " + url + "/sys/dictionaryList", {"id": "10"}),
                     ])
-                        .then(axios.spread(function (batchOptions, scxOptions,typeOptions,statusOptions) {
-                            that.batchOptions =batchOptions.data;
-                            that.scxOptions =scxOptions.data;
+                        .then(axios.spread(function (batchOptions, scxOptions, typeOptions, statusOptions) {
+                            that.batchOptions = batchOptions.data;
+                            that.scxOptions = scxOptions.data;
                             that.fileTypeOptions = typeOptions.data;
-                            that.statusOptions =statusOptions.data;
+                            that.statusOptions = statusOptions.data;
                             that.getList()
                         }));
                 }
@@ -1096,13 +1274,12 @@
             //底部导航跳转
             goToNavBar(index) {
                 this.num = index;
-                this.cols=[];
+                this.cols = [];
                 this.getList();
-
             },
 
             //请求列表
-            getList(){
+            getList() {
                 if (this.num === 0) {
                     let that = this;
                     axios.all([
@@ -1140,18 +1317,71 @@
                     ])
                         .then(axios.spread(function (title, table) {
                             that.cols = title.data;
-                            that.tableData = table.data.data;
+                            that.tableData = table.data;
                         }));
                 }
                 else if (this.num === 3) {
                     let that = this;
                     axios.all([
-                        axios.post(" " + url + "/sys/showTableTitle", {"name": "bzg"}),
-                        axios.post(" " + url + "/teshu/zhijiaList", {"pici": this.pici,})
+                        axios.post(" " + url + "/sys/showTableTitle", {"name": "kbg"}),
+                        axios.post(" " + url + "/teshu/KebuList", {
+                            "type": "3",
+                            "pici": this.pici,
+                            "yiguanhao": this.yiguanhao,
+                            "codeno": this.codeNumber
+                        })
                     ])
                         .then(axios.spread(function (title, table) {
                             that.cols = title.data;
                             that.tableData = table.data.data;
+                        }));
+                }
+                else if (this.num === 4) {
+                    let that = this;
+                    axios.all([
+                        axios.post(" " + url + "/sys/showTableTitle", {"name": "cbg"}),
+                        axios.post(" " + url + "/teshu/KebuList", {
+                            "type": "5",
+                            "pici": this.pici,
+                            "yiguanhao": this.yiguanhao,
+                            "codeno": this.codeNumber
+                        })
+                    ])
+                        .then(axios.spread(function (title, table) {
+                            that.cols = title.data;
+                            that.tableData = table.data.data;
+                        }));
+                }
+                else if (this.num === 5) {
+                    let that = this;
+                    axios.all([
+                        axios.post(" " + url + "/sys/showTableTitle", {"name": "zjgg"}),
+                        axios.post(" " + url + "/teshu/KebuList", {
+                            "type": "4",
+                            "pici": this.pici,
+                            "yiguanhao": this.yiguanhao,
+                            "codeno": this.codeNumber
+                        })
+                    ])
+                        .then(axios.spread(function (title, table) {
+                            that.cols = title.data;
+                            that.tableData = table.data.data;
+                        }));
+                }
+                else if (this.num === 6) {
+                    let that = this;
+                    axios.all([
+                        axios.post(" " + url + "/sys/showTableTitle", {"name": "bzg"}),
+                        axios.post(" " + url + "/teshu/KebuList", {
+                            "type": "4",
+                            "pici": this.pici,
+                            "yiguanhao": this.yiguanhao,
+                            "codeno": this.codeNumber
+                        })
+                    ])
+                        .then(axios.spread(function (title, table) {
+                            that.cols = title.data;
+                            that.tableData = table.data;
                         }));
                 }
             },
@@ -1167,7 +1397,7 @@
                     this.listData = data;
                 }
                 else {
-                    this.listData=[];
+                    this.listData = [];
                 }
             },
 
@@ -1187,8 +1417,6 @@
             },
 
 
-
-
             //进行查询
             doSearch() {
                 this.getList()
@@ -1197,9 +1425,9 @@
             //合拢管查询
             doSearchHLG() {
                 if (this.quHua && this.systemNumber) {
-                    axios.post(" " + url + "/teshu/getHelongDetailByXitong",{
-                        "quhua":this.quHua,
-                        "xitonghao":this.systemNumber
+                    axios.post(" " + url + "/teshu/getHelongDetailByXitong", {
+                        "quhua": this.quHua,
+                        "xitonghao": this.systemNumber
                     })
                         .then((res) => {
                             if (res.data.state === "1") {
@@ -1211,7 +1439,7 @@
                                 this.chulifangshi = res.data.data.chulifangshi;
                                 this.guanzhong = res.data.data.guanzhong;
                             }
-                            else{
+                            else {
                                 this.$message.warning(res.data.message);
                             }
                         })
@@ -1230,24 +1458,24 @@
                 this.addVisible = true;
                 if (index === 0) {
                     this.quHua = "";
-                    this.systemNumber =  "";
-                    this.yxj =  "";
-                    this.code =  "";
-                    this.yiguanhao =  "";
-                    this.tuzhuangfanhao =  "";
-                    this.shuishi =  "";
-                    this.chulifangshi =  "";
-                    this.guanzhong =  "";
-                    this.chuanhao =  "";
+                    this.systemNumber = "";
+                    this.yxj = "";
+                    this.code = "";
+                    this.yiguanhao = "";
+                    this.tuzhuangfanhao = "";
+                    this.shuishi = "";
+                    this.chulifangshi = "";
+                    this.guanzhong = "";
+                    this.chuanhao = "";
                     this.koujing = "";
-                    this.batch =  "";
-                    this.lianxiren =  "";
-                    this.jieshouriqi =  "";
-                    this.jiaofuriqi =  "";
-                    this.beizhu =  "";
+                    this.batch = "";
+                    this.lianxiren = "";
+                    this.jieshouriqi = "";
+                    this.jiaofuriqi = "";
+                    this.beizhu = "";
                 }
                 else if (index === 2) {
-                    this.chuanhao="";
+                    this.chuanhao = "";
                     this.danyuanmingcheng = "";
                     this.caizhi = "";
                     this.waijing = "";
@@ -1260,10 +1488,41 @@
                     this.wanchengri = "";
                     this.songchuri = "";
                 }
+                else if (index === 3) {
+                    this.pipeType = "3";
+                    this.batch = "";
+                    this.chuanhao = "";
+                    this.yiguanhao = "";
+                    this.code = "";
+                    this.shenqingren = "";
+                    this.yxj = "";
+                    this.shenqingtime = "";
+
+                }
+                else if (index === 4) {
+                    this.pipeType = "5";
+                    this.batch = "";
+                    this.chuanhao = "";
+                    this.yiguanhao = "";
+                    this.code = "";
+                    this.shenqingren = "";
+                    this.yxj = "";
+                    this.shenqingtime = "";
+                }
+                else if (index === 5) {
+                    this.pipeType = "4";
+                    this.batch = "";
+                    this.chuanhao = "";
+                    this.yiguanhao = "";
+                    this.code = "";
+                    this.shenqingren = "";
+                    this.yxj = "";
+                    this.shenqingtime = "";
+                }
             },
 
             //进行新增
-            doAdd(index){
+            doAdd(index) {
                 if (index === 0) {
                     if (this.chuanhao && this.quHua && this.systemNumber && this.lianxiren && this.batch && this.jiaofuriqi &&
                         this.beizhu && this.yiguanhao && this.code && this.tuzhuangfanhao && this.shuishi && this.chulifangshi &&
@@ -1312,9 +1571,9 @@
                     }
 
                 }
-                else if (index ===2){
+                else if (index === 2) {
                     if (this.chuanhao && this.danyuanmingcheng && this.caizhi && this.waijing && this.bihou && this.changdu &&
-                        this.genshu && this.yudingri && this.tuzhi && this.naturi && this.wanchengri && this.songchuri ) {
+                        this.genshu && this.yudingri && this.tuzhi && this.naturi && this.wanchengri && this.songchuri) {
                         axios.post(" " + url + "/teshu/addZhijia",
                             {
                                 "chuanhao": this.chuanhao,
@@ -1349,15 +1608,47 @@
                         this.$message.warning(`信息填写不完整`);
                     }
                 }
+                else if (index === 3 || index === 4 || index === 5) {
+                    if (this.chuanhao && this.pipeType && this.batch && this.yiguanhao && this.code && this.shenqingren && this.yxj && this.shenqingtime) {
+                        axios.post(" " + url + "/teshu/addZhijia",
+                            {
+                                "pici": this.batch,
+                                "chuanhao": this.chuanhao,
+                                "yiguanhao": this.yiguanhao,
+                                "codeno": this.code,
+                                "shenqingren": this.shenqingren,
+                                "shenqingtime": this.shenqingtime,
+                                "level": this.yxj,
+                                "type": this.pipeType,
+                            })
+                            .then((res) => {
+                                if (res.data.state === "1") {
+                                    this.$message.success(`新增成功`);
+                                    this.addVisible = false;
+                                    this.getList()
+                                }
+                                else {
+                                    this.$message.warning(res.data.message);
+                                }
+
+                            })
+                            .catch((err) => {
+                                this.$message.warning(err);
+                            })
+                    }
+                    else {
+                        this.$message.warning(`信息填写不完整`);
+                    }
+                }
             },
 
 
             //显示修改
-            showEdit(row, column, cell, event){
+            showEdit(row, column, cell, event) {
                 this.editVisible = true;
                 this.id = row.id;
                 if (this.num === 0) {
-                    axios.post(" " + url + "/teshu/helongDetail", {"id":this.id})
+                    axios.post(" " + url + "/teshu/helongDetail", {"id": this.id})
                         .then((res) => {
                             if (res.data.state === "1") {
                                 this.quHua = res.data.data.quhua;
@@ -1410,18 +1701,39 @@
                             this.$message.warning(err);
                         })
                 }
+                else if (this.num === 3 || this.num === 4 || this.num === 5) {
+                    axios.post(" " + url + "/teshu/detailKebu", {"id": this.id})
+                        .then((res) => {
+                            if (res.data.state === "1") {
+                                this.batch = res.data.data.pici;
+                                this.chuanhao = res.data.data.chuanhao;
+                                this.yiguanhao = res.data.data.yiguanhao;
+                                this.code = res.data.data.codeno;
+                                this.shenqingren = res.data.data.shenqingren;
+                                this.shenqingtime = res.data.data.shenqingtime;
+                                this.yxj = res.data.data.level;
+                                this.pipeType = res.data.data.type;
+                            }
+                            else {
+                                this.$message.warning(res.data.message);
+                            }
+                        })
+                        .catch((err) => {
+                            this.$message.warning(err);
+                        })
+                }
 
             },
 
             //进行修改
-            saveEdit(index){
+            saveEdit(index) {
                 if (index === 0) {
                     if (this.chuanhao && this.quHua && this.systemNumber && this.lianxiren && this.batch && this.jiaofuriqi &&
                         this.beizhu && this.yiguanhao && this.code && this.tuzhuangfanhao && this.shuishi && this.chulifangshi &&
                         this.guanzhong && this.jieshouriqi && this.yxj && this.koujing) {
                         axios.post(" " + url + "/teshu/updateHelong",
                             {
-                                "id":this.id,
+                                "id": this.id,
                                 "chuanhao": this.chuanhao,
                                 "quhua": this.quHua,
                                 "xitonghao": this.systemNumber,
@@ -1464,12 +1776,12 @@
                     }
 
                 }
-                else if(index ===2){
+                else if (index === 2) {
                     if (this.chuanhao && this.danyuanmingcheng && this.caizhi && this.waijing && this.bihou && this.changdu &&
-                        this.genshu && this.yudingri && this.tuzhi && this.naturi && this.wanchengri && this.songchuri ) {
+                        this.genshu && this.yudingri && this.tuzhi && this.naturi && this.wanchengri && this.songchuri) {
                         axios.post(" " + url + "/teshu/updateZhijia",
                             {
-                                "id":this.id,
+                                "id": this.id,
                                 "chuanhao": this.chuanhao,
                                 "danyuanmingcheng": this.danyuanmingcheng,
                                 "caizhi": this.caizhi,
@@ -1502,8 +1814,36 @@
                         this.$message.warning(`信息填写不完整`);
                     }
                 }
-            },
+                else if (index === 3 || index === 4 || index === 5) {
+                    if (this.chuanhao && this.pipeType && this.batch && this.yiguanhao && this.code && this.shenqingren && this.yxj && this.shenqingtime) {
+                        axios.post(" " + url + "/teshu/updateKebu",
+                            {
+                                "id": this.id,
+                                "shenqingren": this.shenqingren,
+                                "shenqingtime": this.shenqingtime,
+                                "level": this.yxj,
+                                "type": this.pipeType,
+                            })
+                            .then((res) => {
+                                if (res.data.state === "1") {
+                                    this.$message.success(`新增成功`);
+                                    this.addVisible = false;
+                                    this.getList()
+                                }
+                                else {
+                                    this.$message.warning(res.data.message);
+                                }
 
+                            })
+                            .catch((err) => {
+                                this.$message.warning(err);
+                            })
+                    }
+                    else {
+                        this.$message.warning(`信息填写不完整`);
+                    }
+                }
+            },
 
 
             //选择点击显示删除
@@ -1519,7 +1859,7 @@
 
             // 确定删除
             deleteRow() {
-                if(this.num===2){
+                if (this.num === 2) {
                     axios.post(" " + url + "/teshu/zhijiaDel",
                         {
                             "id": this.listData[0],
@@ -1541,12 +1881,11 @@
                 }
 
 
-
             },
 
             //显示特别流程导入
-            showTBImport(){
-                this.uploadVisible=true
+            showTBImport() {
+                this.uploadVisible = true
             },
 
 
@@ -1566,39 +1905,41 @@
             },
 
             // 关闭对话框后清空数据
-            closeDialog(){
-               if(this.num===0){
-                   this.batch = "";
-                   this.quHua = "";
-                   this.codeNumber = "";
-                   this.yiguanhao = "";
-                   this.systemNumber = "";
-               }
+            closeDialog() {
+                if (this.num === 0) {
+                    this.batch = "";
+                    this.quHua = "";
+                    this.codeNumber = "";
+                    this.yiguanhao = "";
+                    this.systemNumber = "";
+                    this.listData = [];
+                }
             },
 
+            //设置导入数据类型
+            setImportPipeType(importPipeType) {
+                this.Data = {"lineNo": this.SCX, "type": this.type, "pici": this.pc, 'pipeType': importPipeType}
+            },
 
             //设置批次
             setPc(batch) {
-                this.pc = this.batch;
-                this.Data = {"lineNo": this.SCX, "type": this.type, "pici": this.pc}
+                this.Data = {"lineNo": this.scx, "type": this.type, "pici": batch, 'pipeType': this.importPipeType}
             },
 
             //设置类型
             setType(fileType) {
-                this.type = this.fileType;
-                this.Data = {"lineNo": this.SCX, "type": this.type, "pici": this.pc}
+                this.Data = {"lineNo": this.scx, "type": fileType, "pici": this.pc, 'pipeType': this.importPipeType}
             },
 
             //设置生产线
             setScx(scx) {
-                this.SCX = this.scx;
-                this.Data = {"lineNo": this.SCX, "type": this.type, "pici": this.pc}
+                this.Data = {"lineNo": scx, "type": this.type, "pici": this.batch, 'pipeType': this.importPipeType}
             },
             //上传
             submitUpload() {
-                if (this.batch && this.fileType && this.scx) {
+                if (this.batch && this.fileType && this.scx && this.importPipeType) {
 
-                    this.$refs.upload.submit((data)=>{
+                    this.$refs.upload.submit((data) => {
                         console.log(data)
                     });
                     this.loading = true;
@@ -1619,12 +1960,11 @@
             },
 
             //上传成功
-            uploadSuccess(response, file, fileList)
-            {
+            uploadSuccess(response, file, fileList) {
                 if (response.state === "-1") {
-                    this.errList=response.message;
-                    this.errListData=response.errorList;
-                    this.errVisible =true;
+                    this.errList = response.message;
+                    this.errListData = response.errorList;
+                    this.errVisible = true;
                     this.loading = false;
                     let that = this;
                     axios.all([
@@ -1679,17 +2019,18 @@
 </script>
 <style scoped lang="less" rel="stylesheet/less">
     @import "../../assets/less/base";
-    .InformationImport{
+
+    .InformationImport {
         width: 100%;
         height: 100%;
         background-color: @color-white;
-        .crumbs{
+        .crumbs {
             height: 50px;
             padding-top: 20px;
             padding-left: 20px;
         }
-        .container{
-            .tabTop{
+        .container {
+            .tabTop {
                 display: flex;
                 height: 50px;
                 margin: 10px auto;
