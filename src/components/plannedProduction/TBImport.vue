@@ -458,6 +458,55 @@
                         <el-button type="danger" @click="seeYpt" style="width: 150px;height: 35px">查看一品图
                         </el-button>
                     </el-form-item>
+                    <el-form-item label="船号">
+                        <el-input v-model="chuanhao" style="width: 200px" placeholder="船号"></el-input>
+                    </el-form-item>
+                    <el-form-item label="口径">
+                        <el-input v-model="koujing" style="width: 200px" placeholder="口径"></el-input>
+                    </el-form-item>
+                    <el-form-item label="联系人">
+                        <el-input v-model="lianxiren" style="width: 200px" placeholder="联系人"></el-input>
+                    </el-form-item>
+                    <el-form-item label="批次">
+                        <el-select
+                            v-model="batch"
+                            style="width: 200px"
+                            clearable
+                            filterable
+                            allow-create
+                            default-first-option
+                            placeholder="批次">
+                            <el-option
+                                v-for="item in batchOptions"
+                                :key="item.id"
+                                :label="item.name"
+                                :value="item.id">
+                            </el-option>
+                        </el-select>
+                    </el-form-item>
+                    <el-form-item label="接收日期">
+                        <el-date-picker
+                            v-model="jieshouriqi"
+                            align="right"
+                            type="date"
+                            style="width: 200px"
+                            placeholder="接收日期"
+                            value-format="yyyy-MM-dd">
+                        </el-date-picker>
+                    </el-form-item>
+                    <el-form-item label="交付日期">
+                        <el-date-picker
+                            v-model="jiaofuriqi"
+                            align="right"
+                            type="date"
+                            style="width: 200px"
+                            placeholder="交付日期"
+                            value-format="yyyy-MM-dd">
+                        </el-date-picker>
+                    </el-form-item>
+                    <el-form-item label="备注">
+                        <el-input v-model="beizhu" style="width: 200px" placeholder="备注"></el-input>
+                    </el-form-item>
                     <el-form-item label="优先级">
                         <el-select
                             v-model="yxj"
@@ -491,55 +540,6 @@
                     </el-form-item>
                     <el-form-item label="管种">
                         <el-input v-model="guanzhong" style="width: 200px" placeholder="管种"></el-input>
-                    </el-form-item>
-                    <el-form-item label="船号">
-                        <el-input v-model="chuanhao" style="width: 200px" placeholder="船号"></el-input>
-                    </el-form-item>
-                    <el-form-item label="批次">
-                        <el-select
-                            v-model="batch"
-                            style="width: 200px"
-                            clearable
-                            filterable
-                            allow-create
-                            default-first-option
-                            placeholder="批次">
-                            <el-option
-                                v-for="item in batchOptions"
-                                :key="item.id"
-                                :label="item.name"
-                                :value="item.id">
-                            </el-option>
-                        </el-select>
-                    </el-form-item>
-                    <el-form-item label="口径">
-                        <el-input v-model="koujing" style="width: 200px" placeholder="口径"></el-input>
-                    </el-form-item>
-                    <el-form-item label="联系人">
-                        <el-input v-model="lianxiren" style="width: 200px" placeholder="联系人"></el-input>
-                    </el-form-item>
-                    <el-form-item label="接收日期">
-                        <el-date-picker
-                            v-model="jieshouriqi"
-                            align="right"
-                            type="date"
-                            style="width: 200px"
-                            placeholder="接收日期"
-                            value-format="yyyy-MM-dd">
-                        </el-date-picker>
-                    </el-form-item>
-                    <el-form-item label="交付日期">
-                        <el-date-picker
-                            v-model="jiaofuriqi"
-                            align="right"
-                            type="date"
-                            style="width: 200px"
-                            placeholder="交付日期"
-                            value-format="yyyy-MM-dd">
-                        </el-date-picker>
-                    </el-form-item>
-                    <el-form-item label="备注">
-                        <el-input v-model="beizhu" style="width: 200px" placeholder="备注"></el-input>
                     </el-form-item>
                 </el-form>
             </div>
