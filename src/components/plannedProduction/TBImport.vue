@@ -689,7 +689,6 @@
                 </el-form>
             </div>
             <span slot="footer" class="dialog-footer">
-                <el-button @click="addVisible = false" style="height:30px;width:80px">取 消</el-button>
                 <el-button type="primary" @click="doAdd(num)" style="height:30px;width:80px">确 定</el-button>
             </span>
         </el-dialog>
@@ -948,7 +947,6 @@
                 </el-form>
             </div>
             <span slot="footer" class="dialog-footer">
-                <el-button @click="editVisible = false" style="height:30px;width:80px">取 消</el-button>
                 <el-button type="primary" @click="saveEdit(num)" style="height:30px;width:80px">确 定</el-button>
             </span>
         </el-dialog>
@@ -1274,6 +1272,11 @@
             //底部导航跳转
             goToNavBar(index) {
                 this.num = index;
+                this.batch = "";
+                this.scx = "";
+                this.status = "";
+                this.yiguanhao = "";
+                this.codeNumber = "";
                 this.cols = [];
                 this.getList();
             },
@@ -1610,7 +1613,7 @@
                 }
                 else if (index === 3 || index === 4 || index === 5) {
                     if (this.chuanhao && this.pipeType && this.batch && this.yiguanhao && this.code && this.shenqingren && this.yxj && this.shenqingtime) {
-                        axios.post(" " + url + "/teshu/addZhijia",
+                        axios.post(" " + url + "/teshu/addKebu",
                             {
                                 "pici": this.batch,
                                 "chuanhao": this.chuanhao,
@@ -1624,6 +1627,8 @@
                             .then((res) => {
                                 if (res.data.state === "1") {
                                     this.$message.success(`新增成功`);
+                                    /* this.code="";
+                                     this.yiguanhao="";*/
                                     this.addVisible = false;
                                     this.getList()
                                 }
@@ -1826,8 +1831,10 @@
                             })
                             .then((res) => {
                                 if (res.data.state === "1") {
-                                    this.$message.success(`新增成功`);
-                                    this.addVisible = false;
+                                    this.$message.success(`修改成功`);
+                                   /* this.code="";
+                                    this.yiguanhao="";*/
+                                    this.editVisible = false;
                                     this.getList()
                                 }
                                 else {
@@ -1906,14 +1913,14 @@
 
             // 关闭对话框后清空数据
             closeDialog() {
-                if (this.num === 0) {
-                    this.batch = "";
-                    this.quHua = "";
-                    this.codeNumber = "";
-                    this.yiguanhao = "";
-                    this.systemNumber = "";
-                    this.listData = [];
-                }
+                this.batch = "";
+                this.quHua = "";
+                this.codeNumber = "";
+                this.systemNumber = "";
+                this.scx = "";
+                this.status = "";
+                this.yiguanhao = "";
+                this.listData = [];
             },
 
             //设置导入数据类型
