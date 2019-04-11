@@ -795,7 +795,18 @@
                                     <el-input v-model="code"  style="width: 200px" placeholder="code"></el-input>
                                 </el-form-item>
                                 <el-form-item label="图片">
-                                    <input type="file" value="drawingInputFileList">
+                                    <el-upload
+                                        class="upload-demo"
+                                        ref="upload"
+                                        action="https://jsonplaceholder.typicode.com/posts/"
+                                        :on-preview="handlePreview"
+                                        :on-remove="handleRemove"
+                                        :file-list="fileTypeOptions"
+                                        :auto-upload="false">
+                                        <el-button slot="trigger" size="small" type="primary">选取文件</el-button>
+                                        <el-button style="margin-left: 10px;" size="small" type="success" @click="submitUpload">上传到服务器</el-button>
+                                        <div slot="tip" class="el-upload__tip">只能上传jpg/png文件，且不超过500kb</div>
+                                    </el-upload>
                                 </el-form-item>
                                 <el-form-item label="">
                                     <el-button type="primary" @click="doDrawingInputAdd()">新增</el-button>
@@ -833,7 +844,15 @@
                                     <el-input v-model="code"  style="width: 200px" placeholder="code"></el-input>
                                 </el-form-item>
                                 <el-form-item label="图片">
-                                    <input type="file" value="drawingInputFileList">
+                                    <el-upload
+                                        class="upload-demo"
+                                        action="https://jsonplaceholder.typicode.com/posts/"
+                                        :on-change="handleChange"
+                                        :file-list="drawingInputFileList">
+                                        <el-button size="small" type="primary">点击上传</el-button>
+                                        <div slot="tip" class="el-upload__tip">只能上传jpg/png文件，且不超过500kb</div>
+                                    </el-upload>
+                                   <!-- <input type="file" value="drawingInputFileList">-->
                                 </el-form-item>
                                 <el-form-item label="">
                                     <el-button type="primary" @click="doDrawingInputAdd()">新增</el-button>
@@ -1298,7 +1317,7 @@
                 Data: {},
                 list: [],
                 loading: false,
-                drawingInputFileList:"",
+                drawingInputFileList:[],
 
                 cols: [],                //表头
                 tableData: [],           //表数据
@@ -2231,6 +2250,10 @@
 <style scoped lang="less" rel="stylesheet/less">
     @import "../../assets/less/base";
 
+
+
+
+
     .InformationImport {
         width: 100%;
         height: 100%;
@@ -2295,13 +2318,17 @@
             width: 100%;
             height: 100%;
             overflow: auto;
-            padding-top: 5%;
+            padding-top: 3%;
             background-color: @color-F0;
             border-radius: 20px;
             display: flex;
             align-items: center;
             justify-content: center;
             flex-direction: column;
+            body .el-upload--text {
+                height: 30px;
+                width: 120px;
+            }
         }
         .drawingInputDeleteDiv{
             width: 100%;
