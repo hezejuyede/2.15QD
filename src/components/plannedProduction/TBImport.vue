@@ -149,6 +149,7 @@
                             <el-button type="success" @click="doSearch(num)">查询</el-button>
                             <el-button type="primary" @click="showTBImport()">导入数据</el-button>
                             <el-button type="danger" @click="showDelete()">删除</el-button>
+                            <el-button type="warning" @click="drawingInput()">图纸录入</el-button>
                         </div>
                         <div class="">
                             <el-table class="tb-edit"
@@ -693,6 +694,168 @@
             </span>
         </el-dialog>
 
+
+        <!--图纸弹出框 -->
+        <el-dialog title="图纸录入" :visible.sync="drawingInputVisible" width="90%" @close='closeDialog'>
+            <div class="" style="height: 450px;overflow-y: auto">
+                 <div class="drawingInputTop">
+                     <label style="margin-right:5px">
+                         <span>批次</span>
+                         <span>:</span>
+                         <el-select
+                             v-model="batch"
+                             style="width: 120px"
+                             clearable
+                             filterable
+                             allow-create
+                             default-first-option
+                             placeholder="批次">
+                             <el-option
+                                 v-for="item in batchOptions"
+                                 :key="item.id"
+                                 :label="item.name"
+                                 :value="item.id">
+                             </el-option>
+                         </el-select>
+                     </label>
+                     <label style="margin-right: 5px">
+                         <span>船号</span>
+                         <span>:</span>
+                         <el-input v-model="yiguanhao" style="width: 120px" placeholder="一贯号"></el-input>
+                     </label>
+                     <label style="margin-right: 5px">
+                         <span>一贯号</span>
+                         <span>:</span>
+                         <el-input v-model="yiguanhao" style="width: 120px" placeholder="一贯号"></el-input>
+                     </label>
+                     <label style="margin-right:5px">
+                         <span>code号</span>
+                         <span>:</span>
+                         <el-input v-model="codeNumber" style="width: 120px" placeholder="code"></el-input>
+                     </label>
+                     <label style="margin-right:5px">
+                         <span>船号</span>
+                         <span>:</span>
+                         <el-input v-model="chuanhao" style="width: 120px" placeholder="船号"></el-input>
+                     </label>
+                     <el-button type="primary" @click="drawingInputAdd()">新增</el-button>
+                     <el-button type="success" @click="drawingInputSearch()">查询</el-button>
+                     <el-button type="danger" @click="drawingInputDelete()">删除</el-button>
+                 </div>
+                <div class="drawingInputBottom">
+                    <div class="" v-if="this.drawingInputType ===1">
+                        <el-table class="tb-edit"
+                                  :data="tables"
+                                  :key="2"
+                                  :header-cell-style="{background:'#A1D0FC',color:'rgba(0, 0, 0, 0.8)',fontSize:'12px'}"
+                                  border
+                                  height="380"
+                                  @select-all="selectAll"
+                                  @select="selectList"
+                                  @row-dblclick="showEdit"
+                                  highlight-current-row
+                                  style="width: 98%;margin: auto">
+                            <el-table-column
+                                type="selection"
+                                width="30">
+                            </el-table-column>
+                            <template v-for="(col ,index) in cols">
+                                <el-table-column align="center" :prop="col.prop"
+                                                 :label="col.label"></el-table-column>
+                            </template>
+                        </el-table>
+                    </div>
+                    <div class=""  v-if="this.drawingInputType ===2">
+                        <div class="drawingInputAddDiv">
+                            <el-form ref="form" label-width="100px">
+                                <el-form-item label="批次">
+                                    <el-select
+                                        v-model="batch"
+                                        style="width: 120px"
+                                        clearable
+                                        filterable
+                                        allow-create
+                                        default-first-option
+                                        placeholder="批次">
+                                        <el-option
+                                            v-for="item in batchOptions"
+                                            :key="item.id"
+                                            :label="item.name"
+                                            :value="item.id">
+                                        </el-option>
+                                    </el-select>
+                                </el-form-item>
+                                <el-form-item label="船号">
+                                    <el-input v-model="chuanhao"  style="width: 200px" placeholder="船号"></el-input>
+                                </el-form-item>
+                                <el-form-item label="一贯号">
+                                    <el-input v-model="yiguanhao"  style="width: 200px" placeholder="一贯号"></el-input>
+                                </el-form-item>
+                                <el-form-item label="code">
+                                    <el-input v-model="code"  style="width: 200px" placeholder="code"></el-input>
+                                </el-form-item>
+                                <el-form-item label="图片">
+                                    <input type="file" value="drawingInputFileList">
+                                </el-form-item>
+                                <el-form-item label="">
+                                    <el-button type="primary" @click="doDrawingInputAdd()">新增</el-button>
+                                </el-form-item>
+                            </el-form>
+                        </div>
+                    </div>
+                    <div class=""  v-if="this.drawingInputType ===3">
+                        <div class="drawingInputAddDiv">
+                            <el-form ref="form" label-width="100px">
+                                <el-form-item label="批次">
+                                    <el-select
+                                        v-model="batch"
+                                        style="width: 120px"
+                                        clearable
+                                        filterable
+                                        allow-create
+                                        default-first-option
+                                        placeholder="批次">
+                                        <el-option
+                                            v-for="item in batchOptions"
+                                            :key="item.id"
+                                            :label="item.name"
+                                            :value="item.id">
+                                        </el-option>
+                                    </el-select>
+                                </el-form-item>
+                                <el-form-item label="船号">
+                                    <el-input v-model="chuanhao"  style="width: 200px" placeholder="船号"></el-input>
+                                </el-form-item>
+                                <el-form-item label="一贯号">
+                                    <el-input v-model="yiguanhao"  style="width: 200px" placeholder="一贯号"></el-input>
+                                </el-form-item>
+                                <el-form-item label="code">
+                                    <el-input v-model="code"  style="width: 200px" placeholder="code"></el-input>
+                                </el-form-item>
+                                <el-form-item label="图片">
+                                    <input type="file" value="drawingInputFileList">
+                                </el-form-item>
+                                <el-form-item label="">
+                                    <el-button type="primary" @click="doDrawingInputAdd()">新增</el-button>
+                                </el-form-item>
+                            </el-form>
+                        </div>
+                    </div>
+                    <div class="" v-if="this.drawingInputType ===4">
+                        <div class="drawingInputDeleteDiv">
+                            <div class="del-dialog-cnt">删除不可恢复，是否确定删除？</div>
+                            <span slot="footer" class="dialog-footer">
+                <el-button @click="delVisible = false" style="height:30px;width:80px">取 消</el-button>
+                <el-button type="primary" @click="deleteRow" style="height:30px;width:80px">确 定</el-button>
+                       </span>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </el-dialog>
+
+
         <!-- 编辑弹出框 -->
         <el-dialog title="编辑按钮" :visible.sync="editVisible" width="50%" @close='closeDialog'>
             <div class="" v-if="this.num===0" style="height: 450px;overflow-y: auto">
@@ -955,11 +1118,10 @@
         <el-dialog title="删除按钮" :visible.sync="delVisible" width="300px" center @close='closeDialog'>
             <div class="del-dialog-cnt">删除不可恢复，是否确定删除？</div>
             <span slot="footer" class="dialog-footer">
-                <el-button @click="delVisible = false" style="height:30px;width:80px">取 消</el-button>
-                <el-button type="primary" @click="deleteRow" style="height:30px;width:80px">确 定</el-button>
+                <el-button @click="delVisible = false" style="height:30px;width:80px;margin-top: 20px">取 消</el-button>
+                <el-button type="primary" @click="deleteRow" style="height:30px;width:80px ;margin-top: 20px">确 定</el-button>
             </span>
         </el-dialog>
-
 
         <!--新增弹出框 -->
         <el-dialog title="导入数据" :visible.sync="uploadVisible" width="60%" @close='closeDialog'>
@@ -1088,6 +1250,8 @@
             </div>
         </el-dialog>
 
+
+
         <!--导入文件详情 -->
         <el-dialog title="文件详情" :visible.sync="detailsVisible" width="90%" @close='closeDialog'>
             <div class="container" style="height:470px;overflow:auto">
@@ -1134,6 +1298,7 @@
                 Data: {},
                 list: [],
                 loading: false,
+                drawingInputFileList:"",
 
                 cols: [],                //表头
                 tableData: [],           //表数据
@@ -1146,6 +1311,10 @@
                 uploadVisible: false,        //上传弹框
                 detailsVisible: false,      //详情弹框
                 errVisible: false,           //错误弹框
+                drawingInputVisible:false,   //图纸的弹出框
+
+
+                drawingInputType:1,          //图纸录入状态
 
                 scx: "",                    //生产线
                 scxOptions: [],             //生产线下拉列表
@@ -1923,6 +2092,14 @@
                 this.listData = [];
             },
 
+            //显示船号录取
+            drawingInput() {
+                this.drawingInputVisible = true;
+
+            },
+
+
+
             //设置导入数据类型
             setImportPipeType(importPipeType) {
                 this.Data = {"lineNo": this.SCX, "type": this.type, "pici": this.pc, 'pipeType': importPipeType}
@@ -2021,6 +2198,33 @@
                 this.$message.warning(`上传失败`);
             },
 
+            //图纸新增
+            drawingInputAdd() {
+                this.drawingInputType = 2
+            },
+
+            doDrawingInputAdd(){
+                console.log(this.drawingInputFileList)
+            },
+            //图纸查询
+            drawingInputSearch() {
+                this.drawingInputType = 1
+            },
+
+            //图纸删除
+            drawingInputDelete() {
+                this.drawingInputType = 4
+            },
+
+            //图纸修改
+            drawingInputEdit() {
+                this.drawingInputType = 3
+            },
+
+            handleChange(){
+
+            }
+
         }
     }
 </script>
@@ -2075,6 +2279,47 @@
             }
 
         }
+    }
+
+    .drawingInputTop {
+        padding-left: 5%;
+        margin-bottom: 10px;
+        .el-button {
+            width: 80px;
+            height: 35px;
+        }
+    }
+
+    .drawingInputBottom {
+        .drawingInputAddDiv{
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            padding-top: 5%;
+            background-color: @color-F0;
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+        }
+        .drawingInputDeleteDiv{
+            width: 100%;
+            height: 400px;
+            overflow: auto;
+            background-color: @color-F0;
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+
+        }
+        .el-button {
+            width: 100px;
+            height: 30px;
+        }
+
     }
 
 
