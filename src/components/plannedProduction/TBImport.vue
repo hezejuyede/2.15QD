@@ -1295,8 +1295,8 @@
 
                 importPipeType: "",                  //管子种类
                 importPipeTypeOptions: [
-                    {"name": "未出图", "id": "0"},
-                    {"name": "售后管", "id": "1"}
+                    {"name": "未出图", "id": "3"},
+                    {"name": "售后管", "id": "4"}
                 ],       //管子种类下拉列表
 
                 batch: "",                      //批次
@@ -2020,7 +2020,11 @@
 
             //显示特别流程导入
             showTBImport() {
-                this.uploadVisible = true
+                this.uploadVisible = true;
+                this.batch = "";
+                this.scx = "";
+                this.fileType = "";
+                this.importPipeType = "";
             },
 
 
@@ -2073,22 +2077,22 @@
 
             //设置导入数据类型
             setImportPipeType(importPipeType) {
-                this.Data = {"lineNo": this.SCX, "type": this.type, "pici": this.pc, 'pipeType': importPipeType}
+                this.Data = {"lineNo": this.SCX, "type": this.type, "pici": this.pc, 'guanType': importPipeType}
             },
 
             //设置批次
             setPc(batch) {
-                this.Data = {"lineNo": this.scx, "type": this.type, "pici": batch, 'pipeType': this.importPipeType}
+                this.Data = {"lineNo": this.scx, "type": this.type, "pici": batch, 'guanType': this.importPipeType}
             },
 
             //设置类型
             setType(fileType) {
-                this.Data = {"lineNo": this.scx, "type": fileType, "pici": this.pc, 'pipeType': this.importPipeType}
+                this.Data = {"lineNo": this.scx, "type": fileType, "pici": this.pc, 'guanType': this.importPipeType}
             },
 
             //设置生产线
             setScx(scx) {
-                this.Data = {"lineNo": scx, "type": this.type, "pici": this.batch, 'pipeType': this.importPipeType}
+                this.Data = {"lineNo": scx, "type": this.type, "pici": this.batch, 'guanType': this.importPipeType}
             },
             //上传
             submitUpload() {
@@ -2168,6 +2172,7 @@
             uploadFailure(err, file, fileList) {
                 console.log(err);
                 this.$message.warning(`上传失败`);
+                this.loading = false;
             },
 
 
