@@ -149,7 +149,7 @@
                             <el-button type="success" @click="doSearch(num)">查询</el-button>
                             <el-button type="primary" @click="showTBImport()">导入数据</el-button>
                             <el-button type="danger" @click="showDelete()">删除</el-button>
-                            <el-button type="warning" @click="drawingInput()">图纸录入</el-button>
+                            <el-button type="warning" @click="drawingInput()">一品图纸导入</el-button>
                         </div>
                         <div class="">
                             <el-table class="tb-edit"
@@ -408,6 +408,7 @@
                             <el-button type="success" @click="doSearch(num)">查询</el-button>
                             <el-button type="primary" @click="showTBImport()">导入数据</el-button>
                             <el-button type="danger" @click="showDelete()">删除</el-button>
+                            <el-button type="warning" @click="drawingInput()">一品图纸导入</el-button>
                         </div>
                         <div class="">
                             <el-table class="tb-edit"
@@ -694,54 +695,19 @@
             </span>
         </el-dialog>
 
-
         <!--图纸弹出框 -->
         <el-dialog title="图纸录入" :visible.sync="drawingInputVisible" width="90%" @close='closeDialog'>
             <div class="" style="height: 450px;overflow-y: auto">
-                 <div class="drawingInputTop">
-                     <label style="margin-right:5px">
-                         <span>批次</span>
-                         <span>:</span>
-                         <el-select
-                             v-model="batch"
-                             style="width: 120px"
-                             clearable
-                             filterable
-                             allow-create
-                             default-first-option
-                             placeholder="批次">
-                             <el-option
-                                 v-for="item in batchOptions"
-                                 :key="item.id"
-                                 :label="item.name"
-                                 :value="item.id">
-                             </el-option>
-                         </el-select>
-                     </label>
-                     <label style="margin-right: 5px">
-                         <span>船号</span>
-                         <span>:</span>
-                         <el-input v-model="yiguanhao" style="width: 120px" placeholder="一贯号"></el-input>
-                     </label>
-                     <label style="margin-right: 5px">
-                         <span>一贯号</span>
-                         <span>:</span>
-                         <el-input v-model="yiguanhao" style="width: 120px" placeholder="一贯号"></el-input>
-                     </label>
-                     <label style="margin-right:5px">
-                         <span>code号</span>
-                         <span>:</span>
-                         <el-input v-model="codeNumber" style="width: 120px" placeholder="code"></el-input>
-                     </label>
-                     <label style="margin-right:5px">
-                         <span>船号</span>
-                         <span>:</span>
-                         <el-input v-model="chuanhao" style="width: 120px" placeholder="船号"></el-input>
-                     </label>
-                     <el-button type="primary" @click="drawingInputAdd()">新增</el-button>
-                     <el-button type="success" @click="drawingInputSearch()">查询</el-button>
-                     <el-button type="danger" @click="drawingInputDelete()">删除</el-button>
-                 </div>
+                <div class="drawingInputTop">
+                    <label style="margin-right:5px">
+                        <span>船号</span>
+                        <span>:</span>
+                        <el-input v-model="chuanhao"   style="width: 200px" placeholder="船号"></el-input>
+                    </label>
+                    <el-button type="primary" @click="drawingInputAdd()">新增</el-button>
+                    <el-button type="success" @click="drawingInputSearch()">查询</el-button>
+                    <el-button type="danger" @click="drawingInputDelete()">删除</el-button>
+                </div>
                 <div class="drawingInputBottom">
                     <div class="" v-if="this.drawingInputType ===1">
                         <el-table class="tb-edit"
@@ -752,7 +718,6 @@
                                   height="380"
                                   @select-all="selectAll"
                                   @select="selectList"
-                                  @row-dblclick="showEdit"
                                   highlight-current-row
                                   style="width: 98%;margin: auto">
                             <el-table-column
@@ -765,7 +730,7 @@
                             </template>
                         </el-table>
                     </div>
-                    <div class=""  v-if="this.drawingInputType ===2">
+                    <div class="" v-if="this.drawingInputType ===2">
                         <div class="drawingInputAddDiv">
                             <el-form ref="form" label-width="100px">
                                 <el-form-item label="批次">
@@ -779,6 +744,7 @@
                                         placeholder="批次">
                                         <el-option
                                             v-for="item in batchOptions"
+                                            @input="setDrawingInputPc(batch)"
                                             :key="item.id"
                                             :label="item.name"
                                             :value="item.id">
@@ -786,73 +752,36 @@
                                     </el-select>
                                 </el-form-item>
                                 <el-form-item label="船号">
-                                    <el-input v-model="chuanhao"  style="width: 200px" placeholder="船号"></el-input>
+                                    <el-input v-model="chuanhao"   @input="setDrawingInputCh(chuanhao)" style="width: 200px" placeholder="船号"></el-input>
                                 </el-form-item>
                                 <el-form-item label="一贯号">
-                                    <el-input v-model="yiguanhao"  style="width: 200px" placeholder="一贯号"></el-input>
+                                    <el-input v-model="yiguanhao"  @input="setDrawingInputYgh(yiguanhao)" style="width: 200px" placeholder="一贯号"></el-input>
                                 </el-form-item>
                                 <el-form-item label="code">
-                                    <el-input v-model="code"  style="width: 200px" placeholder="code"></el-input>
+                                    <el-input v-model="code"  @input="setDrawingInputCode(code)" style="width: 200px" placeholder="code"></el-input>
                                 </el-form-item>
                                 <el-form-item label="图片">
                                     <el-upload
-                                        class="upload-demo"
+                                        v-loading="loading"
+                                        element-loading-text="正在上传中"
+                                        element-loading-spinner="el-icon-loading"
+                                        element-loading-background="rgba(0, 0, 0, 0.8)"
+                                        class="upload"
                                         ref="upload"
-                                        action="https://jsonplaceholder.typicode.com/posts/"
+                                        :multiple='true'
+                                        :drag='true'
+                                        :data="drawingInputData"
+                                        :action="drawingInputUploadUrl"
                                         :on-preview="handlePreview"
                                         :on-remove="handleRemove"
-                                        :file-list="fileTypeOptions"
+                                        :on-success="uploadSuccess"
+                                        :on-error="uploadFailure"
+                                        :file-list="drawingInputFileList"
                                         :auto-upload="false">
-                                        <el-button slot="trigger" size="small" type="primary">选取文件</el-button>
-                                        <el-button style="margin-left: 10px;" size="small" type="success" @click="submitUpload">上传到服务器</el-button>
-                                        <div slot="tip" class="el-upload__tip">只能上传jpg/png文件，且不超过500kb</div>
+                                        <el-button style="margin:80px 0 0 0;width: 150px;height: 30px;" slot="trigger" size="small"
+                                                   type="primary">选取文件
+                                        </el-button>
                                     </el-upload>
-                                </el-form-item>
-                                <el-form-item label="">
-                                    <el-button type="primary" @click="doDrawingInputAdd()">新增</el-button>
-                                </el-form-item>
-                            </el-form>
-                        </div>
-                    </div>
-                    <div class=""  v-if="this.drawingInputType ===3">
-                        <div class="drawingInputAddDiv">
-                            <el-form ref="form" label-width="100px">
-                                <el-form-item label="批次">
-                                    <el-select
-                                        v-model="batch"
-                                        style="width: 120px"
-                                        clearable
-                                        filterable
-                                        allow-create
-                                        default-first-option
-                                        placeholder="批次">
-                                        <el-option
-                                            v-for="item in batchOptions"
-                                            :key="item.id"
-                                            :label="item.name"
-                                            :value="item.id">
-                                        </el-option>
-                                    </el-select>
-                                </el-form-item>
-                                <el-form-item label="船号">
-                                    <el-input v-model="chuanhao"  style="width: 200px" placeholder="船号"></el-input>
-                                </el-form-item>
-                                <el-form-item label="一贯号">
-                                    <el-input v-model="yiguanhao"  style="width: 200px" placeholder="一贯号"></el-input>
-                                </el-form-item>
-                                <el-form-item label="code">
-                                    <el-input v-model="code"  style="width: 200px" placeholder="code"></el-input>
-                                </el-form-item>
-                                <el-form-item label="图片">
-                                    <el-upload
-                                        class="upload-demo"
-                                        action="https://jsonplaceholder.typicode.com/posts/"
-                                        :on-change="handleChange"
-                                        :file-list="drawingInputFileList">
-                                        <el-button size="small" type="primary">点击上传</el-button>
-                                        <div slot="tip" class="el-upload__tip">只能上传jpg/png文件，且不超过500kb</div>
-                                    </el-upload>
-                                   <!-- <input type="file" value="drawingInputFileList">-->
                                 </el-form-item>
                                 <el-form-item label="">
                                     <el-button type="primary" @click="doDrawingInputAdd()">新增</el-button>
@@ -864,8 +793,8 @@
                         <div class="drawingInputDeleteDiv">
                             <div class="del-dialog-cnt">删除不可恢复，是否确定删除？</div>
                             <span slot="footer" class="dialog-footer">
-                <el-button @click="delVisible = false" style="height:30px;width:80px">取 消</el-button>
-                <el-button type="primary" @click="deleteRow" style="height:30px;width:80px">确 定</el-button>
+                <el-button @click="noDrawingInputDelete" style="height:30px;width:80px">取 消</el-button>
+                <el-button type="primary" @click="doDrawingInputDelete" style="height:30px;width:80px">确 定</el-button>
                        </span>
                         </div>
 
@@ -873,7 +802,6 @@
                 </div>
             </div>
         </el-dialog>
-
 
         <!-- 编辑弹出框 -->
         <el-dialog title="编辑按钮" :visible.sync="editVisible" width="50%" @close='closeDialog'>
@@ -1162,12 +1090,12 @@
                                 allow-create
                                 default-first-option
                                 style="width: 150px"
-                                placeholder="文件类型">
+                                placeholder="管类型">
                                 <el-option
                                     v-for="item in importPipeTypeOptions"
-                                    :key="item.indexno"
+                                    :key="item.id"
                                     :label="item.name"
-                                    :value="item.indexno">
+                                    :value="item.id">
                                 </el-option>
                             </el-select>
                         </label>
@@ -1270,7 +1198,6 @@
         </el-dialog>
 
 
-
         <!--导入文件详情 -->
         <el-dialog title="文件详情" :visible.sync="detailsVisible" width="90%" @close='closeDialog'>
             <div class="container" style="height:470px;overflow:auto">
@@ -1280,7 +1207,12 @@
 
         <!-- 失败信息返回框 -->
         <el-dialog title="导入失败信息提示" :visible.sync="errVisible" width="60%" @close='closeDialog'>
-
+            <div class="container" style="height:450px;overflow:auto">
+                <div class="containerErr">
+                    <div class="">{{errList}}</div>
+                    <div class="" v-for="(item,index) in errListData">{{item}}</div>
+                </div>
+            </div>
         </el-dialog>
     </div>
 </template>
@@ -1314,10 +1246,14 @@
                 codeNumber: "",           //区划
 
                 uploadUrl: " " + url + "/fileupload/upload",
+                drawingInputUploadUrl: " " + url + "/teshu/addShipCode",
                 Data: {},
+                drawingInputData:{},
                 list: [],
                 loading: false,
                 drawingInputFileList:[],
+                errList:"",
+                errListData:[],
 
                 cols: [],                //表头
                 tableData: [],           //表数据
@@ -1466,6 +1402,7 @@
                 this.yiguanhao = "";
                 this.codeNumber = "";
                 this.cols = [];
+                this.listData = [];
                 this.getList();
             },
 
@@ -1492,12 +1429,16 @@
                 else if (this.num === 1) {
                     let that = this;
                     axios.all([
-                        axios.post(" " + url + "/sys/showTableTitle", {"name": "zjg"}),
-                        axios.post(" " + url + "/teshu/zhijiaList", {"pici": this.pici,})
+                        axios.post(" " + url + "/sys/showTableTitle", {"name": "filelist"}),
+                        axios.post(" " + url + "/fileShenpi/getFileUploadList", {
+                            "lineNo": that.scx,
+                            "status": that.status,
+                            "pici": that.batch
+                        })
                     ])
                         .then(axios.spread(function (title, table) {
                             that.cols = title.data;
-                            that.tableData = table.data.data;
+                            that.tableData = table.data;
                         }));
                 }
                 else if (this.num === 2) {
@@ -1562,12 +1503,11 @@
                 else if (this.num === 6) {
                     let that = this;
                     axios.all([
-                        axios.post(" " + url + "/sys/showTableTitle", {"name": "bzg"}),
-                        axios.post(" " + url + "/teshu/KebuList", {
-                            "type": "4",
-                            "pici": this.pici,
-                            "yiguanhao": this.yiguanhao,
-                            "codeno": this.codeNumber
+                        axios.post(" " + url + "/sys/showTableTitle", {"name": "filelist"}),
+                        axios.post(" " + url + "/fileShenpi/getFileUploadList", {
+                            "lineNo": that.scx,
+                            "status": that.status,
+                            "pici": that.batch
                         })
                     ])
                         .then(axios.spread(function (title, table) {
@@ -2111,9 +2051,21 @@
                 this.listData = [];
             },
 
-            //显示船号录取
+            //显示一品图录入
             drawingInput() {
                 this.drawingInputVisible = true;
+                this.listData = [];
+                this.drawingInputType = 1;
+                this.batch="";
+                let that = this;
+                axios.all([
+                    axios.post(" " + url + "/sys/showTableTitle", {"name": "chlr"}),
+                    axios.post(" " + url + "/teshu/getShipCodeList", {"shipcode": this.chuanhao})
+                ])
+                    .then(axios.spread(function (title, table) {
+                        that.cols = title.data;
+                        that.tableData = table.data.data;
+                    }));
 
             },
 
@@ -2191,6 +2143,7 @@
                     this.$message.success(`上传成功`);
                     this.loading = false;
                     let that = this;
+                    this.drawingInputSearch();
                     axios.all([
                         axios.post(" " + url + "/sys/showTableTitle", {"name": "filelist"}),
                         axios.post(" " + url + "/fileShenpi/getFileUploadList", {
@@ -2217,32 +2170,114 @@
                 this.$message.warning(`上传失败`);
             },
 
-            //图纸新增
-            drawingInputAdd() {
-                this.drawingInputType = 2
+
+
+
+
+
+            //设置一贯号
+            setDrawingInputYgh(yiguanhao) {
+                this.drawingInputData = {"pici":this.batch,"yiguanhao":yiguanhao ,"codehao":this.code,"shipcode":this.chuanhao}
+                console.log(this.drawingInputData)
             },
 
+            //设置批次
+            setDrawingInputPc(batch) {
+                this.drawingInputData ={"pici":batch,"yiguanhao":this.chuanhao ,"codehao":this.code,"shipcode":this.chuanhao}
+                console.log(this.drawingInputData)
+            },
+
+            //设置船号
+            setDrawingInputCh(chuanhao) {
+                this.drawingInputData = {"pici":this.batch,"yiguanhao":this.chuanhao ,"codehao":this.code,"shipcode":chuanhao}
+                console.log(this.drawingInputData)
+            },
+
+            //设置code
+            setDrawingInputCode(code) {
+                this.drawingInputData ={"pici":this.batch,"yiguanhao":this.chuanhao ,"codehao":code,"shipcode":this.chuanhao}
+                console.log(this.drawingInputData)
+
+            },
+
+
+
+
+
+
+            //显示图纸新增
+            drawingInputAdd() {
+                this.drawingInputType = 2;
+                this.batch = "";
+                this.chuanhao = "";
+                this.code = "";
+                this.chuanhao = "";
+            },
+
+
+            //进行图纸新增
             doDrawingInputAdd(){
-                console.log(this.drawingInputFileList)
+                let uJson ={"pici":this.batch,"yiguanhao":this.chuanhao ,"codehao":this.code,"shipcode":this.chuanhao};
+                this.drawingInputData =uJson;
+                if (this.batch && this.chuanhao && this.yiguanhao && this.code) {
+                    console.log(this.drawingInputData)
+                    this.$refs.upload.submit((data) => {
+                        console.log(data)
+                    });
+                    this.loading = true;
+                }
+                else {
+                    this.$message.warning(`批次,船号，一贯号，code号，和上传图片不能为空`);
+                }
             },
             //图纸查询
             drawingInputSearch() {
-                this.drawingInputType = 1
+                this.drawingInputType = 1;
+                let that = this;
+                axios.all([
+                    axios.post(" " + url + "/sys/showTableTitle", {"name": "chlr"}),
+                    axios.post(" " + url + "/teshu/getShipCodeList", {"shipcode": this.chuanhao})
+                ])
+                    .then(axios.spread(function (title, table) {
+                        that.cols = title.data;
+                        that.tableData = table.data.data;
+                    }));
             },
 
-            //图纸删除
+            //显示图纸删除
             drawingInputDelete() {
-                this.drawingInputType = 4
+                if (this.listData.length>0) {
+                    this.drawingInputType = 4
+
+                }
+                else {
+                    this.$message.warning(`选择要勾选的信息`);
+                }
+
             },
 
-            //图纸修改
-            drawingInputEdit() {
-                this.drawingInputType = 3
+            //取消删除
+            noDrawingInputDelete(){
+                this.drawingInputType = 1;
+                this.listData=[];
             },
 
-            handleChange(){
-
-            }
+            //图纸进行删除
+            doDrawingInputDelete() {
+                axios.post(" " + url + "/teshu/delShipCode", {"id": this.listData[0]})
+                    .then((res) => {
+                        if (res.data.state === "1") {
+                            this.$message.success('删除成功');
+                            this.drawingInputSearch();
+                        }
+                        else {
+                            this.$message.warning(`删除失败`);
+                        }
+                    })
+                    .catch((err) => {
+                        console.log(err)
+                    })
+            },
 
         }
     }
