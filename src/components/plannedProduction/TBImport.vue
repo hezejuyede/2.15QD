@@ -149,7 +149,7 @@
                             <el-button type="success" @click="doSearch(num)">查询</el-button>
                             <el-button type="primary" @click="showTBImport()">导入数据</el-button>
                             <el-button type="danger" @click="showDelete()">删除</el-button>
-                            <el-button type="warning" @click="drawingInput()">一品图纸导入</el-button>
+                            <el-button type="warning" @click="drawingInput()">一品图导入</el-button>
                         </div>
                         <div class="">
                             <el-table class="tb-edit"
@@ -408,7 +408,7 @@
                             <el-button type="success" @click="doSearch(num)">查询</el-button>
                             <el-button type="primary" @click="showTBImport()">导入数据</el-button>
                             <el-button type="danger" @click="showDelete()">删除</el-button>
-                            <el-button type="warning" @click="drawingInput()">一品图纸导入</el-button>
+                            <el-button type="warning" @click="drawingInput()">一品图导入</el-button>
                         </div>
                         <div class="">
                             <el-table class="tb-edit"
