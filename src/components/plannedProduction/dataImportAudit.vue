@@ -2,8 +2,8 @@
     <div class="template">
         <div class="crumbs">
             <el-breadcrumb separator="/">
-                <el-breadcrumb-item>资源模型</el-breadcrumb-item>
-                <el-breadcrumb-item>按钮配置</el-breadcrumb-item>
+                <el-breadcrumb-item>计划排产</el-breadcrumb-item>
+                <el-breadcrumb-item>导入数据审核</el-breadcrumb-item>
             </el-breadcrumb>
         </div>
         <div class="template-content">
@@ -15,7 +15,7 @@
                         <el-input v-model="select_word" placeholder="智能检索按钮" class="handle-input mr10"></el-input>
                     </label>
                     <label style="margin-right: 10px;margin-left: 10px">
-                        <span>工位</span>
+                        <span>批次</span>
                         <span>:</span>
                         <el-select
                             v-model="workStation"
@@ -24,7 +24,6 @@
                             allow-create
                             default-first-option
                             @change="changeSelect"
-
                             placeholder="请选择工位">
                             <el-option
                                 v-for="item in workStationOptions"
@@ -34,8 +33,7 @@
                             </el-option>
                         </el-select>
                     </label>
-                    <el-button type="primary" icon="delete" class="handle-del mr10" @click="showAdd">新增按钮</el-button>
-                    <el-button type="danger" icon="delete" class="handle-del mr10" @click="showDelete">删除按钮</el-button>
+                    <el-button type="primary"  @click="showDelete">查询</el-button>
                 </div>
                 <div class="">
                     <el-table class="tb-edit"
