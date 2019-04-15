@@ -18,7 +18,7 @@
                         <span>批次</span>
                         <span>:</span>
                         <el-select
-                            v-model="workStation"
+                            v-model="batch"
                             clearable
                             filterable
                             allow-create
@@ -26,14 +26,14 @@
                             @change="changeSelect"
                             placeholder="请选择工位">
                             <el-option
-                                v-for="item in workStationOptions"
+                                v-for="item in batchOptions"
                                 :key="item.id"
                                 :label="item.name"
                                 :value="item.id">
                             </el-option>
                         </el-select>
                     </label>
-                    <el-button type="primary"  @click="showDelete">查询</el-button>
+                    <el-button type="primary" @click="doSearchData">查询</el-button>
                 </div>
                 <div class="">
                     <el-table class="tb-edit"
@@ -56,174 +56,6 @@
                     </el-table>
                 </div>
             </div>
-            <!--新增弹出框 -->
-            <el-dialog title="新增按钮" :visible.sync="addVisible" width="40%">
-                <el-form ref="form"  label-width="100px">
-                    <el-form-item label="工位名称">
-                        <el-select
-                            v-model="workStation"
-                            clearable
-                            filterable
-                            disabled
-                            allow-create
-                            default-first-option
-                            placeholder="请选择工位">
-                            <el-option
-                                v-for="item in workStationOptions"
-                                :key="item.id"
-                                :label="item.name"
-                                :value="item.id">
-                            </el-option>
-                        </el-select>
-                    </el-form-item>
-                    <el-form-item label="按钮名称">
-                        <el-input v-model="name" style="width: 200px"></el-input>
-                    </el-form-item>
-                    <el-form-item label="事件类型">
-                        <el-select
-                            v-model="type"
-                            clearable
-                            filterable
-                            allow-create
-                            default-first-option
-                            placeholder="请输入或者选择">
-                            <el-option
-                                v-for="item in typeOptions"
-                                :key="item.indexno"
-                                :label="item.name"
-                                :value="item.indexno">
-                            </el-option>
-                        </el-select>
-                    </el-form-item>
-                    <el-form-item label="是否可点">
-                        <el-select
-                            v-model="disabled"
-                            clearable
-                            filterable
-                            allow-create
-                            default-first-option
-                            placeholder="请输入或者选择">
-                            <el-option
-                                v-for="item in disabledOptions"
-                                :key="item.id"
-                                :label="item.name"
-                                :value="item.id">
-                            </el-option>
-                        </el-select>
-                    </el-form-item>
-                    <el-form-item label="按钮颜色">
-                        <el-color-picker v-model="backgroundColor"></el-color-picker>
-                    </el-form-item>
-                    <el-form-item label="显示隐藏">
-                        <el-select
-                            v-model="showHide"
-                            clearable
-                            filterable
-                            allow-create
-                            default-first-option
-                            placeholder="请输入或者选择">
-                            <el-option
-                                v-for="item in showHideOptions"
-                                :key="item.id"
-                                :label="item.name"
-                                :value="item.id">
-                            </el-option>
-                        </el-select>
-                    </el-form-item>
-                </el-form>
-                <span slot="footer" class="dialog-footer">
-                <el-button @click="addVisible = false" style="height:30px;width:80px">取 消</el-button>
-                <el-button type="primary" @click="doAdd" style="height:30px;width:80px">确 定</el-button>
-            </span>
-            </el-dialog>
-            <!-- 编辑弹出框 -->
-            <el-dialog title="编辑按钮" :visible.sync="editVisible" width="40%">
-                <el-form ref="form"  label-width="100px">
-                    <el-form-item label="工位名称">
-                        <el-select
-                            v-model="workStation"
-                            clearable
-                            disabled
-                            filterable
-                            allow-create
-                            default-first-option
-                            placeholder="请选择工位">
-                            <el-option
-                                v-for="item in workStationOptions"
-                                :key="item.id"
-                                :label="item.name"
-                                :value="item.id">
-                            </el-option>
-                        </el-select>
-                    </el-form-item>
-                    <el-form-item label="按钮名称">
-                        <el-input v-model="name" style="width: 200px"></el-input>
-                    </el-form-item>
-                    <el-form-item label="事件类型">
-                        <el-select
-                            v-model="type"
-                            clearable
-                            filterable
-                            allow-create
-                            default-first-option
-                            placeholder="请输入或者选择">
-                            <el-option
-                                v-for="item in typeOptions"
-                                :key="item.indexno"
-                                :label="item.name"
-                                :value="item.indexno">
-                            </el-option>
-                        </el-select>
-                    </el-form-item>
-                    <el-form-item label="是否可点">
-                        <el-select
-                            v-model="disabled"
-                            clearable
-                            filterable
-                            allow-create
-                            default-first-option
-                            placeholder="请输入或者选择">
-                            <el-option
-                                v-for="item in disabledOptions"
-                                :key="item.id"
-                                :label="item.name"
-                                :value="item.id">
-                            </el-option>
-                        </el-select>
-                    </el-form-item>
-                    <el-form-item label="按钮颜色">
-                        <el-color-picker v-model="backgroundColor"></el-color-picker>
-                    </el-form-item>
-                    <el-form-item label="显示隐藏">
-                        <el-select
-                            v-model="showHide"
-                            clearable
-                            filterable
-                            allow-create
-                            default-first-option
-                            placeholder="请输入或者选择">
-                            <el-option
-                                v-for="item in showHideOptions"
-                                :key="item.id"
-                                :label="item.name"
-                                :value="item.id">
-                            </el-option>
-                        </el-select>
-                    </el-form-item>
-                </el-form>
-                <span slot="footer" class="dialog-footer">
-                <el-button @click="editVisible = false" style="height:30px;width:80px">取 消</el-button>
-                <el-button type="primary" @click="saveEdit" style="height:30px;width:80px">确 定</el-button>
-            </span>
-            </el-dialog>
-            <!-- 删除提示框 -->
-            <el-dialog title="删除按钮" :visible.sync="delVisible" width="300px" center>
-                <div class="del-dialog-cnt">删除不可恢复，是否确定删除？</div>
-                <span slot="footer" class="dialog-footer">
-                <el-button @click="delVisible = false" style="height:30px;width:80px">取 消</el-button>
-                <el-button type="primary" @click="deleteRow" style="height:30px;width:80px">确 定</el-button>
-            </span>
-            </el-dialog>
 
             <Modal :msg="message"
                    :isHideModal="HideModal"></Modal>
@@ -241,8 +73,8 @@
             return {
                 message: '',
                 HideModal: true,
-                listData:[],
-                id:"",
+
+                id: "",
 
 
                 cols: [],
@@ -250,21 +82,8 @@
 
                 select_word: '',
 
-                addVisible: false,
-                editVisible: false,
-                delVisible: false,
-
-
-                workStation:"",
-                workStationOptions:[],
-                name: "",
-                type: "",
-                typeOptions: [],
-                disabled: "",
-                disabledOptions: [{"name": "可点击", "id": "1"}, {"name": "不可点击", "id": "0"}],
-                backgroundColor: "",
-                showHide: "",
-                showHideOptions: [{"name": "显示", "id": "1"}, {"name": "隐藏", "id": "0"}],
+                batch: "",
+                batchOptions: [],
 
             }
         },
@@ -301,13 +120,11 @@
                 else {
                     let that = this;
                     axios.all([
-                        axios.post(" " + url + "/api/getPersonProcessList", {"name": ""}),
-                        axios.post(" " + url + "/sys/dictionaryList", {"id": "23"}),
+                        axios.post(" " + url + "/sys/getPiciList"),
                     ])
-                        .then(axios.spread(function (select,type) {
-                            that.workStation = select.data[0].id;
-                            that.workStationOptions = select.data;
-                            that.typeOptions = type.data;
+                        .then(axios.spread(function (select) {
+                            that.batch = select.data[0].id;
+                            that.batchOptions = select.data;
                             that.loadingShowData(1);
                         }));
                 }
@@ -331,186 +148,6 @@
                 this.loadingShowData(this.workStation)
             },
 
-            //选择那个一个
-            selectList(val) {
-                if (val.length) {
-                    let data = [];
-                    for (let i = 0; i < val.length; i++) {
-                        let a = val[i].id;
-                        data.push(a)
-                    }
-                    this.listData = data;
-                }
-                else {
-                    this.listData=[];
-                }
-            },
-
-            //列表全部选择
-            selectAll(val) {
-                if (val.length) {
-                    let data = [];
-                    for (let i = 0; i < val.length; i++) {
-                        let a = val[i].id;
-                        data.push(a)
-                    }
-                    this.listData = data;
-                }
-                else {
-                    this.listData = [];
-                }
-            },
-
-            //显示新增
-            showAdd(){
-
-                if (this.workStation) {
-                    this.addVisible=true;
-                    this.name= "";
-                    this.type= "";
-                    this.disabled= "";
-                    this.backgroundColor="";
-                    this.showHide= "";
-                }
-                else {
-                    this.message = "请选择工位";
-                    this.HideModal = false;
-                    const that = this;
-
-                    function a() {
-                        that.message = "";
-                        that.HideModal = true;
-                    }
-
-                    setTimeout(a, 2000);
-                }
-            },
-
-            //进行新增
-            doAdd() {
-                if (this.name && this.type && this.disabled &&this.backgroundColor&&this.showHide) {
-                    axios.post(" " + url + "/padShow/buttonAdd",
-                        {
-                            "gongxuid": this.workStation,
-                            "name": this.name,
-                            "type": this.type,
-                            "disabled": this.disabled,
-                            "backgroundcolor": this.backgroundColor,
-                            "show": this.showHide,
-                        }
-                    )
-                        .then((res) => {
-                            if (res.data.state === "1") {
-                                this.$message.success(`新增成功`);
-                                this.addVisible = false;
-                                this.loadingShowData(this.workStation)
-
-                            }
-                            else {
-                                this.$message.warning(`新增失败`);
-                            }
-                        })
-                        .catch((err) => {
-                            console.log(err)
-                        })
-                }
-                else {
-                    this.$message.warning(`输入不能为空`);
-                }
-            },
-
-            //双击点击行内编辑
-            edit(row, column, cell, event) {
-                this.editVisible = true;
-                this.id = row.id;
-                axios.post(" " + url + "/padShow/buttonDetail", {"id": this.id})
-                    .then((res) => {
-                        this.workStation = res.data.data.gongxuid;
-                        this.name = res.data.data.name;
-                        this.type = Number(res.data.data.type);
-                        this.disabled = res.data.data.disabled;
-                        this.backgroundColor = res.data.data.backgroundcolor;
-                        this.showHide = res.data.data.show;
-                    })
-                    .catch((err) => {
-                        console.log(err)
-                    });
-            },
-
-            // 保存编辑
-            saveEdit() {
-                if (this.name && this.type && this.disabled &&this.backgroundColor&&this.showHide) {
-                    axios.post(" " + url + "/padShow/buttonUpdate",
-                        {
-                            "id":this.id,
-                            "gongweiid": this.workStation,
-                            "name": this.name,
-                            "type": this.type,
-                            "disabled": this.disabled,
-                            "backgroundcolor": this.backgroundColor,
-                            "show": this.showHide,
-                        }
-                    )
-                        .then((res) => {
-                            if (res.data.state === "1") {
-                                this.editVisible = false;
-                                this.$message.success(`修改成功`);
-                                this.loadingShowData(this.workStation)
-                            }
-                            else {
-                                this.$message.warning(`新增失败`);
-                            }
-                        })
-                        .catch((err) => {
-                            console.log(err)
-                        })
-                }
-                else {
-                    this.$message.warning(`输入不能为空`);
-                }
-
-            },
-
-            //选择点击显示删除
-            showDelete() {
-                if (this.listData.length) {
-                    this.delVisible = true;
-                }
-                else {
-                    this.message = "请勾选要删除的按钮";
-                    this.HideModal = false;
-                    const that = this;
-
-                    function a() {
-                        that.message = "";
-                        that.HideModal = true;
-                    }
-
-                    setTimeout(a, 2000);
-                }
-            },
-
-            // 确定删除
-            deleteRow() {
-                axios.post(" " + url + "/padShow/buttonDel",
-                    {
-                        "id": this.listData[0],
-                    }
-                )
-                    .then((res) => {
-                        if (res.data.state === "1") {
-                            this.$message.success('删除成功');
-                            this.delVisible = false;
-                            this.loadingShowData(this.workStation);
-                        }
-                        else {
-                            this.$message.warning(`删除失败`);
-                        }
-                    })
-                    .catch((err) => {
-                        console.log(err)
-                    })
-            },
 
         }
     }
@@ -530,14 +167,14 @@
         .template-content {
             .handle-box {
                 height: 80px;
-                line-height:80px;
+                line-height: 80px;
                 padding-left: 50px;
                 .handle-input {
                     width: 300px;
                     display: inline-block;
                 }
                 .el-button {
-                    width:100px;
+                    width: 100px;
                     height: 30px;
                 }
             }
