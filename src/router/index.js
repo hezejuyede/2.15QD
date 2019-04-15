@@ -20,6 +20,9 @@ import TBImport from '../components/plannedProduction/TBImport'
 //管加工数据导入
 import InformationImport from '../components/plannedProduction/GJGImport'
 
+//管加工数据导入审核
+import DataImportAudit from '../components/plannedProduction/dataImportAudit'
+
 //数据查询
 import ImportDataQuery from '../components/plannedProduction/ImportDataQuery'
 
@@ -228,6 +231,11 @@ export default new Router({
                             path: '/ImportDataQuery',
                             component: ImportDataQuery,
                             meta: {title: '导入数据查询'}
+                        },
+                        {
+                            path: '/DataImportAudit',
+                            component: DataImportAudit,
+                            meta: {title: '导入数据审核'}
                         },
                         {
                             path: '/ResourceModel',
