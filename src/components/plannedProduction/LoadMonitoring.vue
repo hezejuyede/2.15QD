@@ -36,19 +36,7 @@
                     </label>
                 </div>
                 <div class="">
-                    <el-table
-                        class="tb-edit"
-                        :data="tables"
-                        :header-cell-style="{background:'#A1D0FC',color:'rgba(0, 0, 0, 0.8)',fontSize:'20px'}"
-                        border
-                        height="450"
-                        highlight-current-row
-                        :row-class-name="tableRowClassName"
-                        style="width: 98%;margin: auto">
-                        <template v-for="(col ,index) in cols">
-                            <el-table-column align="center" :prop="col.prop" :label="col.label"></el-table-column>
-                        </template>
-                    </el-table>
+                    <div id="dataBar" :style="{width: '90%', height: '300px'}"></div>
                 </div>
             </div>
         </div>
@@ -63,13 +51,171 @@
         data() {
             return {
 
-
-                cols: [],
-                tableData: [],
-
                 select_word: '',
                 workStation:"",
                 workStationOptions:[],
+
+                ElectricityData:[
+                    {
+                        power: "3012",
+                        time: "10/1",
+                        load:"74.63"
+                    },
+                    {
+                        power: "3013",
+                        time: "10/2",
+                        load:"75.63"
+                    },
+                    {
+                        power: "3014",
+                        time: "10/3",
+                        load:"74.83"
+                    },
+                    {
+                        power: "3012",
+                        time: "10/4",
+                        load:"74.63"
+                    },
+                    {
+                        power: "3013",
+                        time: "10/5",
+                        load:"75.63"
+                    },
+                    {
+                        power: "3014",
+                        time: "10/6",
+                        load:"74.83"
+                    },
+                    {
+                        power: "3012",
+                        time: "10/7",
+                        load:"74.63"
+                    },
+                    {
+                        power: "3013",
+                        time: "10/8",
+                        load:"75.63"
+                    },
+                    {
+                        power: "3014",
+                        time: "10/9",
+                        load:"74.83"
+                    },
+                    {
+                        power: "3012",
+                        time: "10/10",
+                        load:"74.63"
+                    },
+                    {
+                        power: "3013",
+                        time: "10/11",
+                        load:"75.63"
+                    },
+                    {
+                        power: "3014",
+                        time: "10/12",
+                        load:"74.83"
+                    },
+                    {
+                        power: "3012",
+                        time: "10/13",
+                        load:"74.63"
+                    },
+                    {
+                        power: "3013",
+                        time: "10/14",
+                        load:"75.63"
+                    },
+                    {
+                        power: "3014",
+                        time: "10/15",
+                        load:"74.83"
+                    },
+                    {
+                        power: "3012",
+                        time: "10/16",
+                        load:"74.63"
+                    },
+                    {
+                        power: "3013",
+                        time: "10/17",
+                        load:"75.63"
+                    },
+                    {
+                        power: "3014",
+                        time: "10/18",
+                        load:"74.83"
+                    },
+                    {
+                        power: "3012",
+                        time: "10/19",
+                        load:"74.63"
+                    },
+                    {
+                        power: "3013",
+                        time: "10/20",
+                        load:"75.63"
+                    },
+                    {
+                        power: "3014",
+                        time: "10/21",
+                        load:"74.83"
+                    },
+                    {
+                        power: "3012",
+                        time: "10/22",
+                        load:"74.63"
+                    },
+                    {
+                        power: "3013",
+                        time: "10/23",
+                        load:"75.63"
+                    },
+                    {
+                        power: "3014",
+                        time: "10/24",
+                        load:"74.83"
+                    },
+                    {
+                        power: "3012",
+                        time: "10/25",
+                        load:"74.63"
+                    },
+                    {
+                        power: "3013",
+                        time: "10/26",
+                        load:"75.63"
+                    },
+                    {
+                        power: "3014",
+                        time: "10/27",
+                        load:"74.83"
+                    },
+                    {
+                        power: "3012",
+                        time: "10/28",
+                        load:"74.63"
+                    },
+                    {
+                        power: "3013",
+                        time: "10/29",
+                        load:"75.63"
+                    },
+                    {
+                        power: "3014",
+                        time: "10/30",
+                        load:"74.83"
+                    },
+                    {
+                        power: "3012",
+                        time: "10/31",
+                        load:"74.63"
+                    }
+                ],
+                fhl:"60",
+                xx:"0.1",
+                sx:'0.8'
+
             }
         },
         computed: {
@@ -88,7 +234,7 @@
         },
         components: {},
         mounted() {
-
+            this.drawLine();
 
         },
         created() {
@@ -125,8 +271,7 @@
                     axios.post(" " + url + "/padShow/buttonList", {"id": data})
                 ])
                     .then(axios.spread(function (title, table) {
-                        that.cols = title.data;
-                        that.tableData = table.data.data;
+
                     }));
             },
 
@@ -135,21 +280,43 @@
                 this.loadingShowData(this.workStation)
             },
 
-
-            //根据状态显示不同颜色
-            tableRowClassName({row, rowIndex}) {
-                if (row.level === 2) {
-                    return 'red-row';
-                }
-                else if (row.level === 1) {
-                    return 'yellow-row';
-                }
-                else if (row.status === 7) {
-                    return 'gray-row';
-                }
+            drawLine() {
+                // 基于准备好的dom，初始化echarts实例
+                let myChart = this.$echarts.init(document.getElementById('dataBar'));
+                // 绘制图表
+                myChart.setOption({
+                    tooltip : {
+                        formatter: "{a} <br/>{b} : {c}%"
+                    },
+                    toolbox: {
+                        show: true,
+                        feature: {
+                            restore: { //重置
+                                show: true
+                            },
+                            saveAsImage: {//保存图片
+                                show: true
+                            }
+                        }
+                    },
+                    series: [
+                        {
+                            name: '工位负荷',
+                            type: 'gauge',
+                            detail: {formatter:'{value}%'},
+                            data: [{value: this.fhl, name: '负荷率'}],
+                            axisLine: { // 坐标轴线
+                                lineStyle: { // 属性lineStyle控制线条样式
+                                    color: [
+                                        [this.xx, '#c23531'],
+                                        [this.sx, '#63869e'],
+                                        [1, '#91c7ae']]
+                                }
+                            },
+                        }
+                    ]
+                });
             },
-
-
         }
     }
 </script>
