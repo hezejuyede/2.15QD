@@ -86,7 +86,14 @@
                                 label: '导入数据查询',
                                 index: "2-4",
                                 url: "/ImportDataQuery"
-                            }/*,
+                            },
+                            {
+                                label: '导入数据审核',
+                                index: "2-5",
+                                url: "/DataImportAudit"
+                            }
+
+                            /*,
                             {
                                 label: '计划排产',
                                 index: "2-5",
