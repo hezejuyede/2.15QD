@@ -36,61 +36,58 @@
                     <el-button type="primary" @click="doSearchData">查询</el-button>
                 </div>
                 <div class="">
-                    <el-table class="tb-edit"
-                              :data="tables"
-                              height="500"
-                              border
-                              :header-cell-style="{background:'#A1D0FC',color:'rgba(0, 0, 0, 1)',fontSize:'15px'}"
-                              :span-method="arraySpanMethod"
-                              :cell-style="{fontSize:'12px'}"
-                              ref="moviesTable"
-                              style="width: 99%;margin: 0 auto">
-                        <template v-for="(col ,index) in cols">
+                    <el-table
+                        :data="tableData"
+                        height="640"
+                        :header-cell-style="{background:'#A1D0FC',color:'rgba(0, 0, 0, 0.8)',fontSize:'16px'}"
+                        style="width: 100%;border: 1px solid #303133">
+                        <el-table-column
+                            align="center"
+                            prop="pici"
+                            label=""
+                            width="100">
+                        </el-table-column>
+                        <el-table-column
+                            align="center"
+                            prop="gongwei"
+                            label=""
+                            width="100">
+                        </el-table-column>
+                        <el-table-column  v-for="(item,index) in titleData"  align="center" :label="item.zye">
                             <el-table-column
                                 align="center"
-                                width="85"
-                                v-if="col.prop==='pici'"
-                                :prop="col.prop" >
-                                <template scope="scope">
-                                    {{ scope.row.pici }}
-                                </template>
+                                :prop="item.tdsp"
+                                :header-cell-style="{background:'red',color:'rgba(0, 0, 0, 0.8)',fontSize:'16px'}"
+                                label="待审批">
                             </el-table-column>
                             <el-table-column
                                 align="center"
-                                width="70"
-                                v-if="col.prop==='gongwei'"
-                                :prop="col.prop" >
-                                <template scope="scope">
-                                    {{ scope.row.gongwei }}
-                                </template>
+                                :prop="item.tysp"
+                                label="已审批">
+                            </el-table-column>
+                        </el-table-column>
+                        <el-table-column align="center" label="统计">
+                            <el-table-column
+                                align="center"
+                                prop="ctzs"
+                                label="出图总数">
                             </el-table-column>
                             <el-table-column
                                 align="center"
-                                width="85"
-                                v-if="col.prop==='zuoyezhe'"
-                                :prop="col.prop" >
-                                <template scope="scope">
-                                    {{ scope.row.zuoyezhe }}
-                                    <el-table-column
-                                        align="center"
-                                        width="85"
-                                        v-if="col.prop==='zuoyezhe'"
-                                        :prop="col.prop" >
-                                        <template scope="scope">
-                                            {{ scope.row.zuoyezhe }}
-                                        </template>
-                                    </el-table-column>
-                                </template>
+                                prop="ysp"
+                                label="已审批">
                             </el-table-column>
                             <el-table-column
                                 align="center"
-                                v-if="col.prop==='tongji'"
-                                :prop="col.prop" >
-                                <template scope="scope">
-                                    {{ scope.row.tongji }}
-                                </template>
+                                prop="dsp"
+                                label="待审批">
                             </el-table-column>
-                        </template>
+                            <el-table-column
+                                align="center"
+                                prop="wdr"
+                                label="未导入">
+                            </el-table-column>
+                        </el-table-column>
                     </el-table>
                 </div>
             </div>
@@ -115,36 +112,86 @@
                 id: "",
 
 
-                cols: [
-                    {"prop": "pici", "label": "批次"},
-                    {"prop": "gongwei", "label": "工位"},
-                    {"prop": "zuoyezhe", "label": "作业者"},
-                    {"prop": "tongji", "label": "统计"},
+                titleData: [
+                    {"zye": "作业者A","tdsp":"tdsp","tysp":"tysp"},
+                    {"zye": "作业者B","tdsp":"tdsp2","tysp":"tysp2"},
+                    {"zye": "作业者C","tdsp":"tdsp3","tysp":"tysp3"},
+                    {"zye": "作业者D","tdsp":"tdsp4","tysp":"tysp4"},
+                    {"zye": "作业者E","tdsp":"tdsp5","tysp":"tysp5"},
                 ],
                 tableData: [
                     {
-                    "pici":2019,
-                    "gongwei": "切断",
-                    "zuoyezhe": "qieduan",
-                    "tongji": "1323"
-                },
-                    {
-                        "pici": 2019,
+                        "pici": "20190426",
                         "gongwei": "切断",
-                        "zuoyezhe": "qieduan",
-                        "tongji": "1323"
+                        "tdsp": '1',
+                        "tysp": "1",
+                        "tdsp2": '2',
+                        "tysp2": "2",
+                        "tdsp3": '3',
+                        "tysp3": "3",
+                        "tdsp4": '4',
+                        "tysp4": "4",
+                        "tdsp5": '5',
+                        "tysp5": "5",
+                        "ctzs": "1",
+                        "ysp":"2",
+                        "dsp":"3",
+                        "wdr":"4"
+
                     },
                     {
-                        "pici": 2019,
-                        "gongwei": "切断",
-                        "zuoyezhe": "qieduan",
-                        "tongji": "1323"
+                        "pici": "20190426",
+                        "gongwei": "短管焊",
+                        "tdsp": '11',
+                        "tysp": "11",
+                        "tdsp2": '22',
+                        "tysp2": "22",
+                        "tdsp3": '33',
+                        "tysp3": "33",
+                        "tdsp4": '44',
+                        "tysp4": "44",
+                        "tdsp5": '55',
+                        "tysp5": "55",
+                        "ctzs": "1",
+                        "ysp":"2",
+                        "dsp":"3",
+                        "wdr":"2"
                     },
                     {
-                        "pici": 2019,
-                        "gongwei": "切断",
-                        "zuoyezhe": "qieduan",
-                        "tongji": "1323"
+                        "pici": "20190426",
+                        "gongwei": "直管焊",
+                        "tdsp": '111',
+                        "tysp": "111",
+                        "tdsp2": '222',
+                        "tysp2": "222",
+                        "tdsp3": '333',
+                        "tysp3": "333",
+                        "tdsp4": '444',
+                        "tysp4": "444",
+                        "tdsp5": '555',
+                        "tysp5": "555",
+                        "ctzs": "1",
+                        "ysp":"2",
+                        "dsp":"3",
+                        "wdr":"3"
+                    },
+                    {
+                        "pici": "20190426",
+                        "gongwei": "大阻焊",
+                        "tdsp": '1111',
+                        "tysp": "1111",
+                        "tdsp2": '2222',
+                        "tysp2": "2222",
+                        "tdsp3": '3333',
+                        "tysp3": "3333",
+                        "tdsp4": '4444',
+                        "tysp4": "4444",
+                        "tdsp5": '5555',
+                        "tysp5": "5555",
+                        "ctzs": "1",
+                        "ysp":"2",
+                        "dsp":"3",
+                        "wdr":"4"
                     },
                 ],
 
@@ -220,7 +267,7 @@
             doSearchData() {
             },
 
-            arraySpanMethod(){
+            dSP(){
 
             },
 
@@ -247,6 +294,7 @@
                 .handle-input {
                     width: 300px;
                     display: inline-block;
+
                 }
                 .el-button {
                     width: 100px;
