@@ -38,20 +38,58 @@
                 <div class="">
                     <el-table class="tb-edit"
                               :data="tables"
-                              :header-cell-style="{background:'#A1D0FC',color:'rgba(0, 0, 0, 0.8)',fontSize:'20px'}"
+                              height="500"
                               border
-                              height="450"
-                              @select-all="selectAll"
-                              @select="selectList"
-                              @row-dblclick="edit"
-                              highlight-current-row
-                              style="width: 98%;margin: auto">
-                        <el-table-column
-                            type="selection"
-                            width="30">
-                        </el-table-column>
+                              :header-cell-style="{background:'#A1D0FC',color:'rgba(0, 0, 0, 1)',fontSize:'15px'}"
+                              :span-method="arraySpanMethod"
+                              :cell-style="{fontSize:'12px'}"
+                              ref="moviesTable"
+                              style="width: 99%;margin: 0 auto">
                         <template v-for="(col ,index) in cols">
-                            <el-table-column align="center" :prop="col.prop" :label="col.label"></el-table-column>
+                            <el-table-column
+                                align="center"
+                                width="85"
+                                v-if="col.prop==='pici'"
+                                :prop="col.prop" >
+                                <template scope="scope">
+                                    {{ scope.row.pici }}
+                                </template>
+                            </el-table-column>
+                            <el-table-column
+                                align="center"
+                                width="70"
+                                v-if="col.prop==='gongwei'"
+                                :prop="col.prop" >
+                                <template scope="scope">
+                                    {{ scope.row.gongwei }}
+                                </template>
+                            </el-table-column>
+                            <el-table-column
+                                align="center"
+                                width="85"
+                                v-if="col.prop==='zuoyezhe'"
+                                :prop="col.prop" >
+                                <template scope="scope">
+                                    {{ scope.row.zuoyezhe }}
+                                    <el-table-column
+                                        align="center"
+                                        width="85"
+                                        v-if="col.prop==='zuoyezhe'"
+                                        :prop="col.prop" >
+                                        <template scope="scope">
+                                            {{ scope.row.zuoyezhe }}
+                                        </template>
+                                    </el-table-column>
+                                </template>
+                            </el-table-column>
+                            <el-table-column
+                                align="center"
+                                v-if="col.prop==='tongji'"
+                                :prop="col.prop" >
+                                <template scope="scope">
+                                    {{ scope.row.tongji }}
+                                </template>
+                            </el-table-column>
                         </template>
                     </el-table>
                 </div>
@@ -77,8 +115,38 @@
                 id: "",
 
 
-                cols: [],
-                tableData: [],
+                cols: [
+                    {"prop": "pici", "label": "批次"},
+                    {"prop": "gongwei", "label": "工位"},
+                    {"prop": "zuoyezhe", "label": "作业者"},
+                    {"prop": "tongji", "label": "统计"},
+                ],
+                tableData: [
+                    {
+                    "pici":2019,
+                    "gongwei": "切断",
+                    "zuoyezhe": "qieduan",
+                    "tongji": "1323"
+                },
+                    {
+                        "pici": 2019,
+                        "gongwei": "切断",
+                        "zuoyezhe": "qieduan",
+                        "tongji": "1323"
+                    },
+                    {
+                        "pici": 2019,
+                        "gongwei": "切断",
+                        "zuoyezhe": "qieduan",
+                        "tongji": "1323"
+                    },
+                    {
+                        "pici": 2019,
+                        "gongwei": "切断",
+                        "zuoyezhe": "qieduan",
+                        "tongji": "1323"
+                    },
+                ],
 
                 select_word: '',
 
@@ -138,8 +206,8 @@
                     axios.post(" " + url + "/padShow/buttonList", {"id": data})
                 ])
                     .then(axios.spread(function (title, table) {
-                        that.cols = title.data;
-                        that.tableData = table.data.data;
+                        /*that.cols = title.data;
+                        that.tableData = table.data.data;*/
                     }));
             },
 
@@ -148,6 +216,13 @@
                 this.loadingShowData(this.workStation)
             },
 
+            //进行查询
+            doSearchData() {
+            },
+
+            arraySpanMethod(){
+
+            },
 
         }
     }

@@ -8,7 +8,7 @@
         </div>
         <div class="template-content">
             <div class="container">
-                <div class="handle-box">
+               <!-- <div class="handle-box">
                     <label style="margin-right: 10px">
                         <span>智能检索工位</span>
                         <span>:</span>
@@ -34,9 +34,9 @@
                             </el-option>
                         </el-select>
                     </label>
-                </div>
-                <div class="">
-                    <div id="dataBar" :style="{width: '90%', height: '300px'}"></div>
+                </div>-->
+                <div class="handle-div">
+                    <div v-for="(item,index) in dataFH"   :id="item.id" :style="{width: '25%', height: '300px'}" class="fl"></div>
                 </div>
             </div>
         </div>
@@ -55,166 +55,19 @@
                 workStation:"",
                 workStationOptions:[],
 
-                ElectricityData:[
-                    {
-                        power: "3012",
-                        time: "10/1",
-                        load:"74.63"
-                    },
-                    {
-                        power: "3013",
-                        time: "10/2",
-                        load:"75.63"
-                    },
-                    {
-                        power: "3014",
-                        time: "10/3",
-                        load:"74.83"
-                    },
-                    {
-                        power: "3012",
-                        time: "10/4",
-                        load:"74.63"
-                    },
-                    {
-                        power: "3013",
-                        time: "10/5",
-                        load:"75.63"
-                    },
-                    {
-                        power: "3014",
-                        time: "10/6",
-                        load:"74.83"
-                    },
-                    {
-                        power: "3012",
-                        time: "10/7",
-                        load:"74.63"
-                    },
-                    {
-                        power: "3013",
-                        time: "10/8",
-                        load:"75.63"
-                    },
-                    {
-                        power: "3014",
-                        time: "10/9",
-                        load:"74.83"
-                    },
-                    {
-                        power: "3012",
-                        time: "10/10",
-                        load:"74.63"
-                    },
-                    {
-                        power: "3013",
-                        time: "10/11",
-                        load:"75.63"
-                    },
-                    {
-                        power: "3014",
-                        time: "10/12",
-                        load:"74.83"
-                    },
-                    {
-                        power: "3012",
-                        time: "10/13",
-                        load:"74.63"
-                    },
-                    {
-                        power: "3013",
-                        time: "10/14",
-                        load:"75.63"
-                    },
-                    {
-                        power: "3014",
-                        time: "10/15",
-                        load:"74.83"
-                    },
-                    {
-                        power: "3012",
-                        time: "10/16",
-                        load:"74.63"
-                    },
-                    {
-                        power: "3013",
-                        time: "10/17",
-                        load:"75.63"
-                    },
-                    {
-                        power: "3014",
-                        time: "10/18",
-                        load:"74.83"
-                    },
-                    {
-                        power: "3012",
-                        time: "10/19",
-                        load:"74.63"
-                    },
-                    {
-                        power: "3013",
-                        time: "10/20",
-                        load:"75.63"
-                    },
-                    {
-                        power: "3014",
-                        time: "10/21",
-                        load:"74.83"
-                    },
-                    {
-                        power: "3012",
-                        time: "10/22",
-                        load:"74.63"
-                    },
-                    {
-                        power: "3013",
-                        time: "10/23",
-                        load:"75.63"
-                    },
-                    {
-                        power: "3014",
-                        time: "10/24",
-                        load:"74.83"
-                    },
-                    {
-                        power: "3012",
-                        time: "10/25",
-                        load:"74.63"
-                    },
-                    {
-                        power: "3013",
-                        time: "10/26",
-                        load:"75.63"
-                    },
-                    {
-                        power: "3014",
-                        time: "10/27",
-                        load:"74.83"
-                    },
-                    {
-                        power: "3012",
-                        time: "10/28",
-                        load:"74.63"
-                    },
-                    {
-                        power: "3013",
-                        time: "10/29",
-                        load:"75.63"
-                    },
-                    {
-                        power: "3014",
-                        time: "10/30",
-                        load:"74.83"
-                    },
-                    {
-                        power: "3012",
-                        time: "10/31",
-                        load:"74.63"
-                    }
+                dataFH:[
+                    {"id":"a",fhl:"600",  xx:"0.1",  sx:'0.8','gw':"切断"},
+                    {"id":"b",fhl:"40",  xx:"0.2",  sx:'0.8','gw':"短管焊"},
+                    {"id":"c",fhl:"50",  xx:"0.3",  sx:'0.8','gw':"直管焊"},
+                    {"id":"d",fhl:"70",  xx:"0.4",  sx:'0.8','gw':"小组立"}
                 ],
-                fhl:"60",
+
+
+              /*  fhl:"60",
                 xx:"0.1",
-                sx:'0.8'
+                sx:'0.8',*/
+
+
 
             }
         },
@@ -249,73 +102,58 @@
                     this.$router.push("/")
                 }
                 else {
-                    let that = this;
-                    axios.all([
-                        axios.post(" " + url + "/api/getPersonProcessList", {"name": ""}),
-                        axios.post(" " + url + "/sys/dictionaryList", {"id": "23"}),
-                    ])
-                        .then(axios.spread(function (select, type) {
-                            that.workStation = select.data[0].id;
-                            that.workStationOptions = select.data;
-                            that.typeOptions = type.data;
-                            that.loadingShowData(1);
-                        }));
+
                 }
             },
 
-            //瞬间加载数据
-            loadingShowData(data) {
+            drawLine() {
                 let that = this;
                 axios.all([
-                    axios.post(" " + url + "/sys/showTableTitle", {"name": "jgxqan"}),
-                    axios.post(" " + url + "/padShow/buttonList", {"id": data})
+                    axios.post(" " + url + "/gongweiJiance/gongweiJianceList")
                 ])
-                    .then(axios.spread(function (title, table) {
-
+                    .then(axios.spread(function (data) {
+                        console.log(data)
                     }));
-            },
-
-            //根据工位选择
-            changeSelect() {
-                this.loadingShowData(this.workStation)
-            },
-
-            drawLine() {
                 // 基于准备好的dom，初始化echarts实例
-                let myChart = this.$echarts.init(document.getElementById('dataBar'));
-                // 绘制图表
-                myChart.setOption({
-                    tooltip : {
-                        formatter: "{a} <br/>{b} : {c}%"
-                    },
-                    toolbox: {
-                        show: true,
-                        feature: {
-                            restore: { //重置
-                                show: true
-                            },
-                            saveAsImage: {//保存图片
-                                show: true
-                            }
-                        }
-                    },
-                    series: [
-                        {
-                            name: '工位负荷',
-                            type: 'gauge',
-                            detail: {formatter:'{value}%'},
-                            data: [{value: this.fhl, name: '负荷率'}],
-                            axisLine: { // 坐标轴线
-                                lineStyle: { // 属性lineStyle控制线条样式
-                                    color: [
-                                        [this.xx, '#c23531'],
-                                        [this.sx, '#63869e'],
-                                        [1, '#91c7ae']]
+                for (let i = 0; i < this.dataFH.length; i++) {
+                    let id = this.dataFH[i].id;
+                    id = this.$echarts.init(document.getElementById(id));
+                    // 绘制图表
+                    id.setOption({
+                        tooltip: {
+                            formatter: "{a} <br/>{b} : {c}%"
+                        },
+                        toolbox: {
+                            show: true,
+                            feature: {
+                                restore: { //重置
+                                    show: true
+                                },
+                                saveAsImage: {//保存图片
+                                    show: true
                                 }
-                            },
-                        }
-                    ]
-                });
+                            }
+                        },
+                        series: [
+                            {
+                                name: '工位负荷',
+                                type: 'gauge',
+                                detail: {formatter: '{value}%'},
+                                data: [{value: this.dataFH[i].fhl, name: this.dataFH[i].gw}],
+                                axisLine: { // 坐标轴线
+                                    lineStyle: { // 属性lineStyle控制线条样式
+                                        color: [
+                                            [this.dataFH[i].xx, '#c23531'],
+                                            [this.dataFH[i].sx, '#63869e'],
+                                            [1, '#91c7ae']]
+                                    }
+                                },
+                            }
+                        ]
+                    });
+                }
+
+
             },
         }
     }
@@ -346,16 +184,10 @@
                     height: 30px;
                 }
             }
-            .del-dialog-cnt {
-                font-size: 16px;
-                text-align: center
-            }
-            .table {
+            .handle-div{
                 width: 100%;
-                font-size: 14px;
-            }
-            .red {
-                color: #ff0000;
+                height: 500px;
+                overflow: auto;
             }
 
         }
