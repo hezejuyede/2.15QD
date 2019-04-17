@@ -96,7 +96,12 @@
                     <el-form-item label="负荷下限">
                         <el-input  type="number" v-model="xiaxian"></el-input>
                     </el-form-item>
-
+                    <el-form-item label="负荷上限">
+                        <el-input  type="number" v-model="shangxian"></el-input>
+                    </el-form-item>
+                    <el-form-item label="总根数">
+                        <el-input  type="number" v-model="allnum"></el-input>
+                    </el-form-item>
                 </el-form>
                 <span slot="footer" class="dialog-footer">
                 <el-button @click="addVisible = false" style="height:30px;width:80px">取 消</el-button>
@@ -137,11 +142,14 @@
                     <el-form-item label="加工能力">
                         <el-input  type="number" v-model="jgnl"></el-input>
                     </el-form-item>
+                    <el-form-item label="负荷下限">
+                        <el-input  type="number" v-model="xiaxian"></el-input>
+                    </el-form-item>
                     <el-form-item label="负荷上限">
                         <el-input  type="number" v-model="shangxian"></el-input>
                     </el-form-item>
-                    <el-form-item label="负荷下限">
-                        <el-input  type="number" v-model="xiaxian"></el-input>
+                    <el-form-item label="总根数">
+                        <el-input  type="number" v-model="allnum"></el-input>
                     </el-form-item>
                 </el-form>
                 <span slot="footer" class="dialog-footer">
@@ -192,6 +200,7 @@
 
                 id: "",
                 code: "",
+                allnum:"",
                 name: '',
                 context: '',
                 personnum: "",
@@ -267,7 +276,7 @@
                         this.code = res.data.code;
                         this.shangxian = res.data.shangxian;
                         this.xiaxian = res.data.xiaxian;
-
+                        this.allnum = res.data.allnum;
                     })
                     .catch((err) => {
                         console.log(err)
@@ -306,7 +315,8 @@
                             "line": this.line,
                             "jiagongnengli": this.jgnl,
                             "shangxian": this.shangxian,
-                            "xiaxian": this.xiaxian
+                            "xiaxian": this.xiaxian,
+                            "allnum":  this.allnum ,
                         }
                     )
                         .then((res) => {
@@ -361,7 +371,6 @@
 
             //显示新增工序
             addWorkStation() {
-
                 if (this.line) {
                     this.addVisible = true;
                     this.name = "";
@@ -371,6 +380,7 @@
                     this.jgnl = "";
                     this.shangxian = "";
                     this.xiaxian = "";
+                    this.allnum = "";
 
                 }
                 else {
@@ -401,7 +411,9 @@
                             "line": this.line,
                             "jiagongnengli": this.jgnl,
                             "shangxian": this.shangxian,
-                            "xiaxian": this.xiaxian
+                            "xiaxian": this.xiaxian,
+                            "allnum":  this.allnum ,
+
                         }
                     )
                         .then((res) => {
