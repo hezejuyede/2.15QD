@@ -49,7 +49,7 @@
                         </el-table-column>
                         <el-table-column
                             align="center"
-                            prop="gongwei"
+                            prop="filetype"
                             label=""
                             width="100">
                         </el-table-column>
@@ -112,88 +112,8 @@
                 id: "",
 
 
-                titleData: [
-                    {"zye": "作业者A","tdsp":"tdsp","tysp":"tysp"},
-                    {"zye": "作业者B","tdsp":"tdsp2","tysp":"tysp2"},
-                    {"zye": "作业者C","tdsp":"tdsp3","tysp":"tysp3"},
-                    {"zye": "作业者D","tdsp":"tdsp4","tysp":"tysp4"},
-                    {"zye": "作业者E","tdsp":"tdsp5","tysp":"tysp5"},
-                ],
-                tableData: [
-                    {
-                        "pici": "20190426",
-                        "gongwei": "切断",
-                        "tdsp": '1',
-                        "tysp": "1",
-                        "tdsp2": '2',
-                        "tysp2": "2",
-                        "tdsp3": '3',
-                        "tysp3": "3",
-                        "tdsp4": '4',
-                        "tysp4": "4",
-                        "tdsp5": '5',
-                        "tysp5": "5",
-                        "ctzs": "1",
-                        "ysp":"2",
-                        "dsp":"3",
-                        "wdr":"4"
-
-                    },
-                    {
-                        "pici": "20190426",
-                        "gongwei": "短管焊",
-                        "tdsp": '11',
-                        "tysp": "11",
-                        "tdsp2": '22',
-                        "tysp2": "22",
-                        "tdsp3": '33',
-                        "tysp3": "33",
-                        "tdsp4": '44',
-                        "tysp4": "44",
-                        "tdsp5": '55',
-                        "tysp5": "55",
-                        "ctzs": "1",
-                        "ysp":"2",
-                        "dsp":"3",
-                        "wdr":"2"
-                    },
-                    {
-                        "pici": "20190426",
-                        "gongwei": "直管焊",
-                        "tdsp": '111',
-                        "tysp": "111",
-                        "tdsp2": '222',
-                        "tysp2": "222",
-                        "tdsp3": '333',
-                        "tysp3": "333",
-                        "tdsp4": '444',
-                        "tysp4": "444",
-                        "tdsp5": '555',
-                        "tysp5": "555",
-                        "ctzs": "1",
-                        "ysp":"2",
-                        "dsp":"3",
-                        "wdr":"3"
-                    },
-                    {
-                        "pici": "20190426",
-                        "gongwei": "大阻焊",
-                        "tdsp": '1111',
-                        "tysp": "1111",
-                        "tdsp2": '2222',
-                        "tysp2": "2222",
-                        "tdsp3": '3333',
-                        "tysp3": "3333",
-                        "tdsp4": '4444',
-                        "tysp4": "4444",
-                        "tdsp5": '5555',
-                        "tysp5": "5555",
-                        "ctzs": "1",
-                        "ysp":"2",
-                        "dsp":"3",
-                        "wdr":"4"
-                    },
-                ],
+                titleData: [],
+                tableData: [],
 
                 select_word: '',
 
@@ -240,7 +160,7 @@
                         .then(axios.spread(function (select) {
                             that.batch = select.data[0].id;
                             that.batchOptions = select.data;
-                            that.loadingShowData(1);
+                            that.loadingShowData();
                         }));
                 }
             },
@@ -249,12 +169,12 @@
             loadingShowData(data) {
                 let that = this;
                 axios.all([
-                    axios.post(" " + url + "/sys/showTableTitle", {"name": "jgxqan"}),
-                    axios.post(" " + url + "/padShow/buttonList", {"id": data})
+                    axios.post(" " + url + "/fileShenpi/shenpiTitle"),
+                    axios.post(" " + url + "/fileShenpi/shenpiData",{"pici":data}),
                 ])
                     .then(axios.spread(function (title, table) {
-                        /*that.cols = title.data;
-                        that.tableData = table.data.data;*/
+                        that.titleData = title.data;
+                        that.tableData = table.data;
                     }));
             },
 
@@ -265,6 +185,7 @@
 
             //进行查询
             doSearchData() {
+                this.loadingShowData(this.batch);
             },
 
             dSP(){
