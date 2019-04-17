@@ -50,25 +50,7 @@
         name: 'templateVue',
         data() {
             return {
-
-                select_word: '',
-                workStation:"",
-                workStationOptions:[],
-
-                dataFH:[
-                    {"id":"a",fhl:"97",  xx:"0.1",  sx:'0.9','gw':"切断"},
-                    {"id":"b",fhl:"40",  xx:"0.2",  sx:'0.8','gw':"短管焊"},
-                    {"id":"c",fhl:"50",  xx:"0.3",  sx:'0.8','gw':"直管焊"},
-                    {"id":"d",fhl:"70",  xx:"0.4",  sx:'0.8','gw':"小组立"}
-                ],
-
-
-              /*  fhl:"60",
-                xx:"0.1",
-                sx:'0.8',*/
-
-
-
+                dataFH:[]
             }
         },
         computed: {
@@ -87,12 +69,20 @@
         },
         components: {},
         mounted() {
-            this.drawLine();
-
+            this.drawLine()
         },
         created() {
             this.getAdminState();
         },
+        watch:{
+            dataFH: {
+                handler(newValue, oldValue) {
+
+                },
+                deep: true
+            }
+        },
+        
         methods: {
 
             //页面加载检查用户是否登陆，没有登陆就加载登陆页面
@@ -102,56 +92,57 @@
                     this.$router.push("/")
                 }
                 else {
-
+                    axios.post(" " + url + "/gongweiJiance/gongweiJianceList")
+                        .then((res) => {
+                            this.dataFH =res.data
+                        })
+                        .catch((err)=>{
+                            console.log(err)
+                        });
                 }
             },
 
             drawLine() {
-                let that = this;
-                axios.all([
-                    axios.post(" " + url + "/gongweiJiance/gongweiJianceList")
-                ])
-                    .then(axios.spread(function (data) {
-                        console.log(data)
-                    }));
-                // 基于准备好的dom，初始化echarts实例
-                for (let i = 0; i < this.dataFH.length; i++) {
-                    let id = this.dataFH[i].id;
-                    id = this.$echarts.init(document.getElementById(id));
-                    // 绘制图表
-                    id.setOption({
-                        tooltip: {
-                            formatter: "{a} <br/>{b} : {c}%"
-                        },
-                        toolbox: {
-                            show: true,
-                            feature: {
-                                restore: { //重置
-                                    show: true
-                                },
-                                saveAsImage: {//保存图片
-                                    show: true
-                                }
-                            }
-                        },
-                        series: [
-                            {
-                                name: '工位负荷',
-                                type: 'gauge',
-                                detail: {formatter: '{value}%'},
-                                data: [{value: this.dataFH[i].fhl, name: this.dataFH[i].gw}],
-                                axisLine: { // 坐标轴线
-                                    lineStyle: { // 属性lineStyle控制线条样式
-                                        color: [
-                                            [this.dataFH[i].xx, '#c23531'],
-                                            [this.dataFH[i].sx, '#63869e'],
-                                            [1, '#91c7ae']]
+                setTimeout(()=>{
+                    console.log(this.dataFH)
+                    for (let i = 0; i < this.dataFH.length; i++) {
+                        let id = this.dataFH[i].id;
+                        id = this.$echarts.init(document.getElementById(id));
+                        // 绘制图表
+                        id.setOption({
+                            tooltip: {
+                                formatter: "{a} <br/>{b} : {c}%"
+                            },
+                            toolbox: {
+                                show: true,
+                                feature: {
+                                    restore: { //重置
+                                        show: true
+                                    },
+                                    saveAsImage: {//保存图片
+                                        show: true
                                     }
-                                },
-                            }
-                        ]
-                    });
-                }
+                                }
+                            },
+                            series: [
+                                {
+                                    name: '工位负荷',
+                                    type: 'gauge',
+                                    detail: {formatter: '{value}%'},
+                                    data: [{value: this.dataFH[i].fhl, name: this.dataFH[i].gw}],
+                                    axisLine: { // 坐标轴线
+                                        lineStyle: { // 属性lineStyle控制线条样式
+                                            color: [
+                                                [this.dataFH[i].xx, '#c23531'],
+                                                [this.dataFH[i].sx, '#63869e'],
+                                                [1, '#91c7ae']]
+                                        }
+                                    },
+                                }
+                            ]
+                        });
+                    }
+                },3000);
 
 
             },

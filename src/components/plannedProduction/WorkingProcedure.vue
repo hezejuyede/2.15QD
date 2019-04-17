@@ -66,7 +66,7 @@
                             filterable
                             allow-create
                             default-first-option
-                            placeholder="请输入或者选择批次">
+                            placeholder="请输入或生产线">
                             <el-option
                                 v-for="item in lineOptions"
                                 :key="item.indexno"
@@ -89,9 +89,6 @@
                     </el-form-item>
                     <el-form-item label="加工能力">
                         <el-input  type="number" v-model="jgnl"></el-input>
-                    </el-form-item>
-                    <el-form-item label="负荷上限">
-                        <el-input  type="number" v-model="shangxian"></el-input>
                     </el-form-item>
                     <el-form-item label="负荷下限">
                         <el-input  type="number" v-model="xiaxian"></el-input>
@@ -475,7 +472,7 @@
                         that.cols = title.data;
                         that.tableData = table.data;
                         that.lineOptions = line.data;
-                        that.line = line.data[0].name
+                        that.line = line.data[0].indexno
                     }));
             }
 
