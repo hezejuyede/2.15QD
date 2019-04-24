@@ -49,11 +49,11 @@
                         index: 'PlannedProduction',
                         title: '生产管理'
                     },
-                   /* {
+                    {
                         icon: 'el-icon-lx-cartfill',
                         index: 'MaterialManagement',
                         title: '物料管理'
-                    },*/
+                    },
                     {
                         icon: 'el-icon-star-on',
                         index: 'QualityAssurance',
