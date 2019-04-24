@@ -51,7 +51,7 @@
                             {
                                 label: '托单制作',
                                 index: "2-1",
-                                url: "/404"
+                                url: "/ProductionOfGoldSheets"
                             },
                             {
                                 label: '托单审批',

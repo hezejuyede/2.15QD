@@ -58,80 +58,157 @@
                 </div>
             </div>
             <!--新增弹出框 -->
-            <el-dialog title="新增脱单金物" :visible.sync="addVisible" width="40%">
-                <el-form ref="form"  label-width="100px">
-                    <el-form-item label="工位名称">
-                        <el-select
-                            v-model="workStation"
-                            clearable
-                            filterable
-                            disabled
-                            allow-create
-                            default-first-option
-                            placeholder="请选择工位">
-                            <el-option
-                                v-for="item in workStationOptions"
-                                :key="item.id"
-                                :label="item.name"
-                                :value="item.id">
-                            </el-option>
-                        </el-select>
-                    </el-form-item>
-                    <el-form-item label="按钮名称">
-                        <el-input v-model="name" style="width: 200px"></el-input>
-                    </el-form-item>
-                    <el-form-item label="事件类型">
-                        <el-select
-                            v-model="type"
-                            clearable
-                            filterable
-                            allow-create
-                            default-first-option
-                            placeholder="请输入或者选择">
-                            <el-option
-                                v-for="item in typeOptions"
-                                :key="item.indexno"
-                                :label="item.name"
-                                :value="item.indexno">
-                            </el-option>
-                        </el-select>
-                    </el-form-item>
-                    <el-form-item label="是否可点">
-                        <el-select
-                            v-model="disabled"
-                            clearable
-                            filterable
-                            allow-create
-                            default-first-option
-                            placeholder="请输入或者选择">
-                            <el-option
-                                v-for="item in disabledOptions"
-                                :key="item.id"
-                                :label="item.name"
-                                :value="item.id">
-                            </el-option>
-                        </el-select>
-                    </el-form-item>
-                    <el-form-item label="按钮颜色">
-                        <el-color-picker v-model="backgroundColor"></el-color-picker>
-                    </el-form-item>
-                    <el-form-item label="显示隐藏">
-                        <el-select
-                            v-model="showHide"
-                            clearable
-                            filterable
-                            allow-create
-                            default-first-option
-                            placeholder="请输入或者选择">
-                            <el-option
-                                v-for="item in showHideOptions"
-                                :key="item.id"
-                                :label="item.name"
-                                :value="item.id">
-                            </el-option>
-                        </el-select>
-                    </el-form-item>
-                </el-form>
+            <el-dialog title="脱单金物制作" :visible.sync="addVisible" width="100%">
+                <div class="makeFrom">
+                    <div class="makeFromTop">
+
+                    </div>
+                    <div class="makeFromCenter">
+                        <template>
+                            <el-table
+                                :data="excelData"
+                                :header-cell-style="{background:'#ffffff',border: '1px solid #303133',color:'rgba(0, 0, 0, 1)'}"
+                                :cell-style="{border: '1px solid #303133'}"
+                                style="width: 932px;border: 1px solid #303133">
+                                <el-table-column
+                                    align="center"
+                                    prop="chuku"
+                                    label="出库"
+                                    width="30">
+                                    <template  slot-scope="scope">
+                                        <input
+                                            v-model="scope.row.chuku"
+                                            styley="width:30px;height:50px"/>
+                                    </template>
+                                </el-table-column>
+                                <el-table-column
+                                    align="center"
+                                    prop="xuhao"
+                                    label="序号"
+                                    width="30">
+                                    <template  slot-scope="scope">
+                                        <input
+                                            v-model="scope.row.xuhao"
+                                            styley="width:30px;height:50px"/>
+                                    </template>
+                                </el-table-column>
+                                <el-table-column
+                                    align="center"
+                                    prop="tuhao"
+                                    label="图号"
+                                    width="120">
+                                    <template  slot-scope="scope">
+                                        <input
+                                            v-model="scope.row.tuhao"
+                                            styley="width:120px;height:50px"/>
+                                    </template>
+                                </el-table-column>
+                                <el-table-column
+                                    align="center"
+                                    prop="mingchengchicun"
+                                    label="名称尺寸"
+                                    width="300">
+                                    <template  slot-scope="scope">
+                                        <input
+                                            v-model="scope.row.mingchengchicun"
+                                            styley="width:300px"/>
+                                    </template>
+                                </el-table-column>
+                                <el-table-column
+                                    align="center"
+                                    prop="guanliqufenhao"
+                                    label="管理区分号"
+                                    width="100">
+                                    <template  slot-scope="scope">
+                                        <input
+                                            v-model="scope.row.guanliqufenhao"
+                                            styley="width:100px"/>
+                                    </template>
+                                </el-table-column>
+                                <el-table-column
+                                    align="center"
+                                    prop="hangfan"
+                                    label="行番"
+                                    width="30">
+                                    <template  slot-scope="scope">
+                                        <input
+                                            v-model="scope.row.hangfan"
+                                            styley="width:30px"/>
+                                    </template>
+                                </el-table-column>
+                                <el-table-column
+                                    align="center"
+                                    prop="shuliang"
+                                    label="数量"
+                                    width="80">
+                                    <template  slot-scope="scope">
+                                        <input
+                                            v-model="scope.row.shuliang"
+                                            styley="width:80px"/>
+                                    </template>
+                                </el-table-column>
+                                <el-table-column
+                                    align="center"
+                                    prop="danwei"
+                                    label="单位"
+                                    width="30">
+                                    <template  slot-scope="scope">
+                                        <input
+                                            v-model="scope.row.danwei"
+                                            styley="width:30px"/>
+                                    </template>
+                                </el-table-column>
+                                <el-table-column
+                                    align="center"
+                                    prop="tuzhuangfanhao"
+                                    label="涂装番号"
+                                    width="50">
+                                    <template  slot-scope="scope">
+                                        <input
+                                            v-model="scope.row.tuzhuangfanhao"
+                                            styley="width:50px"/>
+                                    </template>
+                                </el-table-column>
+                                <el-table-column
+                                    align="center"
+                                    prop="chupin"
+                                    label="贮品"
+                                    width="30">
+                                    <template  slot-scope="scope">
+                                        <input
+                                            v-model="scope.row.chupin"
+                                            styley="width:30px"/>
+                                    </template>
+                                </el-table-column>
+                                <el-table-column
+                                    align="center"
+                                    prop="guanjin"
+                                    label="管金"
+                                    width="30">
+                                    <template  slot-scope="scope">
+                                        <input
+                                            v-model="scope.row.guanjin"
+                                            styley="width:30px"/>
+                                    </template>
+                                </el-table-column>
+                                <el-table-column
+                                    align="center"
+                                    prop="beizhu"
+                                    label="备注"
+                                    width="100">
+                                    <template  slot-scope="scope">
+                                        <input
+                                            v-model="scope.row.beizhu"
+                                            styley="width:100px"/>
+                                    </template>
+                                </el-table-column>
+                            </el-table>
+                        </template>
+                    </div>
+                    <div class="makeFromBottom">
+
+                    </div>
+                </div>
                 <span slot="footer" class="dialog-footer">
                 <el-button @click="addVisible = false" style="height:30px;width:80px">取 消</el-button>
                 <el-button type="primary" @click="doAdd" style="height:30px;width:80px">确 定</el-button>
@@ -244,28 +321,86 @@
                 HideModal: true,
                 listData:[],
                 id:"",
+                search:"44",
 
-
+                excelData:[
+                    {
+                        "chuku":1,
+                        "xuhao":2,
+                        "tuhao":3,
+                        "mingchengchicun":4,
+                        "guanliqufenhao":5,
+                        "hangfan":6,
+                        "shuliang":7,
+                        "danwei":8,
+                        "tuzhuangfanhao":9,
+                        "chupin":10,
+                        "guanjin":11,
+                        "beizhu":12
+                    },
+                    {
+                        "chuku":1,
+                        "xuhao":2,
+                        "tuhao":3,
+                        "mingchengchicun":4,
+                        "guanliqufenhao":5,
+                        "hangfan":6,
+                        "shuliang":7,
+                        "danwei":8,
+                        "tuzhuangfanhao":9,
+                        "chupin":10,
+                        "guanjin":11,
+                        "beizhu":12
+                    },
+                    {
+                        "chuku":1,
+                        "xuhao":2,
+                        "tuhao":3,
+                        "mingchengchicun":4,
+                        "guanliqufenhao":5,
+                        "hangfan":6,
+                        "shuliang":7,
+                        "danwei":8,
+                        "tuzhuangfanhao":9,
+                        "chupin":10,
+                        "guanjin":11,
+                        "beizhu":12
+                    },
+                    {
+                        "chuku":1,
+                        "xuhao":2,
+                        "tuhao":3,
+                        "mingchengchicun":4,
+                        "guanliqufenhao":5,
+                        "hangfan":6,
+                        "shuliang":7,
+                        "danwei":8,
+                        "tuzhuangfanhao":9,
+                        "chupin":10,
+                        "guanjin":11,
+                        "beizhu":12
+                    },
+                    {
+                        "chuku":1,
+                        "xuhao":2,
+                        "tuhao":3,
+                        "mingchengchicun":4,
+                        "guanliqufenhao":5,
+                        "hangfan":6,
+                        "shuliang":7,
+                        "danwei":8,
+                        "tuzhuangfanhao":9,
+                        "chupin":10,
+                        "guanjin":11,
+                        "beizhu":12
+                    }
+                    ],
                 cols: [],
                 tableData: [],
 
                 select_word: '',
 
                 addVisible: false,
-                editVisible: false,
-                delVisible: false,
-
-
-                workStation:"",
-                workStationOptions:[],
-                name: "",
-                type: "",
-                typeOptions: [],
-                disabled: "",
-                disabledOptions: [{"name": "可点击", "id": "1"}, {"name": "不可点击", "id": "0"}],
-                backgroundColor: "",
-                showHide: "",
-                showHideOptions: [{"name": "显示", "id": "1"}, {"name": "隐藏", "id": "0"}],
 
             }
         },
@@ -555,7 +690,25 @@
             }
 
         }
+
     }
 
-
+    .makeFrom{
+        width: 100%;
+        height: 500px;
+        display: flex;
+        align-items: flex-end;
+        justify-content: center;
+        flex-direction: column;
+        .makeFromTop {
+            height: 120px;
+            width: 962px;
+            border: 1px solid #303133;
+        }
+        .makeFromBottom{
+            height: 120px;
+            width: 962px;
+            border: 1px solid #303133;
+        }
+    }
 </style>
