@@ -71,6 +71,11 @@ import TaskScheduling from '../components/plannedProduction/TaskScheduling'
 //物料管理
 import MaterialManagement from '../components/materialManagement/materialManagement'
 
+import ProductionOfGoldSheets from '../components/materialManagement/productionOfGoldSheets.vue'
+
+
+
+
 import ProductionMonitoring from '../components/productionMonitoring/productionMonitoring'
 
 import DigitalSignage from '../components/productionMonitoring/DigitalSignage'
@@ -252,12 +257,14 @@ export default new Router({
                 {
                     path: '/MaterialManagement',
                     component: MaterialManagement,
-                    meta: {title: '物料管理'}
-                },
-                {
-                    path: '/ForReference',
-                    component: ForReference,
-                    meta: {title: '为引当'}
+                    meta: {title: '物料管理'},
+                    children: [
+                        {
+                            path: '/ProductionOfGoldSheets',
+                            component: ProductionOfGoldSheets,
+                            meta: {title: '脱单金物制作'}
+                        }
+                    ]
                 },
                 {
                     path: '/ProductionMonitoring',

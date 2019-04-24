@@ -1,119 +1,129 @@
 <template>
-    <div class="materialManagement">
-        <main ref="indexDiv" id="indexDiv">
-            <div class="indexDiv-top ">
-                <div class="indexDiv-top-left fl"></div>
-                <div class="indexDiv-top-center fl">物料管理</div>
-                <div class="indexDiv-top-right fl"></div>
-            </div>
-            <div class="indexDiv-bottom clearfix">
-                <div class="nav-div fl" v-for="(item,index) in navBarData" @click="goToNavBar(index,item.url)">
-                    <div class="indexDivText">
-                        <i :class=" item.icon"></i>
-                        <span>{{item.label}}</span>
-                    </div>
+    <div class="plannedProduction">
+        <div class="plannedProduction-nav">
+            <el-menu :default-active="activeIndex" class="el-menu-demo" mode="horizontal">
+                <div  v-for="(item,index) in navBarData"  :class="{'navDivColor':index === num}">
+                    <el-submenu :index="item.index">
+                        <template slot="title">{{item.label}}</template>
+                        <div class="" v-for="(item ,index) in item.children" @click=" handleSelect(item.index,item.url)">
+                            <el-menu-item :index="item.index">{{item.label}}</el-menu-item>
+                        </div>
+                    </el-submenu>
                 </div>
-            </div>
-        </main>
+            </el-menu>
+        </div>
+        <div class="plannedProduction-content">
+            <keep-alive>
+                <router-view></router-view>
+            </keep-alive>
+        </div>
     </div>
 </template>
 <script type="text/ecmascript-6">
 
 
     export default {
-        name: 'materialManagement',
+        name: 'plannedProduction',
         data() {
             return {
+                num:0,
                 navBarData: [
                     {
-                        icon: "iconfont icon-zhunbeiliangchan",
-                        label: '物料准备',
-                        id: "1",
-                        url: "/404"
+                        label: '日志管理',
+                        index: "1",
+                        children: [
+                            {
+                                label: '运行日志',
+                                index: "1-1",
+                                url: "/OperationLog"
+                            },
+                            {
+                                label: '登录日志',
+                                index: "1-2",
+                                url: "/LoginOutLog"
+                            }
+                        ]
                     },
                     {
-                        icon: "iconfont icon-ccgl-chukucaozuo-1",
-                        label: '物料出库',
-                        id: "3",
-                        url: "/404"
+                        label: '系统配置',
+                        index: "2",
+                        children: [
+                            {
+                                label: '字典管理',
+                                index: "2-1",
+                                url: "/DictionaryMaintenance"
+                            },
+                            {
+                                label: '表头维护',
+                                index: "2-2",
+                                url: "/HeaderMaintenance"
+                            },
+                            {
+                                label: '作业记录',
+                                index: "2-3",
+                                url: "/ListDetails"
+                            },
+                            {
+                                label: '按钮配置',
+                                index: "2-3",
+                                url: "/ButtonConfiguration"
+                            },
+                            {
+                                label: '详情头部配置',
+                                index: "2-4",
+                                url: "/DetailsTextConfiguration"
+                            },
+                            {
+                                label: '筛选条件配置',
+                                index: "2-5",
+                                url: "/ScreeningConditionsConfiguration"
+                            },
+                            {
+                                label: '执行端表头配置',
+                                index: "2-6",
+                                url: "/ExecuteHeaderConfiguration"
+                            }
+                        ]
                     },
                     {
-                        icon: "iconfont icon-wuliao",
-                        label: '物料配送',
-                        id: "2",
-                        url: "/404"
+                        label: '接口管理',
+                        index: "3",
+                        children: []
                     },
-                    {
-                        icon: "iconfont icon-genzong",
-                        label: '领料追踪',
-                        id: "4",
-                        url: "/404"
-                    },
-                    {
-                        icon: "iconfont icon-zhizuo",
-                        label: '托单制作',
-                        id: "3",
-                        url: "/404"
-                    },
-                    {
-                        icon: "iconfont icon-shenhe",
-                        label: '托单审核',
-                        id: "3",
-                        url: "/404"
-                    },
-                    {
-                        icon: "iconfont icon-fahang_on",
-                        label: '托单发行',
-                        id: "3",
-                        url: "/404"
-                    },
-                    {
-                        icon: "iconfont icon-zhuizong",
-                        label: '托单追踪',
-                        id: "3",
-                        url: "/404"
-                    },
-                    {
-                        icon: "iconfont icon-wei",
-                        label: '为引当',
-                        id: "4",
-                        url: "/ForReference"
-                    },
-                    {
-                        icon: "iconfont icon-chaxun",
-                        label: '查询',
-                        id: "5",
-                        url: "/404"
-                    }
-                ]
-
+                ],
+                activeIndex: '1',
             }
         },
         components: {},
         mounted() {
 
-
         },
+
         created() {
             this.getAdminState()
-
         },
         methods: {
 
-
             //页面加载检查用户是否登陆，没有登陆就加载登陆页面
             getAdminState() {
-                const userInfo = sessionStorage.getItem("userInfo");
+                const userInfo = localStorage.getItem("userInfo");
                 if (userInfo === null) {
 
                 }
                 else {
-
+                    this.$router.push(this.navBarData[0].children[0].url);
 
                 }
             },
             //点击前往那个子组件
             goToNavBar(index, url) {
+                this.$router.push(url);
+            },
+
+            //点击导航前往哪一个页面
+            handleSelect(index, url) {
+                let Num = parseInt(index.substr(0,1));
+                this.num = Num-1;
                 this.$router.push(url);
             }
 
@@ -123,130 +133,48 @@
 </script>
 <style scoped lang="less" rel="stylesheet/less">
     @import "../../assets/less/base";
-    .materialManagement{
+
+    .plannedProduction {
         width: 100%;
         height: 100%;
         background-color: @color-white;
+        .plannedProduction-nav {
+            width: 100%;
+            height: 10%;
+            .el-menu-demo {
+                display: flex;
+                > div {
+                    flex: 1;
+                    text-align: center;
+
+                }
+
+
+            }
+
+        }
+        .plannedProduction-content{
+            margin-bottom: 50px;
+        }
+
     }
 
-    .indexDiv-top {
-        height: 50px;
-        margin-bottom: 20px;
-        .indexDiv-top-left {
-            height: 1px;
-            width: 5%;
-            margin-top: 25px;
-            background-color: #303133;
-        }
-        .indexDiv-top-center {
-            width: 10%;
-            margin-top: 15px;
-            text-align: center;
-        }
-        .indexDiv-top-right {
-            height: 1px;
-            width: 85%;
-            margin-top: 25px;
-            background-color: #303133;
-        }
+
+    .navDivColor {
+        background-color: @color-background-d;
     }
 
-    .indexDiv-bottom {
-        width: 70%;
-        margin-top: 20px;
-        .nav-div {
-            width: 15%;
-            margin-left: 6%;
-            height: 100px;
-            margin-bottom: 5%;
-            border:1px solid @color-background-dd;
-            box-shadow: 2px 2px 1px @color-background-dd;
-            text-align: center;
-            cursor: pointer;
-            border-radius: 10%;
-            .indexDivText {
-                margin-top: 20px;
-                width: 100%;
-                height: 60px;
-                line-height: 30px;
+    @media only screen and (max-width: 1200px) {
+        .plannedProduction {
+            width: 1200px;
+            .plannedProduction-nav{
+                width: 1200px;
             }
-            i {
-                display: block;
-                font-size: 200%;
-                margin-bottom: 5px;
+            .plannedProduction-content{
+                width: 1200px;
             }
-            span {
-                display: block;
-            }
-
-            .icon-zhunbeiliangchan {
-                display: block;
-                font-size: 400%;
-                margin-bottom: 20px;
-                color: #3EC455;
-
-            }
-            .icon-wuliao
-            {
-                display: block;
-                font-size: 400%;
-                margin-bottom: 20px;
-                color: #d93f30;
-
-            }
-            .icon-ccgl-chukucaozuo-1 {
-                display: block;
-                font-size: 400%;
-                margin-bottom: 20px;
-                color: deeppink;
-
-            }
-            .icon-fahang_on {
-                display: block;
-                font-size: 400%;
-                margin-bottom: 20px;
-                color: orangered;
-            }
-            .icon-shenhe {
-                display: block;
-                font-size: 400%;
-                margin-bottom: 20px;
-                color: #00d1b2;
-            }
-            .icon-zhizuo {
-                display: block;
-                font-size: 400%;
-                margin-bottom: 20px;
-                color: orangered;
-            }
-            .icon-genzong {
-                display: block;
-                font-size: 400%;
-                margin-bottom: 20px;
-                color: #3a8ee6;
-
-            }
-            .icon-chaxun {
-                display: block;
-                font-size: 400%;
-                margin-bottom: 20px;
-                color: hotpink;
-
-            }
-            .icon-wei{
-                display: block;
-                font-size: 400%;
-                margin-bottom: 20px;
-               color: #f56c6c;
-            }
-            .icon-zhuizong{
-                display: block;
-                font-size: 400%;
-                margin-bottom: 20px;
-               color: #07c4a8;
-            }
-
         }
+
     }
 
 
