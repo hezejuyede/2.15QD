@@ -33,8 +33,8 @@
                             </el-option>
                         </el-select>
                     </label>
-                    <el-button type="primary" icon="delete" class="handle-del mr10" @click="showAdd">新增按钮</el-button>
-                    <el-button type="danger" icon="delete" class="handle-del mr10" @click="showDelete">删除按钮</el-button>
+                    <el-button type="primary" icon="delete" class="handle-del mr10" @click="showAdd">新增</el-button>
+                    <el-button type="danger" icon="delete" class="handle-del mr10" @click="showDelete">删除</el-button>
                 </div>
                 <div class="">
                     <el-table class="tb-edit"
