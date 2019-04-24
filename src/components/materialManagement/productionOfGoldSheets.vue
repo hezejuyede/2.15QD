@@ -60,246 +60,214 @@
             <!--新增弹出框 -->
             <el-dialog title="脱单金物制作" :visible.sync="addVisible" width="100%">
                 <div class="makeFrom">
-                    <div class="makeFromTop">
+                    <div class="makeFromDiv">
+                        <div class="makeFromTop fr">
+                            <div class="makeFromTopLeft fl">
+                                <div class="makeFromTopLeftSmall fl">
+                                    <div class="makeFromTopLeftSmallText">
+                                        分段
+                                    </div>
+                                    <div class="makeFromTopLeftSmallText">
+                                        单元
+                                    </div>
+                                    <div class="makeFromTopLeftSmallText">
+                                        青空
+                                    </div>
+                                    <div class="makeFromTopLeftSmallText">
+                                        管金物
+                                    </div>
+                                </div>
+                                <div class="makeFromTopLeftLarge fl">
+                                    管 工 托 单
+                                </div>
+                            </div>
+                            <div class="makeFromTopRight fl">
+                                <div class="makeFromTopRightTop">
+                                    <div class="makeFromTopRightTopGz fl">改正</div>
+                                    <div class="makeFromTopRightTopDH fl">第__回前图引换</div>
+                                    <div class="makeFromTopRightTopS fl">S.</div>
+                                    <div class="makeFromTopRightTopNo fl">No.</div>
+                                    <div class="makeFromTopRightTopInput fl"><input v-model="No"/></div>
+                                </div>
+                                <div class="makeFromTopRightBottom">
+                                    <div class="makeFromTopRightBottomMc fl">区画或工事名称</div>
+                                    <div class="makeFromTopRightBottomInput fl"><input v-model="gsName"/></div>
+                                    <div class="makeFromTopRightBottomTh fl">图号</div>
+                                    <div class="makeFromTopRightBottomInput fl"><input v-model="Tuhao"/></div>
+                                </div>
 
-                    </div>
-                    <div class="makeFromCenter">
-                        <template>
-                            <el-table
-                                :data="excelData"
-                                :header-cell-style="{background:'#ffffff',border: '1px solid #303133',color:'rgba(0, 0, 0, 1)'}"
-                                :cell-style="{border: '1px solid #303133'}"
-                                style="width: 932px;border: 1px solid #303133">
-                                <el-table-column
-                                    align="center"
-                                    prop="chuku"
-                                    label="出库"
-                                    width="30">
-                                    <template  slot-scope="scope">
-                                        <input
-                                            v-model="scope.row.chuku"
-                                            styley="width:30px;height:50px"/>
-                                    </template>
-                                </el-table-column>
-                                <el-table-column
-                                    align="center"
-                                    prop="xuhao"
-                                    label="序号"
-                                    width="30">
-                                    <template  slot-scope="scope">
-                                        <input
-                                            v-model="scope.row.xuhao"
-                                            styley="width:30px;height:50px"/>
-                                    </template>
-                                </el-table-column>
-                                <el-table-column
-                                    align="center"
-                                    prop="tuhao"
-                                    label="图号"
-                                    width="120">
-                                    <template  slot-scope="scope">
-                                        <input
-                                            v-model="scope.row.tuhao"
-                                            styley="width:120px;height:50px"/>
-                                    </template>
-                                </el-table-column>
-                                <el-table-column
-                                    align="center"
-                                    prop="mingchengchicun"
-                                    label="名称尺寸"
-                                    width="300">
-                                    <template  slot-scope="scope">
-                                        <input
-                                            v-model="scope.row.mingchengchicun"
-                                            styley="width:300px"/>
-                                    </template>
-                                </el-table-column>
-                                <el-table-column
-                                    align="center"
-                                    prop="guanliqufenhao"
-                                    label="管理区分号"
-                                    width="100">
-                                    <template  slot-scope="scope">
-                                        <input
-                                            v-model="scope.row.guanliqufenhao"
-                                            styley="width:100px"/>
-                                    </template>
-                                </el-table-column>
-                                <el-table-column
-                                    align="center"
-                                    prop="hangfan"
-                                    label="行番"
-                                    width="30">
-                                    <template  slot-scope="scope">
-                                        <input
-                                            v-model="scope.row.hangfan"
-                                            styley="width:30px"/>
-                                    </template>
-                                </el-table-column>
-                                <el-table-column
-                                    align="center"
-                                    prop="shuliang"
-                                    label="数量"
-                                    width="80">
-                                    <template  slot-scope="scope">
-                                        <input
-                                            v-model="scope.row.shuliang"
-                                            styley="width:80px"/>
-                                    </template>
-                                </el-table-column>
-                                <el-table-column
-                                    align="center"
-                                    prop="danwei"
-                                    label="单位"
-                                    width="30">
-                                    <template  slot-scope="scope">
-                                        <input
-                                            v-model="scope.row.danwei"
-                                            styley="width:30px"/>
-                                    </template>
-                                </el-table-column>
-                                <el-table-column
-                                    align="center"
-                                    prop="tuzhuangfanhao"
-                                    label="涂装番号"
-                                    width="50">
-                                    <template  slot-scope="scope">
-                                        <input
-                                            v-model="scope.row.tuzhuangfanhao"
-                                            styley="width:50px"/>
-                                    </template>
-                                </el-table-column>
-                                <el-table-column
-                                    align="center"
-                                    prop="chupin"
-                                    label="贮品"
-                                    width="30">
-                                    <template  slot-scope="scope">
-                                        <input
-                                            v-model="scope.row.chupin"
-                                            styley="width:30px"/>
-                                    </template>
-                                </el-table-column>
-                                <el-table-column
-                                    align="center"
-                                    prop="guanjin"
-                                    label="管金"
-                                    width="30">
-                                    <template  slot-scope="scope">
-                                        <input
-                                            v-model="scope.row.guanjin"
-                                            styley="width:30px"/>
-                                    </template>
-                                </el-table-column>
-                                <el-table-column
-                                    align="center"
-                                    prop="beizhu"
-                                    label="备注"
-                                    width="100">
-                                    <template  slot-scope="scope">
-                                        <input
-                                            v-model="scope.row.beizhu"
-                                            styley="width:100px"/>
-                                    </template>
-                                </el-table-column>
-                            </el-table>
-                        </template>
-                    </div>
-                    <div class="makeFromBottom">
+                            </div>
+                        </div>
+                        <div class="makeFromCenter fr">
+                            <div class="makeFromCenterLeft fl">
+                                <div class="makeFromCenterLeftTop">
+                                    <div class="makeFromCenterLeftText">
+                                        使用日
+                                    </div>
+                                    <div class="makeFromCenterLeftInput">
+                                        <textarea v-model="shiyongri"/>
+                                    </div>
+                                </div>
+                                <div class="makeFromCenterLeftBottom">
+                                    <div class="makeFromCenterLeftText">
+                                        使用场所
+                                    </div>
+                                    <div class="makeFromCenterLeftInput">
+                                        <textarea v-model="shiyongchangsuo"/>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="makeFromCenterRight fl">
+                                <template>
+                                    <el-table
+                                        :data="excelData"
+                                        :header-cell-style="{background:'#ffffff',border: '1px solid #303133',color:'rgba(0, 0, 0, 1)'}"
+                                        :cell-style="{border: '1px solid #303133'}"
+                                        style="width: 992px;border: 1px solid #303133">
+                                        <el-table-column
+                                            align="center"
+                                            prop="chuku"
+                                            label="出库"
+                                            width="40">
+                                            <template  slot-scope="scope">
+                                                <input
+                                                    v-model="scope.row.chuku"
+                                                    style="width:20px"/>
+                                            </template>
+                                        </el-table-column>
+                                        <el-table-column
+                                            align="center"
+                                            prop="xuhao"
+                                            label="序号"
+                                            width="40">
+                                            <template  slot-scope="scope">
+                                                <input
+                                                    v-model="scope.row.xuhao"
+                                                    style="width:20px"/>
+                                            </template>
+                                        </el-table-column>
+                                        <el-table-column
+                                            align="center"
+                                            prop="tuhao"
+                                            label="图号"
+                                            width="120">
+                                            <template  slot-scope="scope">
+                                                <input
+                                                    v-model="scope.row.tuhao"
+                                                    style="width:100px"/>
+                                            </template>
+                                        </el-table-column>
+                                        <el-table-column
+                                            align="center"
+                                            prop="mingchengchicun"
+                                            label="名称尺寸"
+                                            width="300">
+                                            <template  slot-scope="scope">
+                                                <input
+                                                    v-model="scope.row.mingchengchicun"
+                                                    style="width:300px"/>
+                                            </template>
+                                        </el-table-column>
+                                        <el-table-column
+                                            align="center"
+                                            prop="guanliqufenhao"
+                                            label="管理区分号"
+                                            width="100">
+                                            <template  slot-scope="scope">
+                                                <input
+                                                    v-model="scope.row.guanliqufenhao"
+                                                    style="width:80px"/>
+                                            </template>
+                                        </el-table-column>
+                                        <el-table-column
+                                            align="center"
+                                            prop="hangfan"
+                                            label="行番"
+                                            width="40">
+                                            <template  slot-scope="scope">
+                                                <input
+                                                    v-model="scope.row.hangfan"
+                                                    style="width:20px"/>
+                                            </template>
+                                        </el-table-column>
+                                        <el-table-column
+                                            align="center"
+                                            prop="shuliang"
+                                            label="数量"
+                                            width="80">
+                                            <template  slot-scope="scope">
+                                                <input
+                                                    v-model="scope.row.shuliang"
+                                                    style="width:60px"/>
+                                            </template>
+                                        </el-table-column>
+                                        <el-table-column
+                                            align="center"
+                                            prop="danwei"
+                                            label="单位"
+                                            width="40">
+                                            <template  slot-scope="scope">
+                                                <input
+                                                    v-model="scope.row.danwei"
+                                                    style="width:20px"/>
+                                            </template>
+                                        </el-table-column>
+                                        <el-table-column
+                                            align="center"
+                                            prop="tuzhuangfanhao"
+                                            label="涂装番号"
+                                            width="50">
+                                            <template  slot-scope="scope">
+                                                <input
+                                                    v-model="scope.row.tuzhuangfanhao"
+                                                    style="width:30px"/>
+                                            </template>
+                                        </el-table-column>
+                                        <el-table-column
+                                            align="center"
+                                            prop="chupin"
+                                            label="贮品"
+                                            width="40">
+                                            <template  slot-scope="scope">
+                                                <input
+                                                    v-model="scope.row.chupin"
+                                                    style="width:20px"/>
+                                            </template>
+                                        </el-table-column>
+                                        <el-table-column
+                                            align="center"
+                                            prop="guanjin"
+                                            label="管金"
+                                            width="40">
+                                            <template  slot-scope="scope">
+                                                <input
+                                                    v-model="scope.row.guanjin"
+                                                    style="width:20px"/>
+                                            </template>
+                                        </el-table-column>
+                                        <el-table-column
+                                            align="center"
+                                            prop="beizhu"
+                                            label="备注"
+                                            width="100">
+                                            <template  slot-scope="scope">
+                                                <input
+                                                    v-model="scope.row.beizhu"
+                                                    style="width:80px"/>
+                                            </template>
+                                        </el-table-column>
+                                    </el-table>
+                                </template>
+                            </div>
+                        </div>
+                        <div class="makeFromBottom fr">
 
+                        </div>
                     </div>
                 </div>
                 <span slot="footer" class="dialog-footer">
                 <el-button @click="addVisible = false" style="height:30px;width:80px">取 消</el-button>
                 <el-button type="primary" @click="doAdd" style="height:30px;width:80px">确 定</el-button>
-            </span>
-            </el-dialog>
-            <!-- 编辑弹出框 -->
-            <el-dialog title="编辑按钮" :visible.sync="editVisible" width="40%">
-                <el-form ref="form"  label-width="100px">
-                    <el-form-item label="工位名称">
-                        <el-select
-                            v-model="workStation"
-                            clearable
-                            disabled
-                            filterable
-                            allow-create
-                            default-first-option
-                            placeholder="请选择工位">
-                            <el-option
-                                v-for="item in workStationOptions"
-                                :key="item.id"
-                                :label="item.name"
-                                :value="item.id">
-                            </el-option>
-                        </el-select>
-                    </el-form-item>
-                    <el-form-item label="按钮名称">
-                        <el-input v-model="name" style="width: 200px"></el-input>
-                    </el-form-item>
-                    <el-form-item label="事件类型">
-                        <el-select
-                            v-model="type"
-                            clearable
-                            filterable
-                            allow-create
-                            default-first-option
-                            placeholder="请输入或者选择">
-                            <el-option
-                                v-for="item in typeOptions"
-                                :key="item.indexno"
-                                :label="item.name"
-                                :value="item.indexno">
-                            </el-option>
-                        </el-select>
-                    </el-form-item>
-                    <el-form-item label="是否可点">
-                        <el-select
-                            v-model="disabled"
-                            clearable
-                            filterable
-                            allow-create
-                            default-first-option
-                            placeholder="请输入或者选择">
-                            <el-option
-                                v-for="item in disabledOptions"
-                                :key="item.id"
-                                :label="item.name"
-                                :value="item.id">
-                            </el-option>
-                        </el-select>
-                    </el-form-item>
-                    <el-form-item label="按钮颜色">
-                        <el-color-picker v-model="backgroundColor"></el-color-picker>
-                    </el-form-item>
-                    <el-form-item label="显示隐藏">
-                        <el-select
-                            v-model="showHide"
-                            clearable
-                            filterable
-                            allow-create
-                            default-first-option
-                            placeholder="请输入或者选择">
-                            <el-option
-                                v-for="item in showHideOptions"
-                                :key="item.id"
-                                :label="item.name"
-                                :value="item.id">
-                            </el-option>
-                        </el-select>
-                    </el-form-item>
-                </el-form>
-                <span slot="footer" class="dialog-footer">
-                <el-button @click="editVisible = false" style="height:30px;width:80px">取 消</el-button>
-                <el-button type="primary" @click="saveEdit" style="height:30px;width:80px">确 定</el-button>
-            </span>
-            </el-dialog>
-            <!-- 删除提示框 -->
-            <el-dialog title="删除按钮" :visible.sync="delVisible" width="300px" center>
-                <div class="del-dialog-cnt">删除不可恢复，是否确定删除？</div>
-                <span slot="footer" class="dialog-footer">
-                <el-button @click="delVisible = false" style="height:30px;width:80px">取 消</el-button>
-                <el-button type="primary" @click="deleteRow" style="height:30px;width:80px">确 定</el-button>
             </span>
             </el-dialog>
 
@@ -339,7 +307,49 @@
                         "beizhu":12
                     },
                     {
+                        "chuku":11,
+                        "xuhao":22,
+                        "tuhao":33,
+                        "mingchengchicun":44,
+                        "guanliqufenhao":55,
+                        "hangfan":66,
+                        "shuliang":77,
+                        "danwei":88,
+                        "tuzhuangfanhao":99,
+                        "chupin":101,
+                        "guanjin":111,
+                        "beizhu":121
+                    },
+                    {
+                        "chuku":111,
+                        "xuhao":222,
+                        "tuhao":333,
+                        "mingchengchicun":444,
+                        "guanliqufenhao":555,
+                        "hangfan":666,
+                        "shuliang":777,
+                        "danwei":888,
+                        "tuzhuangfanhao":999,
+                        "chupin":10,
+                        "guanjin":11,
+                        "beizhu":12
+                    },
+                    {
                         "chuku":1,
+                        "xuhao":2,
+                        "tuhao":3,
+                        "mingchengchicun":4,
+                        "guanliqufenhao":5,
+                        "hangfan":6,
+                        "shuliang":7,
+                        "danwei":8,
+                        "tuzhuangfanhao":9,
+                        "chupin":10,
+                        "guanjin":11,
+                        "beizhu":12
+                    },
+                    {
+                        "chuku":111,
                         "xuhao":2,
                         "tuhao":3,
                         "mingchengchicun":4,
@@ -367,7 +377,49 @@
                         "beizhu":12
                     },
                     {
+                        "chuku":11,
+                        "xuhao":22,
+                        "tuhao":33,
+                        "mingchengchicun":44,
+                        "guanliqufenhao":55,
+                        "hangfan":66,
+                        "shuliang":77,
+                        "danwei":88,
+                        "tuzhuangfanhao":99,
+                        "chupin":101,
+                        "guanjin":111,
+                        "beizhu":121
+                    },
+                    {
+                        "chuku":111,
+                        "xuhao":222,
+                        "tuhao":333,
+                        "mingchengchicun":444,
+                        "guanliqufenhao":555,
+                        "hangfan":666,
+                        "shuliang":777,
+                        "danwei":888,
+                        "tuzhuangfanhao":999,
+                        "chupin":10,
+                        "guanjin":11,
+                        "beizhu":12
+                    },
+                    {
                         "chuku":1,
+                        "xuhao":2,
+                        "tuhao":3,
+                        "mingchengchicun":4,
+                        "guanliqufenhao":5,
+                        "hangfan":6,
+                        "shuliang":7,
+                        "danwei":8,
+                        "tuzhuangfanhao":9,
+                        "chupin":10,
+                        "guanjin":11,
+                        "beizhu":12
+                    },
+                    {
+                        "chuku":111,
                         "xuhao":2,
                         "tuhao":3,
                         "mingchengchicun":4,
@@ -393,8 +445,171 @@
                         "chupin":10,
                         "guanjin":11,
                         "beizhu":12
-                    }
+                    },
+                    {
+                        "chuku":11,
+                        "xuhao":22,
+                        "tuhao":33,
+                        "mingchengchicun":44,
+                        "guanliqufenhao":55,
+                        "hangfan":66,
+                        "shuliang":77,
+                        "danwei":88,
+                        "tuzhuangfanhao":99,
+                        "chupin":101,
+                        "guanjin":111,
+                        "beizhu":121
+                    },
+                    {
+                        "chuku":111,
+                        "xuhao":222,
+                        "tuhao":333,
+                        "mingchengchicun":444,
+                        "guanliqufenhao":555,
+                        "hangfan":666,
+                        "shuliang":777,
+                        "danwei":888,
+                        "tuzhuangfanhao":999,
+                        "chupin":10,
+                        "guanjin":11,
+                        "beizhu":12
+                    },
+                    {
+                        "chuku":1,
+                        "xuhao":2,
+                        "tuhao":3,
+                        "mingchengchicun":4,
+                        "guanliqufenhao":5,
+                        "hangfan":6,
+                        "shuliang":7,
+                        "danwei":8,
+                        "tuzhuangfanhao":9,
+                        "chupin":10,
+                        "guanjin":11,
+                        "beizhu":12
+                    },
+                    {
+                        "chuku":111,
+                        "xuhao":2,
+                        "tuhao":3,
+                        "mingchengchicun":4,
+                        "guanliqufenhao":5,
+                        "hangfan":6,
+                        "shuliang":7,
+                        "danwei":8,
+                        "tuzhuangfanhao":9,
+                        "chupin":10,
+                        "guanjin":11,
+                        "beizhu":12
+                    },
+                    {
+                        "chuku":1,
+                        "xuhao":2,
+                        "tuhao":3,
+                        "mingchengchicun":4,
+                        "guanliqufenhao":5,
+                        "hangfan":6,
+                        "shuliang":7,
+                        "danwei":8,
+                        "tuzhuangfanhao":9,
+                        "chupin":10,
+                        "guanjin":11,
+                        "beizhu":12
+                    },
+                    {
+                        "chuku":11,
+                        "xuhao":22,
+                        "tuhao":33,
+                        "mingchengchicun":44,
+                        "guanliqufenhao":55,
+                        "hangfan":66,
+                        "shuliang":77,
+                        "danwei":88,
+                        "tuzhuangfanhao":99,
+                        "chupin":101,
+                        "guanjin":111,
+                        "beizhu":121
+                    },
+                    {
+                        "chuku":111,
+                        "xuhao":222,
+                        "tuhao":333,
+                        "mingchengchicun":444,
+                        "guanliqufenhao":555,
+                        "hangfan":666,
+                        "shuliang":777,
+                        "danwei":888,
+                        "tuzhuangfanhao":999,
+                        "chupin":10,
+                        "guanjin":11,
+                        "beizhu":12
+                    },
+                    {
+                        "chuku":1,
+                        "xuhao":2,
+                        "tuhao":3,
+                        "mingchengchicun":4,
+                        "guanliqufenhao":5,
+                        "hangfan":6,
+                        "shuliang":7,
+                        "danwei":8,
+                        "tuzhuangfanhao":9,
+                        "chupin":10,
+                        "guanjin":11,
+                        "beizhu":12
+                    },
+                    {
+                        "chuku":111,
+                        "xuhao":2,
+                        "tuhao":3,
+                        "mingchengchicun":4,
+                        "guanliqufenhao":5,
+                        "hangfan":6,
+                        "shuliang":7,
+                        "danwei":8,
+                        "tuzhuangfanhao":9,
+                        "chupin":10,
+                        "guanjin":11,
+                        "beizhu":12
+                    },
+                    {
+                        "chuku":111,
+                        "xuhao":222,
+                        "tuhao":333,
+                        "mingchengchicun":444,
+                        "guanliqufenhao":555,
+                        "hangfan":666,
+                        "shuliang":777,
+                        "danwei":888,
+                        "tuzhuangfanhao":999,
+                        "chupin":10,
+                        "guanjin":11,
+                        "beizhu":12
+                    },
+                    {
+                        "chuku":1,
+                        "xuhao":2,
+                        "tuhao":3,
+                        "mingchengchicun":4,
+                        "guanliqufenhao":5,
+                        "hangfan":6,
+                        "shuliang":7,
+                        "danwei":8,
+                        "tuzhuangfanhao":9,
+                        "chupin":10,
+                        "guanjin":11,
+                        "beizhu":12
+                    },
                     ],
+
+                shiyongri:"20190424",
+                shiyongchangsuo:"管工科",
+                No:"",
+                gsName:"",
+                Tuhao:"",
+
+
+
                 cols: [],
                 tableData: [],
 
@@ -693,22 +908,179 @@
 
     }
 
-    .makeFrom{
+    .makeFrom {
         width: 100%;
         height: 500px;
-        display: flex;
-        align-items: flex-end;
-        justify-content: center;
-        flex-direction: column;
-        .makeFromTop {
-            height: 120px;
-            width: 962px;
-            border: 1px solid #303133;
+        .makeFromDiv {
+            width: 100%;
+            height: 500px;
+            overflow: auto;
+            .makeFromTop {
+                height: 120px;
+                width: 1042px;
+                border: 1px solid #303133;
+                .makeFromTopLeft{
+                    width: 40%;
+                    height: 120px;
+                    .makeFromTopLeftSmall{
+                        width: 40%;
+                        height: 100%;
+                        .makeFromTopLeftSmallText{
+                            width: 100%;
+                            height: 25%;
+                            border-left: 1px solid @color-background-dddd;
+                            border-top: 1px solid @color-background-dddd;
+                            border-right: 1px solid @color-background-dddd;
+                            display: flex;
+                            align-items: center;
+                            justify-content: center;
+                        }
+
+                    }
+                    .makeFromTopLeftLarge{
+                        width: 60%;
+                        height: 100%;
+                        display: flex;
+                        align-items: center;
+                        justify-content: center;
+                        font-size: @font-size-large-xxx;
+                        border-left: 1px @color-background-dddd;
+
+                    }
+                }
+                .makeFromTopRight{
+                    width: 60%;
+                    height: 120px;
+                    .makeFromTopRightTop{
+                        height: 60px;
+                        .makeFromTopRightTopGz {
+                            height: 60px;
+                            width: 50px;
+                            text-align: center;
+                            line-height: 60px;
+                            font-size: @font-size-large;
+                            border-left: 1px solid #303133;
+                        }
+                        .makeFromTopRightTopDH {
+                            width: 200px;
+                            height: 60px;
+                            text-align: center;
+                            line-height: 60px;
+                            font-size: @font-size-large;
+                            border-left: 1px solid #303133;
+                        }
+                        .makeFromTopRightTopS {
+                            width: 70px;
+                            height: 60px;
+                            text-align: center;
+                            line-height: 60px;
+                            font-size: @font-size-large;
+                            border-left: 1px solid #303133;
+
+                        }
+                        .makeFromTopRightTopNo {
+                            width: 70px;
+                            height: 60px;
+                            text-align: center;
+                            line-height: 60px;
+                            font-size: @font-size-large;
+                            border-left: 1px solid #303133;
+                        }
+                        .makeFromTopRightTopInput{
+                            width: 234px;
+                            height: 60px;
+                            text-align: center;
+                            line-height: 60px;
+                            font-size: @font-size-large;
+                            border-left: 1px solid #303133;
+                            border-bottom: 1px solid #303133;
+                            input{
+                                height: 60px;
+                                width: 224px;
+                                padding-left:10px ;
+                            }
+                        }
+
+
+                    }
+                    .makeFromTopRightBottom{
+
+                        .makeFromTopRightBottomMc {
+                            width: 120px;
+                            height: 60px;
+                            line-height: 60px;
+                            text-align: center;
+                            border-top: 1px solid #303133;
+                            font-size: @font-size-large;
+                            border-left: 1px solid #303133;
+
+                        }
+                        .makeFromTopRightBottomTh {
+                            width: 120px;
+                            height: 60px;
+                            line-height: 60px;
+                            text-align: center;
+                            border-top: 1px solid #303133;
+                            font-size: @font-size-large;
+                            border-left: 1px solid #303133;
+                        }
+                        .makeFromTopRightBottomInput {
+                            width: 190px;
+                            height: 60px;
+                            text-align: center;
+                            line-height: 60px;
+                            font-size: @font-size-large;
+                            border-left: 1px solid #303133;
+                            border-top: 1px solid #303133;
+                            input{
+                                height: 60px;
+                                width: 190px;
+                                padding-left:10px ;
+                            }
+                        }
+
+                    }
+
+
+                }
+            }
+            .makeFromCenter{
+                .makeFromCenterLeft{
+                    width: 50px;
+                    height:968px;
+                    border-left: 1px solid #303133;
+                    border-top: 1px solid #303133;
+                    border-bottom: 1px solid #303133;
+                    .makeFromCenterLeftTop{
+                        height: 50%;
+                    }
+                    .makeFromCenterLeftBottom{
+                        height: 50%;
+                    }
+                    .makeFromCenterLeftText{
+                        height: 50%;
+                        font-size: 25px;
+                        text-align: center;
+                        line-height:50px ;
+                        border-bottom: 1px solid#303133;
+                    }
+                    .makeFromCenterLeftInput{
+                        height: 50%;
+                        border-bottom: 1px solid#303133;
+                        textarea{
+                            width: 50px;
+                            height: 200px;
+                        }
+                    }
+                }
+
+            }
+            .makeFromBottom {
+                height: 120px;
+                width: 1042px;
+                border: 1px solid #303133;
+            }
         }
-        .makeFromBottom{
-            height: 120px;
-            width: 962px;
-            border: 1px solid #303133;
-        }
+
     }
 </style>
