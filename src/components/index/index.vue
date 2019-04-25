@@ -1,6 +1,9 @@
 <template>
     <div>
-        <el-row :gutter="20">
+        <div class="">
+            <img src="../../assets/img/WechatIMG119.jpeg"  style="width: 100%" alt="">
+        </div>
+        <!--<el-row :gutter="20">
             <el-col :span="8">
                 <el-card shadow="hover" class="mgb20" style="height:252px;">
                     <div class="user-info">
@@ -14,8 +17,7 @@
                     <div class="user-info-list">上次登录地点：<span>北京</span></div>
                 </el-card>
             </el-col>
-
-        </el-row>
+        </el-row>-->
     </div>
 </template>
 

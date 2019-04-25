@@ -40,7 +40,7 @@
                 collapse: false,
                 items: [
                     {
-                        icon: 'el-icon-lx-home',
+                        icon: 'el-icon-document',
                         index: '/',
                         title: '系统首页'
                     },
@@ -66,7 +66,7 @@
                         title: '设备管理'
                     },*/
                     {
-                        icon: 'el-icon-lx-group',
+                        icon: 'el-icon-news',
                         index: 'PersonnelManagement',
                         title: '人员管理'
                     },
