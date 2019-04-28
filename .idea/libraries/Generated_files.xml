@@ -2,29 +2,37 @@
   <library name="Generated files" type="javaScript">
     <properties>
       <sourceFilesUrls>
-        <item url="file://$PROJECT_DIR$/dist/dist/static/js/1.747522f8742ff51be791.js" />
-        <item url="file://$PROJECT_DIR$/dist/dist/static/js/manifest.a1d4648af2ef0f165a0a.js" />
-        <item url="file://$PROJECT_DIR$/dist/src/router/index.js" />
         <item url="file://$PROJECT_DIR$/dist/src/assets/js/URL.js" />
-        <item url="file://$PROJECT_DIR$/dist/dist/static/js/3.e207768e7e3edd8d0485.js" />
-        <item url="file://$PROJECT_DIR$/dist/dist/static/js/0.93bb504d5d55b64117b4.js" />
-        <item url="file://$PROJECT_DIR$/dist/dist/static/js/vendor.016b46a6942bb705f70c.js" />
-        <item url="file://$PROJECT_DIR$/dist/dist/static/js/app.b8a7efdf7340da2f6b24.js" />
-        <item url="file://$PROJECT_DIR$/dist/dist/static/js/2.4800aa83e04ac6aa73ff.js" />
-        <item url="file://$PROJECT_DIR$/dist/dist/static/js/vendor.dll.js" />
+        <item url="file://$PROJECT_DIR$/dist/src/router/index.js" />
       </sourceFilesUrls>
     </properties>
     <CLASSES>
-      <root url="file://$PROJECT_DIR$/dist/dist/static/js/1.747522f8742ff51be791.js" />
-      <root url="file://$PROJECT_DIR$/dist/dist/static/js/manifest.a1d4648af2ef0f165a0a.js" />
-      <root url="file://$PROJECT_DIR$/dist/src/router/index.js" />
-      <root url="file://$PROJECT_DIR$/dist/src/assets/js/URL.js" />
-      <root url="file://$PROJECT_DIR$/dist/dist/static/js/3.e207768e7e3edd8d0485.js" />
-      <root url="file://$PROJECT_DIR$/dist/dist/static/js/0.93bb504d5d55b64117b4.js" />
-      <root url="file://$PROJECT_DIR$/dist/dist/static/js/vendor.016b46a6942bb705f70c.js" />
       <root url="file://$PROJECT_DIR$/dist/dist/static/js/app.b8a7efdf7340da2f6b24.js" />
-      <root url="file://$PROJECT_DIR$/dist/dist/static/js/2.4800aa83e04ac6aa73ff.js" />
+      <root url="file://$PROJECT_DIR$/dist/dist/static/js/app.b8a7efdf7340da2f6b24.js" />
+      <root url="file://$PROJECT_DIR$/dist/dist/static/js/app.c0fd3628c46ca08a6916.js" />
+      <root url="file://$PROJECT_DIR$/dist/dist/static/js/app.c0fd3628c46ca08a6916.js" />
       <root url="file://$PROJECT_DIR$/dist/dist/static/js/vendor.dll.js" />
+      <root url="file://$PROJECT_DIR$/dist/dist/static/js/0.93bb504d5d55b64117b4.js" />
+      <root url="file://$PROJECT_DIR$/dist/dist/static/js/1.747522f8742ff51be791.js" />
+      <root url="file://$PROJECT_DIR$/dist/dist/dist/static/js/vendor.016b46a6942bb705f70c.js" />
+      <root url="file://$PROJECT_DIR$/dist/dist/static/js/manifest.a1d4648af2ef0f165a0a.js" />
+      <root url="file://$PROJECT_DIR$/dist/dist/static/js/2.4800aa83e04ac6aa73ff.js" />
+      <root url="file://$PROJECT_DIR$/dist/dist/static/js/3.e207768e7e3edd8d0485.js" />
+      <root url="file://$PROJECT_DIR$/dist/dist/static/js/vendor.016b46a6942bb705f70c.js" />
+      <root url="file://$PROJECT_DIR$/dist/dist/static/js/app.585dde5b4fb633bd04cd.js" />
+      <root url="file://$PROJECT_DIR$/dist/dist/static/js/vendor.dll.js" />
+      <root url="file://$PROJECT_DIR$/dist/src/assets/js/URL.js" />
+      <root url="file://$PROJECT_DIR$/dist/dist/static/js/0.93bb504d5d55b64117b4.js" />
+      <root url="file://$PROJECT_DIR$/dist/dist/static/js/1.747522f8742ff51be791.js" />
+      <root url="file://$PROJECT_DIR$/dist/dist/dist/static/js/vendor.016b46a6942bb705f70c.js" />
+      <root url="file://$PROJECT_DIR$/dist/dist/static/js/manifest.a1d4648af2ef0f165a0a.js" />
+      <root url="file://$PROJECT_DIR$/dist/dist/static/js/2.4800aa83e04ac6aa73ff.js" />
+      <root url="file://$PROJECT_DIR$/dist/dist/static/js/3.e207768e7e3edd8d0485.js" />
+      <root url="file://$PROJECT_DIR$/dist/src/assets/js/URL.js" />
+      <root url="file://$PROJECT_DIR$/dist/dist/static/js/vendor.016b46a6942bb705f70c.js" />
+      <root url="file://$PROJECT_DIR$/dist/dist/static/js/app.585dde5b4fb633bd04cd.js" />
+      <root url="file://$PROJECT_DIR$/dist/src/assets/js/URL.js" />
+      <root url="file://$PROJECT_DIR$/dist/src/router/index.js" />
     </CLASSES>
     <SOURCES />
   </library>

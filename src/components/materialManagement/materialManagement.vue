@@ -56,7 +56,7 @@
                             {
                                 label: '托单审批',
                                 index: "2-2",
-                                url: "/404"
+                                url: "/tdApproval"
                             },
                             {
                                 label: '托单查询与打印',

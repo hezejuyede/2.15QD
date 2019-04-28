@@ -70,10 +70,10 @@ import TaskScheduling from '../components/plannedProduction/TaskScheduling'
 
 //物料管理
 import MaterialManagement from '../components/materialManagement/materialManagement'
-
+//托单金物制作
 import ProductionOfGoldSheets from '../components/materialManagement/productionOfGoldSheets.vue'
-
-
+//托单金物审批
+import tdApproval from '../components/materialManagement/tdApproval.vue'
 
 
 import ProductionMonitoring from '../components/productionMonitoring/productionMonitoring'
@@ -263,6 +263,11 @@ export default new Router({
                             path: '/ProductionOfGoldSheets',
                             component: ProductionOfGoldSheets,
                             meta: {title: '脱单金物制作'}
+                        },
+                        {
+                                path: '/tdApproval',
+                            component: tdApproval,
+                            meta: {title: '脱单金物审批'}
                         }
                     ]
                 },
