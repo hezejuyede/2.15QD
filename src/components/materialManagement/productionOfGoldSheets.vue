@@ -14,7 +14,7 @@
                         <span>:</span>
                         <el-input v-model="select_word" placeholder="智能检索脱单金物" class="handle-input mr10"></el-input>
                     </label>
-                    <el-button type="primary"  @click="showAdd">制作</el-button>
+                    <el-button type="primary"  @click="showAdd">制作脱单</el-button>
                 </div>
                 <div class="">
                     <el-table class="tb-edit"
@@ -1274,7 +1274,7 @@
             loadingShowData() {
                 let that = this;
                 axios.all([
-                    axios.post(" " + url + "/sys/showTableTitle", {"name": "jgxqan"}),
+                    axios.post(" " + url + "/sys/showTableTitle", {"name": "tuodanjinwu"}),
                     axios.post(" " + url + "/padShow/buttonList", {"id": ""})
                 ])
                     .then(axios.spread(function (title, table) {
