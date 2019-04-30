@@ -3,7 +3,7 @@
         <div class="crumbs">
             <el-breadcrumb separator="/">
                 <el-breadcrumb-item>物料管理</el-breadcrumb-item>
-                <el-breadcrumb-item>缺件查询（注文金物）</el-breadcrumb-item>
+                <el-breadcrumb-item>缺件查询（储品金物）</el-breadcrumb-item>
             </el-breadcrumb>
         </div>
         <div class="template-content">

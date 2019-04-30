@@ -105,7 +105,7 @@
                         times.push(time)
                     }
                     this.examineTime =times;
-                   this.loadingShowData(this.examineTime)
+                    this.loadingShowData(this.examineTime)
                 }
             },
 
