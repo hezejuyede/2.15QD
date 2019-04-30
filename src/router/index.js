@@ -70,10 +70,22 @@ import TaskScheduling from '../components/plannedProduction/TaskScheduling'
 
 //物料管理
 import MaterialManagement from '../components/materialManagement/materialManagement'
+
 //托单金物制作
 import ProductionOfGoldSheets from '../components/materialManagement/productionOfGoldSheets.vue'
+
 //托单金物审批
 import tdApproval from '../components/materialManagement/tdApproval.vue'
+
+
+//注文金物查询
+import zwMetalSearch from '../components/materialManagement/zwMetalSearch.vue'
+
+//储品金物查询
+import cpMetalSearch from '../components/materialManagement/cpMetalSearch.vue'
+
+//管材出库查询
+import pipeOutgoing from '../components/materialManagement/pipeOutgoing.vue'
 
 
 import ProductionMonitoring from '../components/productionMonitoring/productionMonitoring'
@@ -268,6 +280,24 @@ export default new Router({
                                 path: '/tdApproval',
                             component: tdApproval,
                             meta: {title: '脱单金物审批'}
+                        }
+                        ,
+                        {
+                            path: '/zwMetalSearch',
+                            component: zwMetalSearch,
+                            meta: {title: '注文金物查询'}
+                        }
+                        ,
+                        {
+                            path: '/cpMetalSearch',
+                            component: cpMetalSearch,
+                            meta: {title: '储品金物查询'}
+                        }
+                        ,
+                        {
+                            path: '/pipeOutgoing',
+                            component: pipeOutgoing,
+                            meta: {title: '管材出库'}
                         }
                     ]
                 },

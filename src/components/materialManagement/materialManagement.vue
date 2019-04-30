@@ -102,7 +102,7 @@
                             {
                                 label: '缺件查询（注文金物）',
                                 index: "2-3",
-                                url: "/404"
+                                url: "/zwMetalSearch"
                             }
                         ]
                     },
@@ -123,7 +123,7 @@
                             {
                                 label: '缺件查询（储品金物）',
                                 index: "4-3",
-                                url: "/404"
+                                url: "/cpMetalSearch"
                             }
                         ]
                     },
