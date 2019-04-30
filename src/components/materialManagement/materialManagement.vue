@@ -134,7 +134,7 @@
                             {
                                 label: '管吊单查询',
                                 index: "5-1",
-                                url: "/404"
+                                url: "/pipeOutgoing"
                             }
                         ]
                     },
