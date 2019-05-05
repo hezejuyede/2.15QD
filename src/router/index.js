@@ -277,7 +277,7 @@ export default new Router({
                             meta: {title: '脱单金物制作'}
                         },
                         {
-                                path: '/tdApproval',
+                            path: '/tdApproval',
                             component: tdApproval,
                             meta: {title: '脱单金物审批'}
                         }
@@ -339,12 +339,12 @@ export default new Router({
                     meta: {title: '质量管理'},
                     children: [
                         {
-                            path: '/ExceptionQuery',
+                            path: 'ExceptionQuery',
                             component: ExceptionQuery,
                             meta: {title: '异常查询'}
                         },
                         {
-                            path: '/OperatorMainPoints',
+                            path: 'OperatorMainPoints',
                             component: OperatorMainPoints,
                             meta: {title: '作业者要点内容'}
                         }

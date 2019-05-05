@@ -55,7 +55,7 @@
                             {
                                 label: '不具合查询与统计',
                                 index: "1-5",
-                                url: "/ExceptionQuery"
+                                url: "/QualityAssurance/ExceptionQuery"
                             }
                         ]
                     },
@@ -128,7 +128,7 @@
                             {
                                 label: '作业者要点内容',
                                 index: "5-1",
-                                url: "/OperatorMainPoints"
+                                url: "/QualityAssurance/OperatorMainPoints"
                             },
                            /* {
                                 label: '质量提醒查阅',
