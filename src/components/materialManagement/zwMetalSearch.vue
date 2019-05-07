@@ -129,26 +129,24 @@
                 ])
                     .then(axios.spread(function (title, table) {
                         that.cols = title.data;
-                        that.tableData = table.data.data;
+                        that.tableData = table.data;
                     }));
             },
 
 
             //根据时间查询
             doSearch() {
-                if (this.examineTime) {
-                    this.loadingShowData(this.examineTime)
+                if (this.batch) {
+                    this.loadingShowData(this.batch)
                 }
                 else {
                     this.message = "查询批次不能为空";
                     this.HideModal = false;
                     const that = this;
-
                     function a() {
                         that.message = "";
                         that.HideModal = true;
                     }
-
                     setTimeout(a, 2000);
                 }
 

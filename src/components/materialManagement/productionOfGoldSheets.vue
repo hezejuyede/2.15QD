@@ -12,9 +12,24 @@
                     <label style="margin-right: 10px">
                         <span>智能检索脱单金物</span>
                         <span>:</span>
-                        <el-input v-model="select_word" placeholder="智能检索脱单金物" class="handle-input mr10"></el-input>
+                        <el-input v-model="select_word" placeholder="智能检索脱单金物"  style="width: 150px"></el-input>
                     </label>
+                    <label style="margin-right: 10px;margin-left: 10px">
+                        <span>选择查询时间</span>
+                        <span>:</span>
+                        <el-date-picker
+                            v-model="examineTime"
+                            type="daterange"
+                            start-placeholder="开始日期"
+                            end-placeholder="结束日期"
+                            value-format="yyyy-MM-dd">
+                        </el-date-picker>
+                    </label>
+
+                    <el-button type="success"  @click="doSearch">查询</el-button>
                     <el-button type="primary"  @click="showAdd">添加</el-button>
+                    <el-button type="danger"  @click="doFQ">废弃</el-button>
+
                 </div>
                 <div class="">
                     <el-table class="tb-edit"
@@ -322,6 +337,7 @@
     import axios from 'axios'
     import url from '../../assets/js/URL'
     import Modal from '../../common/modal'
+    import {getNowTime} from '../../assets/js/api'
 
     export default {
         name: 'WorkingProcedure',
@@ -984,6 +1000,7 @@
 
                 addVisible: false,
                 editVisible:false,
+                examineTime: "",
 
             }
         },
@@ -1018,7 +1035,13 @@
                     this.$router.push("/")
                 }
                 else {
-                   this.loadingShowData();
+                    let time = getNowTime();
+                    let times = [];
+                    for (let i = 0; i < 2; i++) {
+                        times.push(time)
+                    }
+                    this.examineTime = times;
+                    this.loadingShowData(this.examineTime);
                 }
             },
 
@@ -1027,11 +1050,11 @@
                 let that = this;
                 axios.all([
                     axios.post(" " + url + "/sys/showTableTitle", {"name": "tuodanjinwu"}),
-                    axios.post(" " + url + "/padShow/buttonList", {"id": ""})
+                    axios.post(" " + url + "/wuliao/tuodanjinwuList", {"time": ""})
                 ])
                     .then(axios.spread(function (title, table) {
                         that.cols = title.data;
-                        that.tableData = table.data.data;
+                        that.tableData = table.data;
                     }));
             },
 
@@ -1045,43 +1068,62 @@
 
             //进行新增
             doAdd() {
-                axios.post(" " + url + "/wuliao/jinwuZhuwenpinList",
-                    {
-                        "excelData":this.excelData,
-                        "shiyongri":this.shiyongri,
-                        "shiyongchangsuo":this.shiyongchangsuo,
-                        "No":this.No,
-                        "gsName":this.gsName,
-                        "Tuhao":this.Tuhao,
-                        "CODE":this.CODE,
-                        "gssgqj":this.gssgqj,
-                        "bzgs":this.bzgs,
-                        "sh1":this.sh1,
-                        "sh2":this.sh2,
-                        "sh3":this.sh3,
-                        "sh4":this.sh4,
-                        "ck1":this.ck1,
-                        "ck2":this.ck2,
-                        "ck3":this.ck3,
-                        "xczrz1":this.xczrz1,
-                        "xczrz2":this.xczrz2,
-                        "xczrz3":this.xczrz3,
+                if (this.chuanhao && this.tuhao) {
+                    axios.post(" " + url + "/wuliao/tuodanjinwuAdd",
+                        {
+                            "shipcode": this.chuanhao,
+                            "tuhao": this.tuhao,
+                        }
+                    )
+                        .then((res) => {
+                            if (res.data.state === "1") {
+                                this.$message.success(`新增成功`);
+                                this.addVisible = false;
+                                this.loadingShowData(this.examineTime)
+                            }
+                            else {
+                                this.$message.warning(`新增失败`);
+                            }
+                        })
+                        .catch((err) => {
+                            console.log(err)
+                        })
+                }
+                else {
+                    this.message = "查询时间不能为空";
+                    this.HideModal = false;
+                    const that = this;
+                    function a() {
+                        that.message = "";
+                        that.HideModal = true;
                     }
-                )
-                    .then((res) => {
-                        if (res.data.state === "1") {
-                            this.$message.success(`新增成功`);
-                            this.addVisible = false;
-                            this.loadingShowData(this.workStation)
-                        }
-                        else {
-                            this.$message.warning(`新增失败`);
-                        }
-                    })
-                    .catch((err) => {
-                        console.log(err)
-                    })
+                    setTimeout(a, 2000);
+                }
+
             },
+
+            //进行查询
+            doSearch (){
+                if(this.examineTime){
+                    this.loadingShowData(this.examineTime)
+                }
+                else {
+                    this.message = "查询时间不能为空";
+                    this.HideModal = false;
+                    const that = this;
+                    function a() {
+                        that.message = "";
+                        that.HideModal = true;
+                    }
+                    setTimeout(a, 2000);
+                }
+            },
+
+            //进行废弃
+            doFQ(){
+
+            },
+
 
             //双击点击行内编辑
             edit(row, column, cell, event) {

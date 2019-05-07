@@ -3,7 +3,7 @@
         <div class="crumbs">
             <el-breadcrumb separator="/">
                 <el-breadcrumb-item>物料管理</el-breadcrumb-item>
-                <el-breadcrumb-item>缺件查询（注文金物）</el-breadcrumb-item>
+                <el-breadcrumb-item>缺件查询（储品金物）</el-breadcrumb-item>
             </el-breadcrumb>
         </div>
         <div class="template-content">
@@ -129,26 +129,24 @@
                 ])
                     .then(axios.spread(function (title, table) {
                         that.cols = title.data;
-                        that.tableData = table.data.data;
+                        that.tableData = table.data;
                     }));
             },
 
 
             //根据时间查询
             doSearch() {
-                if (this.examineTime) {
-                    this.loadingShowData(this.examineTime)
+                if (this.batch) {
+                    this.loadingShowData(this.batch)
                 }
                 else {
                     this.message = "查询批次不能为空";
                     this.HideModal = false;
                     const that = this;
-
                     function a() {
                         that.message = "";
                         that.HideModal = true;
                     }
-
                     setTimeout(a, 2000);
                 }
 
