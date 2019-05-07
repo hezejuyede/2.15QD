@@ -15,15 +15,22 @@
                         <el-input v-model="select_word" placeholder="智能检索缺件" class="handle-input mr10"></el-input>
                     </label>
                     <label style="margin-right: 10px;margin-left: 10px">
-                        <span>选择查询时间</span>
+                        <span>选择批次</span>
                         <span>:</span>
-                        <el-date-picker
-                            v-model="examineTime"
-                            type="daterange"
-                            start-placeholder="开始日期"
-                            end-placeholder="结束日期"
-                            value-format="yyyy-MM-dd">
-                        </el-date-picker>
+                        <el-select
+                            v-model="batch"
+                            clearable
+                            filterable
+                            allow-create
+                            default-first-option
+                            placeholder="请选择批次">
+                            <el-option
+                                v-for="item in batchOptions"
+                                :key="item.id"
+                                :label="item.name"
+                                :value="item.id">
+                            </el-option>
+                        </el-select>
                     </label>
                     <el-button type="primary" icon="delete" class="handle-del mr10" @click="doSearch">缺件查询</el-button>
                 </div>
@@ -63,8 +70,11 @@
                 cols: [],
                 tableData: [],
 
+                batch:"",
+                batchOptions:[],
+
                 select_word: '',
-                examineTime: ""
+
 
             }
         },
@@ -99,13 +109,15 @@
                     this.$router.push("/")
                 }
                 else {
-                    let time = getNowTime();
-                    let times = [];
-                    for (let i = 0; i < 2; i++) {
-                        times.push(time)
-                    }
-                    this.examineTime =times;
-                    this.loadingShowData(this.examineTime)
+                    let that = this;
+                    axios.all([
+                        axios.post(" " + url + "/sys/getPiciList"),
+                    ])
+                        .then(axios.spread(function (select) {
+                            that.batchOptions = select.data;
+                            that.batch= select.data[0].id;
+                            that.loadingShowData(that.batch);
+                        }));
                 }
             },
 
@@ -113,8 +125,8 @@
             loadingShowData(data) {
                 let that = this;
                 axios.all([
-                    axios.post(" " + url + "/sys/showTableTitle", {"name": "jgxqan"}),
-                    axios.post(" " + url + "/padShow/buttonList", {"time": data})
+                    axios.post(" " + url + "/sys/showTableTitle", {"name": "zwjwcx"}),
+                    axios.post(" " + url + "/wuliao/jinwuZhuwenpinList", {"time": data})
                 ])
                     .then(axios.spread(function (title, table) {
                         that.cols = title.data;
