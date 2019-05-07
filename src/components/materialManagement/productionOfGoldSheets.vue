@@ -38,8 +38,14 @@
                               border
                               height="450"
                               @row-dblclick="edit"
+                              @select-all="selectAll"
+                              @select="selectList"
                               highlight-current-row
                               style="width: 98%;margin: auto">
+                        <el-table-column
+                            type="selection"
+                            width="30">
+                        </el-table-column>
                         <template v-for="(col ,index) in cols">
                             <el-table-column align="center" :prop="col.prop" :label="col.label"></el-table-column>
                         </template>
@@ -63,7 +69,7 @@
             </el-dialog>
 
             <!--修改弹出框 -->
-            <el-dialog title="脱单金物修改" :visible.sync="editVisible" width="100%">
+            <el-dialog title="脱单金物修改" :visible.sync="editVisible" width="100%" :fullscreen="true" :center="true">
                 <div class="makeFrom">
                     <div class="makeFromDiv">
                         <div class="makeFromTop fr">
@@ -325,6 +331,15 @@
                 <span slot="footer" class="dialog-footer">
                 <el-button @click="addVisible = false" style="height:30px;width:80px">取 消</el-button>
                 <el-button type="primary" @click="doAdd" style="height:30px;width:80px">确 定</el-button>
+            </span>
+            </el-dialog>
+
+            <!-- 废弃提示框 -->
+            <el-dialog title="废弃托单金物" :visible.sync="delVisible" width="300px" center>
+                <div class="del-dialog-cnt">废弃不可恢复，是否确定废弃？</div>
+                <span slot="footer" class="dialog-footer">
+                <el-button @click="delVisible = false" style="height:30px;width:80px">取 消</el-button>
+                <el-button type="primary" @click="deleteRow" style="height:30px;width:80px">确 定</el-button>
             </span>
             </el-dialog>
 
@@ -1000,6 +1015,7 @@
 
                 addVisible: false,
                 editVisible:false,
+                delVisible: false,
                 examineTime: "",
 
             }
@@ -1119,9 +1135,53 @@
                 }
             },
 
+            //选择那个一个
+            selectList(val) {
+                if (val.length) {
+                    let data = [];
+                    for (let i = 0; i < val.length; i++) {
+                        let a = val[i].id;
+                        data.push(a)
+                    }
+                    this.listData = data;
+                }
+                else {
+                    this.listData=[];
+                }
+            },
+
+            //列表全部选择
+            selectAll(val) {
+                if (val.length) {
+                    let data = [];
+                    for (let i = 0; i < val.length; i++) {
+                        let a = val[i].id;
+                        data.push(a)
+                    }
+                    this.listData = data;
+                }
+                else {
+                    this.listData = [];
+                }
+            },
+
             //进行废弃
             doFQ(){
+                if (this.listData.length) {
+                    this.delVisible = true;
+                }
+                else {
+                    this.message = "请勾选要废弃的托单金物";
+                    this.HideModal = false;
+                    const that = this;
 
+                    function a() {
+                        that.message = "";
+                        that.HideModal = true;
+                    }
+
+                    setTimeout(a, 2000);
+                }
             },
 
 
@@ -1533,11 +1593,12 @@
 
     .makeFrom {
         width: 100%;
-        height: 500px;
+        height:580px;
         .makeFromDiv {
-            width: 100%;
-            height: 500px;
+            width: 1100px;
+            height:550px;
             overflow: auto;
+            margin: 0 auto;
             .makeFromTop {
                 height: 120px;
                 width: 1042px;
@@ -1668,7 +1729,7 @@
             .makeFromCenter {
                 .makeFromCenterLeft {
                     width: 50px;
-                    height: 968px;
+                    height: 962.5px;
                     border-left: 1px solid #303133;
                     border-top: 1px solid #303133;
                     border-bottom: 1px solid #303133;
