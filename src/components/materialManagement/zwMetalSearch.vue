@@ -58,7 +58,6 @@
     import axios from 'axios'
     import url from '../../assets/js/URL'
     import Modal from '../../common/modal'
-    import {getNowTime} from '../../assets/js/api'
 
     export default {
         name: 'WorkingProcedure',
@@ -70,8 +69,8 @@
                 cols: [],
                 tableData: [],
 
-                batch:"",
-                batchOptions:[],
+                batch: "",
+                batchOptions: [],
 
                 select_word: '',
 
@@ -115,7 +114,7 @@
                     ])
                         .then(axios.spread(function (select) {
                             that.batchOptions = select.data;
-                            that.batch= select.data[0].id;
+                            that.batch = select.data[0].id;
                             that.loadingShowData(that.batch);
                         }));
                 }
@@ -136,18 +135,20 @@
 
 
             //根据时间查询
-            doSearch(){
-                if(this.examineTime){
+            doSearch() {
+                if (this.examineTime) {
                     this.loadingShowData(this.examineTime)
                 }
                 else {
-                    this.message = "查询时间不能为空";
+                    this.message = "查询批次不能为空";
                     this.HideModal = false;
                     const that = this;
+
                     function a() {
                         that.message = "";
                         that.HideModal = true;
                     }
+
                     setTimeout(a, 2000);
                 }
 
@@ -171,14 +172,14 @@
         .template-content {
             .handle-box {
                 height: 80px;
-                line-height:80px;
+                line-height: 80px;
                 padding-left: 50px;
                 .handle-input {
                     width: 300px;
                     display: inline-block;
                 }
                 .el-button {
-                    width:100px;
+                    width: 100px;
                     height: 30px;
                 }
             }
