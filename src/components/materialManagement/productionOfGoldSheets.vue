@@ -28,7 +28,7 @@
 
                     <el-button type="success"  @click="doSearch">查询</el-button>
                     <el-button type="primary"  @click="showAdd">添加</el-button>
-                    <el-button type="danger"  @click="doFQ">废弃</el-button>
+                    <el-button type="danger"   @click="showFQ">废弃</el-button>
 
                 </div>
                 <div class="">
@@ -310,15 +310,19 @@
                                     <div class="makeFromBottomTwoRightTop">技术本部生产设计部舾装生技科</div>
                                     <div class="makeFromBottomTwoRightBottom">
                                         <div class="makeFromBottomTwoRightBottomDiv">
+                                            <div class="makeFromBottomTwoRightBottomDivName">科长</div>
                                             <input v-model="sh1" style="width:100px; height: 59px"/>
                                         </div>
                                         <div class="makeFromBottomTwoRightBottomDiv">
+                                            <div class="makeFromBottomTwoRightBottomDivName">主管</div>
                                             <input v-model="sh2" style="width:100px; height: 59px"/>
                                         </div>
                                         <div class="makeFromBottomTwoRightBottomDiv">
+                                            <div class="makeFromBottomTwoRightBottomDivName">检图</div>
                                             <input v-model="sh3" style="width:100px; height: 59px"/>
                                         </div>
                                         <div class="makeFromBottomTwoRightBottomDiv">
+                                            <div class="makeFromBottomTwoRightBottomDivName">作成</div>
                                             <input v-model="sh4" style="width:100px; height: 59px"/>
                                         </div>
                                     </div>
@@ -326,11 +330,16 @@
 
                             </div>
                         </div>
+                        <div class="makeFromTime fr">
+                            <div class="makeFromTimeInput fr"> <input v-model="chuturiqi" style="width:200px; height: 50px"/></div>
+                            <div class="makeFromTimeText fr">出图日期：</div>
+                        </div>
+
                     </div>
                 </div>
                 <span slot="footer" class="dialog-footer">
-                <el-button @click="addVisible = false" style="height:30px;width:80px">取 消</el-button>
-                <el-button type="primary" @click="doAdd" style="height:30px;width:80px">确 定</el-button>
+                <el-button @click="editVisible = false" style="height:30px;width:80px">取 消</el-button>
+                <el-button type="primary" @click="saveEdit" style="height:30px;width:80px">确 定</el-button>
             </span>
             </el-dialog>
 
@@ -339,7 +348,7 @@
                 <div class="del-dialog-cnt">废弃不可恢复，是否确定废弃？</div>
                 <span slot="footer" class="dialog-footer">
                 <el-button @click="delVisible = false" style="height:30px;width:80px">取 消</el-button>
-                <el-button type="primary" @click="deleteRow" style="height:30px;width:80px">确 定</el-button>
+                <el-button type="primary" @click="doFQ" style="height:30px;width:80px">确 定</el-button>
             </span>
             </el-dialog>
 
@@ -672,341 +681,7 @@
                 xczrz1:"",
                 xczrz2:"",
                 xczrz3:"",
-
-                tdData:[{
-                    excelData: [
-                        {
-                            "chuku": 1,
-                            "xuhao": 2,
-                            "tuhao": 3,
-                            "mingchengchicun": 4,
-                            "guanliqufenhao": 5,
-                            "hangfan": 6,
-                            "shuliang": 7,
-                            "danwei": 8,
-                            "tuzhuangfanhao": 9,
-                            "chupin": 10,
-                            "guanjin": 11,
-                            "beizhu": 12
-                        },
-                        {
-                            "chuku": 11,
-                            "xuhao": 22,
-                            "tuhao": 33,
-                            "mingchengchicun": 44,
-                            "guanliqufenhao": 55,
-                            "hangfan": 66,
-                            "shuliang": 77,
-                            "danwei": 88,
-                            "tuzhuangfanhao": 99,
-                            "chupin": 101,
-                            "guanjin": 111,
-                            "beizhu": 121
-                        },
-                        {
-                            "chuku": 111,
-                            "xuhao": 222,
-                            "tuhao": 333,
-                            "mingchengchicun": 444,
-                            "guanliqufenhao": 555,
-                            "hangfan": 666,
-                            "shuliang": 777,
-                            "danwei": 888,
-                            "tuzhuangfanhao": 999,
-                            "chupin": 10,
-                            "guanjin": 11,
-                            "beizhu": 12
-                        },
-                        {
-                            "chuku": 1,
-                            "xuhao": 2,
-                            "tuhao": 3,
-                            "mingchengchicun": 4,
-                            "guanliqufenhao": 5,
-                            "hangfan": 6,
-                            "shuliang": 7,
-                            "danwei": 8,
-                            "tuzhuangfanhao": 9,
-                            "chupin": 10,
-                            "guanjin": 11,
-                            "beizhu": 12
-                        },
-                        {
-                            "chuku": 111,
-                            "xuhao": 2,
-                            "tuhao": 3,
-                            "mingchengchicun": 4,
-                            "guanliqufenhao": 5,
-                            "hangfan": 6,
-                            "shuliang": 7,
-                            "danwei": 8,
-                            "tuzhuangfanhao": 9,
-                            "chupin": 10,
-                            "guanjin": 11,
-                            "beizhu": 12
-                        },
-                        {
-                            "chuku": 1,
-                            "xuhao": 2,
-                            "tuhao": 3,
-                            "mingchengchicun": 4,
-                            "guanliqufenhao": 5,
-                            "hangfan": 6,
-                            "shuliang": 7,
-                            "danwei": 8,
-                            "tuzhuangfanhao": 9,
-                            "chupin": 10,
-                            "guanjin": 11,
-                            "beizhu": 12
-                        },
-                        {
-                            "chuku": 11,
-                            "xuhao": 22,
-                            "tuhao": 33,
-                            "mingchengchicun": 44,
-                            "guanliqufenhao": 55,
-                            "hangfan": 66,
-                            "shuliang": 77,
-                            "danwei": 88,
-                            "tuzhuangfanhao": 99,
-                            "chupin": 101,
-                            "guanjin": 111,
-                            "beizhu": 121
-                        },
-                        {
-                            "chuku": 111,
-                            "xuhao": 222,
-                            "tuhao": 333,
-                            "mingchengchicun": 444,
-                            "guanliqufenhao": 555,
-                            "hangfan": 666,
-                            "shuliang": 777,
-                            "danwei": 888,
-                            "tuzhuangfanhao": 999,
-                            "chupin": 10,
-                            "guanjin": 11,
-                            "beizhu": 12
-                        },
-                        {
-                            "chuku": 1,
-                            "xuhao": 2,
-                            "tuhao": 3,
-                            "mingchengchicun": 4,
-                            "guanliqufenhao": 5,
-                            "hangfan": 6,
-                            "shuliang": 7,
-                            "danwei": 8,
-                            "tuzhuangfanhao": 9,
-                            "chupin": 10,
-                            "guanjin": 11,
-                            "beizhu": 12
-                        },
-                        {
-                            "chuku": 111,
-                            "xuhao": 2,
-                            "tuhao": 3,
-                            "mingchengchicun": 4,
-                            "guanliqufenhao": 5,
-                            "hangfan": 6,
-                            "shuliang": 7,
-                            "danwei": 8,
-                            "tuzhuangfanhao": 9,
-                            "chupin": 10,
-                            "guanjin": 11,
-                            "beizhu": 12
-                        },
-                        {
-                            "chuku": 1,
-                            "xuhao": 2,
-                            "tuhao": 3,
-                            "mingchengchicun": 4,
-                            "guanliqufenhao": 5,
-                            "hangfan": 6,
-                            "shuliang": 7,
-                            "danwei": 8,
-                            "tuzhuangfanhao": 9,
-                            "chupin": 10,
-                            "guanjin": 11,
-                            "beizhu": 12
-                        },
-                        {
-                            "chuku": 11,
-                            "xuhao": 22,
-                            "tuhao": 33,
-                            "mingchengchicun": 44,
-                            "guanliqufenhao": 55,
-                            "hangfan": 66,
-                            "shuliang": 77,
-                            "danwei": 88,
-                            "tuzhuangfanhao": 99,
-                            "chupin": 101,
-                            "guanjin": 111,
-                            "beizhu": 121
-                        },
-                        {
-                            "chuku": 111,
-                            "xuhao": 222,
-                            "tuhao": 333,
-                            "mingchengchicun": 444,
-                            "guanliqufenhao": 555,
-                            "hangfan": 666,
-                            "shuliang": 777,
-                            "danwei": 888,
-                            "tuzhuangfanhao": 999,
-                            "chupin": 10,
-                            "guanjin": 11,
-                            "beizhu": 12
-                        },
-                        {
-                            "chuku": 1,
-                            "xuhao": 2,
-                            "tuhao": 3,
-                            "mingchengchicun": 4,
-                            "guanliqufenhao": 5,
-                            "hangfan": 6,
-                            "shuliang": 7,
-                            "danwei": 8,
-                            "tuzhuangfanhao": 9,
-                            "chupin": 10,
-                            "guanjin": 11,
-                            "beizhu": 12
-                        },
-                        {
-                            "chuku": 111,
-                            "xuhao": 2,
-                            "tuhao": 3,
-                            "mingchengchicun": 4,
-                            "guanliqufenhao": 5,
-                            "hangfan": 6,
-                            "shuliang": 7,
-                            "danwei": 8,
-                            "tuzhuangfanhao": 9,
-                            "chupin": 10,
-                            "guanjin": 11,
-                            "beizhu": 12
-                        },
-                        {
-                            "chuku": 1,
-                            "xuhao": 2,
-                            "tuhao": 3,
-                            "mingchengchicun": 4,
-                            "guanliqufenhao": 5,
-                            "hangfan": 6,
-                            "shuliang": 7,
-                            "danwei": 8,
-                            "tuzhuangfanhao": 9,
-                            "chupin": 10,
-                            "guanjin": 11,
-                            "beizhu": 12
-                        },
-                        {
-                            "chuku": 11,
-                            "xuhao": 22,
-                            "tuhao": 33,
-                            "mingchengchicun": 44,
-                            "guanliqufenhao": 55,
-                            "hangfan": 66,
-                            "shuliang": 77,
-                            "danwei": 88,
-                            "tuzhuangfanhao": 99,
-                            "chupin": 101,
-                            "guanjin": 111,
-                            "beizhu": 121
-                        },
-                        {
-                            "chuku": 111,
-                            "xuhao": 222,
-                            "tuhao": 333,
-                            "mingchengchicun": 444,
-                            "guanliqufenhao": 555,
-                            "hangfan": 666,
-                            "shuliang": 777,
-                            "danwei": 888,
-                            "tuzhuangfanhao": 999,
-                            "chupin": 10,
-                            "guanjin": 11,
-                            "beizhu": 12
-                        },
-                        {
-                            "chuku": 1,
-                            "xuhao": 2,
-                            "tuhao": 3,
-                            "mingchengchicun": 4,
-                            "guanliqufenhao": 5,
-                            "hangfan": 6,
-                            "shuliang": 7,
-                            "danwei": 8,
-                            "tuzhuangfanhao": 9,
-                            "chupin": 10,
-                            "guanjin": 11,
-                            "beizhu": 12
-                        },
-                        {
-                            "chuku": 111,
-                            "xuhao": 2,
-                            "tuhao": 3,
-                            "mingchengchicun": 4,
-                            "guanliqufenhao": 5,
-                            "hangfan": 6,
-                            "shuliang": 7,
-                            "danwei": 8,
-                            "tuzhuangfanhao": 9,
-                            "chupin": 10,
-                            "guanjin": 11,
-                            "beizhu": 12
-                        },
-                        {
-                            "chuku": 111,
-                            "xuhao": 222,
-                            "tuhao": 333,
-                            "mingchengchicun": 444,
-                            "guanliqufenhao": 555,
-                            "hangfan": 666,
-                            "shuliang": 777,
-                            "danwei": 888,
-                            "tuzhuangfanhao": 999,
-                            "chupin": 10,
-                            "guanjin": 11,
-                            "beizhu": 12
-                        },
-                        {
-                            "chuku": 1,
-                            "xuhao": 2,
-                            "tuhao": 3,
-                            "mingchengchicun": 4,
-                            "guanliqufenhao": 5,
-                            "hangfan": 6,
-                            "shuliang": 7,
-                            "danwei": 8,
-                            "tuzhuangfanhao": 9,
-                            "chupin": 10,
-                            "guanjin": 11,
-                            "beizhu": 12
-                        },
-                    ],
-                    shiyongri: "使用日",
-                    shiyongchangsuo: "使用场所",
-                    No: "No.",
-                    gsName: "区画或工事名",
-                    Tuhao: "图号",
-                    CODE: "CODE:",
-                    gssgqj: "工事施工期间",
-                    bzgs: "工事施工期间",
-                    sh1:"审核人1",
-                    sh2:"审核人2",
-                    sh3:"审核人3",
-                    sh4:"审核人4",
-                    ck1:"仓库1",
-                    ck2:"仓库2",
-                    ck3:"仓库3",
-                    xczrz1:"现场责任者1",
-                    xczrz2:"现场责任者2",
-                    xczrz3:"现场责任者3",
-                }],
-
-
-
-
+                chuturiqi:"",
 
                 cols: [],
                 tableData: [],
@@ -1165,8 +840,8 @@
                 }
             },
 
-            //进行废弃
-            doFQ(){
+            //显示废弃
+            showFQ() {
                 if (this.listData.length) {
                     this.delVisible = true;
                 }
@@ -1183,308 +858,25 @@
                     setTimeout(a, 2000);
                 }
             },
+            //进行废弃
+            doFQ(){
+
+            },
 
 
             //双击点击行内编辑
             edit(row, column, cell, event) {
                 this.editVisible = true;
                 this.id = row.id;
-                axios.post(" " + url + "/padShow/buttonDetail", {"id": this.id})
+                axios.post(" " + url + "/wuliao/tuodanjinwuDetail", {"id": this.id})
                     .then((res) => {
-                        this.excelData= [
-                            {
-                                "chukuxuhao": "",
-                                "tuhao": "",
-                                "mingchengchicun": "",
-                                "guanliqufenhao": "",
-                                "hangfan": "",
-                                "shuliang": "",
-                                "danwei": "",
-                                "tuzhuangfanhao": "",
-                                "chupin": "",
-                                "guanjin": "",
-                                "beizhu": ""
-                            },
-                            {
-                                "chukuxuhao": "",
-                                "tuhao": "",
-                                "mingchengchicun": "",
-                                "guanliqufenhao": "",
-                                "hangfan": "",
-                                "shuliang": "",
-                                "danwei": "",
-                                "tuzhuangfanhao": "",
-                                "chupin": "",
-                                "guanjin": "",
-                                "beizhu": ""
-                            },
-                            {
-                                "chukuxuhao": "",
-                                "tuhao": "",
-                                "mingchengchicun": "",
-                                "guanliqufenhao": "",
-                                "hangfan": "",
-                                "shuliang": "",
-                                "danwei": "",
-                                "tuzhuangfanhao": "",
-                                "chupin": "",
-                                "guanjin": "",
-                                "beizhu": ""
-                            },
-                            {
-                                "chukuxuhao": "",
-                                "tuhao": "",
-                                "mingchengchicun": "",
-                                "guanliqufenhao": "",
-                                "hangfan": "",
-                                "shuliang": "",
-                                "danwei": "",
-                                "tuzhuangfanhao": "",
-                                "chupin": "",
-                                "guanjin": "",
-                                "beizhu": ""
-                            },
-                            {
-                                "chukuxuhao": "",
-                                "tuhao": "",
-                                "mingchengchicun": "",
-                                "guanliqufenhao": "",
-                                "hangfan": "",
-                                "shuliang": "",
-                                "danwei": "",
-                                "tuzhuangfanhao": "",
-                                "chupin": "",
-                                "guanjin": "",
-                                "beizhu": ""
-                            },
-                            {
-                                "chukuxuhao": "",
-                                "tuhao": "",
-                                "mingchengchicun": "",
-                                "guanliqufenhao": "",
-                                "hangfan": "",
-                                "shuliang": "",
-                                "danwei": "",
-                                "tuzhuangfanhao": "",
-                                "chupin": "",
-                                "guanjin": "",
-                                "beizhu": ""
-                            },
-                            {
-                                "chukuxuhao": "",
-                                "tuhao": "",
-                                "mingchengchicun": "",
-                                "guanliqufenhao": "",
-                                "hangfan": "",
-                                "shuliang": "",
-                                "danwei": "",
-                                "tuzhuangfanhao": "",
-                                "chupin": "",
-                                "guanjin": "",
-                                "beizhu": ""
-                            },
-                            {
-                                "chukuxuhao": "",
-                                "tuhao": "",
-                                "mingchengchicun": "",
-                                "guanliqufenhao": "",
-                                "hangfan": "",
-                                "shuliang": "",
-                                "danwei": "",
-                                "tuzhuangfanhao": "",
-                                "chupin": "",
-                                "guanjin": "",
-                                "beizhu": ""
-                            },
-                            {
-                                "chukuxuhao": "",
-                                "tuhao": "",
-                                "mingchengchicun": "",
-                                "guanliqufenhao": "",
-                                "hangfan": "",
-                                "shuliang": "",
-                                "danwei": "",
-                                "tuzhuangfanhao": "",
-                                "chupin": "",
-                                "guanjin": "",
-                                "beizhu": ""
-                            },
-                            {
-                                "chukuxuhao": "",
-                                "tuhao": "",
-                                "mingchengchicun": "",
-                                "guanliqufenhao": "",
-                                "hangfan": "",
-                                "shuliang": "",
-                                "danwei": "",
-                                "tuzhuangfanhao": "",
-                                "chupin": "",
-                                "guanjin": "",
-                                "beizhu": ""
-                            },
-                            {
-                                "chukuxuhao": "",
-                                "tuhao": "",
-                                "mingchengchicun": "",
-                                "guanliqufenhao": "",
-                                "hangfan": "",
-                                "shuliang": "",
-                                "danwei": "",
-                                "tuzhuangfanhao": "",
-                                "chupin": "",
-                                "guanjin": "",
-                                "beizhu": ""
-                            },
-                            {
-                                "chukuxuhao": "",
-                                "tuhao": "",
-                                "mingchengchicun": "",
-                                "guanliqufenhao": "",
-                                "hangfan": "",
-                                "shuliang": "",
-                                "danwei": "",
-                                "tuzhuangfanhao": "",
-                                "chupin": "",
-                                "guanjin": "",
-                                "beizhu": ""
-                            },
-                            {
-                                "chukuxuhao": "",
-                                "tuhao": "",
-                                "mingchengchicun": "",
-                                "guanliqufenhao": "",
-                                "hangfan": "",
-                                "shuliang": "",
-                                "danwei": "",
-                                "tuzhuangfanhao": "",
-                                "chupin": "",
-                                "guanjin": "",
-                                "beizhu": ""
-                            },
-                            {
-                                "chukuxuhao": "",
-                                "tuhao": "",
-                                "mingchengchicun": "",
-                                "guanliqufenhao": "",
-                                "hangfan": "",
-                                "shuliang": "",
-                                "danwei": "",
-                                "tuzhuangfanhao": "",
-                                "chupin": "",
-                                "guanjin": "",
-                                "beizhu": ""
-                            },
-                            {
-                                "chukuxuhao": "",
-                                "tuhao": "",
-                                "mingchengchicun": "",
-                                "guanliqufenhao": "",
-                                "hangfan": "",
-                                "shuliang": "",
-                                "danwei": "",
-                                "tuzhuangfanhao": "",
-                                "chupin": "",
-                                "guanjin": "",
-                                "beizhu": ""
-                            },
-                            {
-                                "chukuxuhao": "",
-                                "tuhao": "",
-                                "mingchengchicun": "",
-                                "guanliqufenhao": "",
-                                "hangfan": "",
-                                "shuliang": "",
-                                "danwei": "",
-                                "tuzhuangfanhao": "",
-                                "chupin": "",
-                                "guanjin": "",
-                                "beizhu": ""
-                            },
-                            {
-                                "chukuxuhao": "",
-                                "tuhao": "",
-                                "mingchengchicun": "",
-                                "guanliqufenhao": "",
-                                "hangfan": "",
-                                "shuliang": "",
-                                "danwei": "",
-                                "tuzhuangfanhao": "",
-                                "chupin": "",
-                                "guanjin": "",
-                                "beizhu": ""
-                            },
-                            {
-                                "chukuxuhao": "",
-                                "tuhao": "",
-                                "mingchengchicun": "",
-                                "guanliqufenhao": "",
-                                "hangfan": "",
-                                "shuliang": "",
-                                "danwei": "",
-                                "tuzhuangfanhao": "",
-                                "chupin": "",
-                                "guanjin": "",
-                                "beizhu": ""
-                            },
-                            {
-                                "chukuxuhao": "",
-                                "tuhao": "",
-                                "mingchengchicun": "",
-                                "guanliqufenhao": "",
-                                "hangfan": "",
-                                "shuliang": "",
-                                "danwei": "",
-                                "tuzhuangfanhao": "",
-                                "chupin": "",
-                                "guanjin": "",
-                                "beizhu": ""
-                            },
-                            {
-                                "chukuxuhao": "",
-                                "tuhao": "",
-                                "mingchengchicun": "",
-                                "guanliqufenhao": "",
-                                "hangfan": "",
-                                "shuliang": "",
-                                "danwei": "",
-                                "tuzhuangfanhao": "",
-                                "chupin": "",
-                                "guanjin": "",
-                                "beizhu": ""
-                            },
-                            {
-                                "chukuxuhao": "",
-                                "tuhao": "",
-                                "mingchengchicun": "",
-                                "guanliqufenhao": "",
-                                "hangfan": "",
-                                "shuliang": "",
-                                "danwei": "",
-                                "tuzhuangfanhao": "",
-                                "chupin": "",
-                                "guanjin": "",
-                                "beizhu": ""
-                            },
-                            {
-                                "chukuxuhao": "",
-                                "tuhao": "",
-                                "mingchengchicun": "",
-                                "guanliqufenhao": "",
-                                "hangfan": "",
-                                "shuliang": "",
-                                "danwei": "",
-                                "tuzhuangfanhao": "",
-                                "chupin": "",
-                                "guanjin": "",
-                                "beizhu": ""
-                            },
-                        ];
+                        this.excelData= res.data.details;
                         this.shiyongri= res.data.shiyongri;
                         this.shiyongchangsuo=  res.data.shiyongri;
-                        this.No=  res.data.shiyongri;
+                        this.No=  res.data.shipcode;
                         this.gsName=  res.data.shiyongri;
-                        this.Tuhao=  res.data.shiyongri;
-                        this.CODE=  res.data.shiyongri;
+                        this.Tuhao=  res.data.tuhao;
+                        this.CODE=  res.data.CODE;
                         this.gssgqj=  res.data.shiyongri;
                         this.bzgs=  res.data.shiyongri;
                         this.sh1= res.data.shiyongri;
@@ -1505,15 +897,15 @@
 
             // 保存编辑
             saveEdit() {
-                axios.post(" " + url + "/padShow/buttonUpdate",
+                axios.post(" " + url + "/wuliao/tuodanjinwuUpdate",
                     {
                         "id": this.id,
-                        "excelData":this.excelData,
+                        "details":this.excelData,
                         "shiyongri":this.shiyongri,
                         "shiyongchangsuo":this.shiyongchangsuo,
-                        "No":this.No,
+                        "shipcode":this.No,
                         "gsName":this.gsName,
-                        "Tuhao":this.Tuhao,
+                        "tuhao":this.Tuhao,
                         "CODE":this.CODE,
                         "gssgqj":this.gssgqj,
                         "bzgs":this.bzgs,
@@ -1872,11 +1264,29 @@
                                 height: 60px;
                                 border-right:1px solid @color-background-dd;
                                 border-bottom:1px solid @color-background-dd;
+                                position: relative;
+                                .makeFromBottomTwoRightBottomDivName{
+                                    position: absolute;
+                                    top: 0;
+                                    left: 0;
+                                }
                             }
                         }
                     }
 
 
+                }
+            }
+            .makeFromTime{
+                height: 50px;
+                width: 1042px;
+                .makeFromTimeInput{
+                    width: 200px;
+                    height: 50px;
+                }
+                .makeFromTimeText {
+                    font-size: 20px;
+                    line-height: 50px;
                 }
             }
         }
