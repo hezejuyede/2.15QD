@@ -512,7 +512,7 @@
                         {
                             "shipcode": this.chuanhao,
                             "tuhao": this.tuhao,
-                            "gongshiming":this.gsName
+                            "quhuaming":this.gsName
                         }
                     )
                         .then((res) => {
