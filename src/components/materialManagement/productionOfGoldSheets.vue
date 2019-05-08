@@ -354,9 +354,9 @@
                     </div>
                 </div>
                 <span slot="footer" class="dialog-footer">
-                    <el-button @click="cancelEditVisible" style="height:30px;width:100px">取 消</el-button>
-                    <el-button type="primary" @click="doSaveData" style="height:30px;width:100px">保 存</el-button>
-                    <el-button type="success" @click="doAdd" style="height:30px;width:100px">提交捡图</el-button>
+                    <el-button v-if="this.button ===1 "  @click="cancelEditVisible" style="height:30px;width:100px">取 消</el-button>
+                    <el-button v-if="this.button ===1 "  type="primary" @click="doSaveData" style="height:30px;width:100px">保 存</el-button>
+                    <el-button v-if="this.button ===1 "  type="success" @click="saveEdit" style="height:30px;width:100px">提交捡图</el-button>
             </span>
             </el-dialog>
 
@@ -435,6 +435,8 @@
                 delVisible: false,
                 cancelVisible:false,
                 examineTime: "",
+                zuoyezhe:"",
+                button:""
 
             }
         },
@@ -475,7 +477,10 @@
                         times.push(time)
                     }
                     this.examineTime = times;
+                    const info = JSON.parse(userInfo);
+                    this.zuoyezhe = info.username;
                     this.loadingShowData(this.examineTime);
+
                 }
             },
 
@@ -536,6 +541,7 @@
                 }
 
             },
+
 
             //进行查询
             doSearch (){
@@ -602,9 +608,9 @@
                     setTimeout(a, 2000);
                 }
             },
+
             //进行追加修改
             doModify(){
-
 
             },
 
@@ -615,6 +621,7 @@
                 this.id = row.id;
                 axios.post(" " + url + "/wuliao/tuodanjinwuDetail", {"id": this.id})
                     .then((res) => {
+                        this.button=res.data.shenpistatus;
                         this.excelData= res.data.details;
                         this.shiyongri= res.data.shiyongri;
                         this.shiyongchangsuo=  res.data.shiyongri;
@@ -705,11 +712,11 @@
                     .then((res) => {
                         if (res.data.state === "1") {
                             this.editVisible = false;
-                            this.$message.success(`修改成功`);
+                            this.$message.success(`保存成功`);
                             this.loadingShowData(this.workStation)
                         }
                         else {
-                            this.$message.warning(`新增失败`);
+                            this.$message.warning(`保存失败`);
                         }
                     })
                     .catch((err) => {
@@ -719,38 +726,21 @@
 
             // 保存编辑
             saveEdit() {
-                axios.post(" " + url + "/wuliao/tuodanjinwuUpdate",
+                axios.post(" " + url + "/wuliao/tuodanjinwuShenpi",
                     {
                         "id": this.id,
-                        "details":this.excelData,
-                        "shiyongri":this.shiyongri,
-                        "shiyongchangsuo":this.shiyongchangsuo,
-                        "shipcode":this.No,
-                        "gsName":this.gsName,
-                        "tuhao":this.Tuhao,
-                        "CODE":this.CODE,
-                        "gssgqj":this.gssgqj,
-                        "bzgs":this.bzgs,
-                        "sh1":this.sh1,
-                        "sh2":this.sh2,
-                        "sh3":this.sh3,
-                        "sh4":this.sh4,
-                        "ck1":this.ck1,
-                        "ck2":this.ck2,
-                        "ck3":this.ck3,
-                        "xczrz1":this.xczrz1,
-                        "xczrz2":this.xczrz2,
-                        "xczrz3":this.xczrz3,
+                        "type":2,
+                        "zuoyezhe":this.zuoyezhe
                     }
                 )
                     .then((res) => {
                         if (res.data.state === "1") {
                             this.editVisible = false;
-                            this.$message.success(`修改成功`);
+                            this.$message.success(`提交检图成功`);
                             this.loadingShowData(this.workStation)
                         }
                         else {
-                            this.$message.warning(`新增失败`);
+                            this.$message.warning(`提交检图失败`);
                         }
                     })
                     .catch((err) => {
