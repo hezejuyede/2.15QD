@@ -7,16 +7,37 @@
             </el-breadcrumb>
         </div>
         <div class="productionContent">
+            <div class="handle-box">
+                <label style="margin-right: 10px;margin-left: 10px">
+                    <span>选择批次</span>
+                    <span>:</span>
+                    <el-select
+                        v-model="batch"
+                        clearable
+                        filterable
+                        allow-create
+                        default-first-option
+                        placeholder="请选择批次">
+                        <el-option
+                            v-for="item in batchOptions"
+                            :key="item.id"
+                            :label="item.name"
+                            :value="item.id">
+                        </el-option>
+                    </el-select>
+                </label>
+                <el-button type="primary" icon="delete" class="handle-del mr10" @click="doSearch">查询</el-button>
+            </div>
            <div class="contentDiv">
                <div class="productionContentTable clearfix">
                    <div class="productionContentTableLeft fl">
-                       20190411
+                       {{batch}}
                    </div>
                    <div class="productionContentTableRight fr">
                        <div class="tableDiv" v-for="(item,index) in tableData">
                            <div class="tableDivTop">{{item.workStation}}</div>
                            <div class="tableDivBottom">
-                               <div class="tableTemplate" v-for="(item,index) in item.table">
+                               <div class="tableTemplate" v-for="(item,index) in item.table" @click="showModal">
                                    <div class="tableTemplate-title">{{item.title}}</div>
                                    <div class="tableTemplate-number">{{item.number}}</div>
                                    <div class="tableTemplate-jd">{{item.jd}}</div>
@@ -27,6 +48,11 @@
                </div>
            </div>
         </div>
+
+        <!--新增弹出框 -->
+        <el-dialog title="新增按钮" :visible.sync="addVisible" width="80%">
+
+        </el-dialog>
     </div>
 </template>
 <script type="text/ecmascript-6">
@@ -38,7 +64,10 @@
         name: 'FactoryCalendar',
         data() {
             return {
-                tableData:[]
+                tableData:[],
+                batch: "",
+                batchOptions: [],
+                addVisible:false
             }
         },
         components: {},
@@ -58,15 +87,50 @@
                     this.$router.push("/")
                 }
                 else {
-                    axios.post(" " + url + "/dynamic/getStationDynamicList")
-                        .then((res) => {
-                            this.tableData = res.data
-                        })
-                        .catch((err) => {
-                            console.log(err)
-                        })
+                    let that = this;
+                    axios.all([
+                        axios.post(" " + url + "/sys/getPiciList"),
+                    ])
+                        .then(axios.spread(function (select) {
+                            that.batchOptions = select.data;
+                            that.batch = select.data[0].id;
+                            that.loadingShowData(that.batch);
+                        }));
                 }
+            },
+
+            //瞬间加载数据
+            loadingShowData(data) {
+                axios.post(" " + url + "/dynamic/getStationDynamicList",{"pici":data})
+                    .then((res) => {
+                        this.tableData = res.data
+                    })
+                    .catch((err) => {
+                        console.log(err)
+                    })
+            },
+
+
+            doSearch(){
+                if (this.batch) {
+                    this.loadingShowData(this.batch)
+                }
+                else {
+                    this.message = "查询批次不能为空";
+                    this.HideModal = false;
+                    const that = this;
+                    function a() {
+                        that.message = "";
+                        that.HideModal = true;
+                    }
+                    setTimeout(a, 2000);
+                }
+            },
+            showModal(){
+
+                alert("hahah")
             }
+
 
 
 
@@ -88,6 +152,19 @@
             border-bottom: 1px solid @color-bg-hei;
         }
         .productionContent {
+            .handle-box {
+                height: 80px;
+                line-height: 80px;
+                padding-left: 50px;
+                .handle-input {
+                    width: 300px;
+                    display: inline-block;
+                }
+                .el-button {
+                    width: 100px;
+                    height: 30px;
+                }
+            }
             .contentDiv{
                height: 550px;
                 overflow: auto;
