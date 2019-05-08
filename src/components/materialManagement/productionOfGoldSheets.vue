@@ -682,7 +682,8 @@
             },
 
             //保存数据
-            doSaveData(){
+            doSaveData()
+            {
                 axios.post(" " + url + "/wuliao/tuodanjinwuUpdate",
                     {
                         "id": this.id,
