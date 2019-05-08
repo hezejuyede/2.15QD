@@ -28,7 +28,7 @@
             return {
                 num:0,
                 navBarData: [
-                    {
+                    /*{
                         label: '物料数据',
                         index: "1",
                         children: [
@@ -43,7 +43,7 @@
                                 url: "/404"
                             }
                         ]
-                    },
+                    },*/
                     {
                         label: '托单金物',
                         index: "2",

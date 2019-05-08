@@ -10,7 +10,7 @@
             <div class="container">
                 <div class="handle-box">
                     <label style="margin-right: 10px">
-                        <span>智能检索脱单金物</span>
+                        <span>智能检索托单金物</span>
                         <span>:</span>
                         <el-input v-model="select_word" placeholder="智能检索脱单金物"  style="width: 150px"></el-input>
                     </label>
@@ -33,7 +33,7 @@
                 <div class="">
                     <el-table class="tb-edit"
                               :data="tables"
-                              :header-cell-style="{background:'#A1D0FC',color:'rgba(0, 0, 0, 0.8)',fontSize:'20px'}"
+                              :header-cell-style="{background:'#A1D0FC',color:'rgba(0, 0, 0, 0.8)',fontSize:'14px'}"
                               border
                               height="450"
                               @row-dblclick="edit"
@@ -71,7 +71,7 @@
             </el-dialog>
 
             <!--修改弹出框 -->
-            <el-dialog title="脱单金物修改" :visible.sync="editVisible" width="100%" :fullscreen="true" :center="true">
+            <el-dialog title="托单金物制作" :visible.sync="editVisible" width="100%" :fullscreen="true" :center="true">
                 <div class="makeFrom">
                     <div class="makeFromDiv">
                         <div class="makeFromPage fr">
@@ -100,16 +100,28 @@
                             <div class="makeFromTopRight fl">
                                 <div class="makeFromTopRightTop">
                                     <div class="makeFromTopRightTopGz fl">改正</div>
-                                    <div class="makeFromTopRightTopDH fl">第__回前图引换</div>
+                                    <div class="makeFromTopRightTopDH fl">
+                                        <div class="">第</div>
+                                        <div class="">
+                                            <input disabled="disabled" style="width: 30px;background-color: #ffffff" v-model="dijihui"/>
+                                        </div>
+                                        <div class="">回前图引换</div>
+                                    </div>
                                     <div class="makeFromTopRightTopS fl">S.</div>
                                     <div class="makeFromTopRightTopNo fl">No.</div>
-                                    <div class="makeFromTopRightTopInput fl"><input v-model="No"/></div>
+                                    <div class="makeFromTopRightTopInput fl">
+                                        <input disabled="disabled" style="background-color: #ffffff" v-model="No"/>
+                                    </div>
                                 </div>
                                 <div class="makeFromTopRightBottom">
                                     <div class="makeFromTopRightBottomMc fl">区画或工事名称</div>
-                                    <div class="makeFromTopRightBottomInput fl"><input v-model="gsName"/></div>
+                                    <div class="makeFromTopRightBottomInput fl">
+                                        <input style="background-color: #ffffff" disabled="disabled" v-model="gsName"/>
+                                    </div>
                                     <div class="makeFromTopRightBottomTh fl">图号</div>
-                                    <div class="makeFromTopRightBottomInput fl"><input v-model="Tuhao"/></div>
+                                    <div class="makeFromTopRightBottomInput fl">
+                                        <input style="background-color: #ffffff"  disabled="disabled" v-model="Tuhao"/>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -342,9 +354,9 @@
                     </div>
                 </div>
                 <span slot="footer" class="dialog-footer">
-                    <el-button @click="cancelEditVisible" style="height:30px;width:80px">取 消</el-button>
-                    <el-button type="primary" @click="doSaveData" style="height:30px;width:80px">保 存</el-button>
-                    <el-button type="success" @click="doAdd" style="height:30px;width:80px">添 加</el-button>
+                    <el-button @click="cancelEditVisible" style="height:30px;width:100px">取 消</el-button>
+                    <el-button type="primary" @click="doSaveData" style="height:30px;width:100px">保 存</el-button>
+                    <el-button type="success" @click="doAdd" style="height:30px;width:100px">提交捡图</el-button>
             </span>
             </el-dialog>
 
@@ -353,7 +365,7 @@
                 <div class="del-dialog-cnt">废弃不可恢复，是否确定废弃？</div>
                 <span slot="footer" class="dialog-footer">
                 <el-button @click="delVisible = false" style="height:30px;width:80px">取 消</el-button>
-                <el-button type="primary" @click="doFQ" style="height:30px;width:80px">确 定</el-button>
+                <el-button type="primary" @click="doModify" style="height:30px;width:80px">确 定</el-button>
             </span>
             </el-dialog>
 
@@ -411,6 +423,7 @@
                 xczrz3:"",
                 chuturiqi:"",
                 page:"",
+                dijihui:"",
 
                 cols: [],
                 tableData: [],
@@ -606,7 +619,8 @@
                         this.shiyongri= res.data.shiyongri;
                         this.shiyongchangsuo=  res.data.shiyongri;
                         this.No=  res.data.shipcode;
-                        this.gsName=  res.data.shiyongri;
+                        this.gsName=  res.data.quhuaming;
+                        this.dijihui = res.data.gaizheng;
                         this.Tuhao=  res.data.tuhao;
                         this.CODE=  res.data.CODE;
                         this.gssgqj=  res.data.shiyongri;
@@ -665,25 +679,27 @@
                 axios.post(" " + url + "/wuliao/tuodanjinwuUpdate",
                     {
                         "id": this.id,
-                        "details":this.excelData,
-                        "shiyongri":this.shiyongri,
-                        "shiyongchangsuo":this.shiyongchangsuo,
-                        "shipcode":this.No,
-                        "gsName":this.gsName,
-                        "tuhao":this.Tuhao,
-                        "CODE":this.CODE,
-                        "gssgqj":this.gssgqj,
-                        "bzgs":this.bzgs,
-                        "sh1":this.sh1,
-                        "sh2":this.sh2,
-                        "sh3":this.sh3,
-                        "sh4":this.sh4,
-                        "ck1":this.ck1,
-                        "ck2":this.ck2,
-                        "ck3":this.ck3,
-                        "xczrz1":this.xczrz1,
-                        "xczrz2":this.xczrz2,
-                        "xczrz3":this.xczrz3,
+                        "details": this.excelData,
+                        "shiyongri": this.shiyongri,
+                        "shiyongchangsuo": this.shiyongchangsuo,
+                        "shipcode": this.No,
+                        "gsName": this.gsName,
+                        "tuhao": this.Tuhao,
+                        "CODE": this.CODE,
+                        "gssgqj": this.gssgqj,
+                        "bzgs": this.bzgs,
+                        "sh1": this.sh1,
+                        "sh2": this.sh2,
+                        "sh3": this.sh3,
+                        "sh4": this.sh4,
+                        "ck1": this.ck1,
+                        "ck2": this.ck2,
+                        "ck3": this.ck3,
+                        "xczrz1": this.xczrz1,
+                        "xczrz2": this.xczrz2,
+                        "xczrz3": this.xczrz3,
+                        "gaizheng": this.dijihui,
+                        "quhuaming": this.gsName
                     }
                 )
                     .then((res) => {
@@ -863,6 +879,9 @@
                             line-height: 60px;
                             font-size: @font-size-large;
                             border-left: 1px solid #303133;
+                            display: flex;
+                            align-items: center;
+                            justify-content: center;
                         }
                         .makeFromTopRightTopS {
                             width: 70px;
@@ -895,7 +914,6 @@
                                 padding-left: 10px;
                             }
                         }
-
                     }
                     .makeFromTopRightBottom {
 
