@@ -328,6 +328,8 @@
                 this.uploadVisible = true;
                 this.batch = "";
                 this.type="";
+                this.scx="";
+                this.fileType="";
                 this.list=[];
             },
 
