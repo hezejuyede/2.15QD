@@ -714,7 +714,7 @@
                         if (res.data.state === "1") {
                             this.editVisible = false;
                             this.$message.success(`保存成功`);
-                            this.loadingShowData(this.workStation)
+                            this.loadingShowData(this.examineTime)
                         }
                         else {
                             this.$message.warning(`保存失败`);
@@ -738,7 +738,7 @@
                         if (res.data.state === "1") {
                             this.editVisible = false;
                             this.$message.success(`提交检图成功`);
-                            this.loadingShowData(this.workStation)
+                            this.loadingShowData(this.examineTime)
                         }
                         else {
                             this.$message.warning(`提交检图失败`);
