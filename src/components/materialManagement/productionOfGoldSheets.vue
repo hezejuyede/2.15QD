@@ -29,7 +29,6 @@
                     <el-button type="success"  @click="doSearch">查询</el-button>
                     <el-button type="primary"  @click="showAdd">新图添加</el-button>
                     <el-button type="danger"   @click="showFQ">追加改正</el-button>
-
                 </div>
                 <div class="">
                     <el-table class="tb-edit"
@@ -75,6 +74,9 @@
             <el-dialog title="脱单金物修改" :visible.sync="editVisible" width="100%" :fullscreen="true" :center="true">
                 <div class="makeFrom">
                     <div class="makeFromDiv">
+                        <div class="makeFromPage fr">
+                            <div class="makeFromPageText"> {{page}}</div>
+                        </div>
                         <div class="makeFromTop fr">
                             <div class="makeFromTopLeft fl">
                                 <div class="makeFromTopLeftSmall fl">
@@ -337,7 +339,6 @@
                             <div class="makeFromTimeInput fr"> <input v-model="chuturiqi" style="width:200px; height: 50px"/></div>
                             <div class="makeFromTimeText fr">出图日期：</div>
                         </div>
-
                     </div>
                 </div>
                 <span slot="footer" class="dialog-footer">
@@ -398,6 +399,7 @@
                 xczrz2:"",
                 xczrz3:"",
                 chuturiqi:"",
+                page:"P 1/1",
 
                 cols: [],
                 tableData: [],
@@ -576,7 +578,7 @@
             },
             //进行废弃
             doFQ(){
-              
+
 
             },
 
@@ -708,6 +710,19 @@
             height:550px;
             overflow: auto;
             margin: 0 auto;
+            .makeFromPage{
+                height: 40px;
+                width: 1042px;
+                .makeFromPageText{
+                    width: 200px;
+                    height:40px;
+                    text-align: center;
+                    line-height:40px;
+                    font-size: @font-size-large;
+                    float: right;
+
+                }
+            }
             .makeFromTop {
                 height: 120px;
                 width: 1042px;
