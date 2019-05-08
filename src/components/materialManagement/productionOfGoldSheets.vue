@@ -28,7 +28,7 @@
 
                     <el-button type="success"  @click="doSearch">查询</el-button>
                     <el-button type="primary"  @click="showAdd">新图添加</el-button>
-                    <el-button type="danger"   @click="showFQ">追加改正</el-button>
+                    <el-button type="danger"   @click="showModify">追加改正</el-button>
                 </div>
                 <div class="">
                     <el-table class="tb-edit"
@@ -61,12 +61,12 @@
                         <el-input v-model="tuhao" style="width: 200px"></el-input>
                     </el-form-item>
                     <el-form-item label="区画或工事名">
-                        <el-input v-model="tuhao" style="width: 200px"></el-input>
+                        <el-input v-model="gsName" style="width: 200px"></el-input>
                     </el-form-item>
                 </el-form>
                 <span slot="footer" class="dialog-footer">
-                <el-button @click="addVisible = false" style="height:30px;width:80px">取 消</el-button>
-                <el-button type="primary" @click="doAdd" style="height:30px;width:80px">确 定</el-button>
+                    <el-button @click="addVisible = false" style="height:30px;width:80px">取 消</el-button>
+                    <el-button type="primary" @click="doAdd" style="height:30px;width:80px">添 加</el-button>
             </span>
             </el-dialog>
 
@@ -342,8 +342,9 @@
                     </div>
                 </div>
                 <span slot="footer" class="dialog-footer">
-                <el-button @click="editVisible = false" style="height:30px;width:80px">取 消</el-button>
-                <el-button type="primary" @click="saveEdit" style="height:30px;width:80px">确 定</el-button>
+                    <el-button @click="cancelEditVisible" style="height:30px;width:80px">取 消</el-button>
+                    <el-button type="primary" @click="doSaveData" style="height:30px;width:80px">保 存</el-button>
+                    <el-button type="success" @click="doAdd" style="height:30px;width:80px">添 加</el-button>
             </span>
             </el-dialog>
 
@@ -353,6 +354,16 @@
                 <span slot="footer" class="dialog-footer">
                 <el-button @click="delVisible = false" style="height:30px;width:80px">取 消</el-button>
                 <el-button type="primary" @click="doFQ" style="height:30px;width:80px">确 定</el-button>
+            </span>
+            </el-dialog>
+
+
+            <!-- 取消提示框 -->
+            <el-dialog title="取消" :visible.sync="cancelVisible" width="300px" center>
+                <div class="del-dialog-cnt">取消不保存数据，是否确定取消？</div>
+                <span slot="footer" class="dialog-footer">
+                <el-button @click="cancelVisible = false" style="height:30px;width:80px">取 消</el-button>
+                <el-button type="primary" @click="doCancelVisible" style="height:30px;width:80px">确 定</el-button>
             </span>
             </el-dialog>
 
@@ -399,7 +410,7 @@
                 xczrz2:"",
                 xczrz3:"",
                 chuturiqi:"",
-                page:"P 1/1",
+                page:"",
 
                 cols: [],
                 tableData: [],
@@ -409,6 +420,7 @@
                 addVisible: false,
                 editVisible:false,
                 delVisible: false,
+                cancelVisible:false,
                 examineTime: "",
 
             }
@@ -482,6 +494,7 @@
                         {
                             "shipcode": this.chuanhao,
                             "tuhao": this.tuhao,
+                            "gongshiming":this.gsName
                         }
                     )
                         .then((res) => {
@@ -558,8 +571,8 @@
                 }
             },
 
-            //显示废弃
-            showFQ() {
+            //显示追加修改
+            showModify() {
                 if (this.listData.length) {
                     this.delVisible = true;
                 }
@@ -576,8 +589,8 @@
                     setTimeout(a, 2000);
                 }
             },
-            //进行废弃
-            doFQ(){
+            //进行追加修改
+            doModify(){
 
 
             },
@@ -608,10 +621,84 @@
                         this.xczrz1= res.data.shiyongri;
                         this.xczrz2= res.data.shiyongri;
                         this.xczrz3= res.data.shiyongri;
+
                     })
                     .catch((err) => {
                         console.log(err)
                     });
+            },
+
+            //显示取消保存提示
+            cancelEditVisible(){
+                this.cancelVisible =true;
+
+            },
+
+            //进行取消
+            doCancelVisible(){
+                this.cancelVisible =false;
+                this.editVisible =false;
+                this.excelData="";
+                this.shiyongri= "";
+                this.shiyongchangsuo=  "";
+                this.No=  "";
+                this.gsName=  "";
+                this.Tuhao=  "";
+                this.CODE=  "";
+                this.gssgqj=  "";
+                this.bzgs=  "";
+                this.sh1= "";
+                this.sh2= "";
+                this.sh3= "";
+                this.sh4= "";
+                this.ck1= "";
+                this.ck2= "";
+                this.ck3= "";
+                this.xczrz1= "";
+                this.xczrz2= "";
+                this.xczrz3= "";
+                this.page="";
+            },
+
+            //保存数据
+            doSaveData(){
+                axios.post(" " + url + "/wuliao/tuodanjinwuUpdate",
+                    {
+                        "id": this.id,
+                        "details":this.excelData,
+                        "shiyongri":this.shiyongri,
+                        "shiyongchangsuo":this.shiyongchangsuo,
+                        "shipcode":this.No,
+                        "gsName":this.gsName,
+                        "tuhao":this.Tuhao,
+                        "CODE":this.CODE,
+                        "gssgqj":this.gssgqj,
+                        "bzgs":this.bzgs,
+                        "sh1":this.sh1,
+                        "sh2":this.sh2,
+                        "sh3":this.sh3,
+                        "sh4":this.sh4,
+                        "ck1":this.ck1,
+                        "ck2":this.ck2,
+                        "ck3":this.ck3,
+                        "xczrz1":this.xczrz1,
+                        "xczrz2":this.xczrz2,
+                        "xczrz3":this.xczrz3,
+                    }
+                )
+                    .then((res) => {
+                        if (res.data.state === "1") {
+                            this.editVisible = false;
+                            this.$message.success(`修改成功`);
+                            this.loadingShowData(this.workStation)
+                        }
+                        else {
+                            this.$message.warning(`新增失败`);
+                        }
+                    })
+                    .catch((err) => {
+                        console.log(err)
+                    })
             },
 
             // 保存编辑
