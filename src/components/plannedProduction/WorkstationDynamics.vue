@@ -37,8 +37,8 @@
                        <div class="tableDiv" v-for="(item,index) in tableData">
                            <div class="tableDivTop">{{item.workStation}}</div>
                            <div class="tableDivBottom">
-                               <div class="tableTemplate" v-for="(item,index) in item.table" @click="showModal">
-                                   <div class="tableTemplate-title">{{item.title}}</div>
+                               <div class="tableTemplate" v-for="(item,index) in item.table">
+                                   <div class="tableTemplate-title" @click="showModal">{{item.title}} </div>
                                    <div class="tableTemplate-number">{{item.number}}</div>
                                    <div class="tableTemplate-jd">{{item.jd}}</div>
                                </div>
@@ -48,10 +48,20 @@
                </div>
            </div>
         </div>
-
         <!--新增弹出框 -->
-        <el-dialog title="新增按钮" :visible.sync="addVisible" width="80%">
-
+        <el-dialog title="工位列表" :visible.sync="excelVisible" width="100%"  :fullscreen="true" :center="true">
+            <el-table
+                class="tb-edit"
+                :data="tables"
+                :header-cell-style="{background:'#A1D0FC',color:'rgba(0, 0, 0, 0.8)',fontSize:'14px'}"
+                border
+                height="600"
+                highlight-current-row
+                style="width: 98%;margin: auto">
+                <template v-for="(col ,index) in cols">
+                    <el-table-column align="center" :prop="col.prop" :label="col.label"></el-table-column>
+                </template>
+            </el-table>
         </el-dialog>
     </div>
 </template>
@@ -67,7 +77,7 @@
                 tableData:[],
                 batch: "",
                 batchOptions: [],
-                addVisible:false
+                excelVisible:false
             }
         },
         components: {},
@@ -111,7 +121,7 @@
             },
 
 
-            doSearch(){
+            doSearch() {
                 if (this.batch) {
                     this.loadingShowData(this.batch)
                 }
@@ -119,16 +129,28 @@
                     this.message = "查询批次不能为空";
                     this.HideModal = false;
                     const that = this;
+
                     function a() {
                         that.message = "";
                         that.HideModal = true;
                     }
+
                     setTimeout(a, 2000);
                 }
             },
-            showModal(){
 
-                alert("hahah")
+
+            showModal() {
+                this.excelVisible = true;
+                let that = this;
+                axios.all([
+                    axios.post(" " + url + "/sys/showTableTitle", {"name": "gwdtbt"}),
+                    axios.post(" " + url + "/wuliao/tuodanjinwuList", {"time": ""})
+                ])
+                    .then(axios.spread(function (title, table) {
+                        that.cols = title.data;
+                        that.tableData = table.data;
+                    }));
             }
 
 
