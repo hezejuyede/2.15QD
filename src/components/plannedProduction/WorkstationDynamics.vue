@@ -129,12 +129,10 @@
                     this.message = "查询批次不能为空";
                     this.HideModal = false;
                     const that = this;
-
                     function a() {
                         that.message = "";
                         that.HideModal = true;
                     }
-
                     setTimeout(a, 2000);
                 }
             },
@@ -152,12 +150,6 @@
                         that.tableData = table.data;
                     }));
             }
-
-
-
-
-
-
         }
     }
 </script>
