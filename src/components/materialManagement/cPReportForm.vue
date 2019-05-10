@@ -12,7 +12,7 @@
                     <label style="margin-right: 10px">
                         <span>智能检索储品金物</span>
                         <span>:</span>
-                        <el-input v-model="select_word" placeholder="智能检索储品金物"></el-input>
+                        <el-input v-model="select_word" placeholder="智能检索储品金物" class="handle-input mr10"></el-input>
                     </label>
                     <label style="margin-right: 10px;margin-left: 10px">
                         <span>选择批次</span>
@@ -35,14 +35,13 @@
                     <el-button type="primary" icon="delete" class="handle-del mr10" @click="doSearch">查询报表</el-button>
                 </div>
                 <div class="">
-                    <el-table
-                        class="tb-edit"
-                        :data="tables"
-                        :header-cell-style="{background:'#A1D0FC',color:'rgba(0, 0, 0, 0.8)',fontSize:'20px'}"
-                        border
-                        height="450"
-                        highlight-current-row
-                        style="width: 98%;margin: auto">
+                    <el-table class="tb-edit"
+                              :data="tables"
+                              :header-cell-style="{background:'#A1D0FC',color:'rgba(0, 0, 0, 0.8)',fontSize:'20px'}"
+                              border
+                              height="450"
+                              highlight-current-row
+                              style="width: 98%;margin: auto">
                         <template v-for="(col ,index) in cols">
                             <el-table-column align="center" :prop="col.prop" :label="col.label"></el-table-column>
                         </template>
@@ -144,12 +143,10 @@
                     this.message = "查询批次不能为空";
                     this.HideModal = false;
                     const that = this;
-
                     function a() {
                         that.message = "";
                         that.HideModal = true;
                     }
-
                     setTimeout(a, 2000);
                 }
 

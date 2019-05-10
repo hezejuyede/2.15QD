@@ -12,25 +12,18 @@
                     <label style="margin-right: 10px">
                         <span>智能检索托单金物</span>
                         <span>:</span>
-                        <el-input v-model="select_word" placeholder="智能检索托单金物"></el-input>
+                        <el-input v-model="select_word" placeholder="智能检索托单金物" class="handle-input mr10"></el-input>
                     </label>
                     <label style="margin-right: 10px;margin-left: 10px">
-                        <span>选择批次</span>
+                        <span>选择查询时间</span>
                         <span>:</span>
-                        <el-select
-                            v-model="batch"
-                            clearable
-                            filterable
-                            allow-create
-                            default-first-option
-                            placeholder="请选择批次">
-                            <el-option
-                                v-for="item in batchOptions"
-                                :key="item.id"
-                                :label="item.name"
-                                :value="item.id">
-                            </el-option>
-                        </el-select>
+                        <el-date-picker
+                            v-model="examineTime"
+                            type="daterange"
+                            start-placeholder="开始日期"
+                            end-placeholder="结束日期"
+                            value-format="yyyy-MM-dd">
+                        </el-date-picker>
                     </label>
                     <el-button type="primary" icon="delete" class="handle-del mr10" @click="doSearch">查询报表</el-button>
                 </div>
@@ -48,6 +41,7 @@
                     </el-table>
                 </div>
             </div>
+
             <Modal :msg="message"
                    :isHideModal="HideModal"></Modal>
         </div>
@@ -57,6 +51,7 @@
     import axios from 'axios'
     import url from '../../assets/js/URL'
     import Modal from '../../common/modal'
+    import {getNowTime} from '../../assets/js/api'
 
     export default {
         name: 'WorkingProcedure',
@@ -72,6 +67,7 @@
                 batchOptions: [],
 
                 select_word: '',
+                examineTime: "",
 
 
             }
@@ -107,6 +103,13 @@
                     this.$router.push("/")
                 }
                 else {
+                    let time = getNowTime();
+                    let times = [];
+                    for (let i = 0; i < 2; i++) {
+                        times.push(time)
+                    }
+                    this.examineTime = times;
+
                     let that = this;
                     axios.all([
                         axios.post(" " + url + "/sys/getPiciList"),
@@ -142,12 +145,10 @@
                     this.message = "查询批次不能为空";
                     this.HideModal = false;
                     const that = this;
-
                     function a() {
                         that.message = "";
                         that.HideModal = true;
                     }
-
                     setTimeout(a, 2000);
                 }
 
