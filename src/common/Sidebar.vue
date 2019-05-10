@@ -40,7 +40,7 @@
                 collapse: false,
                 items: [
                     {
-                        icon: 'el-icon-document',
+                        icon: 'el-icon-s-home',
                         index: '/',
                         title: '系统首页'
                     },
@@ -50,7 +50,7 @@
                         title: '生产管理'
                     },
                     {
-                        icon: 'el-icon-lx-cartfill',
+                        icon: 'el-icon-shopping-cart-1',
                         index: 'MaterialManagement',
                         title: '物料管理'
                     },
