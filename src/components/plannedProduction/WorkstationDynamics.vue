@@ -38,7 +38,7 @@
                             <div class="tableDivTop">{{item.workStation}}</div>
                             <div class="tableDivBottom">
                                 <div class="tableTemplate" v-for="(item,index) in item.table">
-                                    <div class="tableTemplate-title" @click="showModal(index,item.title)">{{item.title}}</div>
+                                    <div class="tableTemplate-title" @click="showModal(index,item.stationid)">{{item.title}}</div>
                                     <div class="tableTemplate-number">{{item.number}}</div>
                                     <div class="tableTemplate-jd">{{item.jd}}</div>
                                 </div>
@@ -145,20 +145,20 @@
 
 
             //显示表格
-            showModal(index,title) {
+            showModal(index,stationid) {
                 let that = this;
                 axios.all([
                     axios.post(" " + url + "/sys/showTableTitle", {"name": "gwdtbt"}),
                     axios.post(" " + url + "/dynamic/getStationDynamicListDetail", {
                         "pici": this.batch,
-                        "gongxu": title,
+                        "stationid": stationid,
                         "type": index+1
                     })
                 ])
                     .then(axios.spread(function (title, table) {
                         that.excelVisible = true;
                         that.cols = title.data;
-                        that.tableData = table.data;
+                        that.tableData2 = table.data.data;
                     }));
             },
 
