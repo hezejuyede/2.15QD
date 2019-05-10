@@ -90,13 +90,13 @@ import pipeOutgoing from '../components/materialManagement/pipeOutgoing.vue'
 
 
 //储品金物报表
-import cPWreportForm from '../components/materialManagement/cPWreportForm.vue'
+import cPReportForm from '../components/materialManagement/cPReportForm.vue'
 
 //托单金物报表
-import tDJWreportForm from '../components/materialManagement/tDJWreportForm.vue'
+import tDJWReportForm from '../components/materialManagement/tDJWReportForm.vue'
 
 //注文金物报表
-import zWWreportForm from '../components/materialManagement/zWWreportForm.vue'
+import zWReportForm from '../components/materialManagement/zWReportForm.vue'
 
 
 
@@ -310,18 +310,18 @@ export default new Router({
                             meta: {title: '管材出库'}
                         },
                         {
-                            path: '/cPWreportForm',
-                            component: cPWreportForm,
+                            path: '/cPReportForm',
+                            component: cPReportForm,
                             meta: {title: '储品金物报表'}
                         },
                         {
-                            path: '/tDJWreportForm',
-                            component: tDJWreportForm,
+                            path: '/tDJWReportForm',
+                            component: tDJWReportForm,
                             meta: {title: '托单金物报表'}
                         },
                         {
-                            path: '/zWWreportForm',
-                            component: zWWreportForm,
+                            path: '/zWReportForm',
+                            component: zWReportForm,
                             meta: {title: '注文金物报表'}
                         }
                     ]
