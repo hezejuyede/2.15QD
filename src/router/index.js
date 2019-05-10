@@ -88,6 +88,19 @@ import cpMetalSearch from '../components/materialManagement/cpMetalSearch.vue'
 import pipeOutgoing from '../components/materialManagement/pipeOutgoing.vue'
 
 
+
+//储品金物报表
+import cPWreportForm from '../components/materialManagement/cPWreportForm.vue'
+
+//托单金物报表
+import tDJWreportForm from '../components/materialManagement/tDJWreportForm.vue'
+
+//注文金物报表
+import zWWreportForm from '../components/materialManagement/zWWreportForm.vue'
+
+
+
+
 import ProductionMonitoring from '../components/productionMonitoring/productionMonitoring'
 
 import DigitalSignage from '../components/productionMonitoring/DigitalSignage'
@@ -280,24 +293,36 @@ export default new Router({
                             path: '/tdApproval',
                             component: tdApproval,
                             meta: {title: '脱单金物审批'}
-                        }
-                        ,
+                        },
                         {
                             path: '/zwMetalSearch',
                             component: zwMetalSearch,
                             meta: {title: '注文金物查询'}
-                        }
-                        ,
+                        },
                         {
                             path: '/cpMetalSearch',
                             component: cpMetalSearch,
                             meta: {title: '储品金物查询'}
-                        }
-                        ,
+                        },
                         {
                             path: '/pipeOutgoing',
                             component: pipeOutgoing,
                             meta: {title: '管材出库'}
+                        },
+                        {
+                            path: '/cPWreportForm',
+                            component: cPWreportForm,
+                            meta: {title: '储品金物报表'}
+                        },
+                        {
+                            path: '/tDJWreportForm',
+                            component: tDJWreportForm,
+                            meta: {title: '托单金物报表'}
+                        },
+                        {
+                            path: '/zWWreportForm',
+                            component: zWWreportForm,
+                            meta: {title: '注文金物报表'}
                         }
                     ]
                 },
