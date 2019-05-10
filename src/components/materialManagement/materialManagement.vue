@@ -182,17 +182,17 @@
                             {
                                 label: '托单金物报表',
                                 index: "8-2",
-                                url: "/404"
+                                url: "/tDJWreportForm"
                             },
                             {
                                 label: '注文金物报表',
                                 index: "8-3",
-                                url: "/404"
+                                url: "/zWWreportForm"
                             },
                             {
                                 label: '储品金物报表',
                                 index: "8-4",
-                                url: "/404"
+                                url: "/cPWreportForm"
                             },
                             {
                                 label: '未引当报表',
