@@ -10,9 +10,9 @@
             <div class="container">
                 <div class="handle-box">
                     <label style="margin-right: 10px">
-                        <span>智能检索缺件</span>
+                        <span>智能检索托单金物</span>
                         <span>:</span>
-                        <el-input v-model="select_word" placeholder="智能检索缺件" class="handle-input mr10"></el-input>
+                        <el-input v-model="select_word" placeholder="智能检索托单金物"></el-input>
                     </label>
                     <label style="margin-right: 10px;margin-left: 10px">
                         <span>选择批次</span>
@@ -32,7 +32,7 @@
                             </el-option>
                         </el-select>
                     </label>
-                    <el-button type="primary" icon="delete" class="handle-del mr10" @click="doSearch">缺件查询</el-button>
+                    <el-button type="primary" icon="delete" class="handle-del mr10" @click="doSearch">查询报表</el-button>
                 </div>
                 <div class="">
                     <el-table class="tb-edit"
@@ -48,7 +48,6 @@
                     </el-table>
                 </div>
             </div>
-
             <Modal :msg="message"
                    :isHideModal="HideModal"></Modal>
         </div>
@@ -143,10 +142,12 @@
                     this.message = "查询批次不能为空";
                     this.HideModal = false;
                     const that = this;
+
                     function a() {
                         that.message = "";
                         that.HideModal = true;
                     }
+
                     setTimeout(a, 2000);
                 }
 
