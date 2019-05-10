@@ -28,31 +28,32 @@
                 </label>
                 <el-button type="primary" icon="delete" class="handle-del mr10" @click="doSearch">查询</el-button>
             </div>
-           <div class="contentDiv">
-               <div class="productionContentTable clearfix">
-                   <div class="productionContentTableLeft fl">
-                       {{batch}}
-                   </div>
-                   <div class="productionContentTableRight fr">
-                       <div class="tableDiv" v-for="(item,index) in tableData">
-                           <div class="tableDivTop">{{item.workStation}}</div>
-                           <div class="tableDivBottom">
-                               <div class="tableTemplate" v-for="(item,index) in item.table">
-                                   <div class="tableTemplate-title" @click="showModal">{{item.title}} </div>
-                                   <div class="tableTemplate-number">{{item.number}}</div>
-                                   <div class="tableTemplate-jd">{{item.jd}}</div>
-                               </div>
-                           </div>
-                       </div>
-                   </div>
-               </div>
-           </div>
+            <div class="contentDiv">
+                <div class="productionContentTable clearfix">
+                    <div class="productionContentTableLeft fl">
+                        {{batch}}
+                    </div>
+                    <div class="productionContentTableRight fr">
+                        <div class="tableDiv" v-for="(item,index) in tableData">
+                            <div class="tableDivTop">{{item.workStation}}</div>
+                            <div class="tableDivBottom">
+                                <div class="tableTemplate" v-for="(item,index) in item.table">
+                                    <div class="tableTemplate-title" @click="showModal">{{item.title}}</div>
+                                    <div class="tableTemplate-number">{{item.number}}</div>
+                                    <div class="tableTemplate-jd">{{item.jd}}</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
         <!--新增弹出框 -->
-        <el-dialog title="工位列表" :visible.sync="excelVisible" width="100%"  :fullscreen="true" :center="true">
+        <el-dialog title="工位列表" :visible.sync="excelVisible" width="100%" :fullscreen="true" :center="true"
+                   @close='closeDialog'>
             <el-table
                 class="tb-edit"
-                :data="tables"
+                :data="tableData2"
                 :header-cell-style="{background:'#A1D0FC',color:'rgba(0, 0, 0, 0.8)',fontSize:'14px'}"
                 border
                 height="600"
@@ -74,10 +75,14 @@
         name: 'FactoryCalendar',
         data() {
             return {
-                tableData:[],
+                tableData: [],
+
+
                 batch: "",
                 batchOptions: [],
-                excelVisible:false
+                excelVisible: false,
+                cols: [],
+                tableData2: [],
             }
         },
         components: {},
@@ -111,7 +116,7 @@
 
             //瞬间加载数据
             loadingShowData(data) {
-                axios.post(" " + url + "/dynamic/getStationDynamicList",{"pici":data})
+                axios.post(" " + url + "/dynamic/getStationDynamicList", {"pici": data})
                     .then((res) => {
                         this.tableData = res.data
                     })
@@ -129,10 +134,12 @@
                     this.message = "查询批次不能为空";
                     this.HideModal = false;
                     const that = this;
+
                     function a() {
                         that.message = "";
                         that.HideModal = true;
                     }
+
                     setTimeout(a, 2000);
                 }
             },
@@ -149,17 +156,22 @@
                         that.cols = title.data;
                         that.tableData = table.data;
                     }));
+            },
+
+            closeDialog() {
+                this.loadingShowData(this.batch)
             }
         }
     }
 </script>
 <style scoped lang="less" rel="stylesheet/less">
     @import "../../assets/less/base";
-    .production{
+
+    .production {
         width: 100%;
         height: 100%;
         background-color: @color-white;
-        .crumbs{
+        .crumbs {
             height: 50px;
             padding-top: 20px;
             padding-left: 20px;
@@ -179,32 +191,33 @@
                     height: 30px;
                 }
             }
-            .contentDiv{
-               height: 550px;
+            .contentDiv {
+                height: 550px;
                 overflow: auto;
-            };
+            }
+        ;
 
             .productionContentTable {
-                height: 244px;
-                background-color: @color-F0;
+                height: 450px;
                 line-height: 244px;
                 margin-top: 10px;
-                .productionContentTableLeft{
+                .productionContentTableLeft {
                     width: 10%;
-                    height:244px;
-                    line-height: 244px;
+                    height: 450px;
+                    line-height: 450px;
                     text-align: center;
                     font-size: @font-size-large;
+
                 }
-                .productionContentTableRight{
+                .productionContentTableRight {
                     width: 90%;
                     .tableDiv {
-                        width: 16%;
+                        width: 24%;
                         float: left;
                         border-left: 1px solid @color-background-d;
                         border-top: 1px solid @color-background-d;
                         border-bottom: 1px solid @color-background-d;
-                        margin: 10px  0.25%;
+                        margin: 10px 0.25%;
                         .tableDivTop {
                             height: 20px;
                             display: flex;
@@ -213,7 +226,6 @@
                             border-right: 1px solid @color-background-d;
                             font-size: @font-size-large;
                             color: @color-background-dd;
-
                         }
                         .tableDivBottom {
                             display: flex;
@@ -240,8 +252,7 @@
                                 .tableTemplate-title {
                                     width: 100%;
                                     height: 33%;
-                                    background-color: @color-bg-lv;
-                                    color: @color-white;
+                                    background-color: @color-F0;
                                     border-right: 1px solid @color-background-d;
                                     display: flex;
                                     align-items: center;
@@ -263,13 +274,9 @@
 
             }
 
-
-
-
         }
 
     }
-
 
 
 </style>
