@@ -37,10 +37,10 @@
                         <div class="tableDiv" v-for="(item,index) in tableData">
                             <div class="tableDivTop">{{item.workStation}}</div>
                             <div class="tableDivBottom">
-                                <div class="tableTemplate" v-for="(item,index) in item.table">
-                                    <div class="tableTemplate-title" @click="showModal(index,item.stationid)">{{item.title}}</div>
-                                    <div class="tableTemplate-number">{{item.number}}</div>
-                                    <div class="tableTemplate-jd">{{item.jd}}</div>
+                                <div class="tableTemplate" v-for="(item1,index) in item.table"  @click="showModal(index,item1.stationid)">
+                                    <div class="tableTemplate-title">{{item1.title}}</div>
+                                    <div class="tableTemplate-number">{{item1.number}}</div>
+                                    <div class="tableTemplate-jd">{{item1.jd}}</div>
                                 </div>
                             </div>
                         </div>
@@ -224,7 +224,7 @@
                         border-bottom: 1px solid @color-background-d;
                         margin: 10px 0.25%;
                         .tableDivTop {
-                            height: 20px;
+                            height:50px;
                             display: flex;
                             align-items: center;
                             justify-content: center;
