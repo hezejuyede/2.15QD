@@ -107,6 +107,17 @@
                                     }
                                     setTimeout(c, 2000);
                                 }
+                                else if (res.data === "-2") {
+                                    this.message = "权限不足";
+                                    this.HideModal = false;
+                                    const that = this;
+                                    function d() {
+                                        that.message = "";
+                                        that.HideModal = true;
+                                        that.password = '';
+                                    }
+                                    setTimeout(d, 2000);
+                                }
                             })
                             .catch((err) => {
                                 console.log(err)
