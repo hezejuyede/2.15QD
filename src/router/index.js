@@ -78,6 +78,9 @@ import ProductionOfGoldSheets from '../components/materialManagement/productionO
 import tdApproval from '../components/materialManagement/tdApproval.vue'
 
 
+//注文金物缺件登记
+import zwMissingRegistration from '../components/materialManagement/zwMissingRegistration.vue'
+
 //注文金物查询
 import zwMetalSearch from '../components/materialManagement/zwMetalSearch.vue'
 
@@ -293,6 +296,11 @@ export default new Router({
                             path: '/tdApproval',
                             component: tdApproval,
                             meta: {title: '脱单金物审批'}
+                        },
+                        {
+                            path: '/zwMissingRegistration',
+                            component:zwMissingRegistration,
+                            meta: {title: '注文金物缺件登记'}
                         },
                         {
                             path: '/zwMetalSearch',

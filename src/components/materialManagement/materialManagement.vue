@@ -28,191 +28,175 @@
             return {
                 num:0,
                 navBarData: [
-                    /*{
-                        label: '物料数据',
+                    {
+                        label: '托单金物',
                         index: "1",
                         children: [
                             {
-                                label: '物料数据导入',
-                                index: "1-1",
-                                url: "/404"
-                            },
-                            {
-                                label: '物料数据管理',
-                                index: "1-2",
-                                url: "/404"
-                            }
-                        ]
-                    },*/
-                    {
-                        label: '托单金物',
-                        index: "2",
-                        children: [
-                            {
                                 label: '托单制作',
-                                index: "2-1",
+                                index: "1-1",
                                 url: "/ProductionOfGoldSheets"
                             },
                             {
                                 label: '托单审批',
-                                index: "2-2",
+                                index: "1-2",
                                 url: "/tdApproval"
                             },
                             {
                                 label: '出库记录（托单金物）',
-                                index: "2-3",
+                                index: "1-3",
                                 url: "/404"
                             },
                             {
                                 label: '配送跟踪（托单金物）',
-                                index: "2-4",
+                                index: "1-4",
                                 url: "/404"
                             },
                             {
                                 label: '出库与配送查询（托单金物）',
-                                index: "2-5",
+                                index: "1-5",
                                 url: "/404"
                             }
                         ]
                     },
                     {
                         label: '注文金物',
-                        index: "3",
+                        index: "2",
                         children: [
                             {
                                 label: '缺件登记（注文金物）',
-                                index: "3-1",
-                                url: "/404"
+                                index: "2-1",
+                                url: "/zwMissingRegistration"
                             },
                             {
                                 label: '缺件跟踪（注文金物）',
-                                index: "3-2",
+                                index: "2-2",
                                 url: "/404"
                             },
                             {
                                 label: '缺件查询（注文金物）',
-                                index: "3-3",
+                                index: "2-3",
                                 url: "/zwMetalSearch"
                             }
                         ]
                     },
                     {
                         label: '储品金物',
-                        index: "4",
+                        index: "3",
                         children: [
                             {
                                 label: '缺件登记（储品金物）',
-                                index: "4-1",
+                                index: "3-1",
                                 url: "/404"
                             },
                             {
                                 label: '缺件跟踪（储品金物）',
-                                index: "4-2",
+                                index: "3-2",
                                 url: "/404"
                             },
                             {
                                 label: '缺件查询（储品金物）',
-                                index: "4-3",
+                                index: "3-3",
                                 url: "/cpMetalSearch"
                             }
                         ]
                     },
                     {
                         label: '管材出库',
-                        index: "5",
+                        index: "4",
                         children: [
                             {
                                 label: '管吊单查询',
-                                index: "5-1",
+                                index: "4-1",
                                 url: "/pipeOutgoing"
                             }
                         ]
                     },
                     {
                         label: '未引当跟踪',
-                        index: "6",
+                        index: "5",
                         children: [
                             {
                                 label: '注文品不足',
-                                index: "6-1",
+                                index: "5-1",
                                 url: "/404"
                             },
                             {
                                 label: '储品不足',
-                                index: "6-2",
+                                index: "5-2",
                                 url: "/404"
                             },
                             {
                                 label: '注文金物未交货',
-                                index: "6-3",
+                                index: "5-3",
                                 url: "/404"
                             },
                             {
                                 label: '未引当查询与统计',
-                                index: "4-3",
+                                index: "5-4",
                                 url: "/404"
                             }
                         ]
                     },
                     {
                         label: '工位物料管理',
-                        index: "7",
+                        index: "6",
                         children: [
                             {
                                 label: '加工线工位物料管理',
-                                index: "7-1",
+                                index: "6-1",
                                 url: "/404"
                             },
                             {
                                 label: '金物担当物料管理',
-                                index: "7-2",
+                                index: "6-2",
                                 url: "/404"
                             }
                         ]
                     },
                     {
                         label: '物料报表',
-                        index: "8",
+                        index: "7",
                         children: [
                             {
                                 label: '物料数据报表',
-                                index: "8-1",
+                                index: "7-1",
                                 url: "/404"
                             },
                             {
                                 label: '托单金物报表',
-                                index: "8-2",
+                                index: "7-2",
                                 url: "/tDJWReportForm"
                             },
                             {
                                 label: '注文金物报表',
-                                index: "8-3",
+                                index: "7-3",
                                 url: "/zWReportForm"
                             },
                             {
                                 label: '储品金物报表',
-                                index: "8-4",
+                                index: "7-4",
                                 url: "/cPReportForm"
                             },
                             {
                                 label: '未引当报表',
-                                index: "8-5",
+                                index: "7-5",
                                 url: "/404"
                             },
                             {
                                 label: '工位物料报表',
-                                index: "8-6",
+                                index: "7-6",
                                 url: "/404"
                             }
                         ]
                     },
                     {
                         label: '物料监控',
-                        index: "9",
+                        index: "8",
                         children: [
                             {
                                 label: '物料监控图',
-                                index: "9-1",
+                                index: "8-1",
                                 url: "/404"
                             }
                         ]
