@@ -9,30 +9,32 @@
         <div class="template-content">
             <div class="container">
                 <div class="handle-box">
-                    <label style="margin-right: 10px">
-                        <span>智能检索缺件</span>
+                    <label style="margin-right: 5px">
+                        <span>智能检索托单金物出库</span>
                         <span>:</span>
-                        <el-input v-model="select_word" placeholder="智能检索缺件" class="handle-input mr10"></el-input>
+                        <el-input v-model="select_word" placeholder="智能托单金物出库"  style="width: 150px"  class="handle-input mr10"></el-input>
                     </label>
-                    <label style="margin-right: 10px;margin-left: 10px">
-                        <span>选择批次</span>
+                    <label style="margin-right: 5px;margin-left: 5px">
+                        <span>船号</span>
                         <span>:</span>
-                        <el-select
-                            v-model="batch"
-                            clearable
-                            filterable
-                            allow-create
-                            default-first-option
-                            placeholder="请选择批次">
-                            <el-option
-                                v-for="item in batchOptions"
-                                :key="item.id"
-                                :label="item.name"
-                                :value="item.id">
-                            </el-option>
-                        </el-select>
+                        <el-input v-model="chunhao" placeholder="船号"  style="width: 100px"  class="handle-input mr10"></el-input>
                     </label>
-                    <el-button type="primary" icon="delete" class="handle-del mr10" @click="doSearch">缺件查询</el-button>
+                    <label style="margin-right: 5px;margin-left: 5px">
+                        <span>托单号</span>
+                        <span>:</span>
+                        <el-input v-model="tuodanhao" placeholder="托单号"  style="width: 100px"  class="handle-input mr10"></el-input>
+                    </label>
+                    <label style="margin-right: 5px;margin-left: 5px">
+                        <span>行番</span>
+                        <span>:</span>
+                        <el-input v-model="hangfan" placeholder="行番"  style="width: 100px"  class="handle-input mr10"></el-input>
+                    </label>
+                    <label style="margin-right: 5px;margin-left: 5px">
+                        <span>管理区分</span>
+                        <span>:</span>
+                        <el-input v-model="glqf" placeholder="管理区分"  style="width: 100px"  class="handle-input mr10"></el-input>
+                    </label>
+                    <el-button type="primary" icon="delete" class="handle-del mr10" @click="doSearch">出库查询</el-button>
                 </div>
                 <div class="">
                     <el-table class="tb-edit"
@@ -74,6 +76,10 @@
 
                 select_word: '',
 
+                chunhao:"",
+                tuodanhao:"",
+                hangfan:"",
+                glqf:""
 
             }
         },
@@ -108,24 +114,16 @@
                     this.$router.push("/")
                 }
                 else {
-                    let that = this;
-                    axios.all([
-                        axios.post(" " + url + "/sys/getPiciList"),
-                    ])
-                        .then(axios.spread(function (select) {
-                            that.batchOptions = select.data;
-                            that.batch = select.data[0].id;
-                            that.loadingShowData(that.batch);
-                        }));
+                    this.loadingShowData( this.chunhao, this.tuodanhao, this.hangfan, this.glqf);
                 }
             },
 
             //瞬间加载数据
-            loadingShowData(data) {
+            loadingShowData(data1,data2,data3,data4,) {
                 let that = this;
                 axios.all([
                     axios.post(" " + url + "/sys/showTableTitle", {"name": "zwjwcx"}),
-                    axios.post(" " + url + "/wuliao/jinwuZhuwenpinList", {"time": data})
+                    axios.post(" " + url + "/wuliao/jinwuZhuwenpinList", {"chunhao": data1,"tuodanhao": data2,"hangfan": data3,"glqf": data4})
                 ])
                     .then(axios.spread(function (title, table) {
                         that.cols = title.data;
@@ -136,20 +134,7 @@
 
             //根据时间查询
             doSearch() {
-                if (this.batch) {
-                    this.loadingShowData(this.batch)
-                }
-                else {
-                    this.message = "查询批次不能为空";
-                    this.HideModal = false;
-                    const that = this;
-                    function a() {
-                        that.message = "";
-                        that.HideModal = true;
-                    }
-                    setTimeout(a, 2000);
-                }
-
+                this.loadingShowData( this.chunhao, this.tuodanhao, this.hangfan, this.glqf);
             }
 
         }
