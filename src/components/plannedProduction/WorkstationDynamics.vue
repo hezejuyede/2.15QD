@@ -39,7 +39,7 @@
                             <div class="tableDivBottom">
                                 <div class="tableTemplate" v-for="(item1,index) in item.table"  >
                                     <div class="tableTemplate-title">{{item1.title}}</div>
-                                    <div class="tableTemplate-number" ><div class="numberDiv" @click="showModal(index,item1.stationid)">{{item1.number}}</div></div>
+                                    <div class="tableTemplate-number" @click="showModal(index,item1.stationid)">{{item1.number}}</div>
                                     <div class="tableTemplate-jd">{{item1.jd}}</div>
                                 </div>
                             </div>
@@ -256,11 +256,7 @@
                                     display: flex;
                                     align-items: center;
                                     justify-content: center;
-                                    .numberDiv{
-                                        width: 100%;
-                                        height: 100%;
-                                        cursor: pointer;
-                                    }
+                                    cursor: pointer;
 
                                 }
                                 .tableTemplate-title {

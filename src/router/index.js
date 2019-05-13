@@ -77,6 +77,13 @@ import ProductionOfGoldSheets from '../components/materialManagement/productionO
 //托单金物审批
 import tdApproval from '../components/materialManagement/tdApproval.vue'
 
+//出库查询（托单金物）
+import tdjwOuOfStock from '../components/materialManagement/tdjwOuOfStock'
+
+//配送查询（托单金物）
+import tdjwDelivery from '../components/materialManagement/tdjwDelivery'
+
+
 
 //注文金物缺件登记
 import zwMissingRegistration from '../components/materialManagement/zwMissingRegistration.vue'
@@ -308,6 +315,16 @@ export default new Router({
                             path: '/tdApproval',
                             component: tdApproval,
                             meta: {title: '脱单金物审批'}
+                        },
+                        {
+                            path: '/tdjwOuOfStock',
+                            component: tdjwOuOfStock,
+                            meta: {title: '出库查询（托单金物）'}
+                        },
+                        {
+                            path: '/tdjwDelivery',
+                            component: tdjwDelivery,
+                            meta: {title: '配送查询（托单金物）'}
                         },
                         {
                             path: '/zwMissingRegistration',

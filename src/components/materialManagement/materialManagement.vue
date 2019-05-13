@@ -55,12 +55,12 @@
                             {
                                 label: '出库查询（托单金物）',
                                 index: "1-5",
-                                url: "/404"
+                                url: "/tdjwOuOfStock"
                             },
                             {
                                 label: '配送查询（托单金物）',
                                 index: "1-5",
-                                url: "/404"
+                                url: "/tdjwDelivery"
                             }
                         ]
                     },
