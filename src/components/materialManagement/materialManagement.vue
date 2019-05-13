@@ -69,13 +69,8 @@
                                 url: "/zwMissingRegistration"
                             },
                             {
-                                label: '缺件跟踪（注文金物）',
-                                index: "2-2",
-                                url: "/404"
-                            },
-                            {
                                 label: '缺件查询（注文金物）',
-                                index: "2-3",
+                                index: "2-2",
                                 url: "/zwMetalSearch"
                             }
                         ]
@@ -90,13 +85,8 @@
                                 url: "/404"
                             },
                             {
-                                label: '缺件跟踪（储品金物）',
-                                index: "3-2",
-                                url: "/404"
-                            },
-                            {
                                 label: '缺件查询（储品金物）',
-                                index: "3-3",
+                                index: "3-2",
                                 url: "/cpMetalSearch"
                             }
                         ]

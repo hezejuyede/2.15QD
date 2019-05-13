@@ -33,7 +33,7 @@
                         </el-select>
                     </label>
                     <el-button type="primary" @click="doSearch">查询注文金物</el-button>
-                    <el-button type="success" @click="doSearch">缺件记录</el-button>
+                    <el-button type="success" @click="showAdd">缺件记录</el-button>
                 </div>
                 <div class="">
                     <el-table class="tb-edit"
@@ -41,8 +41,14 @@
                               :header-cell-style="{background:'#A1D0FC',color:'rgba(0, 0, 0, 0.8)',fontSize:'20px'}"
                               border
                               height="450"
+                              @select-all="selectAll"
+                              @select="selectList"
                               highlight-current-row
                               style="width: 98%;margin: auto">
+                        <el-table-column
+                            type="selection"
+                            width="30">
+                        </el-table-column>
                         <template v-for="(col ,index) in cols">
                             <el-table-column align="center" :prop="col.prop" :label="col.label"></el-table-column>
                         </template>
@@ -53,6 +59,18 @@
             <Modal :msg="message"
                    :isHideModal="HideModal"></Modal>
         </div>
+        <!--新增弹出框 -->
+        <el-dialog title="缺件数量统计" :visible.sync="addVisible" width="40%">
+            <el-form ref="form"  label-width="100px">
+                <el-form-item label="缺件数量">
+                    <el-input v-model="qjNumber" type="number"></el-input>
+                </el-form-item>
+            </el-form>
+            <span slot="footer" class="dialog-footer">
+                <el-button @click="addVisible = false" style="height:30px;width:80px">取 消</el-button>
+                <el-button type="primary" @click="doAdd" style="height:30px;width:80px">确 定</el-button>
+            </span>
+        </el-dialog>
     </div>
 </template>
 <script type="text/ecmascript-6">
@@ -69,12 +87,12 @@
 
                 cols: [],
                 tableData: [],
-
+                listData: [],
                 batch: "",
                 batchOptions: [],
-
+                qjNumber: "",
                 select_word: '',
-
+                addVisible: false,
 
             }
         },
@@ -153,7 +171,85 @@
                     setTimeout(a, 2000);
                 }
 
-            }
+            },
+
+
+            //选择那个一个
+            selectList(val) {
+                if (val.length) {
+                    let data = [];
+                    for (let i = 0; i < val.length; i++) {
+                        let a = val[i].id;
+                        data.push(a)
+                    }
+                    this.listData = data;
+                }
+                else {
+                    this.listData=[];
+                }
+            },
+
+            //列表全部选择
+            selectAll(val) {
+                if (val.length) {
+                    let data = [];
+                    for (let i = 0; i < val.length; i++) {
+                        let a = val[i].id;
+                        data.push(a)
+                    }
+                    this.listData = data;
+                }
+                else {
+                    this.listData = [];
+                }
+            },
+
+            //显示新增
+            showAdd(){
+                if (this.listData.length) {
+                    this.addVisible = true;
+                }
+                else {
+                    this.message = "请勾选要登记的清单";
+                    this.HideModal = false;
+                    const that = this;
+
+                    function a() {
+                        that.message = "";
+                        that.HideModal = true;
+                    }
+
+                    setTimeout(a, 2000);
+                }
+            },
+
+            //进行新增
+            doAdd() {
+                if (this.qjNumber ) {
+                    axios.post(" " + url + "/padShow/buttonAdd",
+                        {
+                            "qjNumber": this.qjNumber,
+                        }
+                    )
+                        .then((res) => {
+                            if (res.data.state === "1") {
+                                this.$message.success(`登记成功`);
+                                this.addVisible = false;
+                                this.loadingShowData(this.workStation)
+
+                            }
+                            else {
+                                this.$message.warning(`登记失败`);
+                            }
+                        })
+                        .catch((err) => {
+                            console.log(err)
+                        })
+                }
+                else {
+                    this.$message.warning(`输入不能为空`);
+                }
+            },
 
         }
     }
