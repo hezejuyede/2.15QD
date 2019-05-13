@@ -196,7 +196,7 @@
         </el-dialog>
 
         <!--导入文件详情 -->
-        <el-dialog title="文件详情" :visible.sync="detailsVisible" width="90%">
+        <el-dialog title="文件详情" :visible.sync="detailsVisible" width="90%" @close='closeDialog'>
             <div class="container" style="height:470px;overflow:auto">
                 <el-table
                     v-loading="loading"
@@ -215,7 +215,7 @@
                     </template>
                 </el-table>
                 <div class="detailsBtn">
-                    <button @click="doExamine">通过</button>
+                    <button @click="doExamine" :disabled="gtBtn==='2'">通过</button>
                     <button @click="noExamine" style="background-color: #dd6161">不通过</button>
                 </div>
             </div>
@@ -280,6 +280,7 @@
 
                 status: "",
                 statusOptions: [],
+                gtBtn:"1"
             }
         },
         components: {Modal},
@@ -506,6 +507,8 @@
             //通过
             doExamine() {
                 this.loading = true;
+                this.gtBtn="2";
+
                 axios.post(" " + url + "/fileShenpi/updateStatus",
                     {
                         "id": this.listArr,
@@ -516,7 +519,7 @@
                         if (res.data === "1") {
                             this.loading = false;
                             this.$message.success('通过审核成功');
-
+                            this.gtBtn="1"
                             let that = this;
                             axios.all([
                                 axios.post(" " + url + "/sys/getPiciList"),
@@ -546,13 +549,20 @@
                             this.detailsVisible = false;
                         }
                         else if (res.data === "-1") {
+                            this.loading = false;
+
                             this.$message.warning(`传参错误`);
+                            this.gtBtn="1"
                         }
                         else if (res.data === "-2") {
+                            this.loading = false;
                             this.$message.warning(`已经通过审核，无需重复提交`);
+                            this.gtBtn="1"
                         }
                         else {
+                            this.loading = false;
                             this.$message.warning(`审核失败`);
+                            this.gtBtn="1"
                         }
                     })
                     .catch((err) => {
@@ -668,6 +678,10 @@
                 }
             },
 
+            // 关闭对话框后清空数据
+            closeDialog() {
+                this.listData = [];
+            },
             //页面加载
             loadingShow(){
                 let that = this;
