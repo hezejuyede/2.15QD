@@ -84,6 +84,10 @@ import zwMissingRegistration from '../components/materialManagement/zwMissingReg
 //注文金物查询
 import zwMetalSearch from '../components/materialManagement/zwMetalSearch.vue'
 
+
+//储品金物缺件登记
+import cPMissingRegistration from '../components/materialManagement/cPMissingRegistration'
+
 //储品金物查询
 import cpMetalSearch from '../components/materialManagement/cpMetalSearch.vue'
 
@@ -100,6 +104,14 @@ import tDJWReportForm from '../components/materialManagement/tDJWReportForm.vue'
 
 //注文金物报表
 import zWReportForm from '../components/materialManagement/zwReportForm.vue'
+
+//物料报表
+import wlReportForm from '../components/materialManagement/wlReportForm'
+//为引当报表
+import wydReportForm from '../components/materialManagement/wydReportForm'
+
+//工位报表
+import gwReportForm from '../components/materialManagement/gwReportForm'
 
 
 
@@ -308,6 +320,11 @@ export default new Router({
                             meta: {title: '注文金物查询'}
                         },
                         {
+                            path: '/cPMissingRegistration',
+                            component:cPMissingRegistration,
+                            meta: {title: '储品金物缺件登记'}
+                        },
+                        {
                             path: '/cpMetalSearch',
                             component: cpMetalSearch,
                             meta: {title: '储品金物查询'}
@@ -316,6 +333,11 @@ export default new Router({
                             path: '/pipeOutgoing',
                             component: pipeOutgoing,
                             meta: {title: '管材出库'}
+                        },
+                        {
+                            path: '/wlReportForm',
+                            component: wlReportForm,
+                            meta: {title: '物料数据报表'}
                         },
                         {
                             path: '/cPReportForm',
@@ -331,6 +353,16 @@ export default new Router({
                             path: '/zWReportForm',
                             component: zWReportForm,
                             meta: {title: '注文金物报表'}
+                        },
+                        {
+                            path: '/wydReportForm',
+                            component: wydReportForm,
+                            meta: {title: '未引当报表'}
+                        },
+                        {
+                            path: '/gwReportForm',
+                            component: gwReportForm,
+                            meta: {title: '工位物料报表'}
                         }
                     ]
                 },

@@ -82,7 +82,7 @@
                             {
                                 label: '缺件登记（储品金物）',
                                 index: "3-1",
-                                url: "/404"
+                                url: "/cPMissingRegistration"
                             },
                             {
                                 label: '缺件查询（储品金物）',
@@ -151,7 +151,7 @@
                             {
                                 label: '物料数据报表',
                                 index: "7-1",
-                                url: "/404"
+                                url: "/wlReportForm"
                             },
                             {
                                 label: '托单金物报表',
@@ -171,12 +171,12 @@
                             {
                                 label: '未引当报表',
                                 index: "7-5",
-                                url: "/404"
+                                url: "/wydReportForm"
                             },
                             {
                                 label: '工位物料报表',
                                 index: "7-6",
-                                url: "/404"
+                                url: "/gwReportForm"
                             }
                         ]
                     },
