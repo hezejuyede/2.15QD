@@ -79,7 +79,7 @@ import tdApproval from '../components/materialManagement/tdApproval.vue'
 
 
 //注文金物缺件登记
-import zwMissingRegistration from '../components/materialManagement/zWMissingRegistration.vue'
+import zwMissingRegistration from '../components/materialManagement/zwMissingRegistration.vue'
 
 //注文金物查询
 import zwMetalSearch from '../components/materialManagement/zwMetalSearch.vue'
@@ -99,7 +99,7 @@ import cPReportForm from '../components/materialManagement/cPReportForm.vue'
 import tDJWReportForm from '../components/materialManagement/tDJWReportForm.vue'
 
 //注文金物报表
-import zWReportForm from '../components/materialManagement/zWReportForm.vue'
+import zWReportForm from '../components/materialManagement/zwReportForm.vue'
 
 
 

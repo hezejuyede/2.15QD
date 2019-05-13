@@ -3,16 +3,16 @@
         <div class="crumbs">
             <el-breadcrumb separator="/">
                 <el-breadcrumb-item>物料管理</el-breadcrumb-item>
-                <el-breadcrumb-item>缺件登记（注文金物）</el-breadcrumb-item>
+                <el-breadcrumb-item>缺件登记（储品金物）</el-breadcrumb-item>
             </el-breadcrumb>
         </div>
         <div class="template-content">
             <div class="container">
                 <div class="handle-box">
                     <label style="margin-right: 10px">
-                        <span>智能检索注文金物</span>
+                        <span>智能检索储品金物清单</span>
                         <span>:</span>
-                        <el-input v-model="select_word" placeholder="智能检索注文金物" class="handle-input mr10"></el-input>
+                        <el-input v-model="select_word" placeholder="智能检索储品金物清单" class="handle-input mr10"></el-input>
                     </label>
                     <label style="margin-right: 10px;margin-left: 10px">
                         <span>选择批次</span>
@@ -32,7 +32,7 @@
                             </el-option>
                         </el-select>
                     </label>
-                    <el-button type="primary" @click="doSearch">查询注文金物</el-button>
+                    <el-button type="primary" @click="doSearch">查询储品金物</el-button>
                     <el-button type="success" @click="showAdd">缺件记录</el-button>
                 </div>
                 <div class="">
