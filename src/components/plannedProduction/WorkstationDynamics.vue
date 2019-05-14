@@ -35,7 +35,10 @@
                     </div>
                     <div class="productionContentTableRight fr">
                         <div class="tableDiv" v-for="(item,index) in tableData">
-                            <div class="tableDivTop"><div class="tableDivTop-text">{{item.workStation}}</div></div>
+                            <div class="tableDivTop">
+                                <div class="tableDivTop-text">{{item.stationName}}</div>
+                                <div class="tableDivTime">{{item.time}}</div>
+                            </div>
                             <div class="tableDivBottom">
                                 <div class="tableTemplate" v-for="(item1,index) in item.table"  >
                                     <div class="tableTemplate-title">{{item1.title}}</div>
@@ -227,14 +230,30 @@
                             align-items: center;
                             justify-content: center;
                             border-right: 1px solid @color-background-d;
+                            position: relative;
                             .tableDivTop-text{
+                                width: 40%;
+                                height: 30px;
+                                margin: 0 auto;
+                                text-align: center;
+                                line-height: 30px;
+                                position: absolute;
+                                top: 12px;
+                                left: 0;
+                            }
+                            .tableDivTime{
                                 width: 60%;
                                 height: 30px;
                                 margin: 0 auto;
                                 text-align: center;
                                 line-height: 30px;
+                                position: absolute;
+                                top: 12px;
+                                right: 0;
+                                font-size: 12px;
                             }
                         }
+
                         .tableDivBottom {
                             display: flex;
                             .tableTemplate {
