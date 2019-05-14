@@ -34,7 +34,14 @@
                         {{batch}}
                     </div>
                     <div class="productionContentTableRight fr">
-                        <div class="tableDiv" v-for="(item,index) in tableData">
+                        <div class="tableDiv" v-for="(item,index) in tableData"
+                             :class="[classColor1,{
+                        classColor2:item.status===2,
+                        classColor3:item.status===3,
+                        classColor4:item.status===4,
+                        classColor5:item.status===5,
+                        classColor6:item.status===6,
+                        }]">
                             <div class="tableDivTop">
                                 <div class="tableDivTop-text">{{item.stationName}}</div>
                                 <div class="tableDivTime">{{item.time}}</div>
@@ -84,6 +91,7 @@
                 excelVisible: false,
                 cols: [],
                 tableData2: [],
+
             }
         },
         components: {},
@@ -281,8 +289,9 @@
                                 .tableTemplate-title {
                                     width: 100%;
                                     height: 33%;
-                                    background-color: @color-F0;
                                     border-right: 1px solid @color-background-d;
+                                    border-top: 1px solid @color-background-d;
+                                    border-bottom: 1px solid @color-background-d;
                                     display: flex;
                                     align-items: center;
                                     justify-content: center;
@@ -304,6 +313,26 @@
             }
 
         }
+
+    }
+    .classColor1{
+      background-color: #b3d8ff;
+    }
+    .classColor2{
+        background-color: green;
+    }
+    .classColor3{
+        background-color:yellow;
+
+    }
+    .classColor4{
+        background-color: orange;
+    }
+    .classColor5{
+        background-color: violet;
+      }
+    .classColor6{
+        background-color: red;
 
     }
 
