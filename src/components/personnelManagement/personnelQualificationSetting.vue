@@ -137,6 +137,7 @@
                 message: '',
                 HideModal: true,
                 listData: [],
+                listType: [],
 
 
                 cols: [],
@@ -223,11 +224,17 @@
             selectList(val) {
                 if (val.length) {
                     let data = [];
+                    let type = [];
                     for (let i = 0; i < val.length; i++) {
                         let a = val[i].id;
                         data.push(a)
                     }
+                    for (let i = 0; i < val.length; i++) {
+                        let b = val[i].showname;
+                        type.push(b)
+                    }
                     this.listData = data;
+                    this.listType = type;
                 }
                 else {
                     this.listData = [];
@@ -243,38 +250,56 @@
 
             //显示新增资质
             showAdd() {
-                this.post = "";
-                this.role = "";
-                this.dept = "";
-                this.addVisible = true;
-                this.id = "";
-                this.name = "";
-                this.pwd = "";
-                this.showname = "";
-                this.code = "";
+                if (this.listData.length) {
+                    if (this.listData.length > 1) {
+                        this.message = "只能选择一个";
+                        this.HideModal = false;
+                        const that = this;
+
+                        function a() {
+                            that.message = "";
+                            that.HideModal = true;
+                        }
+
+                        setTimeout(a, 2000);
+                    }
+                    else {
+                        this.addVisible = true;
+                        this.zizhiname = "";
+                        this.name = this.listType[0];
+                    }
+                }
+                else {
+                    this.message = "请勾选要设定的人员";
+                    this.HideModal = false;
+                    const that = this;
+
+                    function b() {
+                        that.message = "";
+                        that.HideModal = true;
+                    }
+
+                    setTimeout(b, 2000);
+                }
             },
             //进行新增资质
             doAdd() {
-                if (this.name && this.pwd && this.showname && this.code && this.post && this.dept && this.role) {
+                if (this.name && this.zizhiname) {
                     axios.post(" " + url + "/sysconfig/userAdd",
                         {
-                            "postid": this.post,
-                            "deptid": this.dept,
-                            "roleid": this.role,
+                            "id": this.listData[0],
                             "name": this.name,
-                            "pwd": this.pwd,
-                            "showname": this.showname,
-                            "code": this.code
+                            "zizhiname": this.zizhiname
                         }
                     )
                         .then((res) => {
                             if (res.data === "1") {
-                                this.$message.success(`新增成功`);
+                                this.$message.success(`设定成功`);
                                 this.addVisible = false;
                                 this.loadingShowData(this.dept, this.role, this.post)
                             }
                             else {
-                                this.$message.warning(`新增失败`);
+                                this.$message.warning(`设定失败`);
                             }
                         })
                         .catch((err) => {
@@ -292,13 +317,8 @@
                 this.id = row.id;
                 axios.post(" " + url + "/sysconfig/personDetail", {"id": this.id})
                     .then((res) => {
-                        this.post = res.data.postid;
-                        this.dept = res.data.deptid;
-                        this.role = res.data.roleid;
                         this.name = res.data.name;
-                        this.pwd = res.data.pwd;
-                        this.showname = res.data.showname;
-                        this.code = res.data.code;
+                        this.zizhiname = res.data.zizhiname;
                     })
                     .catch((err) => {
                         console.log(err)
@@ -307,27 +327,23 @@
 
             // 保存编辑
             saveEdit() {
-                if (this.showname && this.code) {
+                if (this.name && this.zizhiname) {
                     axios.post(" " + url + "/sysconfig/updatePerson",
                         {
 
                             "id": this.id,
-                            "postid": this.post,
-                            "deptid": this.dept,
-                            "roleid": this.role,
-                            "pwd": this.pwd,
-                            "showname": this.showname,
-                            "code": this.code
+                            "name": this.name,
+                            "zizhiname": this.zizhiname
                         }
                     )
                         .then((res) => {
                             if (res.data === "1") {
                                 this.$message.success(`修改成功`);
                                 this.editVisible = false;
-                                this.loadingShowData(this.dept, this.role, this.post)
+                                this.loadingShowData(this.dept)
                             }
                             else {
-                                this.$message.warning(`删除成功`);
+                                this.$message.warning(`修改成功`);
                             }
                         })
                         .catch((err) => {
