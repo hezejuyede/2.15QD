@@ -45,7 +45,6 @@
                               border
                               height="400"
                               @select="selectList"
-                              @row-dblclick="editPerson"
                               highlight-current-row
                               style="width: 98%;margin: auto">
                         <el-table-column
@@ -90,36 +89,6 @@
                 <el-button type="primary" @click="doAdd" style="height:30px;width:80px">确 定</el-button>
             </span>
         </el-dialog>
-        <!-- 编辑弹出框 -->
-        <el-dialog title="编辑资质" :visible.sync="editVisible" width="60%">
-            <el-form ref="form" label-width="100px">
-                <el-form-item label="用户名">
-                    <el-input v-model="name" disabled placeholder="用户名" style="width: 150px"></el-input>
-                </el-form-item>
-                <el-form-item label="资质">
-                    <el-select
-                        v-model="zizhiname"
-                        style="width:200px"
-                        clearable
-                        filterable
-                        allow-create
-                        default-first-option
-                        multiple
-                        placeholder="请选择资质">
-                        <el-option
-                            v-for="item in zizhinameOptions"
-                            :key="item.id"
-                            :label="item.name"
-                            :value="item.id">
-                        </el-option>
-                    </el-select>
-                </el-form-item>
-            </el-form>
-            <span slot="footer" class="dialog-footer">
-                <el-button @click="editVisible = false" style="height:30px;width:80px">取 消</el-button>
-                <el-button type="primary" @click="saveEdit" style="height:30px;width:80px">确 定</el-button>
-            </span>
-        </el-dialog>
 
         <Modal :msg="message"
                :isHideModal="HideModal"></Modal>
@@ -152,7 +121,6 @@
                 select_word: '',
 
                 addVisible: false,
-                editVisible: false,
 
 
                 id: "",
@@ -285,7 +253,8 @@
             //进行新增资质
             doAdd() {
                 if (this.name && this.zizhiname) {
-                    axios.post(" " + url + "/sysconfig/userAdd",
+                    console.log(this.zizhiname)
+                 /*   axios.post(" " + url + "/sysconfig/userAdd",
                         {
                             "id": this.listData[0],
                             "name": this.name,
@@ -296,6 +265,8 @@
                             if (res.data === "1") {
                                 this.$message.success(`设定成功`);
                                 this.addVisible = false;
+                                this.listData=[];
+                                this.listType=[];
                                 this.loadingShowData(this.dept, this.role, this.post)
                             }
                             else {
@@ -304,56 +275,11 @@
                         })
                         .catch((err) => {
                             console.log(err)
-                        })
+                        })*/
                 }
                 else {
                     this.$message.warning(`输入不能为空`);
                 }
-            },
-
-            //双击点击行内编辑
-            editPerson(row, column, cell, event) {
-                this.editVisible = true;
-                this.id = row.id;
-                axios.post(" " + url + "/sysconfig/personDetail", {"id": this.id})
-                    .then((res) => {
-                        this.name = res.data.name;
-                        this.zizhiname = res.data.zizhiname;
-                    })
-                    .catch((err) => {
-                        console.log(err)
-                    });
-            },
-
-            // 保存编辑
-            saveEdit() {
-                if (this.name && this.zizhiname) {
-                    axios.post(" " + url + "/sysconfig/updatePerson",
-                        {
-
-                            "id": this.id,
-                            "name": this.name,
-                            "zizhiname": this.zizhiname
-                        }
-                    )
-                        .then((res) => {
-                            if (res.data === "1") {
-                                this.$message.success(`修改成功`);
-                                this.editVisible = false;
-                                this.loadingShowData(this.dept)
-                            }
-                            else {
-                                this.$message.warning(`修改成功`);
-                            }
-                        })
-                        .catch((err) => {
-                            console.log(err)
-                        })
-                }
-                else {
-                    this.$message.warning(`输入不能为空`);
-                }
-
             },
 
 
