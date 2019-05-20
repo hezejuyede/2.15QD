@@ -942,7 +942,7 @@
                     }
                 }
                 else {
-                    this.message = "请勾选要废弃的托单金物";
+                    this.message = "请勾选要追加改正的";
                     this.HideModal = false;
                     const that = this;
 
