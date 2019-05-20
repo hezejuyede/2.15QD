@@ -360,12 +360,293 @@
             </span>
             </el-dialog>
 
-            <!-- 废弃提示框 -->
-            <el-dialog title="废弃托单金物" :visible.sync="delVisible" width="300px" center>
-                <div class="del-dialog-cnt">废弃不可恢复，是否确定废弃？</div>
+            <!-- 追加改正提示框 -->
+            <el-dialog title="托单金物制作" :visible.sync="zjgzEditVisible" width="100%" :fullscreen="true" :center="true">
+                <div class="makeFrom">
+                    <div class="makeFromDiv">
+                        <div class="makeFromPage fr">
+                            <div class="makeFromPageText"> {{page}}</div>
+                        </div>
+                        <div class="makeFromTop fr">
+                            <div class="makeFromTopLeft fl">
+                                <div class="makeFromTopLeftSmall fl">
+                                    <div class="makeFromTopLeftSmallText">
+                                        分段
+                                    </div>
+                                    <div class="makeFromTopLeftSmallText">
+                                        单元
+                                    </div>
+                                    <div class="makeFromTopLeftSmallText">
+                                        青空
+                                    </div>
+                                    <div class="makeFromTopLeftSmallText">
+                                        管金物
+                                    </div>
+                                </div>
+                                <div class="makeFromTopLeftLarge fl">
+                                    管 工 托 单
+                                </div>
+                            </div>
+                            <div class="makeFromTopRight fl">
+                                <div class="makeFromTopRightTop">
+                                    <div class="makeFromTopRightTopGz fl">改正</div>
+                                    <div class="makeFromTopRightTopDH fl">
+                                        <div class="">第</div>
+                                        <div class="">
+                                            <input disabled="disabled" style="width: 30px;background-color: #ffffff" v-model="dijihui"/>
+                                        </div>
+                                        <div class="">回前图引换</div>
+                                    </div>
+                                    <div class="makeFromTopRightTopS fl">S.</div>
+                                    <div class="makeFromTopRightTopNo fl">No.</div>
+                                    <div class="makeFromTopRightTopInput fl">
+                                        <input disabled="disabled" style="background-color: #ffffff" v-model="No"/>
+                                    </div>
+                                </div>
+                                <div class="makeFromTopRightBottom">
+                                    <div class="makeFromTopRightBottomMc fl">区画或工事名称</div>
+                                    <div class="makeFromTopRightBottomInput fl">
+                                        <input style="background-color: #ffffff" disabled="disabled" v-model="gsName"/>
+                                    </div>
+                                    <div class="makeFromTopRightBottomTh fl">图号</div>
+                                    <div class="makeFromTopRightBottomInput fl">
+                                        <input style="background-color: #ffffff"  disabled="disabled" v-model="Tuhao"/>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="makeFromCenter fr">
+                            <div class="makeFromCenterLeft fl">
+                                <div class="makeFromCenterLeftTop">
+                                    <div class="makeFromCenterLeftText">
+                                        使用日
+                                    </div>
+                                    <div class="makeFromCenterLeftInput">
+                                        <textarea v-model="shiyongri"/>
+                                    </div>
+                                </div>
+                                <div class="makeFromCenterLeftBottom">
+                                    <div class="makeFromCenterLeftText">
+                                        使用场所
+                                    </div>
+                                    <div class="makeFromCenterLeftInput">
+                                        <textarea v-model="shiyongchangsuo"/>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="makeFromCenterRight fl">
+                                <template>
+                                    <el-table
+                                        :data="excelData"
+                                        :header-cell-style="{background:'#ffffff',border: '1px solid #303133',color:'rgba(0, 0, 0, 1)'}"
+                                        :cell-style="{border: '1px solid #303133'}"
+                                        style="width: 992px;border: 1px solid #303133">
+                                        <el-table-column
+                                            align="center"
+                                            prop="chukuxuhao"
+                                            label="出库序号"
+                                            width="80">
+                                            <template slot-scope="scope">
+                                                <input
+                                                    v-model="scope.row.chuku"
+                                                    style="width:60px"/>
+                                            </template>
+                                        </el-table-column>
+                                        <el-table-column
+                                            align="center"
+                                            prop="tuhao"
+                                            label="图号"
+                                            width="120">
+                                            <template slot-scope="scope">
+                                                <input
+                                                    v-model="scope.row.tuhao"
+                                                    style="width:100px"/>
+                                            </template>
+                                        </el-table-column>
+                                        <el-table-column
+                                            align="center"
+                                            prop="mingchengchicun"
+                                            label="名称尺寸"
+                                            width="300">
+                                            <template slot-scope="scope">
+                                                <input
+                                                    v-model="scope.row.mingchengchicun"
+                                                    style="width:300px"/>
+                                            </template>
+                                        </el-table-column>
+                                        <el-table-column
+                                            align="center"
+                                            prop="guanliqufenhao"
+                                            label="管理区分号"
+                                            width="100">
+                                            <template slot-scope="scope">
+                                                <input
+                                                    v-model="scope.row.guanliqufenhao"
+                                                    style="width:80px"/>
+                                            </template>
+                                        </el-table-column>
+                                        <el-table-column
+                                            align="center"
+                                            prop="hangfan"
+                                            label="行番"
+                                            width="40">
+                                            <template slot-scope="scope">
+                                                <input
+                                                    v-model="scope.row.hangfan"
+                                                    style="width:20px"/>
+                                            </template>
+                                        </el-table-column>
+                                        <el-table-column
+                                            align="center"
+                                            prop="shuliang"
+                                            label="数量"
+                                            width="80">
+                                            <template slot-scope="scope">
+                                                <input
+                                                    v-model="scope.row.shuliang"
+                                                    style="width:60px"/>
+                                            </template>
+                                        </el-table-column>
+                                        <el-table-column
+                                            align="center"
+                                            prop="danwei"
+                                            label="单位"
+                                            width="40">
+                                            <template slot-scope="scope">
+                                                <input
+                                                    v-model="scope.row.danwei"
+                                                    style="width:20px"/>
+                                            </template>
+                                        </el-table-column>
+                                        <el-table-column
+                                            align="center"
+                                            prop="tuzhuangfanhao"
+                                            label="涂装番号"
+                                            width="50">
+                                            <template slot-scope="scope">
+                                                <input
+                                                    v-model="scope.row.tuzhuangfanhao"
+                                                    style="width:30px"/>
+                                            </template>
+                                        </el-table-column>
+                                        <el-table-column
+                                            align="center"
+                                            prop="chupin"
+                                            label="贮品"
+                                            width="40">
+                                            <template slot-scope="scope">
+                                                <input
+                                                    v-model="scope.row.chupin"
+                                                    style="width:20px"/>
+                                            </template>
+                                        </el-table-column>
+                                        <el-table-column
+                                            align="center"
+                                            prop="guanjin"
+                                            label="管金"
+                                            width="40">
+                                            <template slot-scope="scope">
+                                                <input
+                                                    v-model="scope.row.guanjin"
+                                                    style="width:20px"/>
+                                            </template>
+                                        </el-table-column>
+                                        <el-table-column
+                                            align="center"
+                                            prop="beizhu"
+                                            label="备注"
+                                            width="100">
+                                            <template slot-scope="scope">
+                                                <input
+                                                    v-model="scope.row.beizhu"
+                                                    style="width:80px"/>
+                                            </template>
+                                        </el-table-column>
+                                    </el-table>
+                                </template>
+                            </div>
+                        </div>
+                        <div class="makeFromBottom fr">
+                            <div class="makeFromBottomOne">
+                                <div class="makeFromBottomOneDiv1">
+                                    <div class="makeFromBottomOneDivLeft fl">CODE:</div>
+                                    <div class="fl"><input v-model="CODE" style="height: 49px"/></div>
+                                </div>
+                                <div class="makeFromBottomOneDiv2">
+                                    <div class="makeFromBottomOneDivLeft fl">工事施工期间：</div>
+                                    <div class="fl"><input v-model="gssgqj" style="height: 49px"/></div>
+                                </div>
+                                <div class="makeFromBottomOneDiv3">
+                                    <div class="makeFromBottomOneDivLeft fl">标准工数：</div>
+                                    <div class="fl"><input v-model="bzgs" style="height: 49px"/></div>
+                                </div>
+                                <div class="makeFromBottomOneDiv4">
+                                    H
+                                </div>
+                            </div>
+                            <div class="makeFromBottomTwo">
+                                <div class="makeFromBottomTwoLeft">
+                                    <div class="makeFromBottomTwoLeftTop">现场责任者</div>
+                                    <div class="makeFromBottomTwoLeftBottom">
+                                        <div class="makeFromBottomTwoLeftBottomDiv">
+                                            <input v-model="xczrz1" style="width:100px; height: 59px"/>
+                                        </div>
+                                        <div class="makeFromBottomTwoLeftBottomDiv">
+                                            <input v-model="xczrz2" style="width:100px; height: 59px"/>
+                                        </div>
+                                        <div class="makeFromBottomTwoLeftBottomDiv">
+                                            <input v-model="xczrz3" style="width:100px; height: 59px"/>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="makeFromBottomTwoCenter">
+                                    <div class="makeFromBottomTwoCenterTop">仓库</div>
+                                    <div class="makeFromBottomTwoCenterBottom">
+                                        <div class="makeFromBottomTwoCenterBottomDiv">
+                                            <input v-model="ck1" style="width:100px; height: 59px"/>
+                                        </div>
+                                        <div class="makeFromBottomTwoCenterBottomDiv">
+                                            <input v-model="ck2" style="width:100px; height: 59px"/>
+                                        </div>
+                                        <div class="makeFromBottomTwoCenterBottomDiv">
+                                            <input v-model="ck3" style="width:100px; height: 59px"/>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="makeFromBottomTwoRight">
+                                    <div class="makeFromBottomTwoRightTop">技术本部生产设计部舾装生技科</div>
+                                    <div class="makeFromBottomTwoRightBottom">
+                                        <div class="makeFromBottomTwoRightBottomDiv">
+                                            <div class="makeFromBottomTwoRightBottomDivName">科长</div>
+                                            <input v-model="sh1" style="width:100px; height: 59px"/>
+                                        </div>
+                                        <div class="makeFromBottomTwoRightBottomDiv">
+                                            <div class="makeFromBottomTwoRightBottomDivName">主管</div>
+                                            <input v-model="sh2" style="width:100px; height: 59px"/>
+                                        </div>
+                                        <div class="makeFromBottomTwoRightBottomDiv">
+                                            <div class="makeFromBottomTwoRightBottomDivName">检图</div>
+                                            <input v-model="sh3" style="width:100px; height: 59px"/>
+                                        </div>
+                                        <div class="makeFromBottomTwoRightBottomDiv">
+                                            <div class="makeFromBottomTwoRightBottomDivName">作成</div>
+                                            <input v-model="sh4" style="width:100px; height: 59px"/>
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+                        <div class="makeFromTime fr">
+                            <div class="makeFromTimeInput fr"> <input v-model="chuturiqi" style="width:200px; height: 50px"/></div>
+                            <div class="makeFromTimeText fr">出图日期：</div>
+                        </div>
+                    </div>
+                </div>
                 <span slot="footer" class="dialog-footer">
-                <el-button @click="delVisible = false" style="height:30px;width:80px">取 消</el-button>
-                <el-button type="primary" @click="doModify" style="height:30px;width:80px">确 定</el-button>
+                    <el-button  @click="cancelEditVisible" style="height:30px;width:100px">取 消</el-button>
+                    <el-button  type="primary" @click="doSaveData" style="height:30px;width:100px">保 存</el-button>
+                    <el-button  type="success" @click="saveEdit" style="height:30px;width:100px">提交捡图</el-button>
             </span>
             </el-dialog>
 
@@ -397,6 +678,7 @@
                 message: '',
                 HideModal: true,
                 listData: [],
+                listType:[],
                 id: "",
                 search: "44",
                 chuanhao:"",
@@ -432,7 +714,7 @@
 
                 addVisible: false,
                 editVisible:false,
-                delVisible: false,
+                zjgzEditVisible: false,
                 cancelVisible:false,
                 examineTime: "",
                 zuoyezhe:"",
@@ -477,8 +759,10 @@
                         times.push(time)
                     }
                     this.examineTime = times;
+
                     const info = JSON.parse(userInfo);
                     this.zuoyezhe = info.username;
+
                     this.loadingShowData(this.examineTime);
 
                 }
@@ -564,11 +848,17 @@
             selectList(val) {
                 if (val.length) {
                     let data = [];
+                    let type =[];
                     for (let i = 0; i < val.length; i++) {
                         let a = val[i].id;
                         data.push(a)
                     }
+                    for (let i = 0; i < val.length; i++) {
+                        let b = val[i].shenpistatus;
+                        type.push(b)
+                    }
                     this.listData = data;
+                    this.listType = type;
                 }
                 else {
                     this.listData=[];
@@ -593,19 +883,75 @@
             //显示追加修改
             showModify() {
                 if (this.listData.length) {
-                    this.delVisible = true;
+                    if (this.listData.length > 1) {
+                        this.message = "只能选择一个";
+                        this.HideModal = false;
+                        const that = this;
+
+                        function a() {
+                            that.message = "";
+                            that.HideModal = true;
+                        }
+
+                        setTimeout(a, 2000);
+                    }
+                    else {
+                        if (this.listType[0] === 4) {
+                            this.zjgzEditVisible = true;
+                            axios.post(" " + url + "/wuliao/tuodanjinwuDetail", {"id": this.listData[0]})
+                                .then((res) => {
+                                    this.button = res.data.shenpistatus;
+                                    this.excelData = res.data.details;
+                                    this.shiyongri = res.data.shiyongri;
+                                    this.shiyongchangsuo = res.data.shiyongri;
+                                    this.No = res.data.shipcode;
+                                    this.gsName = res.data.quhuaming;
+                                    this.dijihui = res.data.gaizheng;
+                                    this.Tuhao = res.data.tuhao;
+                                    this.CODE = res.data.CODE;
+                                    this.gssgqj = res.data.shiyongri;
+                                    this.bzgs = res.data.shiyongri;
+                                    this.sh1 = res.data.shiyongri;
+                                    this.sh2 = res.data.shiyongri;
+                                    this.sh3 = res.data.shiyongri;
+                                    this.sh4 = res.data.shiyongri;
+                                    this.ck1 = res.data.shiyongri;
+                                    this.ck2 = res.data.shiyongri;
+                                    this.ck3 = res.data.shiyongri;
+                                    this.xczrz1 = res.data.shiyongri;
+                                    this.xczrz2 = res.data.shiyongri;
+                                    this.xczrz3 = res.data.shiyongri;
+
+                                })
+                                .catch((err) => {
+                                    console.log(err)
+                                });
+                        }
+                        else {
+                            this.message = "没有审批通过，无法改正";
+                            this.HideModal = false;
+                            const that = this;
+
+                            function c() {
+                                that.message = "";
+                                that.HideModal = true;
+                            }
+
+                            setTimeout(c, 2000);
+                        }
+                    }
                 }
                 else {
                     this.message = "请勾选要废弃的托单金物";
                     this.HideModal = false;
                     const that = this;
 
-                    function a() {
+                    function b() {
                         that.message = "";
                         that.HideModal = true;
                     }
 
-                    setTimeout(a, 2000);
+                    setTimeout(b, 2000);
                 }
             },
 
@@ -658,6 +1004,7 @@
             //进行取消
             doCancelVisible(){
                 this.cancelVisible =false;
+                this.zjgzEditVisible=false;
                 this.editVisible =false;
                 this.excelData="";
                 this.shiyongri= "";
