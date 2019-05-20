@@ -653,7 +653,6 @@
                 <span slot="footer" class="dialog-footer">
                     <el-button @click="cancelEditVisible" style="height:30px;width:100px">取 消</el-button>
                     <el-button type="primary" @click="gzDoSaveData" style="height:30px;width:100px">保 存</el-button>
-                    <el-button type="success" @click="gzSaveEdit" style="height:30px;width:100px">提交捡图</el-button>
             </span>
             </el-dialog>
 
@@ -1109,14 +1108,49 @@
 
 
             //改正保存数据
-            gzDoSaveData() {
-
+            gzDoSaveData()
+            {
+                axios.post(" " + url + "/wuliao/tuodanjinwuGaizheng",
+                    {
+                        "id": this.listData[0],
+                        "details": this.excelData,
+                        "shiyongri": this.shiyongri,
+                        "shiyongchangsuo": this.shiyongchangsuo,
+                        "shipcode": this.No,
+                        "gsName": this.gsName,
+                        "tuhao": this.Tuhao,
+                        "CODE": this.CODE,
+                        "gssgqj": this.gssgqj,
+                        "bzgs": this.bzgs,
+                        "sh1": this.sh1,
+                        "sh2": this.sh2,
+                        "sh3": this.sh3,
+                        "sh4": this.sh4,
+                        "ck1": this.ck1,
+                        "ck2": this.ck2,
+                        "ck3": this.ck3,
+                        "xczrz1": this.xczrz1,
+                        "xczrz2": this.xczrz2,
+                        "xczrz3": this.xczrz3,
+                        "gaizheng": this.dijihui,
+                        "quhuaming": this.gsName
+                    }
+                )
+                    .then((res) => {
+                        if (res.data.state === "1") {
+                            this.zjgzEditVisible = false;
+                            this.$message.success(`保存成功`);
+                            this.loadingShowData(this.examineTime)
+                        }
+                        else {
+                            this.$message.warning(`保存失败`);
+                        }
+                    })
+                    .catch((err) => {
+                        console.log(err)
+                    })
             },
 
-            //改正提交检图
-            gzSaveEdit() {
-
-            }
 
         }
     }
