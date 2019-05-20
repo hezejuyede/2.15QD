@@ -58,8 +58,7 @@
                     {
                         label: '上岗资质管理',
                         index: "2",
-                        url: "/404",
-                      /*  children: [
+                        children: [
                             {
                                 label: '人员资质设定',
                                 index: "2-1",
@@ -70,13 +69,12 @@
                                 index: "2-2",
                                 url: "/404"
                             }
-                        ]*/
+                        ]
                     },
                     {
                         label: '人员绩效跟踪',
                         index: "3",
-                        url: "/404",
-                      /*  children: [
+                        children: [
                             {
                                 label: '人员工作记录查询',
                                 index: "3-1",
@@ -92,13 +90,12 @@
                                 index: "3-3",
                                 url: "/404"
                             }
-                        ]*/
+                        ]
                     },
                     {
                         label: '人员报表',
                         index: "4",
-                        url: "/404",
-                        /*children: [
+                        children: [
                             {
                                 label: '人员资质报表',
                                 index: "4-1",
@@ -124,19 +121,18 @@
                                 index: "4-5",
                                 url: "/404"
                             }
-                        ]*/
+                        ]
                     },
                     {
                         label: '人员监控',
                         index: "5",
-                        url: "/404",
-                    /*    children: [
+                        children: [
                             {
                                 label: '人员动态分布图',
                                 index: "5-1",
                                 url: "/404"
                             }
-                        ]*/
+                        ]
                     }
                 ],
                 activeIndex: '1',
