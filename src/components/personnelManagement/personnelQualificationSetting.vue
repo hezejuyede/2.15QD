@@ -24,7 +24,6 @@
                             filterable
                             allow-create
                             default-first-option
-                            @change="changeSelect"
                             placeholder="请选择部门">
                             <el-option
                                 v-for="item in deptOptions"
@@ -34,53 +33,9 @@
                             </el-option>
                         </el-select>
                     </label>
-                    <label style="margin-right: 5px;margin-left: 5px">
-                        <span>角色</span>
-                        <span>:</span>
-                        <el-select
-                            v-model="role"
-                            style="width: 150px"
-                            clearable
-                            filterable
-                            allow-create
-                            default-first-option
-                            @change="changeSelect"
-
-                            placeholder="请选择角色">
-                            <el-option
-                                v-for="item in roleOptions"
-                                :key="item.id"
-                                :label="item.name"
-                                :value="item.id">
-                            </el-option>
-                        </el-select>
-                    </label>
-                    <label style="margin-right: 5px;margin-left: 5px">
-                        <span>岗位</span>
-                        <span>:</span>
-                        <el-select
-                            v-model="post"
-                            style="width: 150px"
-                            clearable
-                            filterable
-                            allow-create
-                            default-first-option
-                            @change="changeSelect"
-
-                            placeholder="请选择岗位">
-                            <el-option
-                                v-for="item in postOptions"
-                                :key="item.id"
-                                :label="item.name"
-                                :value="item.id">
-                            </el-option>
-                        </el-select>
-                    </label>
-                    <el-button type="success" icon="delete" class="handle-del mr10" @click="doSearchPerson">查询资质
+                    <el-button type="success" icon="delete" class="handle-del mr10" @click="doSearchPerson">查询人员
                     </el-button>
-                    <el-button type="primary" icon="delete" class="handle-del mr10" @click="showAddPerson">新增资质
-                    </el-button>
-                    <el-button type="danger" icon="delete" class="handle-del mr10" @click="deletePerson">删除资质
+                    <el-button type="primary" icon="delete" class="handle-del mr10" @click="showAdd">资质设定
                     </el-button>
                 </div>
                 <div class="">
@@ -106,97 +61,23 @@
 
         </div>
         <!--新增弹出框 -->
-        <el-dialog title="新增资质" :visible.sync="addVisible" width="40%">
-
+        <el-dialog title="资质设定" :visible.sync="addVisible" width="40%">
             <el-form ref="form" label-width="100px">
-                <el-form-item label="部门">
-                    <el-select
-                        v-model="dept"
-                        style="width:200px"
-                        clearable
-                        filterable
-                        allow-create
-                        default-first-option
-                        @change="changeSelect"
-                        placeholder="请选择部门">
-                        <el-option
-                            v-for="item in deptOptions"
-                            :key="item.id"
-                            :label="item.name"
-                            :value="item.id">
-                        </el-option>
-                    </el-select>
-                </el-form-item>
-                <el-form-item label="角色">
-                    <el-select
-                        v-model="role"
-                        style="width:200px"
-                        clearable
-                        filterable
-                        allow-create
-                        default-first-option
-                        @change="changeSelect"
-
-                        placeholder="请选择角色">
-                        <el-option
-                            v-for="item in roleOptions"
-                            :key="item.id"
-                            :label="item.name"
-                            :value="item.id">
-                        </el-option>
-                    </el-select>
-                </el-form-item>
-                <el-form-item label="岗位">
-                    <el-select
-                        v-model="post"
-                        style="width:200px"
-                        clearable
-                        filterable
-                        allow-create
-                        default-first-option
-                        @change="changeSelect"
-
-                        placeholder="请选择岗位">
-                        <el-option
-                            v-for="item in postOptions"
-                            :key="item.id"
-                            :label="item.name"
-                            :value="item.id">
-                        </el-option>
-                    </el-select>
-                </el-form-item>
-                <el-form-item label="人员">
-                    <el-select
-                        v-model="post"
-                        style="width:200px"
-                        clearable
-                        filterable
-                        allow-create
-                        default-first-option
-                        @change="changeSelect"
-
-                        placeholder="请选择岗位">
-                        <el-option
-                            v-for="item in postOptions"
-                            :key="item.id"
-                            :label="item.name"
-                            :value="item.id">
-                        </el-option>
-                    </el-select>
+                <el-form-item label="用户名">
+                    <el-input v-model="name" disabled placeholder="用户名" style="width: 150px"></el-input>
                 </el-form-item>
                 <el-form-item label="资质">
                     <el-select
-                        v-model="post"
+                        v-model="zizhiname"
                         style="width:200px"
                         clearable
                         filterable
                         allow-create
                         default-first-option
-                        @change="changeSelect"
-
-                        placeholder="请选择岗位">
+                        multiple
+                        placeholder="请选择资质">
                         <el-option
-                            v-for="item in postOptions"
+                            v-for="item in zizhinameOptions"
                             :key="item.id"
                             :label="item.name"
                             :value="item.id">
@@ -206,100 +87,27 @@
             </el-form>
             <span slot="footer" class="dialog-footer">
                 <el-button @click="addVisible = false" style="height:30px;width:80px">取 消</el-button>
-                <el-button type="primary" @click="doAddPerson" style="height:30px;width:80px">确 定</el-button>
+                <el-button type="primary" @click="doAdd" style="height:30px;width:80px">确 定</el-button>
             </span>
         </el-dialog>
         <!-- 编辑弹出框 -->
         <el-dialog title="编辑资质" :visible.sync="editVisible" width="60%">
             <el-form ref="form" label-width="100px">
-                <el-form-item label="部门">
-                    <el-select
-                        v-model="dept"
-                        style="width:200px"
-                        clearable
-                        filterable
-                        allow-create
-                        default-first-option
-                        @change="changeSelect"
-                        placeholder="请选择部门">
-                        <el-option
-                            v-for="item in deptOptions"
-                            :key="item.id"
-                            :label="item.name"
-                            :value="item.id">
-                        </el-option>
-                    </el-select>
-                </el-form-item>
-                <el-form-item label="角色">
-                    <el-select
-                        v-model="role"
-                        style="width:200px"
-                        clearable
-                        filterable
-                        allow-create
-                        default-first-option
-                        @change="changeSelect"
-
-                        placeholder="请选择角色">
-                        <el-option
-                            v-for="item in roleOptions"
-                            :key="item.id"
-                            :label="item.name"
-                            :value="item.id">
-                        </el-option>
-                    </el-select>
-                </el-form-item>
-                <el-form-item label="岗位">
-                    <el-select
-                        v-model="post"
-                        style="width:200px"
-                        clearable
-                        filterable
-                        allow-create
-                        default-first-option
-                        @change="changeSelect"
-
-                        placeholder="请选择岗位">
-                        <el-option
-                            v-for="item in postOptions"
-                            :key="item.id"
-                            :label="item.name"
-                            :value="item.id">
-                        </el-option>
-                    </el-select>
-                </el-form-item>
-                <el-form-item label="人员">
-                    <el-select
-                        v-model="post"
-                        style="width:200px"
-                        clearable
-                        filterable
-                        allow-create
-                        default-first-option
-                        @change="changeSelect"
-
-                        placeholder="请选择岗位">
-                        <el-option
-                            v-for="item in postOptions"
-                            :key="item.id"
-                            :label="item.name"
-                            :value="item.id">
-                        </el-option>
-                    </el-select>
+                <el-form-item label="用户名">
+                    <el-input v-model="name" disabled placeholder="用户名" style="width: 150px"></el-input>
                 </el-form-item>
                 <el-form-item label="资质">
                     <el-select
-                        v-model="post"
+                        v-model="zizhiname"
                         style="width:200px"
                         clearable
                         filterable
                         allow-create
                         default-first-option
-                        @change="changeSelect"
-
-                        placeholder="请选择岗位">
+                        multiple
+                        placeholder="请选择资质">
                         <el-option
-                            v-for="item in postOptions"
+                            v-for="item in zizhinameOptions"
                             :key="item.id"
                             :label="item.name"
                             :value="item.id">
@@ -312,14 +120,7 @@
                 <el-button type="primary" @click="saveEdit" style="height:30px;width:80px">确 定</el-button>
             </span>
         </el-dialog>
-        <!-- 删除提示框 -->
-        <el-dialog title="删除资质" :visible.sync="delVisible" width="300px" center>
-            <div class="del-dialog-cnt">删除不可恢复，是否确定删除？</div>
-            <span slot="footer" class="dialog-footer">
-                <el-button @click="delVisible = false" style="height:30px;width:80px">取 消</el-button>
-                <el-button type="primary" @click="deleteRow" style="height:30px;width:80px">确 定</el-button>
-            </span>
-        </el-dialog>
+
         <Modal :msg="message"
                :isHideModal="HideModal"></Modal>
     </div>
@@ -341,25 +142,20 @@
                 cols: [],
                 tableData: [],
 
-                deptOptions: [],
-                dept: "",
-                roleOptions: [],
-                role: "",
-                postOptions: [],
-                post: "",
+                zizhinameOptions: [],
+                zizhiname: "",
 
+                dept: "",
+                deptOptions: [],
 
                 select_word: '',
 
                 addVisible: false,
                 editVisible: false,
-                delVisible: false,
+
 
                 id: "",
                 name: '',
-                pwd: '',
-                showname: '',
-                code: ""
 
             }
         },
@@ -397,13 +193,11 @@
                     let that = this;
                     axios.all([
                         axios.post(" " + url + "/sysconfig/deptList"),
-                        axios.post(" " + url + "/sysconfig/roleList"),
-                        axios.post(" " + url + "/sysconfig/postList")
+                        axios.post(" " + url + "/sysconfig/zizhiList"),
                     ])
-                        .then(axios.spread(function (dept, role, post) {
+                        .then(axios.spread(function (dept, zizhiname) {
                             that.deptOptions = dept.data;
-                            that.roleOptions = role.data;
-                            that.postOptions = post.data;
+                            that.zizhinameOptions = zizhiname.data;
                             that.loadingShowData();
 
                         }));
@@ -413,11 +207,11 @@
             },
 
             //瞬间加载数据
-            loadingShowData(data1, data2, data3) {
+            loadingShowData(data1) {
                 let that = this;
                 axios.all([
-                    axios.post(" " + url + "/sys/showTableTitle", {"name": "renyuan"}),
-                    axios.post(" " + url + "/sysconfig/personList", {"deptid": data1, "roleid": data2, "postid": data3})
+                    axios.post(" " + url + "/sys/showTableTitle", {"name": "ryzzsd"}),
+                    axios.post(" " + url + "/sysconfig/personList", {"deptid": data1,})
                 ])
                     .then(axios.spread(function (title, table) {
                         that.cols = title.data;
@@ -443,12 +237,12 @@
 
             //进行人员查询
             doSearchPerson() {
-                this.loadingShowData(this.dept, this.role, this.post)
+                this.loadingShowData(this.dept)
             },
 
 
-            //显示新增人员
-            showAddPerson() {
+            //显示新增资质
+            showAdd() {
                 this.post = "";
                 this.role = "";
                 this.dept = "";
@@ -459,8 +253,8 @@
                 this.showname = "";
                 this.code = "";
             },
-            //新增人员
-            doAddPerson() {
+            //进行新增资质
+            doAdd() {
                 if (this.name && this.pwd && this.showname && this.code && this.post && this.dept && this.role) {
                     axios.post(" " + url + "/sysconfig/userAdd",
                         {
@@ -546,47 +340,6 @@
 
             },
 
-            //选择点击删除
-            deletePerson() {
-                if (this.listData.length) {
-                    this.delVisible = true;
-                }
-                else {
-                    this.message = "请勾选要删除的人员";
-                    this.HideModal = false;
-                    const that = this;
-
-                    function a() {
-                        that.message = "";
-                        that.HideModal = true;
-                    }
-
-                    setTimeout(a, 2000);
-                }
-            },
-
-            // 确定删除
-            deleteRow() {
-                axios.post(" " + url + "/sysconfig/delPerson",
-                    {
-                        "ids": this.listData,
-                    }
-                )
-                    .then((res) => {
-                        if (res.data === "1") {
-
-                            this.$message.success('删除成功');
-                            this.delVisible = false;
-                            this.loadingShowData(this.dept, this.role, this.post)
-                        }
-                        else {
-                            this.$message.warning(`删除失败`);
-                        }
-                    })
-                    .catch((err) => {
-                        console.log(err)
-                    })
-            },
 
         }
     }
