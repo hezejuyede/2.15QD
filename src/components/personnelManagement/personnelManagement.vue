@@ -60,13 +60,18 @@
                         index: "2",
                         children: [
                             {
-                                label: '人员资质设定',
+                                label: '资质设定',
                                 index: "2-1",
+                                url: "/QualificationSetting"
+                            },
+                            {
+                                label: '人员资质设定',
+                                index: "2-2",
                                 url: "/personnelQualificationSetting"
                             },
                             {
                                 label: "资质查询与统计",
-                                index: "2-2",
+                                index: "2-3",
                                 url: "/QualificationQueryAndStatistics"
                             }
                         ]

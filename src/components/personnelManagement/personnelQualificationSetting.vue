@@ -76,11 +76,11 @@
                             </el-option>
                         </el-select>
                     </label>
-                    <el-button type="success" icon="delete" class="handle-del mr10" @click="doSearchPerson">查询人员
+                    <el-button type="success" icon="delete" class="handle-del mr10" @click="doSearchPerson">查询资质
                     </el-button>
-                    <el-button type="primary" icon="delete" class="handle-del mr10" @click="showAddPerson">新增人员
+                    <el-button type="primary" icon="delete" class="handle-del mr10" @click="showAddPerson">新增资质
                     </el-button>
-                    <el-button type="danger" icon="delete" class="handle-del mr10" @click="deletePerson">删除人员
+                    <el-button type="danger" icon="delete" class="handle-del mr10" @click="deletePerson">删除资质
                     </el-button>
                 </div>
                 <div class="">
@@ -106,7 +106,7 @@
 
         </div>
         <!--新增弹出框 -->
-        <el-dialog title="新增人员" :visible.sync="addVisible" width="40%">
+        <el-dialog title="新增资质" :visible.sync="addVisible" width="40%">
 
             <el-form ref="form" label-width="100px">
                 <el-form-item label="部门">
@@ -165,17 +165,43 @@
                         </el-option>
                     </el-select>
                 </el-form-item>
-                <el-form-item label="登陆名">
-                    <el-input v-model="name"></el-input>
+                <el-form-item label="人员">
+                    <el-select
+                        v-model="post"
+                        style="width:200px"
+                        clearable
+                        filterable
+                        allow-create
+                        default-first-option
+                        @change="changeSelect"
+
+                        placeholder="请选择岗位">
+                        <el-option
+                            v-for="item in postOptions"
+                            :key="item.id"
+                            :label="item.name"
+                            :value="item.id">
+                        </el-option>
+                    </el-select>
                 </el-form-item>
-                <el-form-item label="密码">
-                    <el-input v-model="pwd"></el-input>
-                </el-form-item>
-                <el-form-item label="显示名">
-                    <el-input v-model="showname"></el-input>
-                </el-form-item>
-                <el-form-item label="工号">
-                    <el-input v-model="code"></el-input>
+                <el-form-item label="资质">
+                    <el-select
+                        v-model="post"
+                        style="width:200px"
+                        clearable
+                        filterable
+                        allow-create
+                        default-first-option
+                        @change="changeSelect"
+
+                        placeholder="请选择岗位">
+                        <el-option
+                            v-for="item in postOptions"
+                            :key="item.id"
+                            :label="item.name"
+                            :value="item.id">
+                        </el-option>
+                    </el-select>
                 </el-form-item>
             </el-form>
             <span slot="footer" class="dialog-footer">
@@ -184,7 +210,7 @@
             </span>
         </el-dialog>
         <!-- 编辑弹出框 -->
-        <el-dialog title="编辑人员" :visible.sync="editVisible" width="60%">
+        <el-dialog title="编辑资质" :visible.sync="editVisible" width="60%">
             <el-form ref="form" label-width="100px">
                 <el-form-item label="部门">
                     <el-select
@@ -242,17 +268,43 @@
                         </el-option>
                     </el-select>
                 </el-form-item>
-                <el-form-item label="登陆名">
-                    <el-input v-model="name" :disabled="true"></el-input>
+                <el-form-item label="人员">
+                    <el-select
+                        v-model="post"
+                        style="width:200px"
+                        clearable
+                        filterable
+                        allow-create
+                        default-first-option
+                        @change="changeSelect"
+
+                        placeholder="请选择岗位">
+                        <el-option
+                            v-for="item in postOptions"
+                            :key="item.id"
+                            :label="item.name"
+                            :value="item.id">
+                        </el-option>
+                    </el-select>
                 </el-form-item>
-                <el-form-item label="密码">
-                    <el-input v-model="pwd"></el-input>
-                </el-form-item>
-                <el-form-item label="显示名">
-                    <el-input v-model="showname"></el-input>
-                </el-form-item>
-                <el-form-item label="工号">
-                    <el-input v-model="code"></el-input>
+                <el-form-item label="资质">
+                    <el-select
+                        v-model="post"
+                        style="width:200px"
+                        clearable
+                        filterable
+                        allow-create
+                        default-first-option
+                        @change="changeSelect"
+
+                        placeholder="请选择岗位">
+                        <el-option
+                            v-for="item in postOptions"
+                            :key="item.id"
+                            :label="item.name"
+                            :value="item.id">
+                        </el-option>
+                    </el-select>
                 </el-form-item>
             </el-form>
             <span slot="footer" class="dialog-footer">
@@ -261,7 +313,7 @@
             </span>
         </el-dialog>
         <!-- 删除提示框 -->
-        <el-dialog title="删除人员" :visible.sync="delVisible" width="300px" center>
+        <el-dialog title="删除资质" :visible.sync="delVisible" width="300px" center>
             <div class="del-dialog-cnt">删除不可恢复，是否确定删除？</div>
             <span slot="footer" class="dialog-footer">
                 <el-button @click="delVisible = false" style="height:30px;width:80px">取 消</el-button>

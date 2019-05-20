@@ -157,6 +157,10 @@ import PostManagement from '../components/personnelManagement/postManagement';
 //角色管理
 import RoleManagement from '../components/personnelManagement/roleManagement';
 
+//资质设定
+import QualificationSetting from '../components/personnelManagement/QualificationSetting'
+
+
 //人员资质设定
 import personnelQualificationSetting from '../components/personnelManagement/personnelQualificationSetting.vue';
 
@@ -426,6 +430,11 @@ export default new Router({
                             path: '/RoleManagement',
                             component: RoleManagement,
                             meta: {title: '角色管理'}
+                        },
+                        {
+                            path: '/QualificationSetting',
+                            component: QualificationSetting,
+                            meta: {title: '资质设定'}
                         },
                         {
                             path: '/personnelQualificationSetting',
