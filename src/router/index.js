@@ -169,6 +169,17 @@ import zGTimeStatistics from '../components/personnelManagement/zGTimeStatistics
 //上离岗异常统计
 import sLGYCStatistics from '../components/personnelManagement/sLGYCStatistics.vue';
 
+//人员工作记录查询
+import rYGZJVCX from '../components/personnelManagement/rYGZJVCX.vue';
+
+//人员不良记录统计
+import rYBLJVTJ from '../components/personnelManagement/rYBLJVTJ.vue';
+
+//人员作业效率跟踪
+import rYZYXLGZ from '../components/personnelManagement/rYZYXLGZ.vue';
+
+
+
 //系统管理
 import OperationLog from '../components/systemManagement/operationLog';
 import LoginOutLog from '../components/systemManagement/loginOutLog';
@@ -436,6 +447,23 @@ export default new Router({
                             path: '/zGTimeStatistics',
                             component: zGTimeStatistics,
                             meta: {title: '在岗时间查询和统计'}
+                        }
+                        ,
+                        {
+                            path: '/rYGZJVCX',
+                            component: rYGZJVCX,
+                            meta: {title: '人员工作记录查询'}
+                        }
+                        ,
+                        {
+                            path: '/rYBLJVTJ',
+                            component: rYBLJVTJ,
+                            meta: {title: '人员不良记录统计'}
+                        },
+                        {
+                            path: '/rYZYXLGZ',
+                            component: rYZYXLGZ,
+                            meta: {title: '人员作业效率跟踪'}
                         }
                     ]
                 },

@@ -78,17 +78,17 @@
                             {
                                 label: '人员工作记录查询',
                                 index: "3-1",
-                                url: "/404"
+                                url: "/rYGZJVCX"
                             },
                             {
                                 label: '人员不良记录统计',
                                 index: "3-2",
-                                url: "/404"
+                                url: "/rYBLJVTJ"
                             },
                             {
                                 label: '人员作业效率跟踪',
                                 index: "3-3",
-                                url: "/404"
+                                url: "/rYZYXLGZ"
                             }
                         ]
                     },
