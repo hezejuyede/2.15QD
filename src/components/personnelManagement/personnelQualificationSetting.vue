@@ -233,8 +233,15 @@
                     }
                     else {
                         this.addVisible = true;
-                        this.zizhiname = "";
                         this.name = this.listType[0];
+                        axios.post(" " + url + "/sysconfig/getziZhiByUserid", {"id": this.listData[0]}
+                        )
+                            .then((res) => {
+                                this.zizhiname = res.data;
+                            })
+                            .catch((err) => {
+                                console.log(err)
+                            })
                     }
                 }
                 else {
@@ -253,12 +260,10 @@
             //进行新增资质
             doAdd() {
                 if (this.name && this.zizhiname) {
-                    console.log(this.zizhiname)
-                 /*   axios.post(" " + url + "/sysconfig/userAdd",
+                    axios.post(" " + url + "/sysconfig/saveUserZizhi",
                         {
                             "id": this.listData[0],
-                            "name": this.name,
-                            "zizhiname": this.zizhiname
+                            "ids": this.zizhiname
                         }
                     )
                         .then((res) => {
@@ -275,7 +280,7 @@
                         })
                         .catch((err) => {
                             console.log(err)
-                        })*/
+                        })
                 }
                 else {
                     this.$message.warning(`输入不能为空`);
