@@ -157,14 +157,17 @@ import PostManagement from '../components/personnelManagement/postManagement';
 //角色管理
 import RoleManagement from '../components/personnelManagement/roleManagement';
 
+//人员资质设定
+import personnelQualificationSetting from '../components/personnelManagement/personnelQualificationSetting.vue';
 
+//资质查询与统计
+import QualificationQueryAndStatistics from '../components/personnelManagement/QualificationQueryAndStatistics.vue';
 
+//在岗时间查询和统计
+import zGTimeStatistics from '../components/personnelManagement/zGTimeStatistics';
 
-
-//人员管理
-import ForReference from '../components/materialManagement/ForReference';
-
-
+//上离岗异常统计
+import sLGYCStatistics from '../components/personnelManagement/sLGYCStatistics.vue';
 
 //系统管理
 import OperationLog from '../components/systemManagement/operationLog';
@@ -412,6 +415,27 @@ export default new Router({
                             path: '/RoleManagement',
                             component: RoleManagement,
                             meta: {title: '角色管理'}
+                        },
+                        {
+                            path: '/personnelQualificationSetting',
+                            component: personnelQualificationSetting,
+                            meta: {title: '人员资质设定'}
+                        },
+                        {
+                            path: '/QualificationQueryAndStatistics',
+                            component: QualificationQueryAndStatistics,
+                            meta: {title: '资质查询与统计'}
+                        }
+                        ,
+                        {
+                            path: '/sLGYCStatistics',
+                            component: sLGYCStatistics,
+                            meta: {title: '上离岗异常统计'}
+                        },
+                        {
+                            path: '/zGTimeStatistics',
+                            component: zGTimeStatistics,
+                            meta: {title: '在岗时间查询和统计'}
                         }
                     ]
                 },

@@ -62,12 +62,12 @@
                             {
                                 label: '人员资质设定',
                                 index: "2-1",
-                                url: "/404"
+                                url: "/personnelQualificationSetting"
                             },
                             {
                                 label: "资质查询与统计",
                                 index: "2-2",
-                                url: "/404"
+                                url: "/QualificationQueryAndStatistics"
                             }
                         ]
                     },
@@ -124,8 +124,24 @@
                         ]
                     },
                     {
-                        label: '人员监控',
+                        label: '人员时间管理',
                         index: "5",
+                        children: [
+                            {
+                                label: '在岗时间查询和统计',
+                                index: "5-1",
+                                url: "/zGTimeStatistics"
+                            },
+                            {
+                                label: '上离岗异常统计',
+                                index: "5-2",
+                                url: "/sLGYCStatistics"
+                            }
+                        ]
+                    },
+                    {
+                        label: '人员监控',
+                        index: "6",
                         children: [
                             {
                                 label: '人员动态分布图',

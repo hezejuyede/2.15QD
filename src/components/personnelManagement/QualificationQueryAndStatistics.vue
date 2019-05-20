@@ -3,7 +3,7 @@
         <div class="crumbs">
             <el-breadcrumb separator="/">
                 <el-breadcrumb-item>人员管理</el-breadcrumb-item>
-                <el-breadcrumb-item>人员设定</el-breadcrumb-item>
+                <el-breadcrumb-item>资质查询与统计</el-breadcrumb-item>
             </el-breadcrumb>
         </div>
         <div class="template-content">
