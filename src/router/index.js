@@ -183,6 +183,25 @@ import rYBLJVTJ from '../components/personnelManagement/rYBLJVTJ.vue';
 import rYZYXLGZ from '../components/personnelManagement/rYZYXLGZ.vue';
 
 
+//人员资质报表
+import ryzzReportForm from '../components/personnelManagement/ryzzReportForm.vue';
+
+//人员上岗率报表
+import rysglReportForm from '../components/personnelManagement/rysglReportForm.vue';
+
+//不良记录报表
+import bljlReportForm from '../components/personnelManagement/bljlReportForm.vue';
+
+//人员效率报表
+import ryxlReportForm from '../components/personnelManagement/ryxlReportForm.vue';
+
+//人员总体绩效评估报表
+import ryztjxpgReportForm from '../components/personnelManagement/ryztjxpgReportForm.vue';
+
+
+
+
+
 
 //系统管理
 import OperationLog from '../components/systemManagement/operationLog';
@@ -445,8 +464,7 @@ export default new Router({
                             path: '/QualificationQueryAndStatistics',
                             component: QualificationQueryAndStatistics,
                             meta: {title: '资质查询与统计'}
-                        }
-                        ,
+                        },
                         {
                             path: '/sLGYCStatistics',
                             component: sLGYCStatistics,
@@ -456,14 +474,12 @@ export default new Router({
                             path: '/zGTimeStatistics',
                             component: zGTimeStatistics,
                             meta: {title: '在岗时间查询和统计'}
-                        }
-                        ,
+                        },
                         {
                             path: '/rYGZJVCX',
                             component: rYGZJVCX,
                             meta: {title: '人员工作记录查询'}
-                        }
-                        ,
+                        },
                         {
                             path: '/rYBLJVTJ',
                             component: rYBLJVTJ,
@@ -473,6 +489,33 @@ export default new Router({
                             path: '/rYZYXLGZ',
                             component: rYZYXLGZ,
                             meta: {title: '人员作业效率跟踪'}
+                        },
+
+
+                        {
+                            path: '/ryzzReportForm',
+                            component: ryzzReportForm,
+                            meta: {title: '人员资质报表'}
+                        },
+                        {
+                            path: '/rysglReportForm',
+                            component: rysglReportForm,
+                            meta: {title: '人员上岗率报表'}
+                        },
+                        {
+                            path: '/bljlReportForm',
+                            component: bljlReportForm,
+                            meta: {title: '不良记录报表'}
+                        },
+                        {
+                            path: '/ryxlReportForm',
+                            component: ryxlReportForm,
+                            meta: {title: '人员效率报表'}
+                        },
+                        {
+                            path: '/ryztjxpgReportForm',
+                            component: ryztjxpgReportForm,
+                            meta: {title: '人员总体绩效评估报表'}
                         }
                     ]
                 },

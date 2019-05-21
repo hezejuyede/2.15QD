@@ -104,27 +104,27 @@
                             {
                                 label: '人员资质报表',
                                 index: "4-1",
-                                url: "/404"
+                                url: "/ryzzReportForm"
                             },
                             {
                                 label: '人员上岗率报表',
                                 index: "4-2",
-                                url: "/404"
+                                url: "/rysglReportForm"
                             },
                             {
                                 label: '不良记录报表',
                                 index: "4-3",
-                                url: "/404"
+                                url: "/bljlReportForm"
                             },
                             {
                                 label: '人员效率报表',
                                 index: "4-4",
-                                url: "/404"
+                                url: "/ryxlReportForm"
                             },
                             {
                                 label: '人员总体绩效评估报表',
                                 index: "4-5",
-                                url: "/404"
+                                url: "/ryztjxpgReportForm"
                             }
                         ]
                     },

@@ -3,44 +3,36 @@
         <div class="crumbs">
             <el-breadcrumb separator="/">
                 <el-breadcrumb-item>人员管理</el-breadcrumb-item>
-                <el-breadcrumb-item>资质查询与统计</el-breadcrumb-item>
+                <el-breadcrumb-item>人员上岗率报表</el-breadcrumb-item>
             </el-breadcrumb>
         </div>
         <div class="template-content">
             <div class="container">
                 <div class="handle-box">
-                    <label style="margin-right: 5px">
-                        <span>筛选资质</span>
+                    <label style="margin-right: 10px">
+                        <span>智能检索托单金物</span>
                         <span>:</span>
-                        <el-input v-model="select_word" placeholder="筛选人员" style="width: 150px"></el-input>
+                        <el-input v-model="select_word" placeholder="智能检索托单金物" class="handle-input mr10"></el-input>
                     </label>
                     <label style="margin-right: 10px;margin-left: 10px">
-                        <span> 加工线选择</span>
+                        <span>选择查询时间</span>
                         <span>:</span>
-                        <el-select
-                            v-model="line"
-                            clearable
-                            filterable
-                            allow-create
-                            default-first-option
-                            @change="changeScx"
-                            placeholder="请输入或者选择生产线">
-                            <el-option
-                                v-for="item in lineOptions"
-                                :key="item.indexno"
-                                :label="item.name"
-                                :value="item.indexno">
-                            </el-option>
-                        </el-select>
+                        <el-date-picker
+                            v-model="examineTime"
+                            type="daterange"
+                            start-placeholder="开始日期"
+                            end-placeholder="结束日期"
+                            value-format="yyyy-MM-dd">
+                        </el-date-picker>
                     </label>
+                    <el-button type="primary" icon="delete" class="handle-del mr10" @click="doSearch">查询报表</el-button>
                 </div>
                 <div class="">
                     <el-table class="tb-edit"
                               :data="tables"
                               :header-cell-style="{background:'#A1D0FC',color:'rgba(0, 0, 0, 0.8)',fontSize:'20px'}"
                               border
-                              height="400"
-                              @row-dblclick="editPerson"
+                              height="450"
                               highlight-current-row
                               style="width: 98%;margin: auto">
                         <template v-for="(col ,index) in cols">
@@ -50,25 +42,16 @@
                 </div>
             </div>
 
+            <Modal :msg="message"
+                   :isHideModal="HideModal"></Modal>
         </div>
-        <!-- 编辑弹出框 -->
-        <el-dialog title="编辑人员" :visible.sync="editVisible" width="60%">
-            <el-form ref="form" label-width="100px">
-
-            </el-form>
-            <span slot="footer" class="dialog-footer">
-                <el-button @click="editVisible = false" style="height:30px;width:80px">取 消</el-button>
-            </span>
-        </el-dialog>
-
-        <Modal :msg="message"
-               :isHideModal="HideModal"></Modal>
     </div>
 </template>
 <script type="text/ecmascript-6">
     import axios from 'axios'
     import url from '../../assets/js/URL'
     import Modal from '../../common/modal'
+    import {getNowTime} from '../../assets/js/api'
 
     export default {
         name: 'WorkingProcedure',
@@ -76,24 +59,16 @@
             return {
                 message: '',
                 HideModal: true,
-                listData: [],
-
 
                 cols: [],
                 tableData: [],
 
-                line:"",
-                lineOptions:[],
+                batch: "",
+                batchOptions: [],
 
                 select_word: '',
+                examineTime: "",
 
-                editVisible: false,
-
-                id: "",
-                name: '',
-                pwd: '',
-                showname: '',
-                code: ""
 
             }
         },
@@ -128,26 +103,31 @@
                     this.$router.push("/")
                 }
                 else {
+                    let time = getNowTime();
+                    let times = [];
+                    for (let i = 0; i < 2; i++) {
+                        times.push(time)
+                    }
+                    this.examineTime = times;
+
                     let that = this;
                     axios.all([
-                        axios.post(" " + url + "/sys/dictionaryList", {"id": "9"}),
+                        axios.post(" " + url + "/sys/getPiciList"),
                     ])
-                        .then(axios.spread(function (line) {
-                            that.line = line.data[0].indexno;
-                            that.lineOptions = line.data;
-                            that.loadingShowData(that.line)
+                        .then(axios.spread(function (select) {
+                            that.batchOptions = select.data;
+                            that.batch = select.data[0].id;
+                            that.loadingShowData(that.batch);
                         }));
-
-
                 }
             },
 
             //瞬间加载数据
-            loadingShowData(data1) {
+            loadingShowData(data) {
                 let that = this;
                 axios.all([
-                    axios.post(" " + url + "/sys/showTableTitle", {"name": "zzcxtj"}),
-                    axios.post(" " + url + "/sysconfig/personList", {"shengchanxian": data1})
+                    axios.post(" " + url + "/sys/showTableTitle", {"name": "zwjwcx"}),
+                    axios.post(" " + url + "/wuliao/jinwuZhuwenpinList", {"time": data})
                 ])
                     .then(axios.spread(function (title, table) {
                         that.cols = title.data;
@@ -156,29 +136,23 @@
             },
 
 
-            //改变生产线得到新数据
-            changeScx() {
-                this.loadingShowData(this.line)
-            },
-            //双击点击行内编辑
-            editPerson(row, column, cell, event) {
-                this.editVisible = true;
-                this.id = row.id;
-                axios.post(" " + url + "/sysconfig/personDetail", {"id": this.id})
-                    .then((res) => {
-                        this.post = res.data.postid;
-                        this.dept = res.data.deptid;
-                        this.role = res.data.roleid;
-                        this.name = res.data.name;
-                        this.pwd = res.data.pwd;
-                        this.showname = res.data.showname;
-                        this.code = res.data.code;
-                    })
-                    .catch((err) => {
-                        console.log(err)
-                    });
-            },
+            //根据时间查询
+            doSearch() {
+                if (this.batch) {
+                    this.loadingShowData(this.batch)
+                }
+                else {
+                    this.message = "查询批次不能为空";
+                    this.HideModal = false;
+                    const that = this;
+                    function a() {
+                        that.message = "";
+                        that.HideModal = true;
+                    }
+                    setTimeout(a, 2000);
+                }
 
+            }
 
         }
     }
@@ -220,6 +194,9 @@
             .red {
                 color: #ff0000;
             }
+
         }
     }
+
+
 </style>
