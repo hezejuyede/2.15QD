@@ -138,8 +138,7 @@
                         .then(axios.spread(function (dept) {
                             that.deptOptions = dept.data;
                             that.dept = dept.data[0].id;
-                            that.loadingShowData(this.dept, this.examineTime);
-
+                            that.loadingShowData(that.dept, that.examineTime);
                         }));
 
 
