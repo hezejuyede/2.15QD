@@ -9,49 +9,59 @@
         <div class="template-content">
             <div class="container">
                 <div class="handle-box">
-                    <label style="margin-right: 10px">
-                        <span>智能检索托单金物</span>
+                    <label style="margin-right: 5px">
+                        <span>筛选资质</span>
                         <span>:</span>
-                        <el-input v-model="select_word" placeholder="智能检索托单金物" class="handle-input mr10"></el-input>
+                        <el-input v-model="select_word" placeholder="筛选人员" style="width: 150px"></el-input>
                     </label>
                     <label style="margin-right: 10px;margin-left: 10px">
-                        <span>选择查询时间</span>
+                        <span> 加工线选择</span>
                         <span>:</span>
-                        <el-date-picker
-                            v-model="examineTime"
-                            type="daterange"
-                            start-placeholder="开始日期"
-                            end-placeholder="结束日期"
-                            value-format="yyyy-MM-dd">
-                        </el-date-picker>
+                        <el-select
+                            v-model="line"
+                            clearable
+                            filterable
+                            allow-create
+                            default-first-option
+                            @change="changeScx"
+                            placeholder="请输入或者选择生产线">
+                            <el-option
+                                v-for="item in lineOptions"
+                                :key="item.indexno"
+                                :label="item.name"
+                                :value="item.indexno">
+                            </el-option>
+                        </el-select>
                     </label>
-                    <el-button type="primary" icon="delete" class="handle-del mr10" @click="doSearch">查询报表</el-button>
                 </div>
-                <div class="">
-                    <el-table class="tb-edit"
-                              :data="tables"
-                              :header-cell-style="{background:'#A1D0FC',color:'rgba(0, 0, 0, 0.8)',fontSize:'20px'}"
-                              border
-                              height="450"
-                              highlight-current-row
-                              style="width: 98%;margin: auto">
-                        <template v-for="(col ,index) in cols">
-                            <el-table-column align="center" :prop="col.prop" :label="col.label"></el-table-column>
-                        </template>
-                    </el-table>
+                <div class="handle-bottom">
+                    <div class="personnelTemplate fl" v-for="(item,index) in lineWorkPersonnel">
+                        <div class="personnelTemplateAvatar">
+                            <img src="../../assets/img/avatar.png" alt="" class="">
+                        </div>
+                        <div class="personnelTemplateTop">
+                            <div class=""><span>姓名:</span> <span>{{item.name}}</span></div>
+                            <div class=""><span>工位:</span> <span>{{item.workstation}}</span></div>
+                        </div>
+                        <div class="personnelTemplateBottom">
+                            <div class=""><span>今日工作量:</span><span>{{item.workNumber}}</span></div>
+                            <div class=""><span>今日完成率:</span><span>{{item.workCompletionRate}}</span></div>
+                        </div>
+                    </div>
                 </div>
             </div>
 
-            <Modal :msg="message"
-                   :isHideModal="HideModal"></Modal>
         </div>
+
+
+        <Modal :msg="message"
+               :isHideModal="HideModal"></Modal>
     </div>
 </template>
 <script type="text/ecmascript-6">
     import axios from 'axios'
     import url from '../../assets/js/URL'
     import Modal from '../../common/modal'
-    import {getNowTime} from '../../assets/js/api'
 
     export default {
         name: 'WorkingProcedure',
@@ -60,14 +70,30 @@
                 message: '',
                 HideModal: true,
 
-                cols: [],
-                tableData: [],
-
-                batch: "",
-                batchOptions: [],
+                lineWorkPersonnel:[
+                    {"name":"1","workstation":"切断","workNumber":"11","workCompletionRate":"90%"},
+                    {"name":"1","workstation":"切断","workNumber":"11","workCompletionRate":"90%"},
+                    {"name":"1","workstation":"切断","workNumber":"11","workCompletionRate":"90%"},
+                    {"name":"1","workstation":"切断","workNumber":"11","workCompletionRate":"90%"},
+                    {"name":"1","workstation":"切断","workNumber":"11","workCompletionRate":"90%"},
+                    {"name":"1","workstation":"切断","workNumber":"11","workCompletionRate":"90%"},
+                    {"name":"1","workstation":"切断","workNumber":"11","workCompletionRate":"90%"},
+                    {"name":"1","workstation":"切断","workNumber":"11","workCompletionRate":"90%"},
+                    {"name":"1","workstation":"切断","workNumber":"11","workCompletionRate":"90%"},
+                    {"name":"1","workstation":"切断","workNumber":"11","workCompletionRate":"90%"},
+                    {"name":"1","workstation":"切断","workNumber":"11","workCompletionRate":"90%"},
+                    {"name":"1","workstation":"切断","workNumber":"11","workCompletionRate":"90%"},
+                    {"name":"1","workstation":"切断","workNumber":"11","workCompletionRate":"90%"},
+                    {"name":"1","workstation":"切断","workNumber":"11","workCompletionRate":"90%"},
+                    {"name":"1","workstation":"切断","workNumber":"11","workCompletionRate":"90%"}
+                    ],
+                line:"",
+                lineOptions:[],
 
                 select_word: '',
-                examineTime: "",
+
+
+
 
 
             }
@@ -103,31 +129,26 @@
                     this.$router.push("/")
                 }
                 else {
-                    let time = getNowTime();
-                    let times = [];
-                    for (let i = 0; i < 2; i++) {
-                        times.push(time)
-                    }
-                    this.examineTime = times;
-
                     let that = this;
                     axios.all([
-                        axios.post(" " + url + "/sys/getPiciList"),
+                        axios.post(" " + url + "/sys/dictionaryList", {"id": "9"}),
                     ])
-                        .then(axios.spread(function (select) {
-                            that.batchOptions = select.data;
-                            that.batch = select.data[0].id;
-                            that.loadingShowData(that.batch);
+                        .then(axios.spread(function (line) {
+                            that.line = line.data[0].indexno;
+                            that.lineOptions = line.data;
+                            that.loadingShowData(that.line)
                         }));
+
+
                 }
             },
 
             //瞬间加载数据
-            loadingShowData(data) {
+            loadingShowData(data1) {
                 let that = this;
                 axios.all([
-                    axios.post(" " + url + "/sys/showTableTitle", {"name": "zwjwcx"}),
-                    axios.post(" " + url + "/wuliao/jinwuZhuwenpinList", {"time": data})
+                    axios.post(" " + url + "/sys/showTableTitle", {"name": "zzcxtj"}),
+                    axios.post(" " + url + "/sysconfig/personList", {"shengchanxian": data1})
                 ])
                     .then(axios.spread(function (title, table) {
                         that.cols = title.data;
@@ -136,25 +157,12 @@
             },
 
 
-            //根据时间查询
-            doSearch() {
-                if (this.batch) {
-                    this.loadingShowData(this.batch)
-                }
-                else {
-                    this.message = "查询批次不能为空";
-                    this.HideModal = false;
-                    const that = this;
+            //改变生产线得到新数据
+            changeScx() {
+                this.loadingShowData(this.line)
+            },
 
-                    function a() {
-                        that.message = "";
-                        that.HideModal = true;
-                    }
 
-                    setTimeout(a, 2000);
-                }
-
-            }
 
         }
     }
@@ -185,20 +193,46 @@
                     height: 30px;
                 }
             }
-            .del-dialog-cnt {
-                font-size: 16px;
-                text-align: center
+            .handle-bottom{
+                height: 450px;
+                overflow: auto;
+                .personnelTemplate{
+                    width: 12%;
+                    height: 180px;
+                    margin-left: 2%;
+                    margin-bottom: 5%;
+                    background-color: @color-bg-lv;
+                    border-radius: 10px;
+                    .personnelTemplateAvatar{
+                        display: flex;
+                        align-items: center;
+                        justify-content: center;
+                        margin-bottom: 5px;
+                        margin-top: 5px;
+                        img {
+                            width: 80px;
+                            height: 80px;
+                            border-radius: 50%;
+                        }
+                    }
+                    .personnelTemplateTop{
+                        display: flex;
+                        align-items: center;
+                        justify-content: center;
+                        flex-direction: column;
+                        color: @color-white;
+                    }
+                    .personnelTemplateBottom{
+                        display: flex;
+                        align-items: center;
+                        justify-content: center;
+                        flex-direction: column;
+                        color: @color-white;
+                    }
+                }
             }
-            .table {
-                width: 100%;
-                font-size: 14px;
-            }
-            .red {
-                color: #ff0000;
-            }
+
 
         }
     }
-
-
 </style>
