@@ -135,12 +135,12 @@
                             {
                                 label: '在岗时间查询和统计',
                                 index: "5-1",
-                                url: "/zGTimeStatistics"
+                                url: "/sLGYCStatistics"
                             },
                             {
                                 label: '上离岗异常统计',
                                 index: "5-2",
-                                url: "/sLGYCStatistics"
+                                url: "/zGTimeStatistics"
                             }
                         ]
                     },
