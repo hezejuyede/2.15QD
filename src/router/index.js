@@ -198,7 +198,8 @@ import ryxlReportForm from '../components/personnelManagement/ryxlReportForm.vue
 //人员总体绩效评估报表
 import ryztjxpgReportForm from '../components/personnelManagement/ryztjxpgReportForm.vue';
 
-
+//人员动态分布图
+import StaffDynamics from '../components/personnelManagement/StaffDynamics.vue';
 
 
 
@@ -490,8 +491,6 @@ export default new Router({
                             component: rYZYXLGZ,
                             meta: {title: '人员作业效率跟踪'}
                         },
-
-
                         {
                             path: '/ryzzReportForm',
                             component: ryzzReportForm,
@@ -516,6 +515,11 @@ export default new Router({
                             path: '/ryztjxpgReportForm',
                             component: ryztjxpgReportForm,
                             meta: {title: '人员总体绩效评估报表'}
+                        },
+                        {
+                            path: '/StaffDynamics',
+                            component: StaffDynamics,
+                            meta: {title: '人员动态分布图'}
                         }
                     ]
                 },

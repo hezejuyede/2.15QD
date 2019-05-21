@@ -150,8 +150,8 @@
                         children: [
                             {
                                 label: '人员动态分布图',
-                                index: "5-1",
-                                url: "/404"
+                                index: "6-1",
+                                url: "/StaffDynamics"
                             }
                         ]
                     }
