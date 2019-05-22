@@ -519,7 +519,7 @@
                         if (res.data === "1") {
                             this.loading = false;
                             this.$message.success('通过审核成功');
-                            this.gtBtn="1"
+                            this.gtBtn="1";
                             let that = this;
                             axios.all([
                                 axios.post(" " + url + "/sys/getPiciList"),
@@ -529,7 +529,6 @@
                             ])
                                 .then(axios.spread(function (pici, scx, type, status) {
                                     that.batchOptions = pici.data;
-                                    that.batch = pici.data[0].id;
                                     that.scxOptions = scx.data;
                                     that.fileTypeOptions = type.data;
                                     that.statusOptions = status.data;
