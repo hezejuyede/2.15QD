@@ -59,12 +59,11 @@
                         index: 'QualityAssurance',
                         title: '质量管理'
                     },
-
-                  /*  {
+                    {
                         icon: 'el-icon-view',
                         index: 'ProductionMonitoring',
                         title: '设备管理'
-                    },*/
+                    },
                     {
                         icon: 'el-icon-news',
                         index: 'PersonnelManagement',

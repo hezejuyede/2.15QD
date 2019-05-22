@@ -1,281 +1,211 @@
 <template>
-  <div class="productionMonitoring">
-    <main ref="indexDiv" id="indexDiv">
-      <div class="indexDiv-top ">
-        <div class="indexDiv-top-left fl"></div>
-        <div class="indexDiv-top-center fl">设备管理</div>
-        <div class="indexDiv-top-right fl"></div>
-      </div>
-      <div class="indexDiv-bottom clearfix">
-        <div class="nav-div fl"  v-for="(item,index) in navBarData"
-             @click="goToNavBar(index,item.url)">
-          <div class="indexDivText">
-            <i :class=" item.icon"></i>
-            <span>{{item.label}}</span>
-          </div>
+    <div class="productionMonitoring">
+        <div class="productionMonitoring-nav">
+            <el-menu :default-active="activeIndex" class="el-menu-demo" mode="horizontal">
+                <div v-for="(item,index) in navBarData" :class="{'navDivColor':index === num}">
+                    <el-submenu :index="item.index">
+                        <template slot="title">{{item.label}}</template>
+                        <div class="" v-for="(item ,index) in item.children"
+                             @click=" handleSelect(item.index,item.url)">
+                            <el-menu-item :index="item.index">{{item.label}}</el-menu-item>
+                        </div>
+                    </el-submenu>
+                </div>
+            </el-menu>
         </div>
-      </div>
-    </main>
-  </div>
+        <div class="productionMonitoring-content">
+            <keep-alive>
+                <router-view></router-view>
+            </keep-alive>
+        </div>
+    </div>
 </template>
 <script type="text/ecmascript-6">
 
 
-  export default {
-    name: 'productionMonitoring',
-    data() {
-      return {
-        navBarData: [
-          {
-            icon:"iconfont icon-shuju",
-            label: '数据采集',
-            id: "1",
-            url:"/404"
-          },
-          {
-            icon:"iconfont icon-jiaojishiji",
-            label: '计划实绩追踪',
-            id: "2",
-            url:"/404"
-          },
-          {
-            icon:"iconfont icon-youhuiquanguanli-",
-            label: '工位动态',
-            id: "3",
-            url:"/404"
-          },
-          {
-            icon:"iconfont icon-renyuan",
-            label: '人员分布',
-            id: "4",
-            url:"/404"
-          },
-          {
-            icon:"iconfont icon-dongtai",
-            label: '物料动态',
-            id: "5",
-            url:"/404"
-          },
-          {
-            icon:"iconfont icon-icon-life-alarm",
-            label: '异常报警',
-            id: "6",
-            url:"/404"
-          },
-          {
-            icon:"iconfont icon-daiji",
-            label: '待料时间',
-            id: "7",
-            url:"/404"
-          },
-          {
-            icon:"iconfont icon-shujutubiao11",
-            label: '设备运行',
-            id: "8",
-            url:"/404"
-          },
-          {
-            icon:"iconfont icon-baobiao",
-            label: '可视化报表',
-            id: "9",
-            url:"/VisualReportForms"
-          },
-          {
-            icon:"iconfont icon-jiankong",
-            label: '监控信息',
-            id: "10",
-            url:"/404"
-          },
-          {
-            icon:"iconfont icon-dianzikanban",
-            label: '电子看板',
-            id: "11",
-            url:"/DigitalSignage"
-          },
-          {
-            icon:"iconfont icon-chaxun",
-            label: '查询',
-            id: "12",
-            url:"/404"
-          }
-        ]
+    export default {
+        name: 'productionMonitoring',
+        data() {
+            return {
+                num: 0,
+                navBarData: [
+                    {
+                        label: '设备点检',
+                        index: "1",
+                        children: [
+                            {
+                                label: '点检项目设定',
+                                index: "1-1",
+                                url: "/DepartmentManagement"
+                            },
+                            {
+                                label: '工位点检记录',
+                                index: "1-2",
+                                url: "/RoleManagement"
+                            },
+                            {
+                                label: '工位点检记录',
+                                index: "1-3",
+                                url: "/PostManagement"
+                            }
+                        ]
+                    },
+                    {
+                        label: '耗材与备件管理',
+                        index: "2",
+                        children: [
+                            {
+                                label: '定义耗材库',
+                                index: "2-1",
+                                url: "/QualificationSetting"
+                            },
+                            {
+                                label: '出入库登记',
+                                index: "2-2",
+                                url: "/personnelQualificationSetting"
+                            }
+                        ]
+                    },
+                    {
+                        label: '设备故障跟踪',
+                        index: "3",
+                        children: [
+                            {
+                                label: '设备故障异常上报',
+                                index: "3-1",
+                                url: "/rYGZJVCX"
+                            },
+                            {
+                                label: '设备故障处理跟踪',
+                                index: "3-2",
+                                url: "/rYBLJVTJ"
+                            }
+                        ]
+                    },
+                    {
+                        label: '设备报表',
+                        index: "4",
+                        children: [
+                            {
+                                label: '设备归属报表',
+                                index: "4-1",
+                                url: "/ryzzReportForm"
+                            },
+                            {
+                                label: '点检不良率报表',
+                                index: "4-2",
+                                url: "/rysglReportForm"
+                            },
+                            {
+                                label: '设备故障率报表',
+                                index: "4-3",
+                                url: "/bljlReportForm"
+                            }
+                        ]
+                    },
+                    {
+                        label: '设备监控',
+                        index: "5",
+                        children: [
+                            {
+                                label: '设备状态实时监控图',
+                                index: "5-1",
+                                url: "/sLGYCStatistics"
+                            }
+                        ]
+                    }
+                ],
+                activeIndex: '1',
+            }
+        },
+        components: {},
+        mounted() {
 
-      }
-    },
-    components: {},
-    mounted() {
+        },
 
+        created() {
+            this.getAdminState()
+        },
+        methods: {
 
-    },
-    created() {
+            //页面加载检查用户是否登陆，没有登陆就加载登陆页面
+            getAdminState() {
+                const userInfo = localStorage.getItem("userInfo");
+                if (userInfo === null) {
 
+                }
+                else {
+                    this.$router.push(this.navBarData[0].children[0].url);
+                }
+            },
+            //点击前往那个子组件
+            goToNavBar(index, url) {
+                this.$router.push(url);
+            },
 
-    },
-    methods: {
+            //点击导航前往哪一个页面
+            handleSelect(index, url) {
+                let Num = parseInt(index.substr(0, 1));
+                this.num = Num - 1;
+                this.$router.push(url);
+            }
 
-
-      //页面加载检查用户是否登陆，没有登陆就加载登陆页面
-      getAdminState() {
-        const userInfo = sessionStorage.getItem("userInfo");
-        if (userInfo === null) {
 
         }
-        else {
-
-
-        }
-      },
-      //点击前往那个子组件
-      goToNavBar(index, url) {
-        this.$router.push(url);
-      }
-
     }
-  }
 </script>
 <style scoped lang="less" rel="stylesheet/less">
-  @import "../../assets/less/base";
-  .productionMonitoring{
-      width: 100%;
-      height: 100%;
-      background-color: @color-white;
-  }
-  .indexDiv-top {
-    height: 50px;
-    margin-bottom: 20px;
-    .indexDiv-top-left {
-      height: 1px;
-      width: 5%;
-      margin-top: 25px;
-      background-color: #303133;
-    }
-    .indexDiv-top-center {
-      width: 10%;
-      margin-top: 15px;
-      text-align: center;
-    }
-    .indexDiv-top-right {
-      height: 1px;
-      width: 85%;
-      margin-top: 25px;
-      background-color: #303133;
-    }
-  }
-  .indexDiv-bottom{
-      width: 70%;
-      margin-top: 20px;
-      .nav-div {
-          width: 15%;
-          margin-left: 6%;
-          height: 100px;
-          margin-bottom: 5%;
-          text-align: center;
-          cursor: pointer;
-          border: 1px solid @color-background-dd;
-          box-shadow: 2px 2px 1px @color-background-dd;
-          border-radius: 10%;
-          .indexDivText {
-        margin-top: 20px;
+    @import "../../assets/less/base";
+
+    .productionMonitoring {
         width: 100%;
-        height: 60px;
-        line-height: 30px;
-      }
-      i{
-        display: block;
-        font-size: 200%;
-        margin-bottom: 5px;
-      }
-      span{
-        display: block;
-      }
-      .icon-shuju{
-          display: block;
-          font-size: 400%;
-          margin-bottom: 20px;
-        color: #ffcd32;
+        height: 100%;
+        background-color: @color-white;
+        .productionMonitoring-nav {
+            width: 100%;
+            height: 10%;
+            .el-menu-demo {
+                display: flex;
+                > div {
+                    flex: 1;
+                    text-align: center;
+                }
+                div:nth-child(3) {
+                    flex: 1.2;
+                    text-align: center;
+                }
+                div:nth-child(4) {
+                    flex: 1.2;
+                    text-align: center;
+                }
 
-      }
-      .icon-jiaojishiji{
-          display: block;
-          font-size: 400%;
-          margin-bottom: 20px;
-        color: #3EC455;
+            }
 
-      }
-      .icon-youhuiquanguanli-{
-          display: block;
-          font-size: 400%;
-          margin-bottom: 20px;
-        color: #d93f30;
-
-      }
-      .icon-renyuan{
-          display: block;
-          font-size: 400%;
-          margin-bottom: 20px;
-        color: cadetblue;
-
-      }
-      .icon-dongtai{
-          display: block;
-          font-size: 400%;
-          margin-bottom: 20px;
-        color: chartreuse;
-
-      }
-      .icon-icon-life-alarm{
-          display: block;
-          font-size: 400%;
-          margin-bottom: 20px;
-        color: deeppink;
-
-      }
-      .icon-daiji{
-          display: block;
-          font-size: 400%;
-          margin-bottom: 20px;
-        color: brown;
-
-      }
-      .icon-shujutubiao11{
-          display: block;
-          font-size: 400%;
-          margin-bottom: 20px;
-        color: blueviolet;
-      }
-      .icon-jiankong{
-          display: block;
-          font-size: 400%;
-          margin-bottom: 20px;
-        color: chocolate;
-
-      }
-      .icon-dianzikanban{
-          display: block;
-          font-size: 400%;
-          margin-bottom: 20px;
-        color: darkmagenta;
-
-      }
-      .icon-chaxun{
-          display: block;
-          font-size: 400%;
-          margin-bottom: 20px;
-        color: hotpink;
-
-      }
-      .icon-baobiao{
-          display: block;
-          font-size: 400%;
-          margin-bottom: 20px;
-        color: orangered;
-      }
+        }
+        .productionMonitoring-content{
+            margin-bottom: 50px;
+        }
 
     }
-  }
 
+    .navDivColor {
+        background-color: @color-background-d;
+    }
 
+    @media only screen and (max-width: 1200px) {
+        .plannedProduction {
+            width: 1200px;
+            .plannedProduction-nav {
+                width: 1200px;
+            }
+            .plannedProduction-content {
+                width: 1200px;
+            }
+        }
+
+    }
 
 
 </style>
+
 
