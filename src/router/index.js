@@ -125,7 +125,7 @@ import gwReportForm from '../components/materialManagement/gwReportForm'
 
 import ProductionMonitoring from '../components/productionMonitoring/productionMonitoring'
 
-import DigitalSignage from '../components/productionMonitoring/DigitalSignage'
+
 
 import QualityAssurance from '../components/qualityAssurance/qualityAssurance'
 
@@ -623,10 +623,6 @@ export default new Router({
         {
             path: '*',
             redirect: '/404'
-        },
-        {
-            path: '/DigitalSignage',
-            component: DigitalSignage
         }
     ]
 })
