@@ -424,7 +424,7 @@ export default new Router({
                 {
                     path: '/ProductionMonitoring',
                     component: ProductionMonitoring,
-                    meta: {title: '生产监视'}
+                    meta: {title: '设备管理'}
                 },
                 {
                     path: '/PersonnelManagement',

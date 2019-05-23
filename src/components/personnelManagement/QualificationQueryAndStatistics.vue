@@ -12,7 +12,7 @@
                     <label style="margin-right: 5px">
                         <span>筛选资质</span>
                         <span>:</span>
-                        <el-input v-model="select_word" placeholder="筛选人员" style="width: 150px"></el-input>
+                        <el-input v-model="select_word" placeholder="筛选资质" style="width: 200px"></el-input>
                     </label>
                     <label style="margin-right: 10px;margin-left: 10px">
                         <span> 加工线选择</span>
@@ -54,6 +54,27 @@
         <!-- 编辑弹出框 -->
         <el-dialog title="编辑人员" :visible.sync="editVisible" width="60%">
             <el-form ref="form" label-width="100px">
+                <template>
+                    <el-table
+                        :data="zizhiData"
+                        :header-cell-style="{background:'#A1D0FC',color:'rgba(0, 0, 0, 0.8)',fontSize:'20px'}"
+                        border
+                        height="400"
+                        @row-dblclick="editPerson"
+                        highlight-current-row
+                        style="width: 98%;margin: auto">>
+                        <el-table-column
+                            prop="zizhi"
+                            label="资质"
+                            width="180">
+                        </el-table-column>
+                        <el-table-column
+                            prop="renyuan"
+                            label="人员"
+                            width="180">
+                        </el-table-column>
+                    </el-table>
+                </template>
 
             </el-form>
             <span slot="footer" class="dialog-footer">
@@ -76,7 +97,6 @@
             return {
                 message: '',
                 HideModal: true,
-                listData: [],
 
 
                 cols: [],
@@ -89,11 +109,7 @@
 
                 editVisible: false,
 
-                id: "",
-                name: '',
-                pwd: '',
-                showname: '',
-                code: ""
+                zizhiData:[],
 
             }
         },
