@@ -14,25 +14,6 @@
                         <span>:</span>
                         <el-input v-model="select_word" placeholder="筛选班次" class="handle-input mr10"></el-input>
                     </label>
-                    <label style="margin-right: 10px;margin-left: 10px">
-                        <span> 加工线选择</span>
-                        <span>:</span>
-                        <el-select
-                            v-model="shipType"
-                            clearable
-                            filterable
-                            allow-create
-                            default-first-option
-                            @change="changeSelect"
-                            placeholder="请输入或者选择船型">
-                            <el-option
-                                v-for="item in shipTypeOptions"
-                                :key="item.id"
-                                :label="item.name"
-                                :value="item.id">
-                            </el-option>
-                        </el-select>
-                    </label>
                     <el-button type="primary" icon="delete" class="handle-del mr10" @click="addContent">新增班次</el-button>
                     <el-button type="danger" icon="delete" class="handle-del mr10" @click="deleteContent">删除班次
                     </el-button>
@@ -60,54 +41,50 @@
             <!--新增弹出框 -->
             <el-dialog title="新增班次" :visible.sync="addVisible" width="60%">
                 <el-form ref="form" label-width="100px">
-                    <el-form-item label="所属船型">
-                        <el-select
-                            v-model="shipType"
-                            clearable
-                            filterable
-                            allow-create
-                            disabled
-                            default-first-option
-                            placeholder="请输入或者选择船型">
-                            <el-option
-                                v-for="item in shipTypeOptions"
-                                :key="item.id"
-                                :label="item.name"
-                                :value="item.id">
-                            </el-option>
-                        </el-select>
+                    <el-form-item label="班次名">
+                        <el-input v-model="banciName"></el-input>
                     </el-form-item>
-                    <el-form-item label="起工日">
-                        <el-date-picker
-                            v-model="qigongri"
-                            type="date"
-                            value-format="yyyy-MM-dd"
-                            placeholder="选择日期">
-                        </el-date-picker>
+                    <el-form-item
+                        v-for="(domain, index) in dynamicValidateForm.domains"
+                        :key="domain.key"
+                        :prop="'domains.' + index + '.value'"
+                        :label="'时间' + (index+1)+''">
+                        <div class="appendDiv">
+                            <div class="appendDivTemplate">
+                                <div class="fl">
+                                    <span>开始时间:</span>
+                                    <el-time-picker
+                                        v-model="domain.stime"
+                                        value-format="hh:mm:ss"
+                                        placeholder="开始时间">
+                                    </el-time-picker>
+                                </div>
+                                <div class="fl" style="margin-left: 20px">
+                                    <span>结束时间:</span>
+                                    <el-time-picker
+                                        v-model="domain.etime"
+                                        value-format="hh:mm:ss"
+                                        placeholder="结束时间">
+                                    </el-time-picker>
+                                </div>
+                                <div class="fl" style="margin-left: 20px">
+                                    <el-button
+                                        type="danger"
+                                        style="height:30px;width:120px"
+                                        @click.prevent="removeDomain(domain)">删除
+                                    </el-button>
+                                </div>
+                            </div>
+                        </div>
                     </el-form-item>
-                    <el-form-item label="进水日">
-                        <el-date-picker
-                            v-model="jinshuiri"
-                            type="date"
-                            value-format="yyyy-MM-dd"
-                            placeholder="选择日期">
-                        </el-date-picker>
+                    <el-form-item>
+                        <el-button
+                            type="primary"
+                            @click="addDomain"
+                            style="height:30px;width:20%">
+                            新增时间
+                        </el-button>
                     </el-form-item>
-                    <el-form-item label="交船日">
-                        <el-date-picker
-                            v-model="jiaochuanri"
-                            type="date"
-                            value-format="yyyy-MM-dd"
-                            placeholder="选择日期">
-                        </el-date-picker>
-                    </el-form-item>
-                    <el-form-item label="船东">
-                        <el-input v-model="chuandong"></el-input>
-                    </el-form-item>
-                    <el-form-item label="船级">
-                        <el-input v-model="chuanji"></el-input>
-                    </el-form-item>
-
                 </el-form>
                 <span slot="footer" class="dialog-footer">
                 <el-button @click="addVisible = false" style="height:30px;width:80px">取 消</el-button>
@@ -117,52 +94,43 @@
             <!-- 编辑弹出框 -->
             <el-dialog title="编辑班次" :visible.sync="editVisible" width="60%">
                 <el-form ref="form" label-width="100px">
-                    <el-form-item label="所属船型">
-                        <el-select
-                            v-model="shipType"
-                            clearable
-                            filterable
-                            allow-create
-                            disabled
-                            default-first-option
-                            placeholder="请输入或者选择船型">
-                            <el-option
-                                v-for="item in shipTypeOptions"
-                                :key="item.id"
-                                :label="item.name"
-                                :value="item.id">
-                            </el-option>
-                        </el-select>
+                    <el-form-item label="班次名">
+                        <el-input v-model="banciName"></el-input>
                     </el-form-item>
-                    <el-form-item label="起工日">
-                        <el-date-picker
-                            v-model="qigongri"
-                            type="date"
-                            value-format="yyyy-MM-dd"
-                            placeholder="选择日期">
-                        </el-date-picker>
+                    <el-form-item
+                        v-for="(domain, index) in dynamicValidateForm.domains"
+                        :key="domain.key"
+                        :prop="'domains.' + index + '.value'"
+                        :label="'时间' + (index+1)+''">
+                        <div class="appendDiv">
+                            <div class="appendDivTemplate">
+                                <div class="fl">
+                                    <el-time-picker
+                                        is-range
+                                        v-model="domain.time"
+                                        range-separator="至"
+                                        start-placeholder="开始时间"
+                                        end-placeholder="结束时间"
+                                        placeholder="选择时间范围">
+                                    </el-time-picker>
+                                </div>
+                                <div class="fl" style="margin-left: 20px">
+                                    <el-button
+                                        type="danger"
+                                        style="height:30px;width:120px"
+                                        @click.prevent="removeDomain(domain)">删除
+                                    </el-button>
+                                </div>
+                            </div>
+                        </div>
                     </el-form-item>
-                    <el-form-item label="进水日">
-                        <el-date-picker
-                            v-model="jinshuiri"
-                            type="date"
-                            value-format="yyyy-MM-dd"
-                            placeholder="选择日期">
-                        </el-date-picker>
-                    </el-form-item>
-                    <el-form-item label="交船日">
-                        <el-date-picker
-                            v-model="jiaochuanri"
-                            type="date"
-                            value-format="yyyy-MM-dd"
-                            placeholder="选择日期">
-                        </el-date-picker>
-                    </el-form-item>
-                    <el-form-item label="船东">
-                        <el-input v-model="chuandong"></el-input>
-                    </el-form-item>
-                    <el-form-item label="船级">
-                        <el-input v-model="chuanji"></el-input>
+                    <el-form-item>
+                        <el-button
+                            type="primary"
+                            @click="addDomain"
+                            style="height:30px;width:20%">
+                            新增时间
+                        </el-button>
                     </el-form-item>
                 </el-form>
                 <span slot="footer" class="dialog-footer">
@@ -207,14 +175,15 @@
                 delVisible: false,
 
 
-                qigongri: "",
-                jinshuiri: "",
-                jiaochuanri: "",
-                chuandong: "",
-                chuanji: "",
-
-                shipType: '',
-                shipTypeOptions: []
+                dept: '',
+                deptOptions: [],
+                banciName: "",
+                dynamicValidateForm: {
+                    domains: [{
+                        stime: '',
+                        etime: "",
+                    }],
+                },
 
             }
         },
@@ -249,65 +218,52 @@
                     this.$router.push("/")
                 }
                 else {
-                    this.loading();
+                    this.loading()
                 }
             },
 
-            //显示新增工序
+            //页面初始加载
+            loading() {
+                let that = this;
+                axios.all([
+                    axios.post(" " + url + "/sys/showTableTitle", {"name": "banci"}),
+                    axios.post(" " + url + "/sysconfig/getBanciList"),
+                ])
+                    .then(axios.spread(function (title, table) {
+                        that.cols = title.data;
+                        that.tableData = table.data;
+                    }));
+            },
+
+            //显示新增班次
             addContent() {
-                if (this.shipType) {
-
-                    this.qigongri = "";
-                    this.jinshuiri = "";
-                    this.jiaochuanri = "";
-                    this.chuandong = "";
-                    this.chuanji = "";
-                    this.addVisible = true;
-                }
-                else {
-                    this.message = "请选择船型";
-                    this.HideModal = false;
-                    const that = this;
-
-                    function a() {
-                        that.message = "";
-                        that.HideModal = true;
-                    }
-
-                    setTimeout(a, 2000);
+                this.addVisible = true;
+                this.banciName = "";
+                this.dynamicValidateForm = {
+                    domains: [{
+                        stime: '',
+                        etime: "",
+                    }],
                 }
             },
 
-            //新增内容
+            //新增班次
             doAddContent() {
-                if (this.qigongri && this.jinshuiri && this.jiaochuanri && this.chuandong && this.chuanji) {
-
-                    axios.post(" " + url + "/sysconfig/shipCodeAdd",
+                if (this.banciName && this.dynamicValidateForm.domains[0]) {
+                    axios.post(" " + url + "/sysconfig/banciAdd",
                         {
-                            "shiptype": this.shipType,
-                            "qigongri": this.qigongri,
-                            "jinshuiri": this.jinshuiri,
-                            "jiaochuanri": this.jiaochuanri,
-                            "chuandong": this.chuandong,
-                            "chuanji": this.chuanji,
+                            "bancileixing": this.banciName,
+                            "list": this.dynamicValidateForm.domains,
                         }
                     )
                         .then((res) => {
-                            if (res.data === "1") {
+                            if (res.data.state === "1") {
                                 this.$message.success(`新增成功`);
                                 this.addVisible = false;
-                                let that = this;
-                                axios.all([
-                                    axios.post(" " + url + "/sys/showTableTitle", {"name": "shiptype"}),
-                                    axios.post(" " + url + "/sysconfig/getShipCodeList", {"shiptype": that.shipType}),
-                                ])
-                                    .then(axios.spread(function (title, table) {
-                                        that.cols = title.data;
-                                        that.tableData = table.data;
-                                    }));
+                                this.loading()
                             }
                             else {
-                                this.$message.warning(`新增失败`);
+                                this.$message.warning(res.data.message);
                             }
                         })
                         .catch((err) => {
@@ -323,13 +279,10 @@
             editContent(row, column, cell, event) {
                 this.editVisible = true;
                 this.id = row.id;
-                axios.post(" " + url + "/sysconfig/shipCodeDetail", {"id": this.id})
+                axios.post(" " + url + "/sysconfig/banciDetail", {"id": this.id})
                     .then((res) => {
-                        this.qigongri = res.data.qigongri;
-                        this.jinshuiri = res.data.jinshuiri;
-                        this.jiaochuanri = res.data.jiaochuanri;
-                        this.chuandong = res.data.chuandong;
-                        this.chuanji = res.data.chuanji;
+                        this.banciName = res.data.bancileixing;
+                        this.dynamicValidateForm.domains = res.data.list;
                     })
                     .catch((err) => {
                         console.log(err)
@@ -338,34 +291,22 @@
 
             // 进行保存编辑
             saveEdit() {
-                if (this.qigongri && this.jinshuiri && this.jiaochuanri && this.chuandong && this.chuanji) {
-                    axios.post(" " + url + "/sysconfig/shipCodeUpdate",
+                if (this.banciName && this.dynamicValidateForm.domains[0]) {
+                    axios.post(" " + url + "/sysconfig/banciUpdate",
                         {
                             "id": this.id,
-                            "shiptype": this.shipType,
-                            "qigongri": this.qigongri,
-                            "jinshuiri": this.jinshuiri,
-                            "jiaochuanri": this.jiaochuanri,
-                            "chuandong": this.chuandong,
-                            "chuanji": this.chuanji,
+                            "bancileixing": this.banciName,
+                            "list": this.dynamicValidateForm.domains,
                         }
                     )
                         .then((res) => {
-                            if (res.data === "1") {
-                                let that = this;
-                                axios.all([
-                                    axios.post(" " + url + "/sys/showTableTitle", {"name": "shiptype"}),
-                                    axios.post(" " + url + "/sysconfig/getShipCodeList", {"shiptype": that.shipType}),
-                                ])
-                                    .then(axios.spread(function (title, table) {
-                                        that.cols = title.data;
-                                        that.tableData = table.data;
-                                    }));
+                            if (res.data.state === "1") {
                                 this.$message.success(`修改成功`);
-                                this.editVisible = false;
+                                this.addVisible = false;
+                                this.loading()
                             }
                             else {
-                                this.$message.warning(`修改失败`);
+                                this.$message.warning(res.data.message);
                             }
                         })
                         .catch((err) => {
@@ -428,7 +369,7 @@
 
             // 确定删除
             deleteRow() {
-                axios.post(" " + url + "/sysconfig/shipCodeDel",
+                axios.post(" " + url + "/sysconfig/banciDel",
                     {
                         "id": this.listData[0],
                     }
@@ -437,15 +378,7 @@
                         if (res.data === "1") {
                             this.$message.success('删除成功');
                             this.delVisible = false;
-                            let that = this;
-                            axios.all([
-                                axios.post(" " + url + "/sys/showTableTitle", {"name": "shiptype"}),
-                                axios.post(" " + url + "/sysconfig/getShipCodeList", {"shiptype": that.shipType}),
-                            ])
-                                .then(axios.spread(function (title, table) {
-                                    that.cols = title.data;
-                                    that.tableData = table.data;
-                                }));
+                            this.loading()
                         }
                         else {
                             this.$message.warning(`删除失败`);
@@ -456,45 +389,22 @@
                     })
             },
 
-            //根据下拉选择
-            changeSelect() {
-                let that = this;
-                axios.all([
-                    axios.post(" " + url + "/sys/showTableTitle", {"name": "shiptype"}),
-                    axios.post(" " + url + "/sysconfig/getShipCodeList", {"shiptype": that.shipType}),
-                ])
-                    .then(axios.spread(function (title, table) {
-                        if (table.data === "-1") {
-                            that.cols = title.data;
-                            that.tableData = [];
-                        }
-                        else {
-                            that.cols = title.data;
-                            that.tableData = table.data;
-                        }
-                    }));
+
+            //增加时间
+            addDomain() {
+                this.dynamicValidateForm.domains.push({
+                    stime: '',
+                    etime: "",
+                });
             },
 
-            //页面初始加载
-            loading() {
-                axios.post(" " + url + "/sysconfig/getShipTypeSelect")
-                    .then((res) => {
-                        this.shipType = res.data[0].id;
-                        this.shipTypeOptions = res.data;
-                        let that = this;
-                        axios.all([
-                            axios.post(" "+ url +"/sys/showTableTitle",{"name":"banci"}),
-                            axios.post(" "+ url +"/sysconfig/getBanciList"),
-                        ])
-                            .then(axios.spread(function (title, table) {
-                                that.cols = title.data;
-                                that.tableData = table.data;
-                            }));
-                    })
-                    .catch((err) => {
-                        console.log(err)
-                    });
-            }
+            //删除时间
+            removeDomain(item) {
+                var index = this.dynamicValidateForm.domains.indexOf(item);
+                if (index !== -1) {
+                    this.dynamicValidateForm.domains.splice(index, 1)
+                }
+            },
 
         }
     }
