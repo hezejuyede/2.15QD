@@ -122,8 +122,23 @@ import gwReportForm from '../components/materialManagement/gwReportForm'
 
 
 
-
+//设备管理路由
 import ProductionMonitoring from '../components/productionMonitoring/productionMonitoring'
+
+
+
+//点检不良率报表
+import djblvReportForm from '../components/productionMonitoring/djblvReportForm.vue'
+
+//设备归属报表
+import sbgsReportForm from '../components/productionMonitoring/sbgsReportForm'
+
+//设备故障率报表
+import sbgzvReportForm from '../components/productionMonitoring/sbgzvReportForm.vue'
+
+//点检项目设定
+import InspectionItemSetting from '../components/productionMonitoring/InspectionItemSetting.vue'
+
 
 
 
@@ -424,7 +439,30 @@ export default new Router({
                 {
                     path: '/ProductionMonitoring',
                     component: ProductionMonitoring,
-                    meta: {title: '设备管理'}
+                    meta: {title: '设备管理'},
+                    children: [
+
+                        {
+                            path: 'InspectionItemSetting',
+                            component: InspectionItemSetting,
+                            meta: {title: '设备归属报表'}
+                        },
+                        {
+                            path: 'sbgsReportForm',
+                            component: sbgsReportForm,
+                            meta: {title: '设备归属报表'}
+                        },
+                        {
+                            path: 'djblvReportForm',
+                            component: djblvReportForm,
+                            meta: {title: '点检不良率报表'}
+                        },
+                        {
+                            path: 'sbgzvReportForm',
+                            component: sbgzvReportForm,
+                            meta: {title: '设备故障率报表'}
+                        }
+                    ]
                 },
                 {
                     path: '/PersonnelManagement',

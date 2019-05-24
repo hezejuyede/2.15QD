@@ -36,7 +36,7 @@
                             {
                                 label: '点检项目设定',
                                 index: "1-1",
-                                url: "/DepartmentManagement"
+                                url: "/ProductionMonitoring/InspectionItemSetting"
                             },
                             {
                                 label: '工位点检记录',
@@ -89,17 +89,17 @@
                             {
                                 label: '设备归属报表',
                                 index: "4-1",
-                                url: "/sbgsReportForm"
+                                url: "/ProductionMonitoring/sbgsReportForm"
                             },
                             {
                                 label: '点检不良率报表',
                                 index: "4-2",
-                                url: "/djblvReportForm"
+                                url: "/ProductionMonitoring/djblvReportForm"
                             },
                             {
                                 label: '设备故障率报表',
                                 index: "4-3",
-                                url: "/sbgzvReportForm"
+                                url: "/ProductionMonitoring/sbgzvReportForm"
                             }
                         ]
                     },
