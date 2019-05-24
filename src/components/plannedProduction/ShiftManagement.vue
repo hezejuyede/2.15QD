@@ -105,13 +105,19 @@
                         <div class="appendDiv">
                             <div class="appendDivTemplate">
                                 <div class="fl">
+                                    <span>开始时间:</span>
                                     <el-time-picker
-                                        is-range
-                                        v-model="domain.time"
-                                        range-separator="至"
-                                        start-placeholder="开始时间"
-                                        end-placeholder="结束时间"
-                                        placeholder="选择时间范围">
+                                        v-model="domain.stime"
+                                        value-format="hh:mm:ss"
+                                        placeholder="开始时间">
+                                    </el-time-picker>
+                                </div>
+                                <div class="fl" style="margin-left: 20px">
+                                    <span>结束时间:</span>
+                                    <el-time-picker
+                                        v-model="domain.etime"
+                                        value-format="hh:mm:ss"
+                                        placeholder="结束时间">
                                     </el-time-picker>
                                 </div>
                                 <div class="fl" style="margin-left: 20px">
@@ -241,8 +247,8 @@
                 this.banciName = "";
                 this.dynamicValidateForm = {
                     domains: [{
-                        stime: '',
-                        etime: "",
+                        stime:"",
+                        etime:"",
                     }],
                 }
             },
@@ -281,8 +287,12 @@
                 this.id = row.id;
                 axios.post(" " + url + "/sysconfig/banciDetail", {"id": this.id})
                     .then((res) => {
-                        this.banciName = res.data.bancileixing;
-                        this.dynamicValidateForm.domains = res.data.list;
+                        this.banciName = res.data.data.banci.bancileixing;
+
+
+
+                        this.dynamicValidateForm.domains = res.data.data.list;
+                        console.log(this.dynamicValidateForm.domains)
                     })
                     .catch((err) => {
                         console.log(err)
@@ -302,7 +312,7 @@
                         .then((res) => {
                             if (res.data.state === "1") {
                                 this.$message.success(`修改成功`);
-                                this.addVisible = false;
+                                this.editVisible = false;
                                 this.loading()
                             }
                             else {
