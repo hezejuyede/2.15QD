@@ -15,7 +15,7 @@
                         <el-input v-model="select_word" placeholder="筛选资质" style="width: 200px"></el-input>
                     </label>
                     <label style="margin-right: 10px;margin-left: 10px">
-                        <span> 加工线选择</span>
+                        <span> 部门选择</span>
                         <span>:</span>
                         <el-select
                             v-model="line"
@@ -24,12 +24,12 @@
                             allow-create
                             default-first-option
                             @change="changeScx"
-                            placeholder="请输入或者选择生产线">
+                            placeholder="请输入或者选择部门">
                             <el-option
                                 v-for="item in lineOptions"
-                                :key="item.indexno"
+                                :key="item.id"
                                 :label="item.name"
-                                :value="item.indexno">
+                                :value="item.id">
                             </el-option>
                         </el-select>
                     </label>
@@ -52,7 +52,7 @@
 
         </div>
         <!-- 编辑弹出框 -->
-        <el-dialog title="编辑人员" :visible.sync="editVisible" width="60%">
+        <el-dialog title="资质详情" :visible.sync="editVisible" width="60%">
             <el-form ref="form" label-width="100px">
                 <template>
                     <el-table
@@ -64,14 +64,14 @@
                         highlight-current-row
                         style="width: 98%;margin: auto">>
                         <el-table-column
-                            prop="zizhi"
-                            label="资质"
-                            width="180">
+                            prop="zizhname"
+                            align="center"
+                            label="资质">
                         </el-table-column>
                         <el-table-column
-                            prop="renyuan"
-                            label="人员"
-                            width="180">
+                            prop="username"
+                            align="center"
+                            label="人员">
                         </el-table-column>
                     </el-table>
                 </template>
@@ -146,10 +146,10 @@
                 else {
                     let that = this;
                     axios.all([
-                        axios.post(" " + url + "/sys/dictionaryList", {"id": "9"}),
+                        axios.post(" " + url + "/sysconfig/deptList"),
                     ])
                         .then(axios.spread(function (line) {
-                            that.line = line.data[0].indexno;
+                            that.line = line.data[3].id;
                             that.lineOptions = line.data;
                             that.loadingShowData(that.line)
                         }));
@@ -163,7 +163,7 @@
                 let that = this;
                 axios.all([
                     axios.post(" " + url + "/sys/showTableTitle", {"name": "zzcxtj"}),
-                    axios.post(" " + url + "/sysconfig/tongjiZizhi", {"jiagongxian": data1})
+                    axios.post(" " + url + "/sysconfig/tongjiZizhi", {"deptid": data1})
                 ])
                     .then(axios.spread(function (title, table) {
                         that.cols = title.data;
@@ -180,15 +180,9 @@
             editPerson(row, column, cell, event) {
                 this.editVisible = true;
                 this.id = row.id;
-                axios.post(" " + url + "/sysconfig/personDetail", {"id": this.id})
+                axios.post(" " + url + "/sysconfig/getUserbyzizhiId", {"id": this.id,"deptid":this.line})
                     .then((res) => {
-                        this.post = res.data.postid;
-                        this.dept = res.data.deptid;
-                        this.role = res.data.roleid;
-                        this.name = res.data.name;
-                        this.pwd = res.data.pwd;
-                        this.showname = res.data.showname;
-                        this.code = res.data.code;
+                        this.zizhiData = res.data.data;
                     })
                     .catch((err) => {
                         console.log(err)
