@@ -267,15 +267,15 @@
                         }
                     )
                         .then((res) => {
-                            if (res.data === "1") {
+                            if (res.data.state === "1") {
                                 this.$message.success(`设定成功`);
                                 this.addVisible = false;
                                 this.listData=[];
                                 this.listType=[];
-                                this.loadingShowData(this.dept, this.role, this.post)
+                                this.loadingShowData(this.dept)
                             }
                             else {
-                                this.$message.warning(`设定失败`);
+                                this.$message.warning(res.data.message);
                             }
                         })
                         .catch((err) => {
