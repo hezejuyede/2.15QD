@@ -14,9 +14,8 @@
                         <span>:</span>
                         <el-input v-model="select_word" placeholder="筛选班次" class="handle-input mr10"></el-input>
                     </label>
-                    <el-button type="primary" icon="delete" class="handle-del mr10" @click="addContent">新增班次</el-button>
-                    <el-button type="danger" icon="delete" class="handle-del mr10" @click="deleteContent">删除班次
-                    </el-button>
+                    <el-button type="primary" class="handle-del mr10" @click="addContent">新增班次</el-button>
+                    <el-button type="success" class="handle-del mr10" @click="glDept">关联部门</el-button>
                 </div>
                 <div class="">
                     <el-table class="tb-edit"
@@ -25,6 +24,7 @@
                               border
                               height="450"
                               @select="selectList"
+                              @select-all="selectAll"
                               @row-dblclick="editContent"
                               highlight-current-row
                               style="width: 98%;margin: auto">
@@ -144,12 +144,31 @@
                 <el-button type="primary" @click="saveEdit" style="height:30px;width:80px">确 定</el-button>
             </span>
             </el-dialog>
-            <!-- 删除提示框 -->
-            <el-dialog title="删除班次" :visible.sync="delVisible" width="300px" center>
-                <div class="del-dialog-cnt">删除不可恢复，是否确定删除？</div>
+
+            <!--关联部门 -->
+            <el-dialog title="关联部门" :visible.sync="glVisible" width="60%">
+                <el-form ref="form" label-width="100px">
+                    <span>部门</span>
+                    <span>:</span>
+                    <el-select
+                        v-model="dept"
+                        style="width: 150px"
+                        clearable
+                        filterable
+                        allow-create
+                        default-first-option
+                        placeholder="请选择部门">
+                        <el-option
+                            v-for="item in deptOptions"
+                            :key="item.id"
+                            :label="item.name"
+                            :value="item.id">
+                        </el-option>
+                    </el-select>
+                </el-form>
                 <span slot="footer" class="dialog-footer">
-                <el-button @click="delVisible = false" style="height:30px;width:80px">取 消</el-button>
-                <el-button type="primary" @click="deleteRow" style="height:30px;width:80px">确 定</el-button>
+                <el-button @click="editVisible = false" style="height:30px;width:80px">取 消</el-button>
+                <el-button type="primary" @click="doGlDept" style="height:30px;width:80px">确 定</el-button>
             </span>
             </el-dialog>
 
@@ -178,7 +197,7 @@
 
                 addVisible: false,
                 editVisible: false,
-                delVisible: false,
+                glVisible: false,
 
 
                 dept: '',
@@ -344,24 +363,33 @@
                 }
             },
 
-            //选择显示点击删除
-            deleteContent() {
+            //列表全部选择
+            selectAll(val) {
+                if (val.length) {
+                    let data = [];
+                    for (let i = 0; i < val.length; i++) {
+                        let a = val[i].id;
+                        data.push(a)
+                    }
+                    this.listData = data;
+                }
+                else {
+                    this.listData = [];
+                }
+            },
+
+            //显示关联部门
+            glDept() {
                 if (this.listData.length) {
-                    if (this.listData.length > 1) {
-                        this.message = "只能选择一个";
-                        this.HideModal = false;
-                        const that = this;
+                    this.glVisible = true;
+                    let that = this;
+                    axios.all([
+                        axios.post(" " + url + "/sysconfig/deptList"),
+                    ])
+                        .then(axios.spread(function (dept) {
+                            that.deptOptions = dept.data;
+                        }));
 
-                        function a() {
-                            that.message = "";
-                            that.HideModal = true;
-                        }
-
-                        setTimeout(a, 2000);
-                    }
-                    else {
-                        this.delVisible = true;
-                    }
                 }
                 else {
                     this.message = "请勾选要删除的内容";
@@ -377,11 +405,12 @@
                 }
             },
 
-            // 确定删除
-            deleteRow() {
+            //进行部门关联
+            doGlDept() {
                 axios.post(" " + url + "/sysconfig/banciDel",
                     {
-                        "id": this.listData[0],
+                        "ids": this.listData,
+                        "dept":this.dept
                     }
                 )
                     .then((res) => {
