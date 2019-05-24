@@ -89,17 +89,17 @@
                             {
                                 label: '设备归属报表',
                                 index: "4-1",
-                                url: "/ryzzReportForm"
+                                url: "/sbgsReportForm"
                             },
                             {
                                 label: '点检不良率报表',
                                 index: "4-2",
-                                url: "/rysglReportForm"
+                                url: "/djblvReportForm"
                             },
                             {
                                 label: '设备故障率报表',
                                 index: "4-3",
-                                url: "/bljlReportForm"
+                                url: "/sbgzvReportForm"
                             }
                         ]
                     },
