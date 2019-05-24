@@ -41,12 +41,12 @@
                             {
                                 label: '工位点检记录',
                                 index: "1-2",
-                                url: "/RoleManagement"
+                                url: "/ProductionMonitoring/workStationInspectionRecord"
                             },
                             {
                                 label: '工位点检记录',
                                 index: "1-3",
-                                url: "/PostManagement"
+                                url: "/ProductionMonitoring/InspectionItemSetting"
                             }
                         ]
                     },
@@ -57,12 +57,12 @@
                             {
                                 label: '定义耗材库',
                                 index: "2-1",
-                                url: "/QualificationSetting"
+                                url: "/ProductionMonitoring/InspectionItemSetting"
                             },
                             {
                                 label: '出入库登记',
                                 index: "2-2",
-                                url: "/personnelQualificationSetting"
+                                url: "/ProductionMonitoring/InspectionItemSetting"
                             }
                         ]
                     },
@@ -73,12 +73,12 @@
                             {
                                 label: '设备故障异常上报',
                                 index: "3-1",
-                                url: "/rYGZJVCX"
+                                url: "/ProductionMonitoring/InspectionItemSetting"
                             },
                             {
                                 label: '设备故障处理跟踪',
                                 index: "3-2",
-                                url: "/rYBLJVTJ"
+                                url: "/ProductionMonitoring/InspectionItemSetting"
                             }
                         ]
                     },
@@ -110,7 +110,7 @@
                             {
                                 label: '设备状态实时监控图',
                                 index: "5-1",
-                                url: "/sLGYCStatistics"
+                                url: "/ProductionMonitoring/InspectionItemSetting"
                             }
                         ]
                     }

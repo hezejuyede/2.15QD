@@ -139,8 +139,8 @@ import sbgzvReportForm from '../components/productionMonitoring/sbgzvReportForm.
 //点检项目设定
 import InspectionItemSetting from '../components/productionMonitoring/InspectionItemSetting.vue'
 
-
-
+//
+import workStationInspectionRecord from '../components/productionMonitoring/workStationInspectionRecord'
 
 import QualityAssurance from '../components/qualityAssurance/qualityAssurance'
 
@@ -441,11 +441,16 @@ export default new Router({
                     component: ProductionMonitoring,
                     meta: {title: '设备管理'},
                     children: [
-
+                       
                         {
                             path: 'InspectionItemSetting',
                             component: InspectionItemSetting,
-                            meta: {title: '设备归属报表'}
+                            meta: {title: '点检项目设定'}
+                        },
+                        {
+                            path: ' workStationInspectionRecord',
+                            component:  workStationInspectionRecord,
+                            meta: {title: '工位点检记录'}
                         },
                         {
                             path: 'sbgsReportForm',

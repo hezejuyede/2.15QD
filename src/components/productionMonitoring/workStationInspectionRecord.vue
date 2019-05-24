@@ -3,7 +3,7 @@
         <div class="crumbs">
             <el-breadcrumb separator="/">
                 <el-breadcrumb-item>设备管理</el-breadcrumb-item>
-                <el-breadcrumb-item>点检项目设定</el-breadcrumb-item>
+                <el-breadcrumb-item>工位点检记录</el-breadcrumb-item>
             </el-breadcrumb>
         </div>
         <div class="template-content">
