@@ -163,7 +163,7 @@
                 let that = this;
                 axios.all([
                     axios.post(" " + url + "/sys/showTableTitle", {"name": "zzcxtj"}),
-                    axios.post(" " + url + "/sysconfig/personList", {"shengchanxian": data1})
+                    axios.post(" " + url + "/sysconfig/tongjiZizhi", {"jiagongxian": data1})
                 ])
                     .then(axios.spread(function (title, table) {
                         that.cols = title.data;
