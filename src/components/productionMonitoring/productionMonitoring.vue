@@ -44,9 +44,9 @@
                                 url: "/ProductionMonitoring/workStationInspectionRecord"
                             },
                             {
-                                label: '工位点检记录',
+                                label: '点检记录查询与统计',
                                 index: "1-3",
-                                url: "/ProductionMonitoring/InspectionItemSetting"
+                                url: "/ProductionMonitoring/djjjSearchTj"
                             }
                         ]
                     },

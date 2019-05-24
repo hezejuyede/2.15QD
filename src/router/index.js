@@ -122,10 +122,11 @@ import gwReportForm from '../components/materialManagement/gwReportForm'
 
 
 
+
+
+
 //设备管理路由
 import ProductionMonitoring from '../components/productionMonitoring/productionMonitoring'
-
-
 
 //点检不良率报表
 import djblvReportForm from '../components/productionMonitoring/djblvReportForm.vue'
@@ -139,8 +140,16 @@ import sbgzvReportForm from '../components/productionMonitoring/sbgzvReportForm.
 //点检项目设定
 import InspectionItemSetting from '../components/productionMonitoring/InspectionItemSetting.vue'
 
-//
+//工位点检记录
 import workStationInspectionRecord from '../components/productionMonitoring/workStationInspectionRecord'
+
+
+//点检记录查询与统计
+import djjjSearchTj from '../components/productionMonitoring/djjjSearchTj'
+
+
+
+
 
 import QualityAssurance from '../components/qualityAssurance/qualityAssurance'
 
@@ -441,16 +450,21 @@ export default new Router({
                     component: ProductionMonitoring,
                     meta: {title: '设备管理'},
                     children: [
-                       
+
                         {
                             path: 'InspectionItemSetting',
-                            component: InspectionItemSetting,
+                            component:InspectionItemSetting,
                             meta: {title: '点检项目设定'}
                         },
                         {
-                            path: ' workStationInspectionRecord',
-                            component:  workStationInspectionRecord,
+                            path: 'workStationInspectionRecord',
+                            component:workStationInspectionRecord,
                             meta: {title: '工位点检记录'}
+                        },
+                        {
+                            path: 'djjjSearchTj',
+                            component:djjjSearchTj,
+                            meta: {title: '点检记录查询与统计'}
                         },
                         {
                             path: 'sbgsReportForm',
