@@ -57,7 +57,7 @@
                             {
                                 label: '定义耗材库',
                                 index: "2-1",
-                                url: "/ProductionMonitoring/InspectionItemSetting"
+                                url: "/ProductionMonitoring/dingyihancaiku"
                             },
                             {
                                 label: '出入库登记',

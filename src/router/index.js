@@ -147,8 +147,9 @@ import workStationInspectionRecord from '../components/productionMonitoring/work
 //点检记录查询与统计
 import djjjSearchTj from '../components/productionMonitoring/djjjSearchTj'
 
+//定义耗材库
 
-
+import  dingyihancaiku from '../components/productionMonitoring/dingyihancaiku'
 
 
 import QualityAssurance from '../components/qualityAssurance/qualityAssurance'
@@ -466,6 +467,13 @@ export default new Router({
                             component:djjjSearchTj,
                             meta: {title: '点检记录查询与统计'}
                         },
+
+                        {
+                            path: 'dingyihancaiku',
+                            component:dingyihancaiku,
+                            meta: {title: '定义耗材库'}
+                        },
+
                         {
                             path: 'sbgsReportForm',
                             component: sbgsReportForm,
