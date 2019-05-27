@@ -43,12 +43,13 @@
                             placeholder="选择日期">
                         </el-date-picker>
                     </label>
-                    <el-button type="success" icon="delete" class="handle-del mr10" @click="doSearchPerson">查询</el-button>
+                    <el-button type="success" icon="delete" class="handle-del mr10" @click="doSearchPerson">查询
+                    </el-button>
                 </div>
                 <div class="">
                     <el-table class="tb-edit"
                               :data="tables"
-                              :header-cell-style="{background:'#A1D0FC',color:'rgba(0, 0, 0, 0.8)',fontSize:'20px'}"
+                              :header-cell-style="{background:'#A1D0FC',color:'rgba(0, 0, 0, 0.8)',fontSize:'16px'}"
                               border
                               height="400"
                               highlight-current-row
@@ -131,7 +132,7 @@
                     ])
                         .then(axios.spread(function (dept) {
                             that.deptOptions = dept.data;
-                            that.dept = dept.data[0].id;
+                            that.dept = dept.data[3].id;
                             that.loadingShowData(that.dept, that.examineTime);
                         }));
 
@@ -144,11 +145,11 @@
                 let that = this;
                 axios.all([
                     axios.post(" " + url + "/sys/showTableTitle", {"name": "zgsjcxtj"}),
-                    axios.post(" " + url + "/sysconfig/personList", {"deptid": data1, "time": data2,})
+                    axios.post(" " + url + "/timeTongji/userTimesByDay", {"deptid": data1, "curdatestr": data2,})
                 ])
                     .then(axios.spread(function (title, table) {
                         that.cols = title.data;
-                        that.tableData = table.data;
+                        that.tableData = table.data.data;
                     }));
             },
 
