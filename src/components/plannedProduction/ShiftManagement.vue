@@ -182,7 +182,6 @@
     import axios from 'axios'
     import url from '../../assets/js/URL'
     import Modal from '../../common/modal'
-
     export default {
         name: 'WorkingProcedure',
         data() {
@@ -190,17 +189,12 @@
                 message: '',
                 HideModal: true,
                 listData: [],
-
                 cols: [],
                 tableData: [],
-
                 select_word: '',
-
                 addVisible: false,
                 editVisible: false,
                 glVisible: false,
-
-
                 dept: '',
                 deptOptions: [],
                 banciName: "",
@@ -210,7 +204,6 @@
                         etime: "",
                     }],
                 },
-
             }
         },
         computed: {
@@ -229,14 +222,11 @@
         },
         components: {Modal},
         mounted() {
-
-
         },
         created() {
             this.getAdminState();
         },
         methods: {
-
             //页面加载检查用户是否登陆，没有登陆就加载登陆页面
             getAdminState() {
                 const userInfo = localStorage.getItem("userInfo");
@@ -247,7 +237,6 @@
                     this.loading()
                 }
             },
-
             //页面初始加载
             loading() {
                 let that = this;
@@ -260,7 +249,6 @@
                         that.tableData = table.data;
                     }));
             },
-
             //显示新增班次
             addContent() {
                 this.addVisible = true;
@@ -272,7 +260,6 @@
                     }],
                 }
             },
-
             //新增班次
             doAddContent() {
                 if (this.banciName && this.dynamicValidateForm.domains[0]) {
@@ -300,7 +287,6 @@
                     this.$message.warning(`输入不能为空`);
                 }
             },
-
             //双击点击行内编辑
             editContent(row, column, cell, event) {
                 this.editVisible = true;
@@ -308,8 +294,6 @@
                 axios.post(" " + url + "/sysconfig/banciDetail", {"id": this.id})
                     .then((res) => {
                         this.banciName = res.data.data.banci.bancileixing;
-
-
                         this.dynamicValidateForm.domains = res.data.data.list;
                         console.log(this.dynamicValidateForm.domains)
                     })
@@ -317,7 +301,6 @@
                         console.log(err)
                     });
             },
-
             // 进行保存编辑
             saveEdit() {
                 if (this.banciName && this.dynamicValidateForm.domains[0]) {
@@ -345,9 +328,7 @@
                 else {
                     this.$message.warning(`输入不能为空`);
                 }
-
             },
-
             //选择那个一个
             selectList(val) {
                 if (val.length) {
@@ -362,7 +343,6 @@
                     this.listData = [];
                 }
             },
-
             //列表全部选择
             selectAll(val) {
                 if (val.length) {
@@ -377,7 +357,6 @@
                     this.listData = [];
                 }
             },
-
             //显示关联部门
             glDept() {
                 if (this.listData.length) {
@@ -385,12 +364,10 @@
                         this.message = "只能选择一个";
                         this.HideModal = false;
                         const that = this;
-
                         function a() {
                             that.message = "";
                             that.HideModal = true;
                         }
-
                         setTimeout(a, 2000);
                     }
                     else {
@@ -403,22 +380,18 @@
                                 that.deptOptions = dept.data;
                             }));
                     }
-
                 }
                 else {
                     this.message = "请勾关联的班次";
                     this.HideModal = false;
                     const that = this;
-
                     function b() {
                         that.message = "";
                         that.HideModal = true;
                     }
-
                     setTimeout(b, 2000);
                 }
             },
-
             //进行部门关联
             doGlDept() {
                 axios.post(" " + url + "/sysconfig/banciToDept",
@@ -441,8 +414,6 @@
                         console.log(err)
                     })
             },
-
-
             //增加时间
             addDomain() {
                 this.dynamicValidateForm.domains.push({
@@ -450,7 +421,6 @@
                     etime: "",
                 });
             },
-
             //删除时间
             removeDomain(item) {
                 var index = this.dynamicValidateForm.domains.indexOf(item);
@@ -458,13 +428,11 @@
                     this.dynamicValidateForm.domains.splice(index, 1)
                 }
             },
-
         }
     }
 </script>
 <style scoped lang="less" rel="stylesheet/less">
     @import "../../assets/less/base";
-
     .template {
         width: 100%;
         height: 100%;
@@ -499,9 +467,6 @@
             .red {
                 color: #ff0000;
             }
-
         }
     }
-
-
 </style>
