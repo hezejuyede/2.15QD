@@ -152,6 +152,9 @@ import djjjSearchTj from '../components/productionMonitoring/djjjSearchTj'
 import  dingyihancaiku from '../components/productionMonitoring/dingyihancaiku'
 
 
+import zgsjStatistics from '../components/personnelManagement/zgsjStatistics'
+
+
 import QualityAssurance from '../components/qualityAssurance/qualityAssurance'
 
 
@@ -192,10 +195,10 @@ import personnelQualificationSetting from '../components/personnelManagement/per
 //资质查询与统计
 import QualificationQueryAndStatistics from '../components/personnelManagement/QualificationQueryAndStatistics.vue';
 
-//在岗时间查询和统计
+//上离岗异常统计
 import zGTimeStatistics from '../components/personnelManagement/zGTimeStatistics';
 
-//上离岗异常统计
+//在岗时间查询和统计
 import sLGYCStatistics from '../components/personnelManagement/shanggangshijianchaxun.vue';
 
 //人员工作记录查询
@@ -534,12 +537,17 @@ export default new Router({
                         {
                             path: '/sLGYCStatistics',
                             component: sLGYCStatistics,
-                            meta: {title: '上离岗异常统计'}
+                            meta: {title: '在岗时间查询'}
                         },
                         {
                             path: '/zGTimeStatistics',
                             component: zGTimeStatistics,
-                            meta: {title: '在岗时间查询和统计'}
+                            meta: {title: '上离岗异常统计'}
+                        },
+                        {
+                            path: '/zgsjStatistics',
+                            component: zgsjStatistics,
+                            meta: {title: '在岗时间统计'}
                         },
                         {
                             path: '/rYGZJVCX',

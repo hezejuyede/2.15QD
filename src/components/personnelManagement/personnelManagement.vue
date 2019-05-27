@@ -133,9 +133,14 @@
                         index: "5",
                         children: [
                             {
-                                label: '在岗时间查询和统计',
+                                label: '在岗时间查询',
                                 index: "5-1",
                                 url: "/sLGYCStatistics"
+                            },
+                            {
+                                label: '在岗时间统计',
+                                index: "5-1",
+                                url: "/zgsjStatistics"
                             },
                             {
                                 label: '上离岗异常统计',
