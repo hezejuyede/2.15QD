@@ -59,7 +59,7 @@
                                         placeholder="开始时间">
                                     </el-time-picker>
                                 </div>
-                                <div class="fl" style="margin-left: 20px">
+                                <div class="fl" style="margin-left: 10px">
                                     <span>结束时间:</span>
                                     <el-time-picker
                                         v-model="domain.etime"
@@ -67,7 +67,7 @@
                                         placeholder="结束时间">
                                     </el-time-picker>
                                 </div>
-                                <div class="fl" style="margin-left: 20px">
+                                <div class="fl" style="margin-left: 10px">
                                     <el-button
                                         type="danger"
                                         style="height:30px;width:120px"
@@ -157,6 +157,7 @@
                         filterable
                         allow-create
                         default-first-option
+                        multiple
                         placeholder="请选择部门">
                         <el-option
                             v-for="item in deptOptions"
@@ -380,14 +381,28 @@
             //显示关联部门
             glDept() {
                 if (this.listData.length) {
-                    this.glVisible = true;
-                    let that = this;
-                    axios.all([
-                        axios.post(" " + url + "/sysconfig/deptList"),
-                    ])
-                        .then(axios.spread(function (dept) {
-                            that.deptOptions = dept.data;
-                        }));
+                    if (this.listData.length > 1) {
+                        this.message = "只能选择一个";
+                        this.HideModal = false;
+                        const that = this;
+
+                        function a() {
+                            that.message = "";
+                            that.HideModal = true;
+                        }
+
+                        setTimeout(a, 2000);
+                    }
+                    else {
+                        this.glVisible = true;
+                        let that = this;
+                        axios.all([
+                            axios.post(" " + url + "/sysconfig/deptList"),
+                        ])
+                            .then(axios.spread(function (dept) {
+                                that.deptOptions = dept.data;
+                            }));
+                    }
 
                 }
                 else {
@@ -406,20 +421,20 @@
 
             //进行部门关联
             doGlDept() {
-                axios.post(" " + url + "/sysconfig/banciDel",
+                axios.post(" " + url + "/sysconfig/banciToDept",
                     {
-                        "ids": this.listData,
-                        "dept": this.dept
+                        "id": this.listData[0],
+                        "ids": this.dept
                     }
                 )
                     .then((res) => {
-                        if (res.data === "1") {
-                            this.$message.success('删除成功');
-                            this.delVisible = false;
+                        if (res.data.state === "1") {
+                            this.$message.success('关联成功');
+                            this.glVisible = false;
                             this.loading()
                         }
                         else {
-                            this.$message.warning(`删除失败`);
+                            this.$message.warning(res.data.message);
                         }
                     })
                     .catch((err) => {
