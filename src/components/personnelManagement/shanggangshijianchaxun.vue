@@ -3,7 +3,7 @@
         <div class="crumbs">
             <el-breadcrumb separator="/">
                 <el-breadcrumb-item>人员管理</el-breadcrumb-item>
-                <el-breadcrumb-item>上离岗异常统计</el-breadcrumb-item>
+                <el-breadcrumb-item>在岗时间查询</el-breadcrumb-item>
             </el-breadcrumb>
         </div>
         <div class="template-content">
@@ -38,10 +38,9 @@
                         <span>:</span>
                         <el-date-picker
                             v-model="examineTime"
-                            type="daterange"
-                            start-placeholder="开始日期"
-                            end-placeholder="结束日期"
-                            value-format="yyyy-MM-dd">
+                            type="date"
+                            value-format="yyyy-MM-dd"
+                            placeholder="选择日期">
                         </el-date-picker>
                     </label>
                     <el-button type="success" icon="delete" class="handle-del mr10" @click="doSearchPerson">查询
@@ -71,7 +70,7 @@
     import axios from 'axios'
     import url from '../../assets/js/URL'
     import Modal from '../../common/modal'
-    import {getNowTime} from '../../assets/js/api'
+    import {getYTime} from '../../assets/js/api'
 
     export default {
         name: 'WorkingProcedure',
@@ -125,12 +124,8 @@
                     this.$router.push("/")
                 }
                 else {
-                    let time = getNowTime();
-                    let times = [];
-                    for (let i = 0; i < 2; i++) {
-                        times.push(time)
-                    }
-                    this.examineTime = times;
+                    let time = getYTime();
+                    this.examineTime = time;
                     let that = this;
                     axios.all([
                         axios.post(" " + url + "/sysconfig/deptList"),

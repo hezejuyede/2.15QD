@@ -196,7 +196,7 @@ import QualificationQueryAndStatistics from '../components/personnelManagement/Q
 import zGTimeStatistics from '../components/personnelManagement/zGTimeStatistics';
 
 //上离岗异常统计
-import sLGYCStatistics from '../components/personnelManagement/sLGYCStatistics.vue';
+import sLGYCStatistics from '../components/personnelManagement/shanggangshijianchaxun.vue';
 
 //人员工作记录查询
 import rYGZJVCX from '../components/personnelManagement/rYGZJVCX.vue';
