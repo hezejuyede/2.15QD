@@ -79,7 +79,7 @@
                 message: '',
                 HideModal: true,
                 listData: [],
-                examineTime:"",
+                examineTime: "",
 
                 cols: [],
                 tableData: [],
@@ -136,9 +136,8 @@
                     ])
                         .then(axios.spread(function (dept) {
                             that.deptOptions = dept.data;
-                            that.dept=dept.data[0].id;
-                            that.loadingShowData(this.dept,this.examineTime);
-
+                            that.dept = dept.data[3].id;
+                            that.loadingShowData(that.dept, that.examineTime);
                         }));
 
 
@@ -150,175 +149,18 @@
                 let that = this;
                 axios.all([
                     axios.post(" " + url + "/sys/showTableTitle", {"name": "zgsjcxtj"}),
-                    axios.post(" " + url + "/sysconfig/personList", {"deptid": data1, "time": data2, })
+                    axios.post(" " + url + "/timeTongji/userTimesByDay", {"deptid": data1, "curdatestr": data2,})
                 ])
                     .then(axios.spread(function (title, table) {
                         that.cols = title.data;
-                        that.tableData = table.data;
+                        that.tableData = table.data.data;
                     }));
-            },
-
-            //选择那个一个
-            selectList(val) {
-                if (val.length) {
-                    let data = [];
-                    for (let i = 0; i < val.length; i++) {
-                        let a = val[i].id;
-                        data.push(a)
-                    }
-                    this.listData = data;
-                }
-                else {
-                    this.listData = [];
-                }
             },
 
 
             //进行人员查询
             doSearchPerson() {
-                this.loadingShowData(this.dept, this.role, this.post)
-            },
-
-
-            //显示新增人员
-            showAddPerson() {
-                this.post = "";
-                this.role = "";
-                this.dept = "";
-                this.addVisible = true;
-                this.id = "";
-                this.name = "";
-                this.pwd = "";
-                this.showname = "";
-                this.code = "";
-            },
-            //新增人员
-            doAddPerson() {
-                if (this.name && this.pwd && this.showname && this.code && this.post && this.dept && this.role) {
-                    axios.post(" " + url + "/sysconfig/userAdd",
-                        {
-                            "postid": this.post,
-                            "deptid": this.dept,
-                            "roleid": this.role,
-                            "name": this.name,
-                            "pwd": this.pwd,
-                            "showname": this.showname,
-                            "code": this.code
-                        }
-                    )
-                        .then((res) => {
-                            if (res.data === "1") {
-                                this.$message.success(`新增成功`);
-                                this.addVisible = false;
-                                this.loadingShowData(this.dept, this.role, this.post)
-                            }
-                            else {
-                                this.$message.warning(`新增失败`);
-                            }
-                        })
-                        .catch((err) => {
-                            console.log(err)
-                        })
-                }
-                else {
-                    this.$message.warning(`输入不能为空`);
-                }
-            },
-
-            //双击点击行内编辑
-            editPerson(row, column, cell, event) {
-                this.editVisible = true;
-                this.id = row.id;
-                axios.post(" " + url + "/sysconfig/personDetail", {"id": this.id})
-                    .then((res) => {
-                        this.post = res.data.postid;
-                        this.dept = res.data.deptid;
-                        this.role = res.data.roleid;
-                        this.name = res.data.name;
-                        this.pwd = res.data.pwd;
-                        this.showname = res.data.showname;
-                        this.code = res.data.code;
-                    })
-                    .catch((err) => {
-                        console.log(err)
-                    });
-            },
-
-            // 保存编辑
-            saveEdit() {
-                if (this.showname && this.code) {
-                    axios.post(" " + url + "/sysconfig/updatePerson",
-                        {
-
-                            "id": this.id,
-                            "postid": this.post,
-                            "deptid": this.dept,
-                            "roleid": this.role,
-                            "pwd": this.pwd,
-                            "showname": this.showname,
-                            "code": this.code
-                        }
-                    )
-                        .then((res) => {
-                            if (res.data === "1") {
-                                this.$message.success(`修改成功`);
-                                this.editVisible = false;
-                                this.loadingShowData(this.dept, this.role, this.post)
-                            }
-                            else {
-                                this.$message.warning(`删除成功`);
-                            }
-                        })
-                        .catch((err) => {
-                            console.log(err)
-                        })
-                }
-                else {
-                    this.$message.warning(`输入不能为空`);
-                }
-
-            },
-
-            //选择点击删除
-            deletePerson() {
-                if (this.listData.length) {
-                    this.delVisible = true;
-                }
-                else {
-                    this.message = "请勾选要删除的人员";
-                    this.HideModal = false;
-                    const that = this;
-
-                    function a() {
-                        that.message = "";
-                        that.HideModal = true;
-                    }
-
-                    setTimeout(a, 2000);
-                }
-            },
-
-            // 确定删除
-            deleteRow() {
-                axios.post(" " + url + "/sysconfig/delPerson",
-                    {
-                        "ids": this.listData,
-                    }
-                )
-                    .then((res) => {
-                        if (res.data === "1") {
-
-                            this.$message.success('删除成功');
-                            this.delVisible = false;
-                            this.loadingShowData(this.dept, this.role, this.post)
-                        }
-                        else {
-                            this.$message.warning(`删除失败`);
-                        }
-                    })
-                    .catch((err) => {
-                        console.log(err)
-                    })
+                this.loadingShowData(this.dept, this.examineTime);
             },
 
         }
