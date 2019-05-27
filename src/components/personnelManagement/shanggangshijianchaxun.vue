@@ -43,8 +43,7 @@
                             placeholder="选择日期">
                         </el-date-picker>
                     </label>
-                    <el-button type="success" icon="delete" class="handle-del mr10" @click="doSearchPerson">查询
-                    </el-button>
+                    <el-button type="success" icon="delete" class="handle-del mr10" @click="doSearchPerson">查询</el-button>
                 </div>
                 <div class="">
                     <el-table class="tb-edit"
