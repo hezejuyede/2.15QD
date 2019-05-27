@@ -146,7 +146,7 @@
             </el-dialog>
 
             <!--关联部门 -->
-            <el-dialog title="关联部门" :visible.sync="glVisible" width="60%">
+            <el-dialog title="关联部门" :visible.sync="glVisible" width="30%">
                 <el-form ref="form" label-width="100px">
                     <span>部门</span>
                     <span>:</span>
@@ -167,7 +167,7 @@
                     </el-select>
                 </el-form>
                 <span slot="footer" class="dialog-footer">
-                <el-button @click="editVisible = false" style="height:30px;width:80px">取 消</el-button>
+                <el-button @click="glVisible = false" style="height:30px;width:80px">取 消</el-button>
                 <el-button type="primary" @click="doGlDept" style="height:30px;width:80px">确 定</el-button>
             </span>
             </el-dialog>
@@ -266,8 +266,8 @@
                 this.banciName = "";
                 this.dynamicValidateForm = {
                     domains: [{
-                        stime:"",
-                        etime:"",
+                        stime: "",
+                        etime: "",
                     }],
                 }
             },
@@ -307,7 +307,6 @@
                 axios.post(" " + url + "/sysconfig/banciDetail", {"id": this.id})
                     .then((res) => {
                         this.banciName = res.data.data.banci.bancileixing;
-
 
 
                         this.dynamicValidateForm.domains = res.data.data.list;
@@ -392,7 +391,7 @@
 
                 }
                 else {
-                    this.message = "请勾选要删除的内容";
+                    this.message = "请勾关联的班次";
                     this.HideModal = false;
                     const that = this;
 
@@ -410,7 +409,7 @@
                 axios.post(" " + url + "/sysconfig/banciDel",
                     {
                         "ids": this.listData,
-                        "dept":this.dept
+                        "dept": this.dept
                     }
                 )
                     .then((res) => {
