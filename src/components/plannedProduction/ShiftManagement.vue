@@ -55,16 +55,16 @@
                                     <span>开始时间:</span>
                                     <el-time-picker
                                         v-model="domain.stime"
-                                        value-format="hh:mm:ss"
-                                        placeholder="开始时间">
+                                        value-format="HH:mm:ss"
+                                        placeholder="任意时间">
                                     </el-time-picker>
                                 </div>
                                 <div class="fl" style="margin-left: 10px">
                                     <span>结束时间:</span>
                                     <el-time-picker
                                         v-model="domain.etime"
-                                        value-format="hh:mm:ss"
-                                        placeholder="结束时间">
+                                        value-format="HH:mm:ss"
+                                        placeholder="任意时间">
                                     </el-time-picker>
                                 </div>
                                 <div class="fl" style="margin-left: 10px">
@@ -108,7 +108,7 @@
                                     <span>开始时间:</span>
                                     <el-time-picker
                                         v-model="domain.stime"
-                                        value-format="hh:mm:ss"
+                                        value-format="HH:mm:ss"
                                         placeholder="开始时间">
                                     </el-time-picker>
                                 </div>
@@ -116,7 +116,7 @@
                                     <span>结束时间:</span>
                                     <el-time-picker
                                         v-model="domain.etime"
-                                        value-format="hh:mm:ss"
+                                        value-format="HH:mm:ss"
                                         placeholder="结束时间">
                                     </el-time-picker>
                                 </div>
