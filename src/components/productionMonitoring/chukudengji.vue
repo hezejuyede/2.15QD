@@ -12,10 +12,11 @@
                     <label style="margin-right: 5px">
                         <span>检索出库登记</span>
                         <span>:</span>
-                        <el-input v-model="select_word" placeholder="检索出库登记" class="handle-input mr10" style="width: 150px"></el-input>
+                        <el-input v-model="select_word" placeholder="检索出库登记" class="handle-input mr10"
+                                  style="width: 150px"></el-input>
                     </label>
                     <label style="margin-right: 10px;margin-left: 5px">
-                        <span>查询时间</span>
+                        <span>时间</span>
                         <span>:</span>
                         <el-date-picker
                             style="width: 240px"
@@ -30,7 +31,7 @@
                         <span>分类</span>
                         <span>:</span>
                         <el-select
-                            v-model="line"
+                            v-model="fenlei"
                             style="width: 120px"
                             clearable
                             filterable
@@ -39,7 +40,7 @@
                             @change="changeSCX"
                             placeholder="请选择分类">
                             <el-option
-                                v-for="item in lineOptions"
+                                v-for="item in fenleiOptions"
                                 :key="item.indexno"
                                 :label="item.name"
                                 :value="item.indexno">
@@ -51,7 +52,7 @@
                         <span>:</span>
                         <el-select
                             style="width: 120px"
-                            v-model="workStation"
+                            v-model="haocai"
                             clearable
                             filterable
                             allow-create
@@ -59,15 +60,15 @@
                             @change="changeSelect"
                             placeholder="请选择耗材">
                             <el-option
-                                v-for="item in workStationOptions"
+                                v-for="item in haocaiOptions"
                                 :key="item.id"
                                 :label="item.name"
                                 :value="item.id">
                             </el-option>
                         </el-select>
                     </label>
-                    <el-button type="primary" icon="delete" class="handle-del mr10" @click="showAdd">入库</el-button>
-                    <el-button type="danger" icon="delete" class="handle-del mr10" @click="showDelete">入库记录</el-button>
+                    <el-button type="primary" icon="delete" class="handle-del mr10" @click="showAdd">出库</el-button>
+                    <el-button type="success" icon="delete" class="handle-del mr10" @click="showCkjv">出库记录</el-button>
                 </div>
                 <div class="">
                     <el-table class="tb-edit"
@@ -90,83 +91,46 @@
                     </el-table>
                 </div>
             </div>
-            <!--新增弹出框 -->
-            <el-dialog title="新增点检" :visible.sync="addVisible" width="40%">
-                <el-form ref="form"  label-width="100px">
-                    <el-form-item label="生产线">
+            <!--出库弹出框 -->
+            <el-dialog title="出库" :visible.sync="addVisible" width="40%">
+                <el-form ref="form" label-width="100px">
+                    <el-form-item label="分类">
                         <el-select
-                            v-model="line"
+                            v-model="fenlei"
                             clearable
                             filterable
                             allow-create
                             disabled
                             default-first-option
-                            @change="changeSCX"
-                            placeholder="请选择生产线">
+                            @change="changeFenlei"
+                            placeholder="请选择分类">
                             <el-option
-                                v-for="item in lineOptions"
-                                :key="item.indexno"
+                                v-for="item in fenleiOptions"
+                                :key="item.id"
                                 :label="item.name"
-                                :value="item.indexno">
+                                :value="item.id">
                             </el-option>
                         </el-select>
                     </el-form-item>
-                    <el-form-item label="工位">
+                    <el-form-item label="耗材">
                         <el-select
-                            v-model="workStation"
+                            v-model="haocai"
                             clearable
                             filterable
                             disabled
                             allow-create
                             default-first-option
-                            placeholder="请选择工位">
+                            placeholder="请选择耗材">
                             <el-option
-                                v-for="item in workStationOptions"
+                                v-for="item in haocaiOptions"
                                 :key="item.id"
                                 :label="item.name"
                                 :value="item.id">
                             </el-option>
                         </el-select>
                     </el-form-item>
-                    <el-form-item label="点检项目">
-                        <el-select
-                            v-model="djxm"
-                            clearable
-                            filterable
-                            allow-create
-                            default-first-option
-                            multiple
-                            placeholder="请输入或者选择">
-                            <el-option
-                                v-for="item in djxmOptions"
-                                :key="item.id"
-                                :label="item.name"
-                                :value="item.id">
-                            </el-option>
-                        </el-select>
-                    </el-form-item>
-                    <el-form-item label="点检记录">
-                        <el-input v-model="djjl" style="width: 200px"></el-input>
-                    </el-form-item>
-                    <el-form-item label="关联负责设备">
-                        <el-select
-                            v-model="shebei"
-                            clearable
-                            filterable
-                            allow-create
-                            default-first-option
-                            multiple
-                            placeholder="请输入或者选择">
-                            <el-option
-                                v-for="item in shebeiOptions"
-                                :key="item.id"
-                                :label="item.name"
-                                :value="item.id">
-                            </el-option>
-                        </el-select>
-                    </el-form-item>
-                    <el-form-item label="点检周期">
-                        <el-input v-model="djzq" style="width: 200px"></el-input>
+                    <el-form-item label="出库数量">
+                        <el-input v-model="cksl" style="width: 200px"></el-input>
                     </el-form-item>
                 </el-form>
                 <span slot="footer" class="dialog-footer">
@@ -174,83 +138,46 @@
                 <el-button type="primary" @click="doAdd" style="height:30px;width:80px">确 定</el-button>
             </span>
             </el-dialog>
-            <!-- 编辑弹出框 -->
-            <el-dialog title="编辑点检" :visible.sync="editVisible" width="40%">
-                <el-form ref="form"  label-width="100px">
-                    <el-form-item label="生产线">
+            <!-- 出库记录 -->
+            <el-dialog title="出库记录修改" :visible.sync="editVisible" width="80%">
+                <el-form ref="form" label-width="100px">
+                    <el-form-item label="分类">
                         <el-select
-                            v-model="line"
+                            v-model="fenlei"
                             clearable
                             filterable
                             allow-create
                             disabled
                             default-first-option
-                            @change="changeSCX"
-                            placeholder="请选择生产线">
+                            @change="changeFenlei"
+                            placeholder="请选择分类">
                             <el-option
-                                v-for="item in lineOptions"
-                                :key="item.indexno"
+                                v-for="item in fenleiOptions"
+                                :key="item.id"
                                 :label="item.name"
-                                :value="item.indexno">
+                                :value="item.id">
                             </el-option>
                         </el-select>
                     </el-form-item>
-                    <el-form-item label="工位">
+                    <el-form-item label="耗材">
                         <el-select
-                            v-model="workStation"
+                            v-model="haocai"
                             clearable
                             filterable
                             disabled
                             allow-create
                             default-first-option
-                            placeholder="请选择工位">
+                            placeholder="请选择耗材">
                             <el-option
-                                v-for="item in workStationOptions"
+                                v-for="item in haocaiOptions"
                                 :key="item.id"
                                 :label="item.name"
                                 :value="item.id">
                             </el-option>
                         </el-select>
                     </el-form-item>
-                    <el-form-item label="点检项目">
-                        <el-select
-                            v-model="djxm"
-                            clearable
-                            filterable
-                            allow-create
-                            default-first-option
-                            multiple
-                            placeholder="请输入或者选择">
-                            <el-option
-                                v-for="item in djxmOptions"
-                                :key="item.id"
-                                :label="item.name"
-                                :value="item.id">
-                            </el-option>
-                        </el-select>
-                    </el-form-item>
-                    <el-form-item label="点检记录">
-                        <el-input v-model="djjl" style="width: 200px"></el-input>
-                    </el-form-item>
-                    <el-form-item label="关联负责设备">
-                        <el-select
-                            v-model="shebei"
-                            clearable
-                            filterable
-                            allow-create
-                            default-first-option
-                            multiple
-                            placeholder="请输入或者选择">
-                            <el-option
-                                v-for="item in shebeiOptions"
-                                :key="item.id"
-                                :label="item.name"
-                                :value="item.id">
-                            </el-option>
-                        </el-select>
-                    </el-form-item>
-                    <el-form-item label="点检周期">
-                        <el-input v-model="djzq" style="width: 200px"></el-input>
+                    <el-form-item label="出库数量">
+                        <el-input v-model="cksl" style="width: 200px"></el-input>
                     </el-form-item>
                 </el-form>
                 <span slot="footer" class="dialog-footer">
@@ -258,14 +185,40 @@
                 <el-button type="primary" @click="saveEdit" style="height:30px;width:80px">确 定</el-button>
             </span>
             </el-dialog>
-            <!-- 删除提示框 -->
-            <el-dialog title="删除点检" :visible.sync="delVisible" width="300px" center>
-                <div class="del-dialog-cnt">删除不可恢复，是否确定删除？</div>
-                <span slot="footer" class="dialog-footer">
-                <el-button @click="delVisible = false" style="height:30px;width:80px">取 消</el-button>
-                <el-button type="primary" @click="deleteRow" style="height:30px;width:80px">确 定</el-button>
-            </span>
+            <!-- 出库记录列表 -->
+            <el-dialog title="出库记录修改" :visible.sync="ckjvVisible" width="80%">
+                <div class="ckjvVisibleDiv">
+                    <el-table
+                        :data="ckjvData"
+                        :header-cell-style="{background:'#A1D0FC',color:'rgba(0, 0, 0, 0.8)',fontSize:'20px'}"
+                        border
+                        height="400"
+                        @row-dblclick="editPerson"
+                        highlight-current-row
+                        style="width: 98%;margin: auto">
+                        <el-table-column
+                            type="selection"
+                            width="30">
+                        </el-table-column>
+                        <el-table-column
+                            prop="zizhname"
+                            align="center"
+                            label="出库时间">
+                        </el-table-column>
+                        <el-table-column
+                            prop="username"
+                            align="center"
+                            label="出库人员">
+                        </el-table-column>
+                        <el-table-column
+                            prop="username"
+                            align="center"
+                            label="出库数量">
+                        </el-table-column>
+                    </el-table>
+                </div>
             </el-dialog>
+
 
             <Modal :msg="message"
                    :isHideModal="HideModal"></Modal>
@@ -284,42 +237,28 @@
             return {
                 message: '',
                 HideModal: true,
-                listData:[],
-                id:"",
+                listData: [],
+                id: "",
 
 
                 cols: [],
                 tableData: [],
+                ckjvData: [],
 
                 select_word: '',
 
                 addVisible: false,
                 editVisible: false,
-                delVisible: false,
+                ckjvVisible: false,
 
 
-                workStation:"",
-                workStationOptions:[],
-                line: '',
-                lineOptions: [],
+                haocai: "",
+                haocaiOptions: [],
+                fenlei: '',
+                fenleiOptions: [],
 
-                djzq: "",
-                djjl: "",
-                djxm: "",
-                djxmOptions: [
-                    {"name": "项目1", "id": "1"},
-                    {"name": "项目2", "id": "2"},
-                    {"name": "项目3", "id": "3"},
-                    {"name": "项目4", "id": "4"}
-                ],
-                shebei: "",
-                shebeiOptions: [
-                    {"name": "设备1", "id": "1"},
-                    {"name": "设备2", "id": "2"},
-                    {"name": "设备3", "id": "3"},
-                    {"name": "设备4", "id": "4"}
-                ],
-                examineTime:""
+                cksl: "",
+                examineTime: ""
 
             }
         },
@@ -366,7 +305,7 @@
                         axios.post(" " + url + "/sys/dictionaryList", {"id": "9"}),
                         axios.post(" " + url + "/api/getPersonProcessList", {"name": ""}),
                     ])
-                        .then(axios.spread(function (line,workStation) {
+                        .then(axios.spread(function (line, workStation) {
                             that.lineOptions = line.data;
                             that.line = line.data[0].indexno;
                             that.workStation = workStation.data[0].id;
@@ -380,7 +319,7 @@
             loadingShowData(data) {
                 let that = this;
                 axios.all([
-                    axios.post(" " + url + "/sys/showTableTitle", {"name": "djsd"}),
+                    axios.post(" " + url + "/sys/showTableTitle", {"name": "crkdj"}),
                     axios.post(" " + url + "/padShow/buttonList", {"id": data})
                 ])
                     .then(axios.spread(function (title, table) {
@@ -389,7 +328,8 @@
                     }));
             },
 
-            changeSCX(){
+            //更改分类
+            changeFenlei() {
                 axios.post(" " + url + "/sysconfig/getGongxuList", {"id": this.line})
                     .then((res) => {
                         this.workStation = res.data[0].id;
@@ -398,7 +338,7 @@
                     });
             },
 
-            //根据工位选择
+            //根据耗材
             changeSelect() {
                 this.loadingShowData(this.workStation)
             },
@@ -414,7 +354,7 @@
                     this.listData = data;
                 }
                 else {
-                    this.listData=[];
+                    this.listData = [];
                 }
             },
 
@@ -433,16 +373,16 @@
                 }
             },
 
-            //显示新增
-            showAdd(){
+            //显示出库
+            showAdd() {
 
                 if (this.workStation) {
-                    this.addVisible=true;
-                    this.name= "";
-                    this.type= "";
-                    this.disabled= "";
-                    this.backgroundColor="";
-                    this.showHide= "";
+                    this.addVisible = true;
+                    this.name = "";
+                    this.type = "";
+                    this.disabled = "";
+                    this.backgroundColor = "";
+                    this.showHide = "";
                 }
                 else {
                     this.message = "请选择工位";
@@ -458,9 +398,9 @@
                 }
             },
 
-            //进行新增
+            //进行出库
             doAdd() {
-                if (this.name && this.type && this.disabled &&this.backgroundColor&&this.showHide) {
+                if (this.name && this.type && this.disabled && this.backgroundColor && this.showHide) {
                     axios.post(" " + url + "/padShow/buttonAdd",
                         {
                             "gongxuid": this.workStation,
@@ -491,6 +431,43 @@
                 }
             },
 
+
+            //选择点击显示出库记录
+            showCkjv() {
+                if (this.listData.length) {
+                    if (this.listData.length > 1) {
+                        this.message = "只能选择一个";
+                        this.HideModal = false;
+                        const that = this;
+
+                        function a() {
+                            that.message = "";
+                            that.HideModal = true;
+                        }
+
+                        setTimeout(a, 2000);
+                    }
+                    else {
+                        this.ckjvVisible = true;
+                        this.doSearchCKJV(this.id, this.examineTime);
+                    }
+
+                }
+                else {
+                    this.message = "请勾选要查询的耗材";
+                    this.HideModal = false;
+                    const that = this;
+
+                    function b() {
+                        that.message = "";
+                        that.HideModal = true;
+                    }
+
+                    setTimeout(b, 2000);
+                }
+            },
+
+
             //双击点击行内编辑
             edit(row, column, cell, event) {
                 this.editVisible = true;
@@ -500,9 +477,6 @@
                         this.workStation = res.data.data.gongxuid;
                         this.name = res.data.data.name;
                         this.type = Number(res.data.data.type);
-                        this.disabled = res.data.data.disabled;
-                        this.backgroundColor = res.data.data.backgroundcolor;
-                        this.showHide = res.data.data.show;
                     })
                     .catch((err) => {
                         console.log(err)
@@ -511,26 +485,22 @@
 
             // 保存编辑
             saveEdit() {
-                if (this.name && this.type && this.disabled &&this.backgroundColor&&this.showHide) {
+                if (this.name && this.type && this.disabled && this.backgroundColor && this.showHide) {
                     axios.post(" " + url + "/padShow/buttonUpdate",
                         {
-                            "id":this.id,
+                            "id": this.id,
                             "gongweiid": this.workStation,
                             "name": this.name,
-                            "type": this.type,
-                            "disabled": this.disabled,
-                            "backgroundcolor": this.backgroundColor,
-                            "show": this.showHide,
                         }
                     )
                         .then((res) => {
                             if (res.data.state === "1") {
-                                this.editVisible = false;
                                 this.$message.success(`修改成功`);
-                                this.loadingShowData(this.workStation)
+                                this.editVisible = false;
+                                this.doSearchCKJV(this.id, this.examineTime);
                             }
                             else {
-                                this.$message.warning(`新增失败`);
+                                this.$message.warning(res.data.message);
                             }
                         })
                         .catch((err) => {
@@ -543,46 +513,21 @@
 
             },
 
-            //选择点击显示删除
-            showDelete() {
-                if (this.listData.length) {
-                    this.delVisible = true;
-                }
-                else {
-                    this.message = "请勾选要删除的按钮";
-                    this.HideModal = false;
-                    const that = this;
-
-                    function a() {
-                        that.message = "";
-                        that.HideModal = true;
-                    }
-
-                    setTimeout(a, 2000);
-                }
-            },
-
-            // 确定删除
-            deleteRow() {
-                axios.post(" " + url + "/padShow/buttonDel",
+            //出库记录查询
+            doSearchCKJV(data1, data2) {
+                axios.post(" " + url + "/padShow/buttonUpdate",
                     {
-                        "id": this.listData[0],
+                        "id": data1,
+                        "time": data2,
                     }
                 )
                     .then((res) => {
-                        if (res.data.state === "1") {
-                            this.$message.success('删除成功');
-                            this.delVisible = false;
-                            this.loadingShowData(this.workStation);
-                        }
-                        else {
-                            this.$message.warning(`删除失败`);
-                        }
+                        this.ckjvData = res.data.data
                     })
                     .catch((err) => {
                         console.log(err)
                     })
-            },
+            }
 
         }
     }
@@ -602,14 +547,14 @@
         .template-content {
             .handle-box {
                 height: 80px;
-                line-height:80px;
-                padding-left: 50px;
+                line-height: 80px;
+                padding-left: 20px;
                 .handle-input {
                     width: 300px;
                     display: inline-block;
                 }
                 .el-button {
-                    width:100px;
+                    width: 100px;
                     height: 30px;
                 }
             }
