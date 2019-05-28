@@ -65,9 +65,14 @@
                                 url: "/ProductionMonitoring/dingyihancaiku"
                             },
                             {
-                                label: '出入库登记',
+                                label: '入库登记',
                                 index: "2-3",
-                                url: "/ProductionMonitoring/InspectionItemSetting"
+                                url: "/ProductionMonitoring/rukudengji"
+                            },
+                            {
+                                label: '出库登记',
+                                index: "2-4",
+                                url: "/ProductionMonitoring/chukudengji"
                             }
                         ]
                     },

@@ -155,6 +155,14 @@ import  dingyifenlei from '../components/productionMonitoring/dingyifenlei'
 
 
 
+//出库登记
+import chukudengji from '../components/productionMonitoring/chukudengji'
+
+
+//入库登记
+import rukudengji from '../components/productionMonitoring/rukudengji'
+
+
 
 
 
@@ -488,7 +496,16 @@ export default new Router({
                             component:dingyifenlei,
                             meta: {title: '定义分类'}
                         },
-
+                        {
+                            path: 'chukudengji',
+                            component:chukudengji,
+                            meta: {title: '出库登记'}
+                        },
+                        {
+                            path: 'rukudengji',
+                            component:rukudengji,
+                            meta: {title: '入库登记'}
+                        },
                         {
                             path: 'sbgsReportForm',
                             component: sbgsReportForm,
