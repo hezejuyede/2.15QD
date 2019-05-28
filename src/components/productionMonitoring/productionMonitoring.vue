@@ -55,13 +55,18 @@
                         index: "2",
                         children: [
                             {
-                                label: '定义耗材库',
+                                label: '定义分类名称',
                                 index: "2-1",
+                                url: "/ProductionMonitoring/dingyifenlei"
+                            },
+                            {
+                                label: '定义耗材名称',
+                                index: "2-2",
                                 url: "/ProductionMonitoring/dingyihancaiku"
                             },
                             {
                                 label: '出入库登记',
-                                index: "2-2",
+                                index: "2-3",
                                 url: "/ProductionMonitoring/InspectionItemSetting"
                             }
                         ]

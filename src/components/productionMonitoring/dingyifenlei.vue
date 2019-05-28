@@ -3,7 +3,7 @@
         <div class="crumbs">
             <el-breadcrumb separator="/">
                 <el-breadcrumb-item>设备管理</el-breadcrumb-item>
-                <el-breadcrumb-item>定义耗材</el-breadcrumb-item>
+                <el-breadcrumb-item>定义分类</el-breadcrumb-item>
             </el-breadcrumb>
         </div>
         <div class="template-content">
