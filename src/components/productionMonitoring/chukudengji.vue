@@ -305,22 +305,22 @@
                         axios.post(" " + url + "/sys/dictionaryList", {"id": "9"}),
                         axios.post(" " + url + "/api/getPersonProcessList", {"name": ""}),
                     ])
-                        .then(axios.spread(function (line, workStation) {
-                            that.lineOptions = line.data;
-                            that.line = line.data[0].indexno;
-                            that.workStation = workStation.data[0].id;
-                            that.workStationOptions = workStation.data;
-                            that.loadingShowData(1);
+                        .then(axios.spread(function (fenlei, haocai) {
+                            that.fenleiOptions = fenlei.data;
+                            that.fenlei = fenlei.data[0].id;
+                            that.haocaiOptions = haocai.data;
+                            that.haocai = haocai.data[0].id;
+                            that.loadingShowData(that.fenlei, that.haocai, that.examineTime);
                         }));
                 }
             },
 
             //瞬间加载数据
-            loadingShowData(data) {
+            loadingShowData(data1, data2, data3) {
                 let that = this;
                 axios.all([
                     axios.post(" " + url + "/sys/showTableTitle", {"name": "crkdj"}),
-                    axios.post(" " + url + "/padShow/buttonList", {"id": data})
+                    axios.post(" " + url + "/padShow/buttonList", {"fenlei": data1, "haocai": data2, "time": data3})
                 ])
                     .then(axios.spread(function (title, table) {
                         that.cols = title.data;
@@ -328,19 +328,31 @@
                     }));
             },
 
-            //更改分类
+            //出库记录查询
+            doSearchCKJV(data1, data2) {
+                axios.post(" " + url + "/padShow/buttonUpdate", {"id": data1, "time": data2}
+                )
+                    .then((res) => {
+                        this.ckjvData = res.data.data
+                    })
+                    .catch((err) => {
+                        console.log(err)
+                    })
+            },
+
+            //更改分类更新耗材
             changeFenlei() {
                 axios.post(" " + url + "/sysconfig/getGongxuList", {"id": this.line})
                     .then((res) => {
-                        this.workStation = res.data[0].id;
-                        this.workStationOptions = res.data;
-                        this.loadingShowData(this.workStation)
+                        this.haocai = res.data[0].id;
+                        this.haocaiOptions = res.data;
+                        this.loadingShowData(this.fenlei, this.haocai, this.examineTime);
                     });
             },
 
-            //根据耗材
+            //根据耗材查询
             changeSelect() {
-                this.loadingShowData(this.workStation)
+                this.loadingShowData(this.fenlei, this.haocai, this.examineTime);
             },
 
             //选择那个一个
@@ -376,7 +388,7 @@
             //显示出库
             showAdd() {
 
-                if (this.workStation) {
+                if (this.haocai) {
                     this.addVisible = true;
                     this.name = "";
                     this.type = "";
@@ -385,7 +397,7 @@
                     this.showHide = "";
                 }
                 else {
-                    this.message = "请选择工位";
+                    this.message = "请选择耗材";
                     this.HideModal = false;
                     const that = this;
 
@@ -513,21 +525,6 @@
 
             },
 
-            //出库记录查询
-            doSearchCKJV(data1, data2) {
-                axios.post(" " + url + "/padShow/buttonUpdate",
-                    {
-                        "id": data1,
-                        "time": data2,
-                    }
-                )
-                    .then((res) => {
-                        this.ckjvData = res.data.data
-                    })
-                    .catch((err) => {
-                        console.log(err)
-                    })
-            }
 
         }
     }
