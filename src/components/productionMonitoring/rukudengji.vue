@@ -10,11 +10,11 @@
             <div class="container">
                 <div class="handle-box">
                     <label style="margin-right: 10px">
-                        <span>智能检索托单金物</span>
+                        <span>智能检索入库登记</span>
                         <span>:</span>
-                        <el-input v-model="select_word" placeholder="智能检索托单金物" class="handle-input mr10"></el-input>
+                        <el-input v-model="select_word" placeholder="智能检索入库登记" class="handle-input mr10" style="width: 200px"></el-input>
                     </label>
-                    <label style="margin-right: 10px;margin-left: 10px">
+                    <label style="margin-right: 10px;margin-left: 5px">
                         <span>选择查询时间</span>
                         <span>:</span>
                         <el-date-picker
