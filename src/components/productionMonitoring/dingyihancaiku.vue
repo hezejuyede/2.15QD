@@ -10,12 +10,12 @@
             <div class="container">
                 <div class="handle-box">
                     <label style="margin-right: 10px">
-                        <span>智能检索分类</span>
+                        <span>智能检索耗材</span>
                         <span>:</span>
-                        <el-input v-model="select_word" placeholder="智能检索分类" class="handle-input mr10"></el-input>
+                        <el-input v-model="select_word" placeholder="智能检索耗材" class="handle-input mr10"></el-input>
                     </label>
-                    <el-button type="primary" icon="delete" class="handle-del mr10" @click="showAdd">新增分类</el-button>
-                    <el-button type="danger" icon="delete" class="handle-del mr10" @click="showDelete">删除分类</el-button>
+                    <el-button type="primary" icon="delete" class="handle-del mr10" @click="showAdd">新增耗材</el-button>
+                    <el-button type="danger" icon="delete" class="handle-del mr10" @click="showDelete">删除耗材</el-button>
                 </div>
                 <div class="">
                     <el-table class="tb-edit"
@@ -41,10 +41,13 @@
                 </div>
             </div>
             <!--新增弹出框 -->
-            <el-dialog title="新增分类" :visible.sync="addVisible" width="40%">
-                <el-form ref="form"  label-width="100px">
-                    <el-form-item label="部门分类">
+            <el-dialog title="新增耗材" :visible.sync="addVisible" width="40%">
+                <el-form ref="form"  label-width="150px">
+                    <el-form-item label="耗材名称">
                         <el-input v-model="name" style="width: 200px"></el-input>
+                    </el-form-item>
+                    <el-form-item label="最低库存报警值">
+                        <el-input v-model="number" style="width: 200px" type="number"></el-input>
                     </el-form-item>
                 </el-form>
                 <span slot="footer" class="dialog-footer">
@@ -54,10 +57,13 @@
             </el-dialog>
 
             <!-- 编辑弹出框 -->
-            <el-dialog title="编辑分类" :visible.sync="editVisible" width="40%">
+            <el-dialog title="编辑耗材" :visible.sync="editVisible" width="40%">
                 <el-form ref="form"  label-width="100px">
-                    <el-form-item label="部门名称">
+                    <el-form-item label="耗材名称">
                         <el-input v-model="name" style="width: 200px"></el-input>
+                    </el-form-item>
+                    <el-form-item label="最低库存报警值">
+                        <el-input v-model="number" style="width: 200px" type="number"></el-input>
                     </el-form-item>
                 </el-form>
                 <span slot="footer" class="dialog-footer">
@@ -67,7 +73,7 @@
             </el-dialog>
 
             <!-- 删除提示框 -->
-            <el-dialog title="删除分类" :visible.sync="delVisible" width="300px" center>
+            <el-dialog title="删除耗材" :visible.sync="delVisible" width="300px" center>
                 <div class="del-dialog-cnt">删除不可恢复，是否确定删除？</div>
                 <span slot="footer" class="dialog-footer">
                 <el-button @click="cancelDelete" style="height:30px;width:80px">取 消</el-button>
@@ -112,6 +118,7 @@
 
 
                 name: "",
+                number:""
 
 
 
@@ -156,7 +163,7 @@
             loadingShowData() {
                 let that = this;
                 axios.all([
-                    axios.post(" " + url + "/sys/showTableTitle", {"name": "dept"}),
+                    axios.post(" " + url + "/sys/showTableTitle", {"name": "dyhcmc"}),
                     axios.post(" " + url + "/sysconfig/deptList")
                 ])
                     .then(axios.spread(function (title, table) {
@@ -280,7 +287,7 @@
                     this.delVisible = true;
                 }
                 else {
-                    this.message = "请勾选要删除的按钮";
+                    this.message = "请勾选要删除的耗材";
                     this.HideModal = false;
                     const that = this;
 

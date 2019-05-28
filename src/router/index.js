@@ -143,13 +143,20 @@ import InspectionItemSetting from '../components/productionMonitoring/Inspection
 //工位点检记录
 import workStationInspectionRecord from '../components/productionMonitoring/workStationInspectionRecord'
 
-
 //点检记录查询与统计
 import djjjSearchTj from '../components/productionMonitoring/djjjSearchTj'
 
-//定义耗材库
-
+//定义耗材
 import  dingyihancaiku from '../components/productionMonitoring/dingyihancaiku'
+
+
+//定义分类
+import  dingyifenlei from '../components/productionMonitoring/dingyifenlei'
+
+
+
+
+
 
 
 import zgsjStatistics from '../components/personnelManagement/zgsjStatistics'
@@ -474,7 +481,12 @@ export default new Router({
                         {
                             path: 'dingyihancaiku',
                             component:dingyihancaiku,
-                            meta: {title: '定义耗材库'}
+                            meta: {title: '定义耗材'}
+                        },
+                        {
+                            path: 'dingyifenlei',
+                            component:dingyifenlei,
+                            meta: {title: '定义分类'}
                         },
 
                         {

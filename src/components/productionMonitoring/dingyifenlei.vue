@@ -156,7 +156,7 @@
             loadingShowData() {
                 let that = this;
                 axios.all([
-                    axios.post(" " + url + "/sys/showTableTitle", {"name": "dept"}),
+                    axios.post(" " + url + "/sys/showTableTitle", {"name": "dyhcflmc"}),
                     axios.post(" " + url + "/sysconfig/deptList")
                 ])
                     .then(axios.spread(function (title, table) {
@@ -280,7 +280,7 @@
                     this.delVisible = true;
                 }
                 else {
-                    this.message = "请勾选要删除的按钮";
+                    this.message = "请勾选要删除的分类";
                     this.HideModal = false;
                     const that = this;
 
