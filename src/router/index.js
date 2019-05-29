@@ -137,8 +137,16 @@ import sbgsReportForm from '../components/productionMonitoring/sbgsReportForm'
 //设备故障率报表
 import sbgzvReportForm from '../components/productionMonitoring/sbgzvReportForm.vue'
 
-//点检项目设定
+//工位点检项目设定
 import InspectionItemSetting from '../components/productionMonitoring/InspectionItemSetting.vue'
+
+
+//点检项目设定
+import xingmusheding  from '../components/productionMonitoring/xingmusheding.vue'
+
+//关联设备设定
+
+import guanlianshebeisheding from '../components/productionMonitoring/guanlianshebeisheding.vue'
 
 //工位点检记录
 import workStationInspectionRecord from '../components/productionMonitoring/workStationInspectionRecord'
@@ -469,11 +477,21 @@ export default new Router({
                     component: ProductionMonitoring,
                     meta: {title: '设备管理'},
                     children: [
+                        {
+                            path: 'xingmusheding',
+                            component:xingmusheding,
+                            meta: {title: '点检项目设定'}
+                        },
+                        {
+                            path: 'guanlianshebeisheding',
+                            component:guanlianshebeisheding,
+                            meta: {title: '关联设备设定'}
+                        },
 
                         {
                             path: 'InspectionItemSetting',
                             component:InspectionItemSetting,
-                            meta: {title: '点检项目设定'}
+                            meta: {title: '工位点检项目设定'}
                         },
                         {
                             path: 'workStationInspectionRecord',

@@ -36,16 +36,26 @@
                             {
                                 label: '点检项目设定',
                                 index: "1-1",
+                                url: "/ProductionMonitoring/xingmusheding"
+                            },
+                            {
+                                label: '关联设备设定',
+                                index: "1-1",
+                                url: "/ProductionMonitoring/guanlianshebeisheding"
+                            },
+                            {
+                                label: '工位点检项目设定',
+                                index: "1-3",
                                 url: "/ProductionMonitoring/InspectionItemSetting"
                             },
                             {
                                 label: '工位点检记录',
-                                index: "1-2",
+                                index: "1-4",
                                 url: "/ProductionMonitoring/workStationInspectionRecord"
                             },
                             {
                                 label: '点检记录查询与统计',
-                                index: "1-3",
+                                index: "1-5",
                                 url: "/ProductionMonitoring/djjjSearchTj"
                             }
                         ]

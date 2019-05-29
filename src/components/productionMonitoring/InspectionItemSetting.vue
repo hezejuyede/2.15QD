@@ -132,9 +132,6 @@
                             </el-option>
                         </el-select>
                     </el-form-item>
-                    <el-form-item label="点检记录">
-                        <el-input v-model="djjl" style="width: 200px"></el-input>
-                    </el-form-item>
                     <el-form-item label="关联负责设备">
                         <el-select
                             v-model="shebei"
@@ -216,9 +213,6 @@
                             </el-option>
                         </el-select>
                     </el-form-item>
-                    <el-form-item label="点检记录">
-                        <el-input v-model="djjl" style="width: 200px"></el-input>
-                    </el-form-item>
                     <el-form-item label="关联负责设备">
                         <el-select
                             v-model="shebei"
@@ -290,7 +284,6 @@
                 lineOptions: [],
 
                 djzq: "",
-                djjl: "",
                 djxm: "",
                 djxmOptions: [
                     {"name": "项目1", "id": "1"},
