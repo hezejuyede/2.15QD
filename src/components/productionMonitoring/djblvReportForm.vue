@@ -10,20 +10,61 @@
             <div class="container">
                 <div class="handle-box">
                     <label style="margin-right: 10px">
-                        <span>智能检索托单金物</span>
+                        <span>检索点检不良率</span>
                         <span>:</span>
-                        <el-input v-model="select_word" placeholder="智能检索托单金物" class="handle-input mr10"></el-input>
+                        <el-input v-model="select_word" placeholder="检索点检不良率" class="handle-input mr10" style="width: 200px"></el-input>
                     </label>
                     <label style="margin-right: 10px;margin-left: 10px">
                         <span>选择查询时间</span>
                         <span>:</span>
                         <el-date-picker
+                            style="width: 240px"
                             v-model="examineTime"
                             type="daterange"
                             start-placeholder="开始日期"
                             end-placeholder="结束日期"
                             value-format="yyyy-MM-dd">
                         </el-date-picker>
+                    </label>
+                    <label style="margin-right: 5px;margin-left: 5px">
+                        <span>生产线</span>
+                        <span>:</span>
+                        <el-select
+                            style="width: 120px"
+                            v-model="line"
+                            clearable
+                            filterable
+                            allow-create
+                            default-first-option
+                            @change="changeSCX"
+                            placeholder="请选择生产线">
+                            <el-option
+                                v-for="item in lineOptions"
+                                :key="item.indexno"
+                                :label="item.name"
+                                :value="item.indexno">
+                            </el-option>
+                        </el-select>
+                    </label>
+                    <label style="margin-right: 10px;margin-left:5px">
+                        <span>工位</span>
+                        <span>:</span>
+                        <el-select
+                            style="width: 120px"
+                            v-model="workStation"
+                            clearable
+                            filterable
+                            allow-create
+                            default-first-option
+                            @change="changeSelect"
+                            placeholder="请选择工位">
+                            <el-option
+                                v-for="item in workStationOptions"
+                                :key="item.id"
+                                :label="item.name"
+                                :value="item.id">
+                            </el-option>
+                        </el-select>
                     </label>
                     <el-button type="primary" icon="delete" class="handle-del mr10" @click="doSearch">查询报表</el-button>
                 </div>
@@ -68,6 +109,10 @@
 
                 select_word: '',
                 examineTime: "",
+                workStation:"",
+                workStationOptions:[],
+                line: '',
+                lineOptions: [],
 
 
             }
@@ -112,12 +157,15 @@
 
                     let that = this;
                     axios.all([
-                        axios.post(" " + url + "/sys/getPiciList"),
+                        axios.post(" " + url + "/sys/dictionaryList", {"id": "9"}),
+                        axios.post(" " + url + "/api/getPersonProcessList", {"name": ""}),
                     ])
-                        .then(axios.spread(function (select) {
-                            that.batchOptions = select.data;
-                            that.batch = select.data[0].id;
-                            that.loadingShowData(that.batch);
+                        .then(axios.spread(function (line,workStation) {
+                            that.lineOptions = line.data;
+                            that.line = line.data[0].indexno;
+                            that.workStation = workStation.data[0].id;
+                            that.workStationOptions = workStation.data;
+                            that.loadingShowData(1);
                         }));
                 }
             },
@@ -126,7 +174,7 @@
             loadingShowData(data) {
                 let that = this;
                 axios.all([
-                    axios.post(" " + url + "/sys/showTableTitle", {"name": "zwjwcx"}),
+                    axios.post(" " + url + "/sys/showTableTitle", {"name": "djblvbb"}),
                     axios.post(" " + url + "/wuliao/jinwuZhuwenpinList", {"time": data})
                 ])
                     .then(axios.spread(function (title, table) {
@@ -135,14 +183,28 @@
                     }));
             },
 
+            //改变生产线
+            changeSCX(){
+                axios.post(" " + url + "/sysconfig/getGongxuList", {"id": this.line})
+                    .then((res) => {
+                        this.workStation = res.data[0].id;
+                        this.workStationOptions = res.data;
+                        this.loadingShowData(this.workStation)
+                    });
+            },
 
-            //根据时间查询
+            //根据工位选择
+            changeSelect() {
+                this.loadingShowData(this.workStation)
+            },
+
+            //根据时间,生产线，工位查询
             doSearch() {
-                if (this.batch) {
-                    this.loadingShowData(this.batch)
+                if (this.examineTime && this.line && this.workStation) {
+                    this.loadingShowData(this.examineTime,this.line,this.workStation)
                 }
                 else {
-                    this.message = "查询批次不能为空";
+                    this.message = "查询条件不能为空";
                     this.HideModal = false;
                     const that = this;
                     function a() {
@@ -173,7 +235,7 @@
             .handle-box {
                 height: 80px;
                 line-height: 80px;
-                padding-left: 50px;
+                padding-left: 20px;
                 .handle-input {
                     width: 300px;
                     display: inline-block;
