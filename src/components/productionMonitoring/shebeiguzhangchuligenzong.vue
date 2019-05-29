@@ -90,16 +90,32 @@
                 </div>
             </div>
             <!--新增弹出框 -->
-            <el-dialog title="进行点检" :visible.sync="addVisible" width="40%">
+            <el-dialog title="处理故障" :visible.sync="addVisible" width="40%">
                 <el-form ref="form"  label-width="100px">
-                    <el-form-item label="记录内容">
-                        <el-input v-model="jvnr" style="width: 200px"></el-input>
-                    </el-form-item>
-                    <el-form-item label="点检状态">
-                        <el-input v-model="djzt" style="width: 200px"></el-input>
+                    <el-form-item label="处理结果">
+                        <el-select
+                            v-model="cljg"
+                            clearable
+                            filterable
+                            allow-create
+                            default-first-option
+                            multiple
+                            placeholder="请输入或者选择">
+                            <el-option
+                                v-for="item in cljgOptions"
+                                :key="item.id"
+                                :label="item.name"
+                                :value="item.id">
+                            </el-option>
+                        </el-select>
                     </el-form-item>
                     <el-form-item label="备注">
-                        <el-input v-model="beizhu" style="width: 200px"></el-input>
+                        <el-input v-model="beizhu"
+                                  type="textarea"
+                                  placeholder="请输入内容"
+                                  maxlength="30"
+                                  show-word-limit
+                                  style="width: 200px "></el-input>
                     </el-form-item>
                 </el-form>
                 <span slot="footer" class="dialog-footer">
@@ -107,17 +123,34 @@
                 <el-button type="primary" @click="doAdd" style="height:30px;width:80px">确 定</el-button>
             </span>
             </el-dialog>
+
             <!-- 编辑弹出框 -->
-            <el-dialog title="修改点击记录" :visible.sync="editVisible" width="40%">
+            <el-dialog title="修改处理故障" :visible.sync="editVisible" width="40%">
                 <el-form ref="form"  label-width="100px">
-                    <el-form-item label="记录内容">
-                        <el-input v-model="jvnr" style="width: 200px"></el-input>
-                    </el-form-item>
-                    <el-form-item label="点检状态">
-                        <el-input v-model="djzt" style="width: 200px"></el-input>
+                    <el-form-item label="处理结果">
+                        <el-select
+                            v-model="cljg"
+                            clearable
+                            filterable
+                            allow-create
+                            default-first-option
+                            multiple
+                            placeholder="请输入或者选择">
+                            <el-option
+                                v-for="item in cljgOptions"
+                                :key="item.id"
+                                :label="item.name"
+                                :value="item.id">
+                            </el-option>
+                        </el-select>
                     </el-form-item>
                     <el-form-item label="备注">
-                        <el-input v-model="beizhu" style="width: 200px"></el-input>
+                        <el-input v-model="beizhu"
+                                  type="textarea"
+                                  placeholder="请输入内容"
+                                  maxlength="30"
+                                  show-word-limit
+                                  style="width: 200px "></el-input>
                     </el-form-item>
                 </el-form>
                 <span slot="footer" class="dialog-footer">
@@ -136,7 +169,7 @@
     import axios from 'axios'
     import url from '../../assets/js/URL'
     import Modal from '../../common/modal'
-
+    import {getNowTime} from '../../assets/js/api'
     export default {
         name: 'WorkingProcedure',
         data() {
@@ -161,8 +194,13 @@
                 line: '',
                 lineOptions: [],
 
-                jvnr:"",
-                djzt:"",
+                cljg:"",
+                cljgOptions: [
+                    {"name": "故障修复", "id": "1"},
+                    {"name": "继续等待", "id": "2"},
+                    {"name": "返厂维修", "id": "3"},
+                    {"name": "自行维修", "id": "4"}
+                ],
                 beizhu:"",
             }
         },
@@ -197,6 +235,12 @@
                     this.$router.push("/")
                 }
                 else {
+                    let time = getNowTime();
+                    let times = [];
+                    for (let i = 0; i < 2; i++) {
+                        times.push(time)
+                    }
+                    this.examineTime = times;
                     let that = this;
                     axios.all([
                         axios.post(" " + url + "/sys/dictionaryList", {"id": "9"}),
