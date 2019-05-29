@@ -162,7 +162,7 @@
                 addVisible: false,
                 editVisible: false,
 
-
+                examineTime:"",
                 workStation:"",
                 workStationOptions:[],
                 line: '',
