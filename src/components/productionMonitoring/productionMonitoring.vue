@@ -130,7 +130,7 @@
                             {
                                 label: '设备状态实时监控图',
                                 index: "5-1",
-                                url: "/ProductionMonitoring/InspectionItemSetting"
+                                url: "/ProductionMonitoring/shebeizhuangtaishishijiankongtu"
                             }
                         ]
                     }
