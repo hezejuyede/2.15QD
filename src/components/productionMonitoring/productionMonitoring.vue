@@ -91,14 +91,9 @@
                         index: "3",
                         children: [
                             {
-                                label: '设备故障异常上报',
-                                index: "3-1",
-                                url: "/ProductionMonitoring/InspectionItemSetting"
-                            },
-                            {
                                 label: '设备故障处理跟踪',
-                                index: "3-2",
-                                url: "/ProductionMonitoring/InspectionItemSetting"
+                                index: "3-1",
+                                url: "/ProductionMonitoring/shebeiguzhangchuligenzong"
                             }
                         ]
                     },

@@ -170,6 +170,9 @@ import chukudengji from '../components/productionMonitoring/chukudengji'
 //入库登记
 import rukudengji from '../components/productionMonitoring/rukudengji'
 
+//设备故障处理跟踪
+import shebeiguzhangchuligenzong from '../components/productionMonitoring/shebeiguzhangchuligenzong'
+
 //设备状态实时监控图
 
 import shebeizhuangtaishishijiankongtu from '../components/productionMonitoring/shebeizhuangtaishishijiankongtu'
@@ -544,6 +547,11 @@ export default new Router({
                             path: 'shebeizhuangtaishishijiankongtu',
                             component: shebeizhuangtaishishijiankongtu,
                             meta: {title: '设备状态实时监控图'}
+                        },
+                        {
+                            path: 'shebeiguzhangchuligenzong',
+                            component: shebeiguzhangchuligenzong,
+                            meta: {title: '设备故障处理跟踪'}
                         },
                     ]
                 },
