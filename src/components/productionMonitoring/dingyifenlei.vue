@@ -43,7 +43,7 @@
             <!--新增弹出框 -->
             <el-dialog title="新增分类" :visible.sync="addVisible" width="40%">
                 <el-form ref="form"  label-width="100px">
-                    <el-form-item label="部门分类">
+                    <el-form-item label="分类名称">
                         <el-input v-model="name" style="width: 200px"></el-input>
                     </el-form-item>
                 </el-form>
@@ -56,7 +56,7 @@
             <!-- 编辑弹出框 -->
             <el-dialog title="编辑分类" :visible.sync="editVisible" width="40%">
                 <el-form ref="form"  label-width="100px">
-                    <el-form-item label="部门名称">
+                    <el-form-item label="分类名称">
                         <el-input v-model="name" style="width: 200px"></el-input>
                     </el-form-item>
                 </el-form>
@@ -157,7 +157,7 @@
                 let that = this;
                 axios.all([
                     axios.post(" " + url + "/sys/showTableTitle", {"name": "dyhcflmc"}),
-                    axios.post(" " + url + "/sysconfig/deptList")
+                    axios.post(" " + url + "/devType/devTypeList")
                 ])
                     .then(axios.spread(function (title, table) {
                         that.cols = title.data;
@@ -165,10 +165,7 @@
                     }));
             },
 
-            //根据工位选择
-            changeSelect() {
-                this.loadingShowData(this.workStation)
-            },
+
 
             //选择那个一个
             selectList(val) {
@@ -207,7 +204,7 @@
             //进行新增
             doAdd() {
                 if (this.name ) {
-                    axios.post(" " + url + "/sysconfig/deptAdd",
+                    axios.post(" " + url + "/devType/devTypeAdd",
                         {
                             "name": this.name
                         }
@@ -220,7 +217,7 @@
 
                             }
                             else {
-                                this.$message.warning(`新增失败`);
+                                this.$message.warning(res.data.message);
                             }
                         })
                         .catch((err) => {
@@ -236,7 +233,7 @@
             edit(row, column, cell, event) {
                 this.editVisible = true;
                 this.id = row.id;
-                axios.post(" " + url + "/sysconfig/deptDetail", {"id": this.id})
+                axios.post(" " + url + "/devType/devTypeDetail", {"id": this.id})
                     .then((res) => {
                         this.name = res.data.name;
                     })
@@ -248,7 +245,7 @@
             // 保存编辑
             saveEdit() {
                 if (this.name) {
-                    axios.post(" " + url + "/sysconfig/updateDept",
+                    axios.post(" " + url + "/devType/updateDevType",
                         {
                             "id": this.id,
                             "name": this.name,
@@ -257,11 +254,11 @@
                         .then((res) => {
                             if (res.data === "1") {
                                 this.editVisible = false;
-                                this.$message.success(`修改成功`);
+                                this.$message.success("修改成功");
                                 this.loadingShowData()
                             }
                             else {
-                                this.$message.warning(`新增失败`);
+                                this.$message.warning(res.data.message);
                             }
                         })
                         .catch((err) => {
@@ -307,19 +304,19 @@
 
             // 确定删除
             deleteRow() {
-                axios.post(" " + url + "/sysconfig/delDept",
+                axios.post(" " + url + "/devType/delDevType",
                     {
                         "ids": this.listData,
                     }
                 )
                     .then((res) => {
                         if (res.data === "1") {
-                            this.$message.success('删除成功');
+                            this.$message.success("删除成功");
                             this.delVisible = false;
                             this.loadingShowData();
                         }
                         else {
-                            this.$message.warning(`删除失败`);
+                            this.$message.warning(res.data.message);
                         }
                     })
                     .catch((err) => {

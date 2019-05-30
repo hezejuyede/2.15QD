@@ -14,6 +14,25 @@
                         <span>:</span>
                         <el-input v-model="select_word" placeholder="智能检索耗材" class="handle-input mr10"></el-input>
                     </label>
+                    <label style="margin-right: 10px;margin-left: 5px">
+                        <span>分类</span>
+                        <span>:</span>
+                        <el-select
+                            v-model="fenlei"
+                            clearable
+                            filterable
+                            allow-create
+                            default-first-option
+                            @change="changeFl"
+                            placeholder="请选择分类">
+                            <el-option
+                                v-for="item in fenleiOptions"
+                                :key="item.indexno"
+                                :label="item.name"
+                                :value="item.indexno">
+                            </el-option>
+                        </el-select>
+                    </label>
                     <el-button type="primary" icon="delete" class="handle-del mr10" @click="showAdd">新增耗材</el-button>
                     <el-button type="danger" icon="delete" class="handle-del mr10" @click="showDelete">删除耗材</el-button>
                 </div>
@@ -42,12 +61,30 @@
             </div>
             <!--新增弹出框 -->
             <el-dialog title="新增耗材" :visible.sync="addVisible" width="40%">
-                <el-form ref="form"  label-width="150px">
-                    <el-form-item label="耗材名称">
-                        <el-input v-model="name" style="width: 200px"></el-input>
+                <el-form ref="form" label-width="100px">
+                    <el-form-item label="分类名称">
+                        <el-select
+                            v-model="fenlei"
+                            style="width: 120px"
+                            clearable
+                            filterable
+                            allow-create
+                            default-first-option
+                            @change="changeSCX"
+                            placeholder="请选择分类">
+                            <el-option
+                                v-for="item in fenleiOptions"
+                                :key="item.indexno"
+                                :label="item.name"
+                                :value="item.indexno">
+                            </el-option>
+                        </el-select>
                     </el-form-item>
-                    <el-form-item label="最低库存报警值">
-                        <el-input v-model="number" style="width: 200px" type="number"></el-input>
+                    <el-form-item label="耗材名字">
+                        <el-input v-model="hcname" style="width: 200px"></el-input>
+                    </el-form-item>
+                    <el-form-item label="库存警戒值">
+                        <el-input v-model="hcjjz" style="width: 200px"></el-input>
                     </el-form-item>
                 </el-form>
                 <span slot="footer" class="dialog-footer">
@@ -58,12 +95,31 @@
 
             <!-- 编辑弹出框 -->
             <el-dialog title="编辑耗材" :visible.sync="editVisible" width="40%">
-                <el-form ref="form"  label-width="100px">
-                    <el-form-item label="耗材名称">
-                        <el-input v-model="name" style="width: 200px"></el-input>
+                <el-form ref="form" label-width="100px">
+                    <el-form-item label="分类名称">
+                        <el-select
+                            v-model="fenlei"
+                            style="width: 120px"
+                            clearable
+                            filterable
+                            allow-create
+                            disabled
+                            default-first-option
+                            @change="changeSCX"
+                            placeholder="请选择分类">
+                            <el-option
+                                v-for="item in fenleiOptions"
+                                :key="item.indexno"
+                                :label="item.name"
+                                :value="item.indexno">
+                            </el-option>
+                        </el-select>
                     </el-form-item>
-                    <el-form-item label="最低库存报警值">
-                        <el-input v-model="number" style="width: 200px" type="number"></el-input>
+                    <el-form-item label="耗材名字">
+                        <el-input v-model="hcname" style="width: 200px"></el-input>
+                    </el-form-item>
+                    <el-form-item label="库存警戒值">
+                        <el-input v-model="hcjjz" style="width: 200px"></el-input>
                     </el-form-item>
                 </el-form>
                 <span slot="footer" class="dialog-footer">
@@ -116,9 +172,10 @@
                 editVisible: false,
                 delVisible: false,
 
-
-                name: "",
-                number:""
+                fenlei:"",
+                fenleiOptions:[],
+                hcname: "",
+                hcjjz:""
 
 
 
@@ -155,26 +212,27 @@
                     this.$router.push("/")
                 }
                 else {
+
                     this.loadingShowData();
                 }
             },
 
             //瞬间加载数据
-            loadingShowData() {
+            loadingShowData(data) {
                 let that = this;
                 axios.all([
                     axios.post(" " + url + "/sys/showTableTitle", {"name": "dyhcmc"}),
-                    axios.post(" " + url + "/sysconfig/deptList")
+                    axios.post(" " + url + "/dev/devList",{"devtypeid":data})
                 ])
                     .then(axios.spread(function (title, table) {
                         that.cols = title.data;
-                        that.tableData = table.data;
+                        that.tableData = table.data.data;
                     }));
             },
 
             //根据工位选择
-            changeSelect() {
-                this.loadingShowData(this.workStation)
+            changeFl() {
+                this.loadingShowData(this.fenlei)
             },
 
             //选择那个一个
@@ -223,11 +281,11 @@
                             if (res.data === "1") {
                                 this.$message.success(`新增成功`);
                                 this.addVisible = false;
-                                this.loadingShowData(this.workStation)
+                                this.loadingShowData(this.fenlei)
 
                             }
                             else {
-                                this.$message.warning(`新增失败`);
+                                this.$message.warning(res.data.message);
                             }
                         })
                         .catch((err) => {
@@ -262,13 +320,13 @@
                         }
                     )
                         .then((res) => {
-                            if (res.data === "1") {
+                            if (res.data.state === "1") {
                                 this.editVisible = false;
-                                this.$message.success(`修改成功`);
-                                this.loadingShowData()
+                                this.$message.success(res.data.message);
+                                this.loadingShowData(this.fenlei)
                             }
                             else {
-                                this.$message.warning(`新增失败`);
+                                this.$message.warning(res.data.message);
                             }
                         })
                         .catch((err) => {
@@ -287,7 +345,7 @@
                     this.delVisible = true;
                 }
                 else {
-                    this.message = "请勾选要删除的耗材";
+                    this.message = "请勾选要删除的分类";
                     this.HideModal = false;
                     const that = this;
 
@@ -320,13 +378,13 @@
                     }
                 )
                     .then((res) => {
-                        if (res.data === "1") {
-                            this.$message.success('删除成功');
+                        if (res.data.state === "1") {
+                            this.$message.success(res.data.message);
                             this.delVisible = false;
-                            this.loadingShowData();
+                            this.loadingShowData(this.fenlei);
                         }
                         else {
-                            this.$message.warning(`删除失败`);
+                            this.$message.warning(res.data.message);
                         }
                     })
                     .catch((err) => {
@@ -370,9 +428,6 @@
             .table {
                 width: 100%;
                 font-size: 14px;
-            }
-            .red {
-                color: #ff0000;
             }
 
         }
