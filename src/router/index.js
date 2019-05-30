@@ -170,6 +170,11 @@ import chukudengji from '../components/productionMonitoring/chukudengji'
 //入库登记
 import rukudengji from '../components/productionMonitoring/rukudengji'
 
+
+//入库登记
+import churukuchaxuntongji from '../components/productionMonitoring/churukuchaxuntongji'
+
+
 //设备故障处理跟踪
 import shebeiguzhangchuligenzong from '../components/productionMonitoring/shebeiguzhangchuligenzong'
 
@@ -526,6 +531,11 @@ export default new Router({
                         {
                             path: 'rukudengji',
                             component:rukudengji,
+                            meta: {title: '入库登记'}
+                        },
+                        {
+                            path: 'churukuchaxuntongji',
+                            component:churukuchaxuntongji,
                             meta: {title: '入库登记'}
                         },
                         {

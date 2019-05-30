@@ -3,16 +3,16 @@
         <div class="crumbs">
             <el-breadcrumb separator="/">
                 <el-breadcrumb-item>设备管理</el-breadcrumb-item>
-                <el-breadcrumb-item>出库登记</el-breadcrumb-item>
+                <el-breadcrumb-item>出入库查询与统计</el-breadcrumb-item>
             </el-breadcrumb>
         </div>
         <div class="template-content">
             <div class="container">
                 <div class="handle-box">
                     <label style="margin-right: 5px">
-                        <span>检索出库记录</span>
+                        <span>检索出入库记录</span>
                         <span>:</span>
-                        <el-input v-model="select_word" placeholder="检索出库记录" class="handle-input mr10"
+                        <el-input v-model="select_word" placeholder="检索出入库记录" class="handle-input mr10"
                                   style="width: 150px"></el-input>
                     </label>
                     <label style="margin-right: 10px;margin-left: 5px">
@@ -68,14 +68,11 @@
                         </el-select>
                     </label>
                     <el-button type="success" icon="delete" class="handle-del mr10" @click="doSearchCKJV">查询</el-button>
-
-                    <el-button type="primary" icon="delete" class="handle-del mr10" @click="showAdd">出库</el-button>
-
                 </div>
                 <div class="">
                     <el-table class="tb-edit"
                               :data="tables"
-                              :header-cell-style="{background:'#A1D0FC',color:'rgba(0, 0, 0, 0.8)',fontSize:'20px'}"
+                              :header-cell-style="{background:'#A1D0FC',color:'rgba(0, 0, 0, 0.8)',fontSize:'16px'}"
                               border
                               height="450"
                               highlight-current-row
@@ -86,52 +83,6 @@
                     </el-table>
                 </div>
             </div>
-            <!--入库弹出框 -->
-            <el-dialog title="出库" :visible.sync="addVisible" width="40%">
-                <el-form ref="form" label-width="100px">
-                    <el-form-item label="分类">
-                        <el-select
-                            v-model="fenlei"
-                            clearable
-                            filterable
-                            allow-create
-                            default-first-option
-                            @change="changeFenlei"
-                            placeholder="请选择分类">
-                            <el-option
-                                v-for="item in fenleiOptions"
-                                :key="item.id"
-                                :label="item.name"
-                                :value="item.id">
-                            </el-option>
-                        </el-select>
-                    </el-form-item>
-                    <el-form-item label="耗材">
-                        <el-select
-                            v-model="haocai"
-                            clearable
-                            filterable
-                            allow-create
-                            default-first-option
-                            placeholder="请选择耗材">
-                            <el-option
-                                v-for="item in haocaiOptions"
-                                :key="item.id"
-                                :label="item.name"
-                                :value="item.id">
-                            </el-option>
-                        </el-select>
-                    </el-form-item>
-                    <el-form-item label="出库数量">
-                        <el-input v-model="cksl" style="width: 200px"></el-input>
-                    </el-form-item>
-                </el-form>
-                <span slot="footer" class="dialog-footer">
-                <el-button @click="addVisible = false" style="height:30px;width:80px">取 消</el-button>
-                <el-button type="primary" @click="doAdd" style="height:30px;width:80px">确 定</el-button>
-            </span>
-            </el-dialog>
-
 
             <Modal :msg="message"
                    :isHideModal="HideModal"></Modal>
@@ -150,17 +101,14 @@
             return {
                 message: '',
                 HideModal: true,
-                listData: [],
-                id: "",
+
 
 
                 cols: [],
                 tableData: [],
-                ckjvData: [],
 
                 select_word: '',
 
-                addVisible: false,
 
 
                 haocai: "",
@@ -168,7 +116,6 @@
                 fenlei: '',
                 fenleiOptions: [],
 
-                cksl: "",
                 examineTime: ""
 
             }
@@ -234,7 +181,7 @@
             loadingShowData(data1, data2, data3) {
                 let that = this;
                 axios.all([
-                    axios.post(" " + url + "/sys/showTableTitle", {"name": "ckjlcx"}),
+                    axios.post(" " + url + "/sys/showTableTitle", {"name": "crkdj"}),
                     axios.post(" " + url + "/devrecord/devRecordList", {"type": data1, "devid": data2, "times": data3})
                 ])
                     .then(axios.spread(function (title, table) {
@@ -248,58 +195,6 @@
                 this.loadingShowData(2, this.haocai, this.examineTime);
             },
 
-            //更改分类更新耗材
-            changeFenlei() {
-                axios.post(" " + url + "/dev/devList", {"devtypeid": this.fenlei})
-                    .then((res) => {
-                        this.haocai = res.data[0].id;
-                        this.haocaiOptions = res.data;
-                        this.loadingShowData(2, this.haocai, this.examineTime);
-                    });
-            },
-
-            //根据耗材查询
-            changeSelect() {
-                this.loadingShowData(2, this.haocai, this.examineTime);
-            },
-
-            //显示出库
-            showAdd() {
-                this.addVisible = true;
-                this.haocai = "";
-                this.fenlei = "";
-                this.cksl = "";
-            },
-
-            //进行出库
-            doAdd() {
-                if (this.haocai && this.fenlei && this.cksl) {
-                    axios.post(" " + url + "/padShow/buttonAdd",
-                        {
-
-                            "gongxuid": this.haocai,
-                            "name": this.fenlei,
-                            "type": this.cksl,
-                        }
-                    )
-                        .then((res) => {
-                            if (res.data.state === "1") {
-                                this.$message.success(`出库成功`);
-                                this.addVisible = false;
-                                this.loadingShowData(2, this.haocai, this.examineTime);
-                            }
-                            else {
-                                this.$message.warning(res.data.message);
-                            }
-                        })
-                        .catch((err) => {
-                            console.log(err)
-                        })
-                }
-                else {
-                    this.$message.warning(`输入不能为空`);
-                }
-            },
 
 
         }

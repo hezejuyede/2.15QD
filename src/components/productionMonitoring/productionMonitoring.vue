@@ -83,6 +83,11 @@
                                 label: '出库登记',
                                 index: "2-4",
                                 url: "/ProductionMonitoring/chukudengji"
+                            },
+                            {
+                                label: '出入库查询与统计',
+                                index: "2-4",
+                                url: "/ProductionMonitoring/churukuchaxuntongji"
                             }
                         ]
                     },
