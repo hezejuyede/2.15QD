@@ -123,7 +123,7 @@
                         </el-select>
                     </el-form-item>
                     <el-form-item label="入库数量">
-                        <el-input v-model="cksl" style="width: 200px"></el-input>
+                        <el-input v-model="rksl" style="width: 200px"></el-input>
                     </el-form-item>
                 </el-form>
                 <span slot="footer" class="dialog-footer">
@@ -168,7 +168,7 @@
                 fenlei: '',
                 fenleiOptions: [],
 
-                cksl: "",
+                rksl: "",
                 examineTime: ""
 
             }
@@ -252,9 +252,16 @@
             changeFenlei() {
                 axios.post(" " + url + "/dev/devList", {"devtypeid": this.fenlei})
                     .then((res) => {
-                        this.haocai = res.data[0].id;
-                        this.haocaiOptions = res.data;
-                        this.loadingShowData(1, this.haocai, this.examineTime);
+                        if (res.data.length > 0) {
+                            this.haocai = res.data[0].id;
+                            this.haocaiOptions = res.data;
+                            this.loadingShowData(1, this.haocai, this.examineTime);
+                        }
+                        else {
+                            this.haocai="";
+                            this.haocaiOptions=[];
+                        }
+
                     });
             },
 
@@ -263,28 +270,29 @@
                 this.loadingShowData(1, this.haocai, this.examineTime);
             },
 
-            //显示出库
+            //显示入库
             showAdd() {
                 this.addVisible = true;
                 this.haocai = "";
                 this.fenlei = "";
-                this.cksl = "";
+                this.rksl = "";
+                this.haocaiOptions=[];
             },
 
-            //进行出库
+            //进行入库
             doAdd() {
-                if (this.haocai && this.fenlei && this.cksl) {
-                    axios.post(" " + url + "/padShow/buttonAdd",
+                if (this.haocai && this.fenlei && this.rksl) {
+                    axios.post(" " + url + "/devrecord/devRecordAdd",
                         {
 
-                            "gongxuid": this.haocai,
-                            "name": this.fenlei,
-                            "type": this.cksl,
+                            "inouttype": 1,
+                            "devid": this.fenlei,
+                            "devcount": this.rksl,
                         }
                     )
                         .then((res) => {
                             if (res.data.state === "1") {
-                                this.$message.success(`新增成功`);
+                                this.$message.success(`入库成功`);
                                 this.addVisible = false;
                                 this.loadingShowData(1, this.haocai, this.examineTime);
                             }

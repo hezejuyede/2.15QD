@@ -252,9 +252,15 @@
             changeFenlei() {
                 axios.post(" " + url + "/dev/devList", {"devtypeid": this.fenlei})
                     .then((res) => {
-                        this.haocai = res.data[0].id;
-                        this.haocaiOptions = res.data;
-                        this.loadingShowData(2, this.haocai, this.examineTime);
+                        if (res.data.length > 0) {
+                            this.haocai = res.data[0].id;
+                            this.haocaiOptions = res.data;
+                            this.loadingShowData(1, this.haocai, this.examineTime);
+                        }
+                        else {
+                            this.haocai="";
+                            this.haocaiOptions=[];
+                        }
                     });
             },
 
@@ -269,6 +275,7 @@
                 this.haocai = "";
                 this.fenlei = "";
                 this.cksl = "";
+                this.haocaiOptions=[];
             },
 
             //进行出库
@@ -277,9 +284,9 @@
                     axios.post(" " + url + "/padShow/buttonAdd",
                         {
 
-                            "gongxuid": this.haocai,
-                            "name": this.fenlei,
-                            "type": this.cksl,
+                            "inouttype":2,
+                            "devid": this.fenlei,
+                            "devcount": this.cksl,
                         }
                     )
                         .then((res) => {
