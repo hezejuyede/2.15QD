@@ -27,9 +27,9 @@
                             placeholder="请选择分类">
                             <el-option
                                 v-for="item in fenleiOptions"
-                                :key="item.indexno"
+                                :key="item.id"
                                 :label="item.name"
-                                :value="item.indexno">
+                                :value="item.id">
                             </el-option>
                         </el-select>
                     </label>
@@ -70,13 +70,12 @@
                             filterable
                             allow-create
                             default-first-option
-                            @change="changeSCX"
                             placeholder="请选择分类">
                             <el-option
                                 v-for="item in fenleiOptions"
-                                :key="item.indexno"
+                                :key="item.id"
                                 :label="item.name"
-                                :value="item.indexno">
+                                :value="item.id">
                             </el-option>
                         </el-select>
                     </el-form-item>
@@ -84,7 +83,7 @@
                         <el-input v-model="hcname" style="width: 200px"></el-input>
                     </el-form-item>
                     <el-form-item label="库存警戒值">
-                        <el-input v-model="hcjjz" style="width: 200px"></el-input>
+                        <el-input v-model="hcjjz" style="width: 200px" type="number"></el-input>
                     </el-form-item>
                 </el-form>
                 <span slot="footer" class="dialog-footer">
@@ -103,15 +102,13 @@
                             clearable
                             filterable
                             allow-create
-                            disabled
                             default-first-option
-                            @change="changeSCX"
                             placeholder="请选择分类">
                             <el-option
                                 v-for="item in fenleiOptions"
-                                :key="item.indexno"
+                                :key="item.id"
                                 :label="item.name"
-                                :value="item.indexno">
+                                :value="item.id">
                             </el-option>
                         </el-select>
                     </el-form-item>
@@ -119,7 +116,7 @@
                         <el-input v-model="hcname" style="width: 200px"></el-input>
                     </el-form-item>
                     <el-form-item label="库存警戒值">
-                        <el-input v-model="hcjjz" style="width: 200px"></el-input>
+                        <el-input v-model="hcjjz" style="width: 200px"  type="number"></el-input>
                     </el-form-item>
                 </el-form>
                 <span slot="footer" class="dialog-footer">
@@ -212,8 +209,16 @@
                     this.$router.push("/")
                 }
                 else {
+                    let that = this;
+                    axios.all([
+                        axios.post(" " + url + "/devType/devTypeList")
+                    ])
+                        .then(axios.spread(function (select) {
+                            that.fenlei=select.data[0].id;
+                            that.fenleiOptions=select.data;
+                            that.loadingShowData(that.fenlei);
+                        }));
 
-                    this.loadingShowData();
                 }
             },
 
@@ -226,7 +231,7 @@
                 ])
                     .then(axios.spread(function (title, table) {
                         that.cols = title.data;
-                        that.tableData = table.data.data;
+                        that.tableData = table.data;
                     }));
             },
 
@@ -265,16 +270,20 @@
 
             //显示新增
             showAdd(){
-                this.addVisible=true;
-                this.name= "";
+                this.addVisible = true;
+                this.hcname = "";
+                this.fenlei = "";
+                this.hcjjz = "";
             },
 
             //进行新增
             doAdd() {
-                if (this.name ) {
-                    axios.post(" " + url + "/sysconfig/deptAdd",
+                if (this.hcname && this.fenlei && this.hcjjz) {
+                    axios.post(" " + url + "/dev/devAdd",
                         {
-                            "name": this.name
+                            "name": this.hcname,
+                            "devtypeid": this.fenlei,
+                            "mincount": this.hcjjz
                         }
                     )
                         .then((res) => {
@@ -301,9 +310,11 @@
             edit(row, column, cell, event) {
                 this.editVisible = true;
                 this.id = row.id;
-                axios.post(" " + url + "/sysconfig/deptDetail", {"id": this.id})
+                axios.post(" " + url + "/dev/devDetail", {"id": this.id})
                     .then((res) => {
-                        this.name = res.data.name;
+                        this.hcname= res.data.name;
+                        this.fenlei= res.data.devtypeid;
+                        this.hcjjz= res.data.mincount;
                     })
                     .catch((err) => {
                         console.log(err)
@@ -312,17 +323,19 @@
 
             // 保存编辑
             saveEdit() {
-                if (this.name) {
-                    axios.post(" " + url + "/sysconfig/updateDept",
+                if (this.hcname && this.fenlei && this.hcjjz){
+                    axios.post(" " + url + "/dev/devUpdate",
                         {
                             "id": this.id,
-                            "name": this.name,
+                            "name": this.hcname,
+                            "devtypeid": this.fenlei,
+                            "mincount": this.hcjjz
                         }
                     )
                         .then((res) => {
-                            if (res.data.state === "1") {
+                            if (res.data === "1") {
                                 this.editVisible = false;
-                                this.$message.success(res.data.message);
+                                this.$message.success("修改成功");
                                 this.loadingShowData(this.fenlei)
                             }
                             else {
@@ -372,14 +385,14 @@
 
             // 确定删除
             deleteRow() {
-                axios.post(" " + url + "/sysconfig/delDept",
+                axios.post(" " + url + "/dev/devDel",
                     {
                         "ids": this.listData,
                     }
                 )
                     .then((res) => {
-                        if (res.data.state === "1") {
-                            this.$message.success(res.data.message);
+                        if (res.data === "1") {
+                            this.$message.success("删除成功");
                             this.delVisible = false;
                             this.loadingShowData(this.fenlei);
                         }
