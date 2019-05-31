@@ -135,7 +135,6 @@
                     this.$router.push("/")
                 }
                 else {
-
                     let that = this;
                     axios.all([
                         axios.post(" " + url + "/devType/devTypeList"),
@@ -149,18 +148,18 @@
                                 .then(axios.spread(function (haocai) {
                                     that.haocaiOptions = haocai.data;
                                     that.haocai = haocai.data[0].id;
-                                    that.loadingShowData(2, that.haocai, that.examineTime);
+                                    that.loadingShowData(that.haocai);
                                 }));
                         }));
                 }
             },
 
             //瞬间加载数据
-            loadingShowData(data1, data2) {
+            loadingShowData(data1) {
                 let that = this;
                 axios.all([
                     axios.post(" " + url + "/sys/showTableTitle", {"name": "crkdj"}),
-                    axios.post(" " + url + "/devrecord/devRecordList", {"type": data1, "devid": data2})
+                    axios.post(" " + url + "/devRecordListAll", {"devid": data1})
                 ])
                     .then(axios.spread(function (title, table) {
                         that.cols = title.data;
@@ -170,8 +169,31 @@
 
             //出库记录查询
             doSearchCKJV() {
-                this.loadingShowData(2, this.haocai);
+                this.loadingShowData(this.haocai);
             },
+            changeFenlei(){
+                axios.post(" " + url + "/dev/devList", {"devtypeid": this.fenlei})
+                    .then((res)=>{
+                        if(res.data.length>0){
+                            this.haocaiOptions = res.data;
+                            this.haocai = res.data[0].id;
+                            this.loadingShowData(this.haocai);
+                        }
+                        else {
+                            this.haocaiOptions=[];
+                            this.haocai="";
+                        }
+
+                    })
+                    .catch((err)=>{
+                        console.log(err)
+                    })
+
+            },
+
+            changeSelect(){
+                this.loadingShowData(this.haocai);
+            }
 
 
 
