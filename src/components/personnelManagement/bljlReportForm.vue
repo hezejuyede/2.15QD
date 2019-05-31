@@ -10,9 +10,9 @@
             <div class="container">
                 <div class="handle-box">
                     <label style="margin-right: 10px">
-                        <span>智能检索托单金物</span>
+                        <span>智能检索不良记录</span>
                         <span>:</span>
-                        <el-input v-model="select_word" placeholder="智能检索托单金物" class="handle-input mr10"></el-input>
+                        <el-input v-model="select_word" placeholder="智能检索不良记录" class="handle-input mr10"></el-input>
                     </label>
                     <label style="margin-right: 10px;margin-left: 10px">
                         <span>选择查询时间</span>
@@ -30,7 +30,7 @@
                 <div class="">
                     <el-table class="tb-edit"
                               :data="tables"
-                              :header-cell-style="{background:'#A1D0FC',color:'rgba(0, 0, 0, 0.8)',fontSize:'20px'}"
+                              :header-cell-style="{background:'#A1D0FC',color:'rgba(0, 0, 0, 0.8)',fontSize:'14px'}"
                               border
                               height="450"
                               highlight-current-row
@@ -126,7 +126,7 @@
             loadingShowData(data) {
                 let that = this;
                 axios.all([
-                    axios.post(" " + url + "/sys/showTableTitle", {"name": "zwjwcx"}),
+                    axios.post(" " + url + "/sys/showTableTitle", {"name": "bljlbbtj"}),
                     axios.post(" " + url + "/wuliao/jinwuZhuwenpinList", {"time": data})
                 ])
                     .then(axios.spread(function (title, table) {
