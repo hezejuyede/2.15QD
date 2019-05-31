@@ -126,7 +126,7 @@
             loadingShowData(data) {
                 let that = this;
                 axios.all([
-                    axios.post(" " + url + "/sys/showTableTitle", {"name": "zwjwcx"}),
+                    axios.post(" " + url + "/sys/showTableTitle", {"name": "ryztjxpgbb"}),
                     axios.post(" " + url + "/wuliao/jinwuZhuwenpinList", {"time": data})
                 ])
                     .then(axios.spread(function (title, table) {
