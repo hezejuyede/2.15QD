@@ -286,7 +286,7 @@
                         {
 
                             "inouttype": 1,
-                            "devid": this.fenlei,
+                            "devid": this.haocai,
                             "devcount": this.rksl,
                         }
                     )

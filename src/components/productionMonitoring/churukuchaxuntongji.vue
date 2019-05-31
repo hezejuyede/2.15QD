@@ -16,18 +16,6 @@
                                   style="width: 150px"></el-input>
                     </label>
                     <label style="margin-right: 10px;margin-left: 5px">
-                        <span>时间</span>
-                        <span>:</span>
-                        <el-date-picker
-                            style="width: 240px"
-                            v-model="examineTime"
-                            type="daterange"
-                            start-placeholder="开始日期"
-                            end-placeholder="结束日期"
-                            value-format="yyyy-MM-dd">
-                        </el-date-picker>
-                    </label>
-                    <label style="margin-right: 10px;margin-left: 5px">
                         <span>分类</span>
                         <span>:</span>
                         <el-select
@@ -93,7 +81,6 @@
     import axios from 'axios'
     import url from '../../assets/js/URL'
     import Modal from '../../common/modal'
-    import {getYTime} from '../../assets/js/api'
 
     export default {
         name: 'WorkingProcedure',
@@ -115,9 +102,6 @@
                 haocaiOptions: [],
                 fenlei: '',
                 fenleiOptions: [],
-
-                examineTime: ""
-
             }
         },
         computed: {
@@ -151,12 +135,6 @@
                     this.$router.push("/")
                 }
                 else {
-                    let time = getYTime();
-                    let times = [];
-                    for (let i = 0; i < 2; i++) {
-                        times.push(time)
-                    }
-                    this.examineTime = times;
 
                     let that = this;
                     axios.all([
@@ -178,21 +156,21 @@
             },
 
             //瞬间加载数据
-            loadingShowData(data1, data2, data3) {
+            loadingShowData(data1, data2) {
                 let that = this;
                 axios.all([
                     axios.post(" " + url + "/sys/showTableTitle", {"name": "crkdj"}),
-                    axios.post(" " + url + "/devrecord/devRecordList", {"type": data1, "devid": data2, "times": data3})
+                    axios.post(" " + url + "/devrecord/devRecordList", {"type": data1, "devid": data2})
                 ])
                     .then(axios.spread(function (title, table) {
                         that.cols = title.data;
-                        that.tableData = table.data;
+                        that.tableData = table.data.data;
                     }));
             },
 
             //出库记录查询
             doSearchCKJV() {
-                this.loadingShowData(2, this.haocai, this.examineTime);
+                this.loadingShowData(2, this.haocai);
             },
 
 

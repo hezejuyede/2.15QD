@@ -10,12 +10,12 @@
             <div class="container">
                 <div class="handle-box">
                     <label style="margin-right: 10px">
-                        <span>智能检索项目</span>
+                        <span>智能检索点检内容</span>
                         <span>:</span>
-                        <el-input v-model="select_word" placeholder="智能检索项目" class="handle-input mr10"></el-input>
+                        <el-input v-model="select_word" placeholder="智能检索点检内容" class="handle-input mr10"></el-input>
                     </label>
                     <label style="margin-right: 10px">
-                        <span>设备</span>
+                        <span>检查部位</span>
                         <span>:</span>
                         <el-select
                             v-model="shebei"
@@ -60,9 +60,9 @@
                 </div>
             </div>
             <!--新增弹出框 -->
-            <el-dialog title="新增项目" :visible.sync="addVisible" width="90%">
+            <el-dialog title="新增点检内容" :visible.sync="addVisible" width="90%">
                 <el-form ref="form"  label-width="100px">
-                    <el-form-item label="设备名称">
+                    <el-form-item label="检查部位">
                         <el-select
                             v-model="shebei"
                             clearable
@@ -83,45 +83,26 @@
                         v-for="(domain, index) in dynamicValidateForm.domains"
                         :key="domain.key"
                         :prop="'domains.' + index + '.value'"
-                        :label="'点击项目' + (index+1)+''">
+                        :label="'点检内容' + (index+1)+''">
                         <div class="appendDiv">
                             <div class="appendDivTemplate">
-                                <div class="fl">
-                                    <span>项目名称:</span>
-                                    <el-input v-model="domain.xmName" style="width: 150px"></el-input>
+                                <div class="fl"  style="margin-left: 10px">
+                                    <span>NO</span>
+                                    <el-input v-model="domain.no" style="width: 100px" type="number"></el-input>
                                 </div>
-                                <div class="fl" style="margin-left: 5px">
-                                    <span>项目形式:</span>
-                                    <el-select
-                                        style="width: 150px"
-                                        v-model="domain.xmType"
-                                        clearable
-                                        filterable
-                                        @change="changeSelect"
-                                        allow-create
-                                        default-first-option
-                                        placeholder="请选择形式">
-                                        <el-option
-                                            v-for="item in xmTypeOptions"
-                                            :key="item.id"
-                                            :label="item.name"
-                                            :value="item.id">
-                                        </el-option>
-                                    </el-select>
+                                <div class="fl" style="margin-left: 10px">
+                                    <span>检查项目:</span>
+                                    <el-input v-model="domain.jcxm" style="width: 150px"></el-input>
                                 </div>
-                                <div class="fl" style="margin-left: 5px">
-                                    <span>内容:</span>
-                                    <el-input v-model="domain.xmNr" style="width: 150px"></el-input>
+                                <div class="fl"  style="margin-left: 10px">
+                                    <span>检查内容:</span>
+                                    <el-input v-model="domain.jcnr" style="width: 150px"></el-input>
                                 </div>
-                                <div class="fl" style="margin-left: 5px">
-                                    <span>编码:</span>
-                                    <el-input v-model="domain.xmBm" style="width: 150px"></el-input>
+                                <div class="fl"  style="margin-left: 10px">
+                                    <span>检查方法:</span>
+                                    <el-input v-model="domain.jcff" style="width: 400px"></el-input>
                                 </div>
-                                <div class="fl" style="margin-left: 5px">
-                                    <span>序号:</span>
-                                    <el-input v-model="domain.xmXh" style="width: 150px"></el-input>
-                                </div>
-                                <div class="fl" style="margin-left: 5px">
+                                <div class="fl" style="margin-left: 10px">
                                     <el-button
                                         type="danger"
                                         style="height:30px;width:120px"
@@ -212,11 +193,10 @@
 
                 dynamicValidateForm: {
                     domains: [{
-                        xmName: '',
-                        xmType: "",
-                        xmNr:"",
-                        xmBm:"",
-                        xmXh:""
+                        no: '',
+                        jcxm: "",
+                        jcnr:"",
+                        jcff:""
                     }],
                 },
                 xmTypeOptions: [{"name": "下拉菜单", "id": "1"}, {"name": "勾选形式", "id": "2"}, {"name": "手工录入", "id": "3"}],
@@ -308,11 +288,10 @@
                 this.addVisible = true;
                 this.dynamicValidateForm = {
                     domains: [{
-                        xmName: '',
-                        xmType: "",
-                        xmNr: "",
-                        xmBm: "",
-                        xmXh: ""
+                        no: '',
+                        jcxm: "",
+                        jcnr:"",
+                        jcff:""
                     }],
                 };
             },
@@ -442,11 +421,10 @@
             //增加时间
             addDomain() {
                 this.dynamicValidateForm.domains.push({
-                    xmName: '',
-                    xmType: "",
-                    xmNr:"",
-                    xmBm:"",
-                    xmXh:""
+                    no: '',
+                    jcxm: "",
+                    jcnr:"",
+                    jcff:""
                 });
             },
             //删除时间

@@ -255,7 +255,7 @@
                         if (res.data.length > 0) {
                             this.haocai = res.data[0].id;
                             this.haocaiOptions = res.data;
-                            this.loadingShowData(1, this.haocai, this.examineTime);
+                            this.loadingShowData(2, this.haocai, this.examineTime);
                         }
                         else {
                             this.haocai="";
@@ -285,7 +285,7 @@
                         {
 
                             "inouttype":2,
-                            "devid": this.fenlei,
+                            "devid": this.haocai,
                             "devcount": this.cksl,
                         }
                     )
