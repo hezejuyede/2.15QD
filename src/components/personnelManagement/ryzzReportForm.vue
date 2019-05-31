@@ -15,15 +15,23 @@
                         <el-input v-model="select_word" placeholder="智能检索托单金物" class="handle-input mr10"></el-input>
                     </label>
                     <label style="margin-right: 10px;margin-left: 10px">
-                        <span>选择查询时间</span>
+                        <span>生产线</span>
                         <span>:</span>
-                        <el-date-picker
-                            v-model="examineTime"
-                            type="daterange"
-                            start-placeholder="开始日期"
-                            end-placeholder="结束日期"
-                            value-format="yyyy-MM-dd">
-                        </el-date-picker>
+                        <el-select
+                            v-model="line"
+                            clearable
+                            filterable
+                            allow-create
+                            default-first-option
+                            @change="changeSCX"
+                            placeholder="请选择生产线">
+                            <el-option
+                                v-for="item in lineOptions"
+                                :key="item.indexno"
+                                :label="item.name"
+                                :value="item.indexno">
+                            </el-option>
+                        </el-select>
                     </label>
                     <el-button type="primary" icon="delete" class="handle-del mr10" @click="doSearch">查询报表</el-button>
                 </div>
@@ -63,11 +71,11 @@
                 cols: [],
                 tableData: [],
 
-                batch: "",
-                batchOptions: [],
+                line: "",
+                lineOptions: [],
 
                 select_word: '',
-                examineTime: "",
+
 
 
             }
@@ -112,12 +120,12 @@
 
                     let that = this;
                     axios.all([
-                        axios.post(" " + url + "/sys/getPiciList"),
+                        axios.post(" " + url + "/sys/dictionaryList", {"id": "9"}),
                     ])
                         .then(axios.spread(function (select) {
-                            that.batchOptions = select.data;
-                            that.batch = select.data[0].id;
-                            that.loadingShowData(that.batch);
+                            that.lineOptions = select.data;
+                            that.line = select.data[0].indexno;
+                            that.loadingShowData(that.line);
                         }));
                 }
             },
@@ -136,23 +144,14 @@
             },
 
 
-            //根据时间查询
-            doSearch() {
-                if (this.batch) {
-                    this.loadingShowData(this.batch)
-                }
-                else {
-                    this.message = "查询批次不能为空";
-                    this.HideModal = false;
-                    const that = this;
-                    function a() {
-                        that.message = "";
-                        that.HideModal = true;
-                    }
-                    setTimeout(a, 2000);
-                }
-
-            }
+            changeSCX(){
+                axios.post(" " + url + "/sysconfig/getGongxuList", {"id": this.line})
+                    .then((res) => {
+                        this.workStation = res.data[0].id;
+                        this.workStationOptions = res.data;
+                        this.loadingShowData(this.workStation)
+                    });
+            },
 
         }
     }
