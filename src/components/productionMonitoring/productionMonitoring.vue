@@ -34,14 +34,14 @@
                         index: "1",
                         children: [
                             {
-                                label: '点检项目设定',
-                                index: "1-1",
-                                url: "/ProductionMonitoring/xingmusheding"
-                            },
-                            {
-                                label: '关联设备设定',
+                                label: '设备设定',
                                 index: "1-1",
                                 url: "/ProductionMonitoring/guanlianshebeisheding"
+                            },
+                            {
+                                label: '点检项目设定',
+                                index: "1-2",
+                                url: "/ProductionMonitoring/xingmusheding"
                             },
                             {
                                 label: '工位点检项目设定',

@@ -142,7 +142,7 @@ import InspectionItemSetting from '../components/productionMonitoring/Inspection
 
 
 //点检项目设定
-import xingmusheding  from '../components/productionMonitoring/xingmusheding.vue'
+import xingmusheding  from '../components/productionMonitoring/xingmusheding'
 
 //关联设备设定
 

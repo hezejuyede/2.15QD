@@ -14,6 +14,25 @@
                         <span>:</span>
                         <el-input v-model="select_word" placeholder="智能检索项目" class="handle-input mr10"></el-input>
                     </label>
+                    <label style="margin-right: 10px">
+                        <span>设备</span>
+                        <span>:</span>
+                        <el-select
+                            v-model="shebei"
+                            clearable
+                            filterable
+                            @change="changeSelect"
+                            allow-create
+                            default-first-option
+                            placeholder="请选择设备">
+                            <el-option
+                                v-for="item in shebeiOptions"
+                                :key="item.id"
+                                :label="item.name"
+                                :value="item.id">
+                            </el-option>
+                        </el-select>
+                    </label>
                     <el-button type="primary" icon="delete" class="handle-del mr10" @click="showAdd">新增项目</el-button>
                     <el-button type="danger" icon="delete" class="handle-del mr10" @click="showDelete">删除项目</el-button>
                 </div>
@@ -41,10 +60,84 @@
                 </div>
             </div>
             <!--新增弹出框 -->
-            <el-dialog title="新增项目" :visible.sync="addVisible" width="40%">
+            <el-dialog title="新增项目" :visible.sync="addVisible" width="90%">
                 <el-form ref="form"  label-width="100px">
-                    <el-form-item label="项目名称">
-                        <el-input v-model="name" style="width: 200px"></el-input>
+                    <el-form-item label="设备名称">
+                        <el-select
+                            v-model="shebei"
+                            clearable
+                            filterable
+                            @change="changeSelect"
+                            allow-create
+                            default-first-option
+                            placeholder="请选择设备">
+                            <el-option
+                                v-for="item in shebeiOptions"
+                                :key="item.id"
+                                :label="item.name"
+                                :value="item.id">
+                            </el-option>
+                        </el-select>
+                    </el-form-item>
+                    <el-form-item
+                        v-for="(domain, index) in dynamicValidateForm.domains"
+                        :key="domain.key"
+                        :prop="'domains.' + index + '.value'"
+                        :label="'点击项目' + (index+1)+''">
+                        <div class="appendDiv">
+                            <div class="appendDivTemplate">
+                                <div class="fl">
+                                    <span>项目名称:</span>
+                                    <el-input v-model="domain.xmName" style="width: 150px"></el-input>
+                                </div>
+                                <div class="fl" style="margin-left: 5px">
+                                    <span>项目形式:</span>
+                                    <el-select
+                                        style="width: 150px"
+                                        v-model="domain.xmType"
+                                        clearable
+                                        filterable
+                                        @change="changeSelect"
+                                        allow-create
+                                        default-first-option
+                                        placeholder="请选择形式">
+                                        <el-option
+                                            v-for="item in xmTypeOptions"
+                                            :key="item.id"
+                                            :label="item.name"
+                                            :value="item.id">
+                                        </el-option>
+                                    </el-select>
+                                </div>
+                                <div class="fl" style="margin-left: 5px">
+                                    <span>内容:</span>
+                                    <el-input v-model="domain.xmNr" style="width: 150px"></el-input>
+                                </div>
+                                <div class="fl" style="margin-left: 5px">
+                                    <span>编码:</span>
+                                    <el-input v-model="domain.xmBm" style="width: 150px"></el-input>
+                                </div>
+                                <div class="fl" style="margin-left: 5px">
+                                    <span>序号:</span>
+                                    <el-input v-model="domain.xmXh" style="width: 150px"></el-input>
+                                </div>
+                                <div class="fl" style="margin-left: 5px">
+                                    <el-button
+                                        type="danger"
+                                        style="height:30px;width:120px"
+                                        @click.prevent="removeDomain(domain)">删除
+                                    </el-button>
+                                </div>
+                            </div>
+                        </div>
+                    </el-form-item>
+                    <el-form-item>
+                        <el-button
+                            type="primary"
+                            @click="addDomain"
+                            style="height:30px;width:20%">
+                            新增点检项目
+                        </el-button>
                     </el-form-item>
                 </el-form>
                 <span slot="footer" class="dialog-footer">
@@ -113,8 +206,20 @@
 
                 name: "",
 
+                shebei: "",
+                shebeiOptions: [],
 
 
+                dynamicValidateForm: {
+                    domains: [{
+                        xmName: '',
+                        xmType: "",
+                        xmNr:"",
+                        xmBm:"",
+                        xmXh:""
+                    }],
+                },
+                xmTypeOptions: [{"name": "下拉菜单", "id": "1"}, {"name": "勾选形式", "id": "2"}, {"name": "手工录入", "id": "3"}],
             }
         },
         computed: {
@@ -200,8 +305,16 @@
 
             //显示新增
             showAdd(){
-                this.addVisible=true;
-                this.name= "";
+                this.addVisible = true;
+                this.dynamicValidateForm = {
+                    domains: [{
+                        xmName: '',
+                        xmType: "",
+                        xmNr: "",
+                        xmBm: "",
+                        xmXh: ""
+                    }],
+                };
             },
 
             //进行新增
@@ -325,6 +438,23 @@
                     .catch((err) => {
                         console.log(err)
                     })
+            },
+            //增加时间
+            addDomain() {
+                this.dynamicValidateForm.domains.push({
+                    xmName: '',
+                    xmType: "",
+                    xmNr:"",
+                    xmBm:"",
+                    xmXh:""
+                });
+            },
+            //删除时间
+            removeDomain(item) {
+                var index = this.dynamicValidateForm.domains.indexOf(item);
+                if (index !== -1) {
+                    this.dynamicValidateForm.domains.splice(index, 1)
+                }
             },
 
         }
