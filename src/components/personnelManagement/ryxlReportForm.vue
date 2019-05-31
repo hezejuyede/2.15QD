@@ -10,9 +10,9 @@
             <div class="container">
                 <div class="handle-box">
                     <label style="margin-right: 10px">
-                        <span>智能检索托单金物</span>
+                        <span>智能检索人员效率</span>
                         <span>:</span>
-                        <el-input v-model="select_word" placeholder="智能检索托单金物" class="handle-input mr10"></el-input>
+                        <el-input v-model="select_word" placeholder="智能检索人员效率" class="handle-input mr10"></el-input>
                     </label>
                     <label style="margin-right: 10px;margin-left: 10px">
                         <span>选择查询时间</span>
@@ -126,7 +126,7 @@
             loadingShowData(data) {
                 let that = this;
                 axios.all([
-                    axios.post(" " + url + "/sys/showTableTitle", {"name": "zwjwcx"}),
+                    axios.post(" " + url + "/sys/showTableTitle", {"name": "ryxlbbtj"}),
                     axios.post(" " + url + "/wuliao/jinwuZhuwenpinList", {"time": data})
                 ])
                     .then(axios.spread(function (title, table) {
