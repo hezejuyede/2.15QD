@@ -134,7 +134,7 @@
             loadingShowData(data) {
                 let that = this;
                 axios.all([
-                    axios.post(" " + url + "/sys/showTableTitle", {"name": "zwjwcx"}),
+                    axios.post(" " + url + "/sys/showTableTitle", {"name": "ryzzbbtj"}),
                     axios.post(" " + url + "/wuliao/jinwuZhuwenpinList", {"time": data})
                 ])
                     .then(axios.spread(function (title, table) {
@@ -145,13 +145,11 @@
 
 
             changeSCX(){
-                axios.post(" " + url + "/sysconfig/getGongxuList", {"id": this.line})
-                    .then((res) => {
-                        this.workStation = res.data[0].id;
-                        this.workStationOptions = res.data;
-                        this.loadingShowData(this.workStation)
-                    });
+                this.loadingShowData(this.line)
             },
+            doSearch(){
+                this.loadingShowData(this.line)
+            }
 
         }
     }
