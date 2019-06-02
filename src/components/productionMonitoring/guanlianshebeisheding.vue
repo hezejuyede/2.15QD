@@ -3,7 +3,7 @@
         <div class="crumbs">
             <el-breadcrumb separator="/">
                 <el-breadcrumb-item>设备管理</el-breadcrumb-item>
-                <el-breadcrumb-item>关联设备设定</el-breadcrumb-item>
+                <el-breadcrumb-item>设备设定</el-breadcrumb-item>
             </el-breadcrumb>
         </div>
         <div class="template-content">
@@ -12,7 +12,45 @@
                     <label style="margin-right: 10px">
                         <span>智能检索设备</span>
                         <span>:</span>
-                        <el-input v-model="select_word" placeholder="智能检索分类" class="handle-input mr10"></el-input>
+                        <el-input v-model="select_word" placeholder="智能检索设备" class="handle-input mr10"></el-input>
+                    </label>
+                    <label style="margin-right: 10px;margin-left: 10px">
+                        <span>生产线</span>
+                        <span>:</span>
+                        <el-select
+                            v-model="line"
+                            clearable
+                            filterable
+                            allow-create
+                            default-first-option
+                            @change="changeSCX"
+                            placeholder="请选择生产线">
+                            <el-option
+                                v-for="item in lineOptions"
+                                :key="item.indexno"
+                                :label="item.name"
+                                :value="item.indexno">
+                            </el-option>
+                        </el-select>
+                    </label>
+                    <label style="margin-right: 10px;margin-left: 10px">
+                        <span>工位</span>
+                        <span>:</span>
+                        <el-select
+                            v-model="workStation"
+                            clearable
+                            filterable
+                            allow-create
+                            default-first-option
+                            @change="changeSelect"
+                            placeholder="请选择工位">
+                            <el-option
+                                v-for="item in workStationOptions"
+                                :key="item.id"
+                                :label="item.name"
+                                :value="item.id">
+                            </el-option>
+                        </el-select>
                     </label>
                     <el-button type="primary" icon="delete" class="handle-del mr10" @click="showAdd">新增设备</el-button>
                     <el-button type="danger" icon="delete" class="handle-del mr10" @click="showDelete">删除设备</el-button>
@@ -23,10 +61,8 @@
                               :header-cell-style="{background:'#A1D0FC',color:'rgba(0, 0, 0, 0.8)',fontSize:'20px'}"
                               border
                               height="450"
-                              @select="selectList"
                               @select-all="selectAll"
-                              @selection-change="selectionChange"
-                              ref="moviesTable"
+                              @select="selectList"
                               @row-dblclick="edit"
                               highlight-current-row
                               style="width: 98%;margin: auto">
@@ -44,7 +80,43 @@
             <el-dialog title="新增设备" :visible.sync="addVisible" width="40%">
                 <el-form ref="form"  label-width="100px">
                     <el-form-item label="设备名称">
-                        <el-input v-model="name" style="width: 200px"></el-input>
+                        <el-input v-model="shebei" style="width: 200px"></el-input>
+                    </el-form-item>
+                    <el-form-item label="生产线">
+                        <el-select
+                            v-model="line"
+                            clearable
+                            filterable
+                            allow-create
+                            default-first-option
+                            @change="changeSCX"
+                            placeholder="请选择生产线">
+                            <el-option
+                                v-for="item in lineOptions"
+                                :key="item.indexno"
+                                :label="item.name"
+                                :value="item.indexno">
+                            </el-option>
+                        </el-select>
+                    </el-form-item>
+                    <el-form-item label="工位">
+                        <el-select
+                            v-model="workStation"
+                            clearable
+                            filterable
+                            allow-create
+                            default-first-option
+                            placeholder="请选择工位">
+                            <el-option
+                                v-for="item in workStationOptions"
+                                :key="item.id"
+                                :label="item.name"
+                                :value="item.id">
+                            </el-option>
+                        </el-select>
+                    </el-form-item>
+                    <el-form-item label="点检周期">
+                        <el-input v-model="djzq" style="width: 200px"></el-input>
                     </el-form-item>
                 </el-form>
                 <span slot="footer" class="dialog-footer">
@@ -52,12 +124,47 @@
                 <el-button type="primary" @click="doAdd" style="height:30px;width:80px">确 定</el-button>
             </span>
             </el-dialog>
-
             <!-- 编辑弹出框 -->
             <el-dialog title="编辑设备" :visible.sync="editVisible" width="40%">
                 <el-form ref="form"  label-width="100px">
                     <el-form-item label="设备名称">
-                        <el-input v-model="name" style="width: 200px"></el-input>
+                        <el-input v-model="shebei" style="width: 200px"></el-input>
+                    </el-form-item>
+                    <el-form-item label="生产线">
+                        <el-select
+                            v-model="line"
+                            clearable
+                            filterable
+                            allow-create
+                            default-first-option
+                            @change="changeSCX"
+                            placeholder="请选择生产线">
+                            <el-option
+                                v-for="item in lineOptions"
+                                :key="item.indexno"
+                                :label="item.name"
+                                :value="item.indexno">
+                            </el-option>
+                        </el-select>
+                    </el-form-item>
+                    <el-form-item label="工位">
+                        <el-select
+                            v-model="workStation"
+                            clearable
+                            filterable
+                            allow-create
+                            default-first-option
+                            placeholder="请选择工位">
+                            <el-option
+                                v-for="item in workStationOptions"
+                                :key="item.id"
+                                :label="item.name"
+                                :value="item.id">
+                            </el-option>
+                        </el-select>
+                    </el-form-item>
+                    <el-form-item label="点检周期">
+                        <el-input v-model="djzq" style="width: 200px"></el-input>
                     </el-form-item>
                 </el-form>
                 <span slot="footer" class="dialog-footer">
@@ -65,16 +172,14 @@
                 <el-button type="primary" @click="saveEdit" style="height:30px;width:80px">确 定</el-button>
             </span>
             </el-dialog>
-
             <!-- 删除提示框 -->
             <el-dialog title="删除设备" :visible.sync="delVisible" width="300px" center>
                 <div class="del-dialog-cnt">删除不可恢复，是否确定删除？</div>
                 <span slot="footer" class="dialog-footer">
-                <el-button @click="cancelDelete" style="height:30px;width:80px">取 消</el-button>
+                <el-button @click="delVisible = false" style="height:30px;width:80px">取 消</el-button>
                 <el-button type="primary" @click="deleteRow" style="height:30px;width:80px">确 定</el-button>
             </span>
             </el-dialog>
-
 
             <Modal :msg="message"
                    :isHideModal="HideModal"></Modal>
@@ -92,12 +197,7 @@
             return {
                 message: '',
                 HideModal: true,
-
-                val:[],
-
-
                 listData:[],
-
                 id:"",
 
 
@@ -111,9 +211,26 @@
                 delVisible: false,
 
 
-                name: "",
+                workStation:"",
+                workStationOptions:[],
+                line: '',
+                lineOptions: [],
 
-
+                djzq: "",
+                djxm: "",
+                djxmOptions: [
+                    {"name": "项目1", "id": "1"},
+                    {"name": "项目2", "id": "2"},
+                    {"name": "项目3", "id": "3"},
+                    {"name": "项目4", "id": "4"}
+                ],
+                shebei: "",
+                shebeiOptions: [
+                    {"name": "设备1", "id": "1"},
+                    {"name": "设备2", "id": "2"},
+                    {"name": "设备3", "id": "3"},
+                    {"name": "设备4", "id": "4"}
+                ],
 
             }
         },
@@ -148,21 +265,41 @@
                     this.$router.push("/")
                 }
                 else {
-                    this.loadingShowData();
+                    let that = this;
+                    axios.all([
+                        axios.post(" " + url + "/sys/dictionaryList", {"id": "9"}),
+                        axios.post(" " + url + "/api/getPersonProcessList", {"name": ""}),
+                    ])
+                        .then(axios.spread(function (line,workStation) {
+                            that.lineOptions = line.data;
+                            that.line = line.data[0].indexno;
+                            that.workStation = workStation.data[0].id;
+                            that.workStationOptions = workStation.data;
+                            that.loadingShowData(that.line,that.workStation);
+                        }));
                 }
             },
 
             //瞬间加载数据
-            loadingShowData() {
+            loadingShowData(data1,data2) {
                 let that = this;
                 axios.all([
-                    axios.post(" " + url + "/sys/showTableTitle", {"name": "dyhcflmc"}),
-                    axios.post(" " + url + "/sysconfig/deptList")
+                    axios.post(" " + url + "/sys/showTableTitle", {"name": "djsbzqsd"}),
+                    axios.post(" " + url + "/shebei/shebeiList", {"jiagongxian": data1,"stationid":data2})
                 ])
                     .then(axios.spread(function (title, table) {
                         that.cols = title.data;
-                        that.tableData = table.data;
+                        that.tableData = table.data.data;
                     }));
+            },
+
+            changeSCX(){
+                axios.post(" " + url + "/sysconfig/getGongxuList", {"id": this.line})
+                    .then((res) => {
+                        this.workStation = res.data[0].id;
+                        this.workStationOptions = res.data;
+                        this.loadingShowData(this.workStation)
+                    });
             },
 
             //根据工位选择
@@ -172,7 +309,6 @@
 
             //选择那个一个
             selectList(val) {
-                this.val =val;
                 if (val.length) {
                     let data = [];
                     for (let i = 0; i < val.length; i++) {
@@ -180,40 +316,67 @@
                         data.push(a)
                     }
                     this.listData = data;
-
                 }
                 else {
                     this.listData=[];
-
                 }
             },
 
             //列表全部选择
             selectAll(val) {
-                this.selectList(val)
-            },
-
-            //选择改变
-            selectionChange(val) {
-                this.selectList(val)
+                if (val.length) {
+                    let data = [];
+                    for (let i = 0; i < val.length; i++) {
+                        let a = val[i].id;
+                        data.push(a)
+                    }
+                    this.listData = data;
+                }
+                else {
+                    this.listData = [];
+                }
             },
 
             //显示新增
             showAdd(){
-                this.addVisible=true;
-                this.name= "";
+
+                if (this.workStation) {
+                    this.addVisible=true;
+                    this.name= "";
+                    this.type= "";
+                    this.disabled= "";
+                    this.backgroundColor="";
+                    this.showHide= "";
+                }
+                else {
+                    this.message = "请选择工位";
+                    this.HideModal = false;
+                    const that = this;
+
+                    function a() {
+                        that.message = "";
+                        that.HideModal = true;
+                    }
+
+                    setTimeout(a, 2000);
+                }
             },
 
             //进行新增
             doAdd() {
-                if (this.name ) {
-                    axios.post(" " + url + "/sysconfig/deptAdd",
+                if (this.name && this.type && this.disabled &&this.backgroundColor&&this.showHide) {
+                    axios.post(" " + url + "/padShow/buttonAdd",
                         {
-                            "name": this.name
+                            "gongxuid": this.workStation,
+                            "name": this.name,
+                            "type": this.type,
+                            "disabled": this.disabled,
+                            "backgroundcolor": this.backgroundColor,
+                            "show": this.showHide,
                         }
                     )
                         .then((res) => {
-                            if (res.data === "1") {
+                            if (res.data.state === "1") {
                                 this.$message.success(`新增成功`);
                                 this.addVisible = false;
                                 this.loadingShowData(this.workStation)
@@ -236,9 +399,14 @@
             edit(row, column, cell, event) {
                 this.editVisible = true;
                 this.id = row.id;
-                axios.post(" " + url + "/sysconfig/deptDetail", {"id": this.id})
+                axios.post(" " + url + "/padShow/buttonDetail", {"id": this.id})
                     .then((res) => {
-                        this.name = res.data.name;
+                        this.workStation = res.data.data.gongxuid;
+                        this.name = res.data.data.name;
+                        this.type = Number(res.data.data.type);
+                        this.disabled = res.data.data.disabled;
+                        this.backgroundColor = res.data.data.backgroundcolor;
+                        this.showHide = res.data.data.show;
                     })
                     .catch((err) => {
                         console.log(err)
@@ -247,18 +415,23 @@
 
             // 保存编辑
             saveEdit() {
-                if (this.name) {
-                    axios.post(" " + url + "/sysconfig/updateDept",
+                if (this.name && this.type && this.disabled &&this.backgroundColor&&this.showHide) {
+                    axios.post(" " + url + "/padShow/buttonUpdate",
                         {
-                            "id": this.id,
+                            "id":this.id,
+                            "gongweiid": this.workStation,
                             "name": this.name,
+                            "type": this.type,
+                            "disabled": this.disabled,
+                            "backgroundcolor": this.backgroundColor,
+                            "show": this.showHide,
                         }
                     )
                         .then((res) => {
-                            if (res.data === "1") {
+                            if (res.data.state === "1") {
                                 this.editVisible = false;
                                 this.$message.success(`修改成功`);
-                                this.loadingShowData()
+                                this.loadingShowData(this.workStation)
                             }
                             else {
                                 this.$message.warning(`新增失败`);
@@ -280,7 +453,7 @@
                     this.delVisible = true;
                 }
                 else {
-                    this.message = "请勾选要删除的分类";
+                    this.message = "请勾选要删除的按钮";
                     this.HideModal = false;
                     const that = this;
 
@@ -293,30 +466,18 @@
                 }
             },
 
-            //取消删除
-            cancelDelete() {
-                this.delVisible = false;
-                this.listData = [];
-                if (this.val.length === 1) {
-                    for (let i = 0, l = this.val.length; i < l; i++) {
-                        this.$refs.moviesTable.toggleRowSelection(this.val[i]);
-                    }
-                }
-
-            },
-
             // 确定删除
             deleteRow() {
-                axios.post(" " + url + "/sysconfig/delDept",
+                axios.post(" " + url + "/padShow/buttonDel",
                     {
-                        "ids": this.listData,
+                        "id": this.listData[0],
                     }
                 )
                     .then((res) => {
-                        if (res.data === "1") {
+                        if (res.data.state === "1") {
                             this.$message.success('删除成功');
                             this.delVisible = false;
-                            this.loadingShowData();
+                            this.loadingShowData(this.workStation);
                         }
                         else {
                             this.$message.warning(`删除失败`);

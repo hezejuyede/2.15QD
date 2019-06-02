@@ -115,23 +115,6 @@
                             </el-option>
                         </el-select>
                     </el-form-item>
-                    <el-form-item label="点检项目">
-                        <el-select
-                            v-model="djxm"
-                            clearable
-                            filterable
-                            allow-create
-                            default-first-option
-                            multiple
-                            placeholder="请输入或者选择">
-                            <el-option
-                                v-for="item in djxmOptions"
-                                :key="item.id"
-                                :label="item.name"
-                                :value="item.id">
-                            </el-option>
-                        </el-select>
-                    </el-form-item>
                     <el-form-item label="关联负责设备">
                         <el-select
                             v-model="shebei"
@@ -190,23 +173,6 @@
                             placeholder="请选择工位">
                             <el-option
                                 v-for="item in workStationOptions"
-                                :key="item.id"
-                                :label="item.name"
-                                :value="item.id">
-                            </el-option>
-                        </el-select>
-                    </el-form-item>
-                    <el-form-item label="点检项目">
-                        <el-select
-                            v-model="djxm"
-                            clearable
-                            filterable
-                            allow-create
-                            default-first-option
-                            multiple
-                            placeholder="请输入或者选择">
-                            <el-option
-                                v-for="item in djxmOptions"
                                 :key="item.id"
                                 :label="item.name"
                                 :value="item.id">
