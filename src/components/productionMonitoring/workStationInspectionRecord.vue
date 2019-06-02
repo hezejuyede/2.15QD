@@ -321,9 +321,14 @@
                             that.line = line.data[0].indexno;
                             that.workStation = workStation.data[0].id;
                             that.workStationOptions = workStation.data;
-                            that.shebei =shebei.data[0].id;
-                            that.shebeiOptions = shebei.data;
-                            that.loadingShowData(that.shebei);
+                            axios.all([
+                                axios.post(" " + url + "/shebei/shebeiList", {"jiagongxian": that.line,"stationid":that.workStation})
+                            ])
+                                .then(axios.spread(function (shebei) {
+                                    that.shebei =shebei.data[0].id;
+                                    that.shebeiOptions = shebei.data;
+                                    that.loadingShowData(that.shebei);
+                                }));
                         }));
                 }
             },

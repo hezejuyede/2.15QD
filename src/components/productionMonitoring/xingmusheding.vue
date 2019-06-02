@@ -9,24 +9,86 @@
         <div class="template-content">
             <div class="container">
                 <div class="handle-box">
-                    <label style="margin-right: 10px">
-                        <span>智能检索点检内容</span>
+                    <label style="margin-right: 5px">
+                        <span>智能检索项目</span>
                         <span>:</span>
-                        <el-input v-model="select_word" placeholder="智能检索点检内容" class="handle-input mr10"></el-input>
+                        <el-input v-model="select_word" placeholder="智能检索项目" class="handle-input mr10" style="width: 150px"></el-input>
                     </label>
-                    <label style="margin-right: 10px">
-                        <span>检查部位</span>
+                    <label style="margin-right: 10px;margin-left: 5px">
+                        <span>生产线</span>
                         <span>:</span>
                         <el-select
+                            style="width: 150px"
+                            v-model="line"
+                            clearable
+                            filterable
+                            allow-create
+                            default-first-option
+                            @change="changeSCX"
+                            placeholder="请选择生产线">
+                            <el-option
+                                v-for="item in lineOptions"
+                                :key="item.indexno"
+                                :label="item.name"
+                                :value="item.indexno">
+                            </el-option>
+                        </el-select>
+                    </label>
+                    <label style="margin-right: 10px;margin-left: 5px">
+                        <span>工位</span>
+                        <span>:</span>
+                        <el-select
+                            style="width: 150px"
+                            v-model="workStation"
+                            clearable
+                            filterable
+                            allow-create
+                            default-first-option
+                            @change="changeSelect"
+
+                            placeholder="请选择工位">
+                            <el-option
+                                v-for="item in workStationOptions"
+                                :key="item.id"
+                                :label="item.name"
+                                :value="item.id">
+                            </el-option>
+                        </el-select>
+                    </label>
+                    <label style="margin-right: 10px;margin-left: 5px">
+                        <span>设备</span>
+                        <span>:</span>
+                        <el-select
+                            style="width: 150px"
                             v-model="shebei"
                             clearable
                             filterable
-                            @change="changeSelect"
                             allow-create
                             default-first-option
+                            @change="changeSB"
                             placeholder="请选择设备">
                             <el-option
                                 v-for="item in shebeiOptions"
+                                :key="item.id"
+                                :label="item.name"
+                                :value="item.id">
+                            </el-option>
+                        </el-select>
+                    </label>
+                    <label style="margin-right: 10px;margin-left: 5px">
+                        <span>部位</span>
+                        <span>:</span>
+                        <el-select
+                            style="width: 150px"
+                            v-model="buwei"
+                            clearable
+                            filterable
+                            allow-create
+                            default-first-option
+                            @change="changeBW"
+                            placeholder="请选择设备">
+                            <el-option
+                                v-for="item in buweiOptions"
                                 :key="item.id"
                                 :label="item.name"
                                 :value="item.id">
@@ -62,17 +124,73 @@
             <!--新增弹出框 -->
             <el-dialog title="新增点检内容" :visible.sync="addVisible" width="90%">
                 <el-form ref="form"  label-width="100px">
-                    <el-form-item label="检查部位">
+                    <el-form-item label="生产线">
                         <el-select
+                            style="width: 150px"
+                            v-model="line"
+                            clearable
+                            filterable
+                            allow-create
+                            default-first-option
+                            @change="changeSCX"
+                            placeholder="请选择生产线">
+                            <el-option
+                                v-for="item in lineOptions"
+                                :key="item.indexno"
+                                :label="item.name"
+                                :value="item.indexno">
+                            </el-option>
+                        </el-select>
+                    </el-form-item>
+                    <el-form-item label="工位">
+                        <el-select
+                            style="width: 150px"
+                            v-model="workStation"
+                            clearable
+                            filterable
+                            allow-create
+                            default-first-option
+                            @change="changeSelect"
+
+                            placeholder="请选择工位">
+                            <el-option
+                                v-for="item in workStationOptions"
+                                :key="item.id"
+                                :label="item.name"
+                                :value="item.id">
+                            </el-option>
+                        </el-select>
+                    </el-form-item>
+                    <el-form-item label="设备">
+                        <el-select
+                            style="width: 150px"
                             v-model="shebei"
                             clearable
                             filterable
-                            @change="changeSelect"
                             allow-create
                             default-first-option
+                            @change="changeSB"
                             placeholder="请选择设备">
                             <el-option
                                 v-for="item in shebeiOptions"
+                                :key="item.id"
+                                :label="item.name"
+                                :value="item.id">
+                            </el-option>
+                        </el-select>
+                    </el-form-item>
+                    <el-form-item label="检查部位">
+                        <el-select
+                            style="width: 150px"
+                            v-model="buwei"
+                            clearable
+                            filterable
+                            allow-create
+                            default-first-option
+                            @change="changeSB"
+                            placeholder="请选择部位">
+                            <el-option
+                                v-for="item in buweiOptions"
                                 :key="item.id"
                                 :label="item.name"
                                 :value="item.id">
@@ -185,11 +303,15 @@
                 delVisible: false,
 
 
-                name: "",
 
                 shebei: "",
                 shebeiOptions: [],
-
+                buwei:"",
+                buweiOptions: [],
+                workStation:"",
+                workStationOptions:[],
+                line: '',
+                lineOptions: [],
 
                 dynamicValidateForm: {
                     domains: [{
@@ -199,7 +321,6 @@
                         jcff:""
                     }],
                 },
-                xmTypeOptions: [{"name": "下拉菜单", "id": "1"}, {"name": "勾选形式", "id": "2"}, {"name": "手工录入", "id": "3"}],
             }
         },
         computed: {
@@ -233,16 +354,43 @@
                     this.$router.push("/")
                 }
                 else {
-                    this.loadingShowData();
+                    let that = this;
+                    axios.all([
+                        axios.post(" " + url + "/sys/dictionaryList", {"id": "9"}),
+                        axios.post(" " + url + "/api/getPersonProcessList", {"name": ""}),
+                    ])
+                        .then(axios.spread(function (line,workStation,shebei,buwei) {
+                            that.lineOptions = line.data;
+                            that.line = line.data[0].indexno;
+                            that.workStation = workStation.data[0].id;
+                            that.workStationOptions = workStation.data;
+                            axios.all([
+                                axios.post(" " + url + "/shebei/shebeiList", {"jiagongxian": that.line,"stationid":that.workStation})
+                            ])
+                                .then(axios.spread(function (shebei) {
+                                    that.shebei =shebei.data[0].id;
+                                    that.shebeiOptions = shebei.data;
+                                    axios.all([
+                                        axios.post(" " + url + "/shebei/shebeibuweiList", {"shebeiid": that.shebei})
+                                    ])
+                                        .then(axios.spread(function (buwei) {
+                                            that.buwei =buwei.data[0].id;
+                                            that.buweiOptions = buwei.data;
+                                            that.loadingShowData(that.buwei);
+                                        }));
+                                    that.loadingShowData(that.shebei);
+                                }));
+                        }));
+
                 }
             },
 
             //瞬间加载数据
-            loadingShowData() {
+            loadingShowData(data) {
                 let that = this;
                 axios.all([
                     axios.post(" " + url + "/sys/showTableTitle", {"name": "dyhcflmc"}),
-                    axios.post(" " + url + "/sysconfig/deptList")
+                    axios.post(" " + url + "/shebei/contentListByBuwei",{"buweiid":data})
                 ])
                     .then(axios.spread(function (title, table) {
                         that.cols = title.data;
@@ -250,9 +398,50 @@
                     }));
             },
 
+            //更改生产线
+            changeSCX(){
+                axios.post(" " + url + "/sysconfig/getGongxuList", {"id": this.line})
+                    .then((res) => {
+                        if(res.data.length>0){
+                            this.workStation = res.data[0].id;
+                            this.workStationOptions = res.data;
+                        }
+                        else {
+                            this.workStation="";
+                            this.workStationOptions=[];
+                            this.shebei="";
+                            this.shebeiOptions=[];
+                        }
+                    });
+            },
+
             //根据工位选择
             changeSelect() {
-                this.loadingShowData(this.workStation)
+                axios.post(" " + url + "/shebei/shebeiList", {"jiagongxian": this.line,"stationid":this.workStation})
+                    .then((res)=>{
+                        if(res.data.length>0){
+                            this.shebei =res.data[0].id;
+                            this.shebeiOptions = res.data;
+                            this.loadingShowData( this.shebei);
+                        }
+                        else {
+                            this.shebei="";
+                            this.shebeiOptions=[];
+                        }
+                    })
+                    .catch((err)=>{
+                        console.log(err)
+                    })
+            },
+
+            //更改设备
+            changeSB(){
+                this.loadingShowData(this.shebei);
+            },
+
+
+            changeBW(){
+
             },
 
             //选择那个一个
@@ -454,7 +643,7 @@
             .handle-box {
                 height: 80px;
                 line-height:80px;
-                padding-left: 50px;
+                padding-left:20px;
                 .handle-input {
                     width: 300px;
                     display: inline-block;
@@ -471,9 +660,6 @@
             .table {
                 width: 100%;
                 font-size: 14px;
-            }
-            .red {
-                color: #ff0000;
             }
 
         }
