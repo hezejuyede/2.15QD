@@ -52,8 +52,8 @@
                             </el-option>
                         </el-select>
                     </label>
-                    <el-button type="primary" icon="delete" class="handle-del mr10" @click="showAdd">新增设备</el-button>
-                    <el-button type="danger" icon="delete" class="handle-del mr10" @click="showDelete">删除设备</el-button>
+                    <el-button type="primary"  class="handle-del mr10" @click="showAdd">新增设备</el-button>
+                    <el-button type="danger"   class="handle-del mr10" @click="showDelete">删除设备</el-button>
                 </div>
                 <div class="">
                     <el-table class="tb-edit"
@@ -116,7 +116,7 @@
                         </el-select>
                     </el-form-item>
                     <el-form-item label="点检周期">
-                        <el-input v-model="djzq" style="width: 200px"></el-input>
+                        <el-input v-model="djzq" style="width: 200px" type="number"></el-input>
                     </el-form-item>
                 </el-form>
                 <span slot="footer" class="dialog-footer">
@@ -164,7 +164,7 @@
                         </el-select>
                     </el-form-item>
                     <el-form-item label="点检周期">
-                        <el-input v-model="djzq" style="width: 200px"></el-input>
+                        <el-input v-model="djzq" style="width: 200px" type="number"></el-input>
                     </el-form-item>
                 </el-form>
                 <span slot="footer" class="dialog-footer">
@@ -215,22 +215,8 @@
                 workStationOptions:[],
                 line: '',
                 lineOptions: [],
-
-                djzq: "",
-                djxm: "",
-                djxmOptions: [
-                    {"name": "项目1", "id": "1"},
-                    {"name": "项目2", "id": "2"},
-                    {"name": "项目3", "id": "3"},
-                    {"name": "项目4", "id": "4"}
-                ],
-                shebei: "",
-                shebeiOptions: [
-                    {"name": "设备1", "id": "1"},
-                    {"name": "设备2", "id": "2"},
-                    {"name": "设备3", "id": "3"},
-                    {"name": "设备4", "id": "4"}
-                ],
+                shebei:"",
+                djzq:""
 
             }
         },
@@ -289,22 +275,23 @@
                 ])
                     .then(axios.spread(function (title, table) {
                         that.cols = title.data;
-                        that.tableData = table.data.data;
+                        that.tableData = table.data;
                     }));
             },
 
+            //更改生产线
             changeSCX(){
                 axios.post(" " + url + "/sysconfig/getGongxuList", {"id": this.line})
                     .then((res) => {
                         this.workStation = res.data[0].id;
                         this.workStationOptions = res.data;
-                        this.loadingShowData(this.workStation)
+                        this.loadingShowData( this.line, this.workStation)
                     });
             },
 
             //根据工位选择
             changeSelect() {
-                this.loadingShowData(this.workStation)
+                this.loadingShowData( this.line, this.workStation)
             },
 
             //选择那个一个
@@ -338,49 +325,30 @@
             },
 
             //显示新增
-            showAdd(){
-
-                if (this.workStation) {
-                    this.addVisible=true;
-                    this.name= "";
-                    this.type= "";
-                    this.disabled= "";
-                    this.backgroundColor="";
-                    this.showHide= "";
-                }
-                else {
-                    this.message = "请选择工位";
-                    this.HideModal = false;
-                    const that = this;
-
-                    function a() {
-                        that.message = "";
-                        that.HideModal = true;
-                    }
-
-                    setTimeout(a, 2000);
-                }
+            showAdd() {
+                this.addVisible=true;
+                this.workStation = "";
+                this.line = "";
+                this.shebei = "";
+                this.djzq = "";
             },
 
             //进行新增
             doAdd() {
-                if (this.name && this.type && this.disabled &&this.backgroundColor&&this.showHide) {
-                    axios.post(" " + url + "/padShow/buttonAdd",
+                if (this.shebei && this.workStation && this.line &&this.djzq) {
+                    axios.post(" " + url + "/shebei/shebeiAdd",
                         {
-                            "gongxuid": this.workStation,
-                            "name": this.name,
-                            "type": this.type,
-                            "disabled": this.disabled,
-                            "backgroundcolor": this.backgroundColor,
-                            "show": this.showHide,
+                            "stationid": this.workStation,
+                            "jiagongxian": this.line,
+                            "name": this.shebei,
+                            "zhouqi": this.djzq,
                         }
                     )
                         .then((res) => {
-                            if (res.data.state === "1") {
+                            if (res.data === 1) {
                                 this.$message.success(`新增成功`);
                                 this.addVisible = false;
-                                this.loadingShowData(this.workStation)
-
+                                this.loadingShowData( this.line, this.workStation)
                             }
                             else {
                                 this.$message.warning(`新增失败`);
@@ -399,14 +367,12 @@
             edit(row, column, cell, event) {
                 this.editVisible = true;
                 this.id = row.id;
-                axios.post(" " + url + "/padShow/buttonDetail", {"id": this.id})
+                axios.post(" " + url + "/shebei/shebeiDetail", {"id": this.id})
                     .then((res) => {
-                        this.workStation = res.data.data.gongxuid;
-                        this.name = res.data.data.name;
-                        this.type = Number(res.data.data.type);
-                        this.disabled = res.data.data.disabled;
-                        this.backgroundColor = res.data.data.backgroundcolor;
-                        this.showHide = res.data.data.show;
+                        this.workStation = res.data.stationid;
+                        this.line = res.data.jiagongxian;
+                        this.shebei = res.data.name;
+                        this.djzq = res.data.zhouqi;
                     })
                     .catch((err) => {
                         console.log(err)
@@ -415,23 +381,21 @@
 
             // 保存编辑
             saveEdit() {
-                if (this.name && this.type && this.disabled &&this.backgroundColor&&this.showHide) {
-                    axios.post(" " + url + "/padShow/buttonUpdate",
+                if (this.shebei && this.workStation && this.line &&this.djzq) {
+                    axios.post(" " + url + "/shebei/shebeiUpdate",
                         {
                             "id":this.id,
-                            "gongweiid": this.workStation,
-                            "name": this.name,
-                            "type": this.type,
-                            "disabled": this.disabled,
-                            "backgroundcolor": this.backgroundColor,
-                            "show": this.showHide,
+                            "stationid": this.workStation,
+                            "jiagongxian": this.line,
+                            "name": this.shebei,
+                            "zhouqi": this.djzq,
                         }
                     )
                         .then((res) => {
-                            if (res.data.state === "1") {
+                            if (res.data === "1") {
                                 this.editVisible = false;
                                 this.$message.success(`修改成功`);
-                                this.loadingShowData(this.workStation)
+                                this.loadingShowData(this.line,this.workStation)
                             }
                             else {
                                 this.$message.warning(`新增失败`);
@@ -468,16 +432,16 @@
 
             // 确定删除
             deleteRow() {
-                axios.post(" " + url + "/padShow/buttonDel",
+                axios.post(" " + url + "/shebei/shebeiDel",
                     {
-                        "id": this.listData[0],
+                        "ids": this.listData,
                     }
                 )
                     .then((res) => {
-                        if (res.data.state === "1") {
+                        if (res.data === "1") {
                             this.$message.success('删除成功');
                             this.delVisible = false;
-                            this.loadingShowData(this.workStation);
+                            this.loadingShowData( this.line, this.workStation)
                         }
                         else {
                             this.$message.warning(`删除失败`);
