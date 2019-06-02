@@ -211,15 +211,15 @@
                                 </div>
                                 <div class="fl" style="margin-left: 10px">
                                     <span>检查项目:</span>
-                                    <el-input v-model="domain.jcxm" style="width: 150px"></el-input>
+                                    <el-input v-model="domain.xiangmu" style="width: 150px"></el-input>
                                 </div>
                                 <div class="fl" style="margin-left: 10px">
                                     <span>检查内容:</span>
-                                    <el-input v-model="domain.jcnr" style="width: 150px"></el-input>
+                                    <el-input v-model="domain.neirong" style="width: 150px"></el-input>
                                 </div>
                                 <div class="fl" style="margin-left: 10px">
                                     <span>检查方法:</span>
-                                    <el-input v-model="domain.jcff" style="width: 400px"></el-input>
+                                    <el-input v-model="domain.fangfa" style="width: 400px"></el-input>
                                 </div>
                                 <div class="fl" style="margin-left: 10px">
                                     <el-button
@@ -335,15 +335,15 @@
                                 </div>
                                 <div class="fl" style="margin-left: 10px">
                                     <span>检查项目:</span>
-                                    <el-input v-model="domain.jcxm" style="width: 150px"></el-input>
+                                    <el-input v-model="domain.xiangmu" style="width: 150px"></el-input>
                                 </div>
                                 <div class="fl" style="margin-left: 10px">
                                     <span>检查内容:</span>
-                                    <el-input v-model="domain.jcnr" style="width: 150px"></el-input>
+                                    <el-input v-model="domain.neirong" style="width: 150px"></el-input>
                                 </div>
                                 <div class="fl" style="margin-left: 10px">
                                     <span>检查方法:</span>
-                                    <el-input v-model="domain.jcff" style="width: 400px"></el-input>
+                                    <el-input v-model="domain.fangfa" style="width: 400px"></el-input>
                                 </div>
                                 <div class="fl" style="margin-left: 10px">
                                     <el-button
@@ -427,9 +427,9 @@
                 dynamicValidateForm: {
                     domains: [{
                         no: '',
-                        jcxm: "",
-                        jcnr: "",
-                        jcff: ""
+                        xiangmu: "",
+                        neirong: "",
+                        fangfa: ""
                     }],
                 },
             }
@@ -492,7 +492,6 @@
                                             that.buweiOptions = buwei.data;
                                             that.loadingShowData(that.buwei);
                                         }));
-                                    that.loadingShowData(that.shebei);
                                 }));
                         }));
 
@@ -503,7 +502,7 @@
             loadingShowData(data) {
                 let that = this;
                 axios.all([
-                    axios.post(" " + url + "/sys/showTableTitle", {"name": "dyhcflmc"}),
+                    axios.post(" " + url + "/sys/showTableTitle", {"name": "scxdjxmsd"}),
                     axios.post(" " + url + "/shebei/contentListByBuwei", {"buweiid": data})
                 ])
                     .then(axios.spread(function (title, table) {
@@ -558,6 +557,13 @@
                         if (res.data.length > 0) {
                             this.buwei = res.data[0].id;
                             this.buweiOptions = res.data;
+                            axios.post(" " + url + "/shebei/contentListByShebei", {"shebeiid": this.shebei})
+                                .then((res) => {
+                                    this.tableData = res.data;
+                                })
+                                .catch((err) => {
+                                    console.log(err)
+                                })
                         }
                         else {
                             this.buwei = "";
@@ -571,7 +577,7 @@
 
 
             changeBW() {
-
+                this.loadingShowData(this.buwei);
             },
 
             //选择那个一个
@@ -622,17 +628,19 @@
 
             //进行新增
             doAdd() {
-                if (this.name) {
+                if (this.shebei && this.buwei ) {
                     axios.post(" " + url + "/shebei/contentAdd",
                         {
-                            "name": this.name
+                            "shebeid": this.shebei,
+                            "buweiid": this.buwei,
+                            "list": this.dynamicValidateForm.domains
                         }
                     )
                         .then((res) => {
                             if (res.data === "1") {
                                 this.$message.success(`新增成功`);
                                 this.addVisible = false;
-                                this.loadingShowData(this.workStation)
+                                this.loadingShowData(this.buwei);
 
                             }
                             else {
@@ -663,11 +671,13 @@
 
             // 保存编辑
             saveEdit() {
-                if (this.name) {
+                if (this.shebei && this.buwei ) {
                     axios.post(" " + url + "/sysconfig/updateDept",
                         {
                             "id": this.id,
-                            "name": this.name,
+                            "shebeid": this.shebei,
+                            "buweiid": this.buwei,
+                            "list": this.dynamicValidateForm.domains
                         }
                     )
                         .then((res) => {
@@ -746,9 +756,9 @@
             addDomain() {
                 this.dynamicValidateForm.domains.push({
                     no: '',
-                    jcxm: "",
-                    jcnr: "",
-                    jcff: ""
+                    xiangmu: "",
+                    neirong: "",
+                    fangfa: ""
                 });
             },
             //删除时间
