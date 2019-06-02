@@ -559,7 +559,7 @@
                             this.buweiOptions = res.data;
                             axios.post(" " + url + "/shebei/contentListByShebei", {"shebeiid": this.shebei})
                                 .then((res) => {
-                                    this.tableData = res.data;
+                                    this.tableData = res.data.data;
                                 })
                                 .catch((err) => {
                                     console.log(err)
