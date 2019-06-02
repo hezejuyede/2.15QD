@@ -12,7 +12,8 @@
                     <label style="margin-right: 5px">
                         <span>智能检索项目</span>
                         <span>:</span>
-                        <el-input v-model="select_word" placeholder="智能检索项目" class="handle-input mr10" style="width: 150px"></el-input>
+                        <el-input v-model="select_word" placeholder="智能检索项目" class="handle-input mr10"
+                                  style="width: 150px"></el-input>
                     </label>
                     <label style="margin-right: 10px;margin-left: 5px">
                         <span>生产线</span>
@@ -123,7 +124,7 @@
             </div>
             <!--新增弹出框 -->
             <el-dialog title="新增点检内容" :visible.sync="addVisible" width="90%">
-                <el-form ref="form"  label-width="100px">
+                <el-form ref="form" label-width="100px">
                     <el-form-item label="生产线">
                         <el-select
                             style="width: 150px"
@@ -204,7 +205,7 @@
                         :label="'点检内容' + (index+1)+''">
                         <div class="appendDiv">
                             <div class="appendDivTemplate">
-                                <div class="fl"  style="margin-left: 10px">
+                                <div class="fl" style="margin-left: 10px">
                                     <span>NO</span>
                                     <el-input v-model="domain.no" style="width: 100px" type="number"></el-input>
                                 </div>
@@ -212,11 +213,11 @@
                                     <span>检查项目:</span>
                                     <el-input v-model="domain.jcxm" style="width: 150px"></el-input>
                                 </div>
-                                <div class="fl"  style="margin-left: 10px">
+                                <div class="fl" style="margin-left: 10px">
                                     <span>检查内容:</span>
                                     <el-input v-model="domain.jcnr" style="width: 150px"></el-input>
                                 </div>
-                                <div class="fl"  style="margin-left: 10px">
+                                <div class="fl" style="margin-left: 10px">
                                     <span>检查方法:</span>
                                     <el-input v-model="domain.jcff" style="width: 400px"></el-input>
                                 </div>
@@ -247,9 +248,120 @@
 
             <!-- 编辑弹出框 -->
             <el-dialog title="编辑项目" :visible.sync="editVisible" width="40%">
-                <el-form ref="form"  label-width="100px">
-                    <el-form-item label="部门名称">
-                        <el-input v-model="name" style="width: 200px"></el-input>
+                <el-form ref="form" label-width="100px">
+                    <el-form-item label="生产线">
+                        <el-select
+                            style="width: 150px"
+                            v-model="line"
+                            clearable
+                            filterable
+                            allow-create
+                            default-first-option
+                            @change="changeSCX"
+                            placeholder="请选择生产线">
+                            <el-option
+                                v-for="item in lineOptions"
+                                :key="item.indexno"
+                                :label="item.name"
+                                :value="item.indexno">
+                            </el-option>
+                        </el-select>
+                    </el-form-item>
+                    <el-form-item label="工位">
+                        <el-select
+                            style="width: 150px"
+                            v-model="workStation"
+                            clearable
+                            filterable
+                            allow-create
+                            default-first-option
+                            @change="changeSelect"
+
+                            placeholder="请选择工位">
+                            <el-option
+                                v-for="item in workStationOptions"
+                                :key="item.id"
+                                :label="item.name"
+                                :value="item.id">
+                            </el-option>
+                        </el-select>
+                    </el-form-item>
+                    <el-form-item label="设备">
+                        <el-select
+                            style="width: 150px"
+                            v-model="shebei"
+                            clearable
+                            filterable
+                            allow-create
+                            default-first-option
+                            @change="changeSB"
+                            placeholder="请选择设备">
+                            <el-option
+                                v-for="item in shebeiOptions"
+                                :key="item.id"
+                                :label="item.name"
+                                :value="item.id">
+                            </el-option>
+                        </el-select>
+                    </el-form-item>
+                    <el-form-item label="检查部位">
+                        <el-select
+                            style="width: 150px"
+                            v-model="buwei"
+                            clearable
+                            filterable
+                            allow-create
+                            default-first-option
+                            @change="changeSB"
+                            placeholder="请选择部位">
+                            <el-option
+                                v-for="item in buweiOptions"
+                                :key="item.id"
+                                :label="item.name"
+                                :value="item.id">
+                            </el-option>
+                        </el-select>
+                    </el-form-item>
+                    <el-form-item
+                        v-for="(domain, index) in dynamicValidateForm.domains"
+                        :key="domain.key"
+                        :prop="'domains.' + index + '.value'"
+                        :label="'点检内容' + (index+1)+''">
+                        <div class="appendDiv">
+                            <div class="appendDivTemplate">
+                                <div class="fl" style="margin-left: 10px">
+                                    <span>NO</span>
+                                    <el-input v-model="domain.no" style="width: 100px" type="number"></el-input>
+                                </div>
+                                <div class="fl" style="margin-left: 10px">
+                                    <span>检查项目:</span>
+                                    <el-input v-model="domain.jcxm" style="width: 150px"></el-input>
+                                </div>
+                                <div class="fl" style="margin-left: 10px">
+                                    <span>检查内容:</span>
+                                    <el-input v-model="domain.jcnr" style="width: 150px"></el-input>
+                                </div>
+                                <div class="fl" style="margin-left: 10px">
+                                    <span>检查方法:</span>
+                                    <el-input v-model="domain.jcff" style="width: 400px"></el-input>
+                                </div>
+                                <div class="fl" style="margin-left: 10px">
+                                    <el-button
+                                        type="danger"
+                                        style="height:30px;width:120px"
+                                        @click.prevent="removeDomain(domain)">删除
+                                    </el-button>
+                                </div>
+                            </div>
+                        </div>
+                    </el-form-item>
+                    <el-form-item>
+                        <el-button
+                            type="primary"
+                            @click="addDomain"
+                            style="height:30px;width:20%">
+                            新增点检项目
+                        </el-button>
                     </el-form-item>
                 </el-form>
                 <span slot="footer" class="dialog-footer">
@@ -285,12 +397,12 @@
                 message: '',
                 HideModal: true,
 
-                val:[],
+                val: [],
 
 
-                listData:[],
+                listData: [],
 
-                id:"",
+                id: "",
 
 
                 cols: [],
@@ -303,13 +415,12 @@
                 delVisible: false,
 
 
-
                 shebei: "",
                 shebeiOptions: [],
-                buwei:"",
+                buwei: "",
                 buweiOptions: [],
-                workStation:"",
-                workStationOptions:[],
+                workStation: "",
+                workStationOptions: [],
                 line: '',
                 lineOptions: [],
 
@@ -317,8 +428,8 @@
                     domains: [{
                         no: '',
                         jcxm: "",
-                        jcnr:"",
-                        jcff:""
+                        jcnr: "",
+                        jcff: ""
                     }],
                 },
             }
@@ -359,22 +470,25 @@
                         axios.post(" " + url + "/sys/dictionaryList", {"id": "9"}),
                         axios.post(" " + url + "/api/getPersonProcessList", {"name": ""}),
                     ])
-                        .then(axios.spread(function (line,workStation,shebei,buwei) {
+                        .then(axios.spread(function (line, workStation, shebei, buwei) {
                             that.lineOptions = line.data;
                             that.line = line.data[0].indexno;
                             that.workStation = workStation.data[0].id;
                             that.workStationOptions = workStation.data;
                             axios.all([
-                                axios.post(" " + url + "/shebei/shebeiList", {"jiagongxian": that.line,"stationid":that.workStation})
+                                axios.post(" " + url + "/shebei/shebeiList", {
+                                    "jiagongxian": that.line,
+                                    "stationid": that.workStation
+                                })
                             ])
                                 .then(axios.spread(function (shebei) {
-                                    that.shebei =shebei.data[0].id;
+                                    that.shebei = shebei.data[0].id;
                                     that.shebeiOptions = shebei.data;
                                     axios.all([
                                         axios.post(" " + url + "/shebei/shebeibuweiList", {"shebeiid": that.shebei})
                                     ])
                                         .then(axios.spread(function (buwei) {
-                                            that.buwei =buwei.data[0].id;
+                                            that.buwei = buwei.data[0].id;
                                             that.buweiOptions = buwei.data;
                                             that.loadingShowData(that.buwei);
                                         }));
@@ -390,63 +504,79 @@
                 let that = this;
                 axios.all([
                     axios.post(" " + url + "/sys/showTableTitle", {"name": "dyhcflmc"}),
-                    axios.post(" " + url + "/shebei/contentListByBuwei",{"buweiid":data})
+                    axios.post(" " + url + "/shebei/contentListByBuwei", {"buweiid": data})
                 ])
                     .then(axios.spread(function (title, table) {
                         that.cols = title.data;
-                        that.tableData = table.data;
+                        that.tableData = table.data.data;
                     }));
             },
 
             //更改生产线
-            changeSCX(){
+            changeSCX() {
                 axios.post(" " + url + "/sysconfig/getGongxuList", {"id": this.line})
                     .then((res) => {
-                        if(res.data.length>0){
+                        if (res.data.length > 0) {
                             this.workStation = res.data[0].id;
                             this.workStationOptions = res.data;
                         }
                         else {
-                            this.workStation="";
-                            this.workStationOptions=[];
-                            this.shebei="";
-                            this.shebeiOptions=[];
+                            this.workStation = "";
+                            this.workStationOptions = [];
+                            this.shebei = "";
+                            this.shebeiOptions = [];
+                            this.buwei = "";
+                            this.buweiOptions = [];
                         }
                     });
             },
 
             //根据工位选择
             changeSelect() {
-                axios.post(" " + url + "/shebei/shebeiList", {"jiagongxian": this.line,"stationid":this.workStation})
-                    .then((res)=>{
-                        if(res.data.length>0){
-                            this.shebei =res.data[0].id;
+                axios.post(" " + url + "/shebei/shebeiList", {"jiagongxian": this.line, "stationid": this.workStation})
+                    .then((res) => {
+                        if (res.data.length > 0) {
+                            this.shebei = res.data[0].id;
                             this.shebeiOptions = res.data;
-                            this.loadingShowData( this.shebei);
                         }
                         else {
-                            this.shebei="";
-                            this.shebeiOptions=[];
+                            this.shebei = "";
+                            this.shebeiOptions = [];
+                            this.buwei = "";
+                            this.buweiOptions = [];
                         }
                     })
-                    .catch((err)=>{
+                    .catch((err) => {
                         console.log(err)
                     })
             },
 
             //更改设备
-            changeSB(){
-                this.loadingShowData(this.shebei);
+            changeSB() {
+                axios.post(" " + url + "/shebei/shebeibuweiList", {"shebeiid": this.shebei})
+                    .then((res) => {
+                        if (res.data.length > 0) {
+                            this.buwei = res.data[0].id;
+                            this.buweiOptions = res.data;
+                        }
+                        else {
+                            this.buwei = "";
+                            this.buweiOptions = [];
+                        }
+                    })
+                    .catch((err) => {
+                        console.log(err)
+                    })
             },
 
 
-            changeBW(){
+            changeBW() {
 
             },
 
             //选择那个一个
             selectList(val) {
-                this.val =val;
+                this.val = val;
                 if (val.length) {
                     let data = [];
                     for (let i = 0; i < val.length; i++) {
@@ -457,7 +587,7 @@
 
                 }
                 else {
-                    this.listData=[];
+                    this.listData = [];
 
                 }
             },
@@ -473,22 +603,27 @@
             },
 
             //显示新增
-            showAdd(){
-                this.addVisible = true;
+            showAdd() {
+                this.addVisible=true;
+                this.shebei="";
+                this.name="";
+                this.line= '';
+                this.buwei="";
+                this.workStation="";
                 this.dynamicValidateForm = {
                     domains: [{
                         no: '',
                         jcxm: "",
-                        jcnr:"",
-                        jcff:""
+                        jcnr: "",
+                        jcff: ""
                     }],
                 };
             },
 
             //进行新增
             doAdd() {
-                if (this.name ) {
-                    axios.post(" " + url + "/sysconfig/deptAdd",
+                if (this.name) {
+                    axios.post(" " + url + "/shebei/contentAdd",
                         {
                             "name": this.name
                         }
@@ -612,8 +747,8 @@
                 this.dynamicValidateForm.domains.push({
                     no: '',
                     jcxm: "",
-                    jcnr:"",
-                    jcff:""
+                    jcnr: "",
+                    jcff: ""
                 });
             },
             //删除时间
@@ -642,14 +777,14 @@
         .template-content {
             .handle-box {
                 height: 80px;
-                line-height:80px;
-                padding-left:20px;
+                line-height: 80px;
+                padding-left: 20px;
                 .handle-input {
                     width: 300px;
                     display: inline-block;
                 }
                 .el-button {
-                    width:100px;
+                    width: 100px;
                     height: 30px;
                 }
             }

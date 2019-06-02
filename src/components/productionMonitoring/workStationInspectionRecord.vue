@@ -422,6 +422,8 @@
                 this.addVisible=true;
                 this.shebei="";
                 this.name="";
+                this.line= '';
+                this.workStation="";
             },
 
             //进行新增
