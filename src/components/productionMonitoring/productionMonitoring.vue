@@ -39,19 +39,19 @@
                                 url: "/ProductionMonitoring/guanlianshebeisheding"
                             },
                             {
-                                label: '点检项目设定',
+                                label: '部位设定',
                                 index: "1-2",
+                                url: "/ProductionMonitoring/workStationInspectionRecord"
+                            },
+                            {
+                                label: '点检项目设定',
+                                index: "1-3",
                                 url: "/ProductionMonitoring/xingmusheding"
                             },
                             {
                                 label: '工位点检项目设定',
-                                index: "1-3",
-                                url: "/ProductionMonitoring/InspectionItemSetting"
-                            },
-                            {
-                                label: '工位点检记录',
                                 index: "1-4",
-                                url: "/ProductionMonitoring/workStationInspectionRecord"
+                                url: "/ProductionMonitoring/InspectionItemSetting"
                             },
                             {
                                 label: '点检记录查询与统计',
