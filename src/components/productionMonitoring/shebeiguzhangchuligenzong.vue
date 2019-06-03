@@ -66,7 +66,28 @@
                             </el-option>
                         </el-select>
                     </label>
-                    <el-button type="primary" icon="delete" class="handle-del mr10" @click="showAdd">处理故障</el-button>
+                    <label style="margin-right: 10px;margin-left:5px">
+                        <span>设备</span>
+                        <span>:</span>
+                        <el-select
+                            style="width: 120px"
+                            v-model="shebei"
+                            clearable
+                            filterable
+                            allow-create
+                            default-first-option
+                            @change="changeSB"
+                            placeholder="请选择设备">
+                            <el-option
+                                v-for="item in shebeiOptions"
+                                :key="item.id"
+                                :label="item.name"
+                                :value="item.id">
+                            </el-option>
+                        </el-select>
+                    </label>
+                    <el-button type="primary"  class="handle-del mr10" @click="showAdd">处理故障</el-button>
+                    <el-button type="danger"   class="handle-del mr10" @click="showDelete">删除故障</el-button>
                 </div>
                 <div class="">
                     <el-table class="tb-edit"
@@ -76,7 +97,6 @@
                               height="450"
                               @select-all="selectAll"
                               @select="selectList"
-                              @row-dblclick="edit"
                               highlight-current-row
                               style="width: 98%;margin: auto">
                         <el-table-column
@@ -99,7 +119,6 @@
                             filterable
                             allow-create
                             default-first-option
-                            multiple
                             placeholder="请输入或者选择">
                             <el-option
                                 v-for="item in cljgOptions"
@@ -124,41 +143,15 @@
             </span>
             </el-dialog>
 
-            <!-- 编辑弹出框 -->
-            <el-dialog title="修改处理故障" :visible.sync="editVisible" width="40%">
-                <el-form ref="form"  label-width="100px">
-                    <el-form-item label="处理结果">
-                        <el-select
-                            v-model="cljg"
-                            clearable
-                            filterable
-                            allow-create
-                            default-first-option
-                            multiple
-                            placeholder="请输入或者选择">
-                            <el-option
-                                v-for="item in cljgOptions"
-                                :key="item.id"
-                                :label="item.name"
-                                :value="item.id">
-                            </el-option>
-                        </el-select>
-                    </el-form-item>
-                    <el-form-item label="备注">
-                        <el-input v-model="beizhu"
-                                  type="textarea"
-                                  placeholder="请输入内容"
-                                  maxlength="30"
-                                  show-word-limit
-                                  style="width: 200px "></el-input>
-                    </el-form-item>
-                </el-form>
+
+            <!-- 删除提示框 -->
+            <el-dialog title="删除异常上报记录" :visible.sync="delVisible" width="300px" center>
+                <div class="del-dialog-cnt">删除不可恢复，是否确定删除？</div>
                 <span slot="footer" class="dialog-footer">
-                <el-button @click="editVisible = false" style="height:30px;width:80px">取 消</el-button>
-                <el-button type="primary" @click="saveEdit" style="height:30px;width:80px">确 定</el-button>
+                <el-button @click="delVisible = false" style="height:30px;width:80px">取 消</el-button>
+                <el-button type="primary" @click="deleteRow" style="height:30px;width:80px">确 定</el-button>
             </span>
             </el-dialog>
-
 
             <Modal :msg="message"
                    :isHideModal="HideModal"></Modal>
@@ -186,13 +179,19 @@
                 select_word: '',
 
                 addVisible: false,
-                editVisible: false,
+
+                delVisible: false,
+
 
                 examineTime:"",
                 workStation:"",
                 workStationOptions:[],
                 line: '',
                 lineOptions: [],
+
+                shebei:"",
+                shebeiOptions:[],
+
 
                 cljg:"",
                 cljgOptions: [
@@ -251,37 +250,71 @@
                             that.line = line.data[0].indexno;
                             that.workStation = workStation.data[0].id;
                             that.workStationOptions = workStation.data;
-                            that.loadingShowData(1);
+                            axios.all([
+                                axios.post(" " + url + "/shebei/shebeiList", {"jiagongxian": that.line,"stationid":that.workStation})
+                            ])
+                                .then(axios.spread(function (shebei) {
+                                    that.shebeiOptions = shebei.data;
+                                    that.loadingShowData(that.examineTime,that.workStation,that.shebei);
+                                }));
                         }));
                 }
             },
 
             //瞬间加载数据
-            loadingShowData(data) {
+            loadingShowData(data1,data2,data3) {
                 let that = this;
                 axios.all([
                     axios.post(" " + url + "/sys/showTableTitle", {"name": "sbgzclgz"}),
-                    axios.post(" " + url + "/padShow/buttonList", {"id": data})
+                    axios.post(" " + url + "/shebei/errorList", {"time":data1,"stationid":data2,"shebeiid": data3})
                 ])
                     .then(axios.spread(function (title, table) {
                         that.cols = title.data;
-                        that.tableData = table.data.data;
+                        that.tableData = table.data;
                     }));
             },
 
+            //更改生产线
             changeSCX(){
                 axios.post(" " + url + "/sysconfig/getGongxuList", {"id": this.line})
                     .then((res) => {
-                        this.workStation = res.data[0].id;
-                        this.workStationOptions = res.data;
-                        this.loadingShowData(this.workStation)
+                        if(res.data.length>0){
+                            this.workStation = res.data[0].id;
+                            this.workStationOptions = res.data;
+                        }
+                        else {
+                            this.workStation="";
+                            this.workStationOptions=[];
+                            this.shebei="";
+                            this.shebeiOptions=[];
+                        }
                     });
             },
 
-            //根据工位选择
+            //更改工位选择
             changeSelect() {
-                this.loadingShowData(this.workStation)
+                this.shebei="";
+                axios.post(" " + url + "/shebei/shebeiList", {"jiagongxian": this.line,"stationid":this.workStation})
+                    .then((res)=>{
+                        if(res.data.length>0){
+                            this.shebeiOptions = res.data;
+                            this.loadingShowData(this.examineTime,this.workStation,this.shebei);
+                        }
+                        else {
+                            this.shebei="";
+                            this.shebeiOptions=[];
+                        }
+                    })
+                    .catch((err)=>{
+                        console.log(err)
+                    })
             },
+
+            //更改设备
+            changeSB(){
+                this.loadingShowData(this.examineTime,this.workStation,this.shebei);
+            },
+
 
             //选择那个一个
             selectList(val) {
@@ -315,12 +348,28 @@
 
             //显示新增
             showAdd(){
-
                 if (this.listData.length) {
-                    this.addVisible = true;
+                    if(this.listData.length>1){
+                        this.message = "只能选择一个";
+                        this.HideModal = false;
+                        const that = this;
+
+                        function b() {
+                            that.message = "";
+                            that.HideModal = true;
+                        }
+
+                        setTimeout(b, 2000);
+                    }
+                    else {
+                        this.addVisible = true;
+                        this.cljg="";
+                        this.beizhu="";
+                    }
+
                 }
                 else {
-                    this.message = "请勾选要点检的工位";
+                    this.message = "请勾选要处理的异常";
                     this.HideModal = false;
                     const that = this;
 
@@ -335,26 +384,23 @@
 
             //进行新增
             doAdd() {
-                if (this.name && this.type && this.disabled &&this.backgroundColor&&this.showHide) {
-                    axios.post(" " + url + "/padShow/buttonAdd",
+                if (this.cljg) {
+                    axios.post(" " + url + "/shebei/errorUpdate",
                         {
-                            "gongxuid": this.workStation,
-                            "name": this.name,
-                            "type": this.type,
-                            "disabled": this.disabled,
-                            "backgroundcolor": this.backgroundColor,
-                            "show": this.showHide,
+                            "id":this.listData[0],
+                            "errortypeid": this.cljg,
+                            "beizhu": this.beizhu,
                         }
                     )
                         .then((res) => {
-                            if (res.data.state === "1") {
-                                this.$message.success(`新增成功`);
+                            if (res.data === "1") {
+                                this.$message.success(`处理成功`);
                                 this.addVisible = false;
-                                this.loadingShowData(this.workStation)
+                                this.loadingShowData(this.examineTime,this.workStation,this.shebei);
 
                             }
                             else {
-                                this.$message.warning(`新增失败`);
+                                this.$message.warning(`处理失败`);
                             }
                         })
                         .catch((err) => {
@@ -366,59 +412,47 @@
                 }
             },
 
-            //双击点击行内编辑
-            edit(row, column, cell, event) {
-                this.editVisible = true;
-                this.id = row.id;
-                axios.post(" " + url + "/padShow/buttonDetail", {"id": this.id})
+
+            //选择点击显示删除
+            showDelete() {
+                if (this.listData.length) {
+                    this.delVisible = true;
+                }
+                else {
+                    this.message = "请勾选要删除的上报故障";
+                    this.HideModal = false;
+                    const that = this;
+
+                    function a() {
+                        that.message = "";
+                        that.HideModal = true;
+                    }
+
+                    setTimeout(a, 2000);
+                }
+            },
+
+            // 确定删除
+            deleteRow() {
+                axios.post(" " + url + "/shebei/errorDel",
+                    {
+                        "ids": this.listData,
+                    }
+                )
                     .then((res) => {
-                        this.workStation = res.data.data.gongxuid;
-                        this.name = res.data.data.name;
-                        this.type = Number(res.data.data.type);
-                        this.disabled = res.data.data.disabled;
-                        this.backgroundColor = res.data.data.backgroundcolor;
-                        this.showHide = res.data.data.show;
+                        if (res.data === "1") {
+                            this.$message.success('删除成功');
+                            this.delVisible = false;
+                            this.loadingShowData(this.examineTime,this.workStation,this.shebei);
+                        }
+                        else {
+                            this.$message.warning(`删除失败`);
+                        }
                     })
                     .catch((err) => {
                         console.log(err)
-                    });
+                    })
             },
-
-            // 保存编辑
-            saveEdit() {
-                if (this.name && this.type && this.disabled &&this.backgroundColor&&this.showHide) {
-                    axios.post(" " + url + "/padShow/buttonUpdate",
-                        {
-                            "id":this.id,
-                            "gongweiid": this.workStation,
-                            "name": this.name,
-                            "type": this.type,
-                            "disabled": this.disabled,
-                            "backgroundcolor": this.backgroundColor,
-                            "show": this.showHide,
-                        }
-                    )
-                        .then((res) => {
-                            if (res.data.state === "1") {
-                                this.editVisible = false;
-                                this.$message.success(`修改成功`);
-                                this.loadingShowData(this.workStation)
-                            }
-                            else {
-                                this.$message.warning(`新增失败`);
-                            }
-                        })
-                        .catch((err) => {
-                            console.log(err)
-                        })
-                }
-                else {
-                    this.$message.warning(`输入不能为空`);
-                }
-
-            },
-
-
         }
     }
 </script>
@@ -438,7 +472,7 @@
             .handle-box {
                 height: 80px;
                 line-height:80px;
-                padding-left: 50px;
+                padding-left: 20px;
                 .handle-input {
                     width: 300px;
                     display: inline-block;
@@ -455,9 +489,6 @@
             .table {
                 width: 100%;
                 font-size: 14px;
-            }
-            .red {
-                color: #ff0000;
             }
 
         }

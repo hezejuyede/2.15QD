@@ -159,7 +159,7 @@
                 let that = this;
                 axios.all([
                     axios.post(" " + url + "/sys/showTableTitle", {"name": "crkdj"}),
-                    axios.post(" " + url + "/devRecordListAll", {"devid": data1})
+                    axios.post(" " + url + "/devrecord/devRecordListAll", {"devid": data1})
                 ])
                     .then(axios.spread(function (title, table) {
                         that.cols = title.data;
@@ -171,6 +171,7 @@
             doSearchCKJV() {
                 this.loadingShowData(this.haocai);
             },
+            //更改分类
             changeFenlei(){
                 axios.post(" " + url + "/dev/devList", {"devtypeid": this.fenlei})
                     .then((res)=>{
@@ -191,6 +192,7 @@
 
             },
 
+            //更改耗材
             changeSelect(){
                 this.loadingShowData(this.haocai);
             }
