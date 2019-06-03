@@ -149,11 +149,11 @@
                 let that = this;
                 axios.all([
                     axios.post(" " + url + "/sys/showTableTitle", {"name": "zgsjcxtj"}),
-                    axios.post(" " + url + "/timeTongji/userTimesByDay", {"deptid": data1, "curdatestr": data2,})
+                    axios.post(" " + url + "/timeTongji/userTimesum", {"deptid": data1, "times": data2,})
                 ])
                     .then(axios.spread(function (title, table) {
                         that.cols = title.data;
-                        that.tableData = table.data.data;
+                        that.tableData = table.data;
                     }));
             },
 
