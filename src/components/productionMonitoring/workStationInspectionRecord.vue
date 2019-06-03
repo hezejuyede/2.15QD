@@ -314,9 +314,8 @@
                     axios.all([
                         axios.post(" " + url + "/sys/dictionaryList", {"id": "9"}),
                         axios.post(" " + url + "/api/getPersonProcessList", {"name": ""}),
-                        axios.post(" " + url + "/shebei/shebeiList", {"jiagongxian": that.line,"stationid":that.workStation})
                     ])
-                        .then(axios.spread(function (line,workStation,shebei) {
+                        .then(axios.spread(function (line,workStation) {
                             that.lineOptions = line.data;
                             that.line = line.data[0].indexno;
                             that.workStation = workStation.data[0].id;
