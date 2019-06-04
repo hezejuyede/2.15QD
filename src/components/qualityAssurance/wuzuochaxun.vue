@@ -2,19 +2,19 @@
     <div class="template">
         <div class="crumbs">
             <el-breadcrumb separator="/">
-                <el-breadcrumb-item>设备管理</el-breadcrumb-item>
-                <el-breadcrumb-item>设备故障率报表</el-breadcrumb-item>
+                <el-breadcrumb-item>质量管理</el-breadcrumb-item>
+                <el-breadcrumb-item>误作查询</el-breadcrumb-item>
             </el-breadcrumb>
         </div>
         <div class="template-content">
             <div class="container">
                 <div class="handle-box">
-                    <label style="margin-right: 10px">
-                        <span>智能检索设备</span>
+                    <label style="margin-right: 5px">
+                        <span>智能检索误做反馈</span>
                         <span>:</span>
-                        <el-input v-model="select_word" placeholder="智能检索设备" class="handle-input mr10" style="width: 200px"></el-input>
+                        <el-input v-model="select_word" placeholder="智能检索误做反馈" class="handle-input mr10"  style="width: 200px"></el-input>
                     </label>
-                    <label style="margin-right: 10px;margin-left: 10px">
+                    <label style="margin-right: 5px;margin-left:5px">
                         <span>选择查询时间</span>
                         <span>:</span>
                         <el-date-picker
@@ -27,46 +27,26 @@
                         </el-date-picker>
                     </label>
                     <label style="margin-right: 5px;margin-left: 5px">
-                        <span>生产线</span>
+                        <span>误做类型</span>
                         <span>:</span>
                         <el-select
-                            style="width: 120px"
-                            v-model="line"
+                            style="width: 150px"
+                            v-model="wuzuo"
                             clearable
                             filterable
                             allow-create
                             default-first-option
-                            @change="changeSCX"
-                            placeholder="请选择生产线">
-                            <el-option
-                                v-for="item in lineOptions"
-                                :key="item.indexno"
-                                :label="item.name"
-                                :value="item.indexno">
-                            </el-option>
-                        </el-select>
-                    </label>
-                    <label style="margin-right: 10px;margin-left:5px">
-                        <span>工位</span>
-                        <span>:</span>
-                        <el-select
-                            style="width: 120px"
-                            v-model="workStation"
-                            clearable
-                            filterable
-                            allow-create
-                            default-first-option
-                            @change="changeSelect"
                             placeholder="请选择工位">
                             <el-option
-                                v-for="item in workStationOptions"
+                                v-for="item in wuzuoOptions"
                                 :key="item.id"
                                 :label="item.name"
                                 :value="item.id">
                             </el-option>
                         </el-select>
                     </label>
-                    <el-button type="primary" icon="delete" class="handle-del mr10" @click="doSearch">查询报表</el-button>
+                    <el-button type="primary"  class="handle-del mr10" @click="doSearch">查询</el-button>
+                    <el-button type="danger"  class="handle-del mr10" @click="importExcel">导出</el-button>
                 </div>
                 <div class="">
                     <el-table class="tb-edit"
@@ -74,8 +54,17 @@
                               :header-cell-style="{background:'#A1D0FC',color:'rgba(0, 0, 0, 0.8)',fontSize:'20px'}"
                               border
                               height="450"
+                              @select="selectList"
+                              @select-all="selectAll"
+                              @selection-change="selectionChange"
+                              ref="moviesTable"
+                              @row-dblclick="edit"
                               highlight-current-row
                               style="width: 98%;margin: auto">
+                        <el-table-column
+                            type="selection"
+                            width="30">
+                        </el-table-column>
                         <template v-for="(col ,index) in cols">
                             <el-table-column align="center" :prop="col.prop" :label="col.label"></el-table-column>
                         </template>
@@ -101,18 +90,22 @@
                 message: '',
                 HideModal: true,
 
+                val:[],
+
+
+                listData:[],
+
+                id:"",
+
+
                 cols: [],
                 tableData: [],
 
-                batch: "",
-                batchOptions: [],
-
                 select_word: '',
-                examineTime: "",
-                workStation:"",
-                workStationOptions:[],
-                line: '',
-                lineOptions: [],
+
+
+                wuzuo: "1",
+                wuzuoOptions: [{"name": "客户反馈的误做", "id": "1"}, {"name": "加工线内部误做", "id": "2"}],
 
 
             }
@@ -154,28 +147,16 @@
                         times.push(time)
                     }
                     this.examineTime = times;
-
-                    let that = this;
-                    axios.all([
-                        axios.post(" " + url + "/sys/dictionaryList", {"id": "9"}),
-                        axios.post(" " + url + "/api/getPersonProcessList", {"name": ""}),
-                    ])
-                        .then(axios.spread(function (line,workStation) {
-                            that.lineOptions = line.data;
-                            that.line = line.data[0].indexno;
-                            that.workStation = workStation.data[0].id;
-                            that.workStationOptions = workStation.data;
-                            that.loadingShowData(1);
-                        }));
+                    this.loadingShowData(this.examineTime,2);
                 }
             },
 
             //瞬间加载数据
-            loadingShowData(data) {
+            loadingShowData(data1,data2) {
                 let that = this;
                 axios.all([
-                    axios.post(" " + url + "/sys/showTableTitle", {"name": "sbgzlbb"}),
-                    axios.post(" " + url + "/wuliao/jinwuZhuwenpinList", {"time": data})
+                    axios.post(" " + url + "/sys/showTableTitle", {"name": "khfkdwz"}),
+                    axios.post(" " + url + "/devType/devTypeList",{"times":data1,"type":data2})
                 ])
                     .then(axios.spread(function (title, table) {
                         that.cols = title.data;
@@ -183,38 +164,15 @@
                     }));
             },
 
-            //改变生产线
-            changeSCX(){
-                axios.post(" " + url + "/sysconfig/getGongxuList", {"id": this.line})
-                    .then((res) => {
-                        this.workStation = res.data[0].id;
-                        this.workStationOptions = res.data;
-                        this.loadingShowData(this.workStation)
-                    });
+            doSearch(){
+                this.loadingShowData(this.examineTime,this.wuzuo);
             },
 
-            //根据工位选择
-            changeSelect() {
-                this.loadingShowData(this.workStation)
-            },
-
-            //根据时间,生产线，工位查询
-            doSearch() {
-                if (this.examineTime && this.line && this.workStation) {
-                    this.loadingShowData(this.examineTime,this.line,this.workStation)
-                }
-                else {
-                    this.message = "查询条件不能为空";
-                    this.HideModal = false;
-                    const that = this;
-                    function a() {
-                        that.message = "";
-                        that.HideModal = true;
-                    }
-                    setTimeout(a, 2000);
-                }
+            importExcel(){
 
             }
+
+
 
         }
     }
@@ -234,14 +192,14 @@
         .template-content {
             .handle-box {
                 height: 80px;
-                line-height: 80px;
+                line-height:80px;
                 padding-left: 20px;
                 .handle-input {
                     width: 300px;
                     display: inline-block;
                 }
                 .el-button {
-                    width: 100px;
+                    width:100px;
                     height: 30px;
                 }
             }
@@ -252,9 +210,6 @@
             .table {
                 width: 100%;
                 font-size: 14px;
-            }
-            .red {
-                color: #ff0000;
             }
 
         }

@@ -723,7 +723,7 @@ export default new Router({
                         },
                         {
                             path: 'wuzuotongji',
-                            component: ExceptionQuery,
+                            component: wuzuotongji,
                             meta: {title: 'wuzuotongji'}
                         },
                         {
