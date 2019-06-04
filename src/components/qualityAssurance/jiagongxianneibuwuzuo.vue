@@ -2,20 +2,32 @@
     <div class="template">
         <div class="crumbs">
             <el-breadcrumb separator="/">
-                <el-breadcrumb-item>设备管理</el-breadcrumb-item>
-                <el-breadcrumb-item>定义分类</el-breadcrumb-item>
+                <el-breadcrumb-item>质量管理</el-breadcrumb-item>
+                <el-breadcrumb-item>加工线内部误作</el-breadcrumb-item>
             </el-breadcrumb>
         </div>
         <div class="template-content">
             <div class="container">
                 <div class="handle-box">
                     <label style="margin-right: 10px">
-                        <span>智能检索分类</span>
+                        <span>智能检索误做反馈</span>
                         <span>:</span>
-                        <el-input v-model="select_word" placeholder="智能检索分类" class="handle-input mr10"></el-input>
+                        <el-input v-model="select_word" placeholder="智能检索误做反馈" class="handle-input mr10"></el-input>
                     </label>
-                    <el-button type="primary" icon="delete" class="handle-del mr10" @click="showAdd">新增分类</el-button>
-                    <el-button type="danger" icon="delete" class="handle-del mr10" @click="showDelete">删除分类</el-button>
+                    <label style="margin-right: 10px;margin-left: 10px">
+                        <span>选择查询时间</span>
+                        <span>:</span>
+                        <el-date-picker
+                            style="width: 240px"
+                            v-model="examineTime"
+                            type="daterange"
+                            start-placeholder="开始日期"
+                            end-placeholder="结束日期"
+                            value-format="yyyy-MM-dd">
+                        </el-date-picker>
+                    </label>
+                    <el-button type="primary" icon="delete" class="handle-del mr10" @click="showAdd">新增反馈</el-button>
+                    <el-button type="danger" icon="delete" class="handle-del mr10" @click="showDelete">删除反馈</el-button>
                 </div>
                 <div class="">
                     <el-table class="tb-edit"
@@ -41,10 +53,19 @@
                 </div>
             </div>
             <!--新增弹出框 -->
-            <el-dialog title="新增分类" :visible.sync="addVisible" width="40%">
+            <el-dialog title="新增反馈" :visible.sync="addVisible" width="40%">
                 <el-form ref="form"  label-width="100px">
-                    <el-form-item label="分类名称">
-                        <el-input v-model="name" style="width: 200px"></el-input>
+                    <el-form-item label="船号">
+                        <el-input v-model="chuanhao" style="width: 200px"></el-input>
+                    </el-form-item>
+                    <el-form-item label="管子编号">
+                        <el-input v-model="guanzibianhao" style="width: 200px"></el-input>
+                    </el-form-item>
+                    <el-form-item label="反馈人">
+                        <el-input v-model="fankuiren" style="width: 200px"></el-input>
+                    </el-form-item>
+                    <el-form-item label="误作详情">
+                        <el-input v-model="wuzuoxiangqing" style="width: 300px"></el-input>
                     </el-form-item>
                 </el-form>
                 <span slot="footer" class="dialog-footer">
@@ -54,10 +75,21 @@
             </el-dialog>
 
             <!-- 编辑弹出框 -->
-            <el-dialog title="编辑分类" :visible.sync="editVisible" width="40%">
+            <el-dialog title="编辑反馈" :visible.sync="editVisible" width="40%">
                 <el-form ref="form"  label-width="100px">
                     <el-form-item label="分类名称">
-                        <el-input v-model="name" style="width: 200px"></el-input>
+                        <el-form-item label="船号">
+                            <el-input v-model="chuanhao" style="width: 200px"></el-input>
+                        </el-form-item>
+                        <el-form-item label="管子编号">
+                            <el-input v-model="guanzibianhao" style="width: 200px"></el-input>
+                        </el-form-item>
+                        <el-form-item label="反馈人">
+                            <el-input v-model="name" style="width: 200px"></el-input>
+                        </el-form-item>
+                        <el-form-item label="误作详情">
+                            <el-input v-model="name"></el-input>
+                        </el-form-item>
                     </el-form-item>
                 </el-form>
                 <span slot="footer" class="dialog-footer">
@@ -67,7 +99,7 @@
             </el-dialog>
 
             <!-- 删除提示框 -->
-            <el-dialog title="删除分类" :visible.sync="delVisible" width="300px" center>
+            <el-dialog title="删除反馈" :visible.sync="delVisible" width="300px" center>
                 <div class="del-dialog-cnt">删除不可恢复，是否确定删除？</div>
                 <span slot="footer" class="dialog-footer">
                 <el-button @click="cancelDelete" style="height:30px;width:80px">取 消</el-button>
@@ -85,6 +117,7 @@
     import axios from 'axios'
     import url from '../../assets/js/URL'
     import Modal from '../../common/modal'
+    import {getNowTime} from '../../assets/js/api'
 
     export default {
         name: 'WorkingProcedure',
@@ -111,8 +144,10 @@
                 delVisible: false,
 
 
-                name: "",
-
+                chuanhao: "",
+                guanzibianhao:"",
+                fankuiren:"",
+                wuzuoxiangqing:""
 
 
             }
@@ -148,16 +183,22 @@
                     this.$router.push("/")
                 }
                 else {
-                    this.loadingShowData();
+                    let time = getNowTime();
+                    let times = [];
+                    for (let i = 0; i < 2; i++) {
+                        times.push(time)
+                    }
+                    this.examineTime = times;
+                    this.loadingShowData(this.examineTime,2);
                 }
             },
 
             //瞬间加载数据
-            loadingShowData() {
+            loadingShowData(data1,data2) {
                 let that = this;
                 axios.all([
-                    axios.post(" " + url + "/sys/showTableTitle", {"name": "dyhcflmc"}),
-                    axios.post(" " + url + "/devType/devTypeList")
+                    axios.post(" " + url + "/sys/showTableTitle", {"name": "khfkdwz"}),
+                    axios.post(" " + url + "/devType/devTypeList",{"times":data1,"type":data2})
                 ])
                     .then(axios.spread(function (title, table) {
                         that.cols = title.data;
@@ -198,22 +239,29 @@
             //显示新增
             showAdd(){
                 this.addVisible=true;
-                this.name= "";
+                this.chuanhao = "";
+                this.guanzibianhao = "";
+                this.fankuiren = "";
+                this.wuzuoxiangqing = "";
             },
 
             //进行新增
             doAdd() {
-                if (this.name ) {
+                if (this.chuanhao && this.guanzibianhao && this.fankuiren && this.wuzuoxiangqing) {
                     axios.post(" " + url + "/devType/devTypeAdd",
                         {
-                            "name": this.name
+                            "type":2,
+                            "chuanhao":  this.chuanhao,
+                            "guanzibianhao":  this.guanzibianhao,
+                            "fankuiren":  this.fankuiren,
+                            "wuzuoxiangqing":  this.wuzuoxiangqing
                         }
                     )
                         .then((res) => {
                             if (res.data === "1") {
                                 this.$message.success(`新增成功`);
                                 this.addVisible = false;
-                                this.loadingShowData(this.workStation)
+                                this.loadingShowData(this.examineTime,2);
 
                             }
                             else {
@@ -235,7 +283,10 @@
                 this.id = row.id;
                 axios.post(" " + url + "/devType/devTypeDetail", {"id": this.id})
                     .then((res) => {
-                        this.name = res.data.name;
+                        this.chuanhao =res.data.chuanhao;
+                        this.guanzibianhao =res.data.guanzibianhao;
+                        this.fankuiren = res.data.fankuiren;
+                        this.wuzuoxiangqing = res.data.wuzuoxiangqing;
                     })
                     .catch((err) => {
                         console.log(err)
@@ -244,18 +295,22 @@
 
             // 保存编辑
             saveEdit() {
-                if (this.name) {
+                if (this.chuanhao && this.guanzibianhao && this.fankuiren && this.wuzuoxiangqing) {
                     axios.post(" " + url + "/devType/updateDevType",
                         {
                             "id": this.id,
-                            "name": this.name,
+                            "type":2,
+                            "chuanhao":  this.chuanhao,
+                            "guanzibianhao":  this.guanzibianhao,
+                            "fankuiren":  this.fankuiren,
+                            "wuzuoxiangqing":  this.wuzuoxiangqing
                         }
                     )
                         .then((res) => {
                             if (res.data === "1") {
                                 this.editVisible = false;
                                 this.$message.success("修改成功");
-                                this.loadingShowData()
+                                this.loadingShowData(this.examineTime,2);
                             }
                             else {
                                 this.$message.warning(res.data.message);
@@ -313,7 +368,7 @@
                         if (res.data === "1") {
                             this.$message.success("删除成功");
                             this.delVisible = false;
-                            this.loadingShowData();
+                            this.loadingShowData(this.examineTime,2);
                         }
                         else {
                             this.$message.warning(res.data.message);
@@ -343,7 +398,7 @@
             .handle-box {
                 height: 80px;
                 line-height:80px;
-                padding-left: 50px;
+                padding-left: 20px;
                 .handle-input {
                     width: 300px;
                     display: inline-block;
@@ -361,12 +416,10 @@
                 width: 100%;
                 font-size: 14px;
             }
-            .red {
-                color: #ff0000;
-            }
 
         }
     }
 
 
 </style>
+
