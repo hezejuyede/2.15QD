@@ -215,15 +215,24 @@ import kehufankuiwuzuo from '../components/qualityAssurance/kehufankuiwuzuo';
 import jiagongxianneibuwuzuo from '../components/qualityAssurance/jiagongxianneibuwuzuo';
 
 //误作查询
-import wuzuochaxun from '../components/qualityAssurance/wuzuochaxun';
+import wuzuochaxun from '../components/qualityAssurance/wuzuochaxunbaobiao';
 
 //误作统计
 import wuzuotongji from '../components/qualityAssurance/wuzuotongji';
 
 
+//船东船级意见报表
 
+import chuandongyijianfankui from '../components/qualityAssurance/chuandongyijianfankui';
 
+//船东船级意见的查询与统计
+import chuanjiyijianfankui from '../components/qualityAssurance/chuanjiyijianfankui';
 
+//船级意见反馈
+import chuanjichuandongchaxuntongji from '../components/qualityAssurance/chuanjichuandongchaxuntongji';
+
+//船东船东意见报表
+import chuanqichuandongbaobiao from '../components/qualityAssurance/chuanqichuandongbaobiao';
 
 
 
@@ -724,12 +733,32 @@ export default new Router({
                         {
                             path: 'wuzuotongji',
                             component: wuzuotongji,
-                            meta: {title: 'wuzuotongji'}
+                            meta: {title: '误做查询与统计'}
                         },
                         {
                             path: 'OperatorMainPoints',
                             component: OperatorMainPoints,
                             meta: {title: '作业者要点内容'}
+                        },
+                        {
+                            path: 'chuandongyijianfankui',
+                            component: chuandongyijianfankui,
+                            meta: {title: '船东意见反馈'}
+                        },
+                        {
+                            path: 'chuanjiyijianfankui',
+                            component: chuanjiyijianfankui,
+                            meta: {title: '船级意见反馈'}
+                        },
+                        {
+                            path: 'chuanjichuandongchaxuntongji',
+                            component: chuanjichuandongchaxuntongji,
+                            meta: {title: '船东船级意见的查询与统计'}
+                        },
+                        {
+                            path: 'chuanqichuandongbaobiao',
+                            component: chuanqichuandongbaobiao,
+                            meta: {title: '船东船级意见报表'}
                         }
                     ]
                 },

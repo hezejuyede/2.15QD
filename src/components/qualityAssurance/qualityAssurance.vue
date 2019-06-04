@@ -75,12 +75,7 @@
                                 url: "/QualityAssurance/jiagongxianneibuwuzuo"
                             },
                             {
-                                label: '误作查询',
-                                index: "2-3",
-                                url: "/QualityAssurance/wuzuochaxun"
-                            },
-                            {
-                                label: '误作统计',
+                                label: '误作查询与统计',
                                 index: "2-3",
                                 url: "/QualityAssurance/wuzuotongji"
                             }
@@ -94,12 +89,17 @@
                             {
                                 label: '船东意见反馈',
                                 index: "3-1",
-                                url: "/404"
+                                url: "/QualityAssurance/chuandongyijianfankui"
                             },
                             {
                                 label: '船级意见反馈',
                                 index: "3-2",
-                                url: "/404"
+                                url: "/QualityAssurance/chuanjiyijianfankui"
+                            },
+                            {
+                                label: '船东船级意见的查询与统计',
+                                index: "3-3",
+                                url: "/QualityAssurance/chuanjichuandongchaxuntongji"
                             }
                         ]
                     },
@@ -188,13 +188,13 @@
                             },
                             {
                                 label: '误作报表',
-                                index: "7-2",
-                                url: "/404"
+                                index: "2-2",
+                                url: "/QualityAssurance/wuzuochaxun"
                             },
                             {
                                 label: '船东船级意见报表',
                                 index: "7-3",
-                                url: "/404"
+                                url: "/QualityAssurance/chuanqichuandongbaobiao"
                             },
                             {
                                 label: '质量提醒报表',
