@@ -10,8 +10,6 @@
             <div class="container">
                 <div class="handle-box">
                     <label style="margin-right: 5px">
-                        <span>智能检索项目</span>
-                        <span>:</span>
                         <el-input v-model="select_word" placeholder="智能检索项目" class="handle-input mr10"
                                   style="width: 150px"></el-input>
                     </label>
@@ -390,6 +388,7 @@
     import url from '../../assets/js/URL'
     import Modal from '../../common/modal'
 
+
     export default {
         name: 'WorkingProcedure',
         data() {
@@ -557,13 +556,6 @@
                         if (res.data.length > 0) {
                             this.buwei = res.data[0].id;
                             this.buweiOptions = res.data;
-                            axios.post(" " + url + "/shebei/contentListByShebei", {"shebeiid": this.shebei})
-                                .then((res) => {
-                                    this.tableData = res.data.data;
-                                })
-                                .catch((err) => {
-                                    console.log(err)
-                                })
                         }
                         else {
                             this.buwei = "";

@@ -187,7 +187,7 @@ import shebeizhuangtaishishijiankongtu from '../components/productionMonitoring/
 import zgsjStatistics from '../components/personnelManagement/zgsjStatistics'
 
 
-import QualityAssurance from '../components/qualityAssurance/qualityAssurance'
+
 
 
 import SystemManagement from '../components/systemManagement/systemManagement';
@@ -196,13 +196,42 @@ import SystemManagement from '../components/systemManagement/systemManagement';
 import SecurityManagement from '../components/securityManagement/securityManagement';
 
 
-import PersonnelManagement from '../components/personnelManagement/personnelManagement';
 
 
 
+//质量管理模块
+import QualityAssurance from '../components/qualityAssurance/qualityAssurance'
 
-//质量管理
+//不具合查询与统计
 import ExceptionQuery from '../components/qualityAssurance/exceptionQuery';
+
+//作业者要点内容
+import OperatorMainPoints from '../components/qualityAssurance/operatorMainPoints';
+
+//客户反馈的误作
+import kehufankuiwuzuo from '../components/qualityAssurance/kehufankuiwuzuo';
+
+//加工线内部误作
+import jiagongxianneibuwuzuo from '../components/qualityAssurance/jiagongxianneibuwuzuo';
+
+//误作查询
+import wuzuochaxun from '../components/qualityAssurance/wuzuochaxun';
+
+//误作统计
+import wuzuotongji from '../components/qualityAssurance/wuzuotongji';
+
+
+
+
+
+
+
+
+
+
+
+//人员模块
+import PersonnelManagement from '../components/personnelManagement/personnelManagement';
 
 
 //部门管理
@@ -270,7 +299,7 @@ import LoginOutLog from '../components/systemManagement/loginOutLog';
 import DictionaryMaintenance from '../components/systemManagement/dictionaryMaintenance';
 import HeaderMaintenance from '../components/systemManagement/headerMaintenance';
 import LoginSecurityAlert from '../components/securityManagement/loginSecurityAlert';
-import OperatorMainPoints from '../components/qualityAssurance/operatorMainPoints';
+
 import ListDetails from '../components/systemManagement/listDetails';
 
 
@@ -675,7 +704,27 @@ export default new Router({
                         {
                             path: 'ExceptionQuery',
                             component: ExceptionQuery,
-                            meta: {title: '异常查询'}
+                            meta: {title: '不具合查询与统计'}
+                        },
+                        {
+                            path: 'kehufankuiwuzuo',
+                            component: kehufankuiwuzuo,
+                            meta: {title: '不具合查询与统计'}
+                        },
+                        {
+                            path: 'jiagongxianneibuwuzuo',
+                            component: jiagongxianneibuwuzuo,
+                            meta: {title: '不具合查询与统计'}
+                        },
+                        {
+                            path: 'wuzuochaxun',
+                            component: wuzuochaxun,
+                            meta: {title: '不具合查询与统计'}
+                        },
+                        {
+                            path: 'wuzuotongji',
+                            component: ExceptionQuery,
+                            meta: {title: 'wuzuotongji'}
                         },
                         {
                             path: 'OperatorMainPoints',

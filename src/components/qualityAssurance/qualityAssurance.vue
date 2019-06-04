@@ -63,29 +63,34 @@
                         label: '误作跟踪',
                         index: "2",
                         url: "/404",
-                        /*children: [
+                        children: [
                             {
                                 label: '客户反馈的误作',
                                 index: "2-1",
-                                url: "/404"
+                                url: "/QualityAssurance/kehufankuiwuzuo"
                             },
                             {
                                 label: "加工线内部误作",
                                 index: "2-2",
-                                url: "/404"
+                                url: "/QualityAssurance/jiagongxianneibuwuzuo"
                             },
                             {
-                                label: '误作查询与统计',
+                                label: '误作查询',
                                 index: "2-3",
-                                url: "/404"
+                                url: "/QualityAssurance/wuzuochaxun"
+                            },
+                            {
+                                label: '误作统计',
+                                index: "2-3",
+                                url: "/QualityAssurance/wuzuotongji"
                             }
-                        ]*/
+                        ]
                     },
                     {
                         label: '船东船级意见反馈',
                         index: "3",
                         url: "/404",
-                       /* children: [
+                        children: [
                             {
                                 label: '船东意见反馈',
                                 index: "3-1",
@@ -96,13 +101,13 @@
                                 index: "3-2",
                                 url: "/404"
                             }
-                        ]*/
+                        ]
                     },
                     {
                         label: '作业工位质量记录',
                         index: "4",
                         url: "/404",
-                      /*  children: [
+                        children: [
                             {
                                 label: '常规自检记录',
                                 index: "4-1",
@@ -118,7 +123,7 @@
                                 index: "4-1",
                                 url: "/404"
                             }
-                        ]*/
+                        ]
                     },
                     {
                         label: '质量提醒推送',
@@ -130,7 +135,7 @@
                                 index: "5-1",
                                 url: "/QualityAssurance/OperatorMainPoints"
                             },
-                           /* {
+                            {
                                 label: '质量提醒查阅',
                                 index: "5-2",
                                 url: "/404"
@@ -145,14 +150,14 @@
                                 label: '质量提醒的查询与统计',
                                 index: "5-4",
                                 url: "/404"
-                            }*/
+                            }
                         ]
                     },
                     {
                         label: '质量基准学习',
                         index: "6",
                         url: "/404",
-                      /*  children: [
+                        children: [
                             {
                                 label: '作业基准上传',
                                 index: "6-1",
@@ -168,14 +173,14 @@
                                 index: "6-3",
                                 url: "/404"
                             }
-                        ]*/
+                        ]
 
                     },
                     {
                         label: '质量报表',
                         index: "7",
                         url: "/404",
-                       /* children: [
+                        children: [
                             {
                                 label: '不具合报表',
                                 index: "7-1",
@@ -211,19 +216,19 @@
                                 index: "7-3",
                                 url: "/404"
                             }
-                        ]*/
+                        ]
                     },
                     {
                         label: '质量监控',
                         index: "8",
                         url: "/404",
-                       /* children: [
+                        children: [
                             {
                                 label: '质量监控综合地图',
                                 index: "8-1",
                                 url: "/404"
                             }
-                        ]*/
+                        ]
                     }
                 ],
                 activeIndex: '1',

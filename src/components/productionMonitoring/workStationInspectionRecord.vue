@@ -146,7 +146,6 @@
                             filterable
                             allow-create
                             default-first-option
-                            @change="changeSCX"
                             placeholder="请选择设备">
                             <el-option
                                 v-for="item in shebeiOptions"

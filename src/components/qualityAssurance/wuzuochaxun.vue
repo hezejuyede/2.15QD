@@ -3,17 +3,19 @@
         <div class="crumbs">
             <el-breadcrumb separator="/">
                 <el-breadcrumb-item>设备管理</el-breadcrumb-item>
-                <el-breadcrumb-item>点检记录查询与统计</el-breadcrumb-item>
+                <el-breadcrumb-item>设备故障率报表</el-breadcrumb-item>
             </el-breadcrumb>
         </div>
         <div class="template-content">
             <div class="container">
                 <div class="handle-box">
-                    <label style="margin-right: 5px">
-                        <el-input v-model="select_word" placeholder="检索点检记录" class="handle-input mr10" style="width: 150px"></el-input>
+                    <label style="margin-right: 10px">
+                        <span>智能检索设备</span>
+                        <span>:</span>
+                        <el-input v-model="select_word" placeholder="智能检索设备" class="handle-input mr10" style="width: 200px"></el-input>
                     </label>
-                    <label style="margin-right: 5px;margin-left: 5px">
-                        <span>时间</span>
+                    <label style="margin-right: 10px;margin-left: 10px">
+                        <span>选择查询时间</span>
                         <span>:</span>
                         <el-date-picker
                             style="width: 240px"
@@ -24,11 +26,11 @@
                             value-format="yyyy-MM-dd">
                         </el-date-picker>
                     </label>
-                    <label style="margin-right: 10px;margin-left: 5px">
+                    <label style="margin-right: 5px;margin-left: 5px">
                         <span>生产线</span>
                         <span>:</span>
                         <el-select
-                            style="width: 150px"
+                            style="width: 120px"
                             v-model="line"
                             clearable
                             filterable
@@ -44,18 +46,17 @@
                             </el-option>
                         </el-select>
                     </label>
-                    <label style="margin-right: 10px;margin-left: 5px">
+                    <label style="margin-right: 10px;margin-left:5px">
                         <span>工位</span>
                         <span>:</span>
                         <el-select
-                            style="width: 150px"
+                            style="width: 120px"
                             v-model="workStation"
                             clearable
                             filterable
                             allow-create
                             default-first-option
                             @change="changeSelect"
-
                             placeholder="请选择工位">
                             <el-option
                                 v-for="item in workStationOptions"
@@ -65,28 +66,7 @@
                             </el-option>
                         </el-select>
                     </label>
-                    <label style="margin-right: 10px;margin-left: 5px">
-                        <span>设备</span>
-                        <span>:</span>
-                        <el-select
-                            style="width: 150px"
-                            v-model="shebei"
-                            clearable
-                            filterable
-                            allow-create
-                            default-first-option
-                            @change="changeSB"
-                            placeholder="请选择设备">
-                            <el-option
-                                v-for="item in shebeiOptions"
-                                :key="item.id"
-                                :label="item.name"
-                                :value="item.id">
-                            </el-option>
-                        </el-select>
-                    </label>
-                    <el-button type="primary" icon="delete" class="handle-del mr10" @click="showAdd">查询</el-button>
-                    <el-button type="success" icon="delete" class="handle-del mr10" @click="showAdd">导出</el-button>
+                    <el-button type="primary" icon="delete" class="handle-del mr10" @click="doSearch">查询报表</el-button>
                 </div>
                 <div class="">
                     <el-table class="tb-edit"
@@ -94,45 +74,18 @@
                               :header-cell-style="{background:'#A1D0FC',color:'rgba(0, 0, 0, 0.8)',fontSize:'20px'}"
                               border
                               height="450"
-                              @select-all="selectAll"
-                              @select="selectList"
-                              @row-dblclick="edit"
                               highlight-current-row
                               style="width: 98%;margin: auto">
-                        <el-table-column
-                            type="selection"
-                            width="30">
-                        </el-table-column>
                         <template v-for="(col ,index) in cols">
                             <el-table-column align="center" :prop="col.prop" :label="col.label"></el-table-column>
                         </template>
                     </el-table>
                 </div>
             </div>
-            <!--新增弹出框 -->
-            <el-dialog title="进行点检" :visible.sync="addVisible" width="40%">
-                <el-form ref="form"  label-width="100px">
-                    <el-form-item label="记录内容">
-                        <el-input v-model="jvnr" style="width: 200px"></el-input>
-                    </el-form-item>
-                    <el-form-item label="点检状态">
-                        <el-input v-model="djzt" style="width: 200px"></el-input>
-                    </el-form-item>
-                    <el-form-item label="备注">
-                        <el-input v-model="beizhu" style="width: 200px"></el-input>
-                    </el-form-item>
-                </el-form>
-                <span slot="footer" class="dialog-footer">
-                <el-button @click="addVisible = false" style="height:30px;width:80px">取 消</el-button>
-                <el-button type="primary" @click="doAdd" style="height:30px;width:80px">确 定</el-button>
-            </span>
-            </el-dialog>
 
             <Modal :msg="message"
                    :isHideModal="HideModal"></Modal>
         </div>
-
-
     </div>
 </template>
 <script type="text/ecmascript-6">
@@ -147,30 +100,21 @@
             return {
                 message: '',
                 HideModal: true,
-                listData:[],
-                id:"",
-
 
                 cols: [],
                 tableData: [],
 
+                batch: "",
+                batchOptions: [],
+
                 select_word: '',
-
-                addVisible: false,
-                editVisible: false,
-
-
+                examineTime: "",
                 workStation:"",
                 workStationOptions:[],
                 line: '',
                 lineOptions: [],
-                examineTime:"",
-                shebei: "",
-                shebeiOptions: [],
 
-                jvnr:"",
-                djzt:"",
-                beizhu:"",
+
             }
         },
         computed: {
@@ -216,83 +160,61 @@
                         axios.post(" " + url + "/sys/dictionaryList", {"id": "9"}),
                         axios.post(" " + url + "/api/getPersonProcessList", {"name": ""}),
                     ])
-                        .then(axios.spread(function (line, workStation) {
+                        .then(axios.spread(function (line,workStation) {
                             that.lineOptions = line.data;
                             that.line = line.data[0].indexno;
                             that.workStation = workStation.data[0].id;
                             that.workStationOptions = workStation.data;
-                            axios.all([
-                                axios.post(" " + url + "/shebei/shebeiList", {
-                                    "jiagongxian": that.line,
-                                    "stationid": that.workStation
-                                })
-                            ])
-                                .then(axios.spread(function (shebei) {
-                                    that.shebei = shebei.data[0].id;
-                                    that.shebeiOptions = shebei.data;
-                                    that.loadingShowData(that.shebei,that.examineTime)
-                                }));
+                            that.loadingShowData(1);
                         }));
-
                 }
             },
 
             //瞬间加载数据
-            loadingShowData(data1,data2) {
+            loadingShowData(data) {
                 let that = this;
                 axios.all([
-                    axios.post(" " + url + "/sys/showTableTitle", {"name": "zxdsbdjjlcx"}),
-                    axios.post(" " + url + "/shebei/getShebeiRecord", {"id": data1,"times":data2})
+                    axios.post(" " + url + "/sys/showTableTitle", {"name": "sbgzlbb"}),
+                    axios.post(" " + url + "/wuliao/jinwuZhuwenpinList", {"time": data})
                 ])
                     .then(axios.spread(function (title, table) {
                         that.cols = title.data;
-                        that.tableData = table.data.data;
+                        that.tableData = table.data;
                     }));
             },
 
+            //改变生产线
             changeSCX(){
                 axios.post(" " + url + "/sysconfig/getGongxuList", {"id": this.line})
                     .then((res) => {
-                        if (res.data.length > 0) {
-                            this.workStation = res.data[0].id;
-                            this.workStationOptions = res.data;
-                        }
-                        else {
-                            this.workStation = "";
-                            this.workStationOptions = [];
-                            this.shebei = "";
-                            this.shebeiOptions = [];
-                        }
+                        this.workStation = res.data[0].id;
+                        this.workStationOptions = res.data;
+                        this.loadingShowData(this.workStation)
                     });
             },
 
             //根据工位选择
             changeSelect() {
-                this.loadingShowData(this.shebei,this.examineTime)
+                this.loadingShowData(this.workStation)
             },
 
-
-            //显示新增
-            showAdd(){
-
-                if (this.listData.length) {
-                    this.addVisible = true;
+            //根据时间,生产线，工位查询
+            doSearch() {
+                if (this.examineTime && this.line && this.workStation) {
+                    this.loadingShowData(this.examineTime,this.line,this.workStation)
                 }
                 else {
-                    this.message = "请勾选要点检的工位";
+                    this.message = "查询条件不能为空";
                     this.HideModal = false;
                     const that = this;
-
                     function a() {
                         that.message = "";
                         that.HideModal = true;
                     }
-
                     setTimeout(a, 2000);
                 }
-            },
 
-
+            }
 
         }
     }
@@ -312,14 +234,14 @@
         .template-content {
             .handle-box {
                 height: 80px;
-                line-height:80px;
+                line-height: 80px;
                 padding-left: 20px;
                 .handle-input {
                     width: 300px;
                     display: inline-block;
                 }
                 .el-button {
-                    width:100px;
+                    width: 100px;
                     height: 30px;
                 }
             }
