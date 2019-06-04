@@ -759,6 +759,28 @@ export default new Router({
                             path: 'chuanqichuandongbaobiao',
                             component: chuanqichuandongbaobiao,
                             meta: {title: '船东船级意见报表'}
+                        },
+
+
+                        {
+                            path: 'zuoyejizhunshangchuan',
+                            component: zuoyejizhunshangchuan,
+                            meta: {title: '作业基准上传'}
+                        },
+                        {
+                            path: 'xuexizhibiaoxiada',
+                            component: xuexizhibiaoxiada,
+                            meta: {title: '学习指示下达'}
+                        },
+                        {
+                            path: 'xuexibaogaotongji',
+                            component: xuexibaogaotongji,
+                            meta: {title: '学习报告统计'}
+                        },
+                        {
+                            path: 'zhiliangjizhunbaobiao',
+                            component: zhiliangjizhunbaobiao,
+                            meta: {title: '质量基准报表'}
                         }
                     ]
                 },

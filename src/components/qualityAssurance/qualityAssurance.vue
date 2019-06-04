@@ -161,17 +161,17 @@
                             {
                                 label: '作业基准上传',
                                 index: "6-1",
-                                url: "/404"
+                                url: "/QualityAssurance/zuoyejizhunshangchuan"
                             },
                             {
                                 label: '学习指示下达',
                                 index: "6-2",
-                                url: "/404"
+                                url: "/QualityAssurance/xuexizhibiaoxiada"
                             },
                             {
                                 label: '学习报告统计',
                                 index: "6-3",
-                                url: "/404"
+                                url: "/QualityAssurance/xuexibaogaotongji"
                             }
                         ]
 
@@ -188,7 +188,7 @@
                             },
                             {
                                 label: '误作报表',
-                                index: "2-2",
+                                index: "7-2",
                                 url: "/QualityAssurance/wuzuochaxun"
                             },
                             {
@@ -198,23 +198,23 @@
                             },
                             {
                                 label: '质量提醒报表',
-                                index: "7-2",
+                                index: "7-4",
                                 url: "/404"
                             },
                             {
                                 label: '质量记录报表',
-                                index: "7-3",
+                                index: "7-5",
                                 url: "/404"
                             },
                             {
                                 label: '质量提醒报表',
-                                index: "7-2",
+                                index: "7-6",
                                 url: "/404"
                             },
                             {
                                 label: '质量基准报表',
-                                index: "7-3",
-                                url: "/404"
+                                index: "7-7",
+                                url: "/zhiliangjizhunbaobiao"
                             }
                         ]
                     },
