@@ -2,19 +2,39 @@
     <div class="editorTemplate">
         <div class="crumbs">
             <el-breadcrumb separator="/">
-                <el-breadcrumb-item>系统管理</el-breadcrumb-item>
-                <el-breadcrumb-item>作业者界面要点内容提示</el-breadcrumb-item>
+                <el-breadcrumb-item>质量管理</el-breadcrumb-item>
+                <el-breadcrumb-item>作业基准上传</el-breadcrumb-item>
             </el-breadcrumb>
         </div>
         <div class="editorTemplate-content">
             <div class="container">
                 <div class="handle-box">
-                    <label style="margin-right: 10px">
-                        <span>筛选要点</span>
+                    <label style="margin-right: 5px">
+                        <span>筛选作业基准</span>
                         <span>:</span>
-                        <el-input v-model="select_word" placeholder="筛选要点" class="handle-input mr10"></el-input>
+                        <el-input v-model="select_word" placeholder="筛选作业基准" class="handle-input mr10" style="width: 200px"></el-input>
                     </label>
-                    <label style="margin-right: 10px;margin-left: 10px">
+                    <label style="margin-right: 5px;margin-left: 5px">
+                        <span>生产线</span>
+                        <span>:</span>
+                        <el-select
+                            style="width: 150px"
+                            v-model="line"
+                            clearable
+                            filterable
+                            allow-create
+                            default-first-option
+                            @change="changeSCX"
+                            placeholder="请选择生产线">
+                            <el-option
+                                v-for="item in lineOptions"
+                                :key="item.indexno"
+                                :label="item.name"
+                                :value="item.indexno">
+                            </el-option>
+                        </el-select>
+                    </label>
+                    <label style="margin-right: 5px;margin-left: 5px">
                         <span>工位</span>
                         <span>:</span>
                         <el-select
@@ -32,10 +52,10 @@
                             </el-option>
                         </el-select>
                     </label>
-                    <el-button type="success" icon="delete" class="handle-del mr10" @click="doSearch">查询要点</el-button>
-                    <el-button type="primary" icon="delete" class="handle-del mr10" @click="showAdd">新增要点</el-button>
-                    <el-button type="warning" icon="delete" class="handle-del mr10" @click="showEdit">编辑要点</el-button>
-                    <el-button type="danger" icon="delete" class="handle-del mr10" @click="deleteAlert">删除要点</el-button>
+                    <el-button type="success" class="handle-del mr10" @click="doSearch">查询基准</el-button>
+                    <el-button type="primary" class="handle-del mr10" @click="showAdd">新增基准</el-button>
+                    <el-button type="warning" class="handle-del mr10" @click="showEdit">编辑基准</el-button>
+                    <el-button type="danger"  class="handle-del mr10" @click="deleteAlert">删除基准</el-button>
                 </div>
                 <div class="">
                     <el-table class="tb-edit"
@@ -59,7 +79,7 @@
             </div>
         </div>
         <!--新增弹出框 -->
-        <el-dialog title="新增要点内容提示" :visible.sync="addVisible" width="90%" top="50px">
+        <el-dialog title="新增作业基准" :visible.sync="addVisible" width="90%" top="50px">
             <div class="container" style="height:500px;overflow:auto">
                 <div class="containerDiv">
                     <quill-editor ref="myTextEditor" v-model="content" :options="editorOption"></quill-editor>
@@ -71,14 +91,14 @@
         </el-dialog>
 
         <!--详情弹出框 -->
-        <el-dialog title="要点内容提示详情" :visible.sync="contentVisible" width="90%" top="50px">
+        <el-dialog title="作业基准详情" :visible.sync="contentVisible" width="90%" top="50px">
             <div class="container" style="height:500px;overflow:auto">
                 <div class="" v-html="htmlData"></div>
             </div>
         </el-dialog>
 
         <!-- 编辑弹出框 -->
-        <el-dialog title="编辑要点内容提示" :visible.sync="editVisible" width="90%" top="50px">
+        <el-dialog title="编辑作业基准" :visible.sync="editVisible" width="90%" top="50px">
             <div class="container" style="height:500px;overflow:auto">
                 <div class="containerDiv">
                     <quill-editor ref="myTextEditor" v-model="content" :options="editorOption" height="300"></quill-editor>
@@ -90,7 +110,7 @@
         </el-dialog>
 
         <!-- 删除提示框 -->
-        <el-dialog title="删除要点内容提示" :visible.sync="delVisible" width="300px" center>
+        <el-dialog title="删除作业基准" :visible.sync="delVisible" width="300px" center>
             <div class="del-dialog-cnt">删除不可恢复，是否确定删除？</div>
             <span slot="footer" class="dialog-footer">
                 <el-button @click="delVisible = false" style="height:30px;width:80px">取 消</el-button>
@@ -138,7 +158,8 @@
                 contentVisible:false,
 
 
-
+                line: '',
+                lineOptions: [],
                 select:"",
                 selectOptions: [],
 
@@ -183,11 +204,14 @@
                 else {
                     let that = this;
                     axios.all([
+                        axios.post(" " + url + "/sys/dictionaryList", {"id": "9"}),
                         axios.post(" " + url + "/api/getPersonProcessList", {"name": ""}),
                     ])
-                        .then(axios.spread(function (select,title, table) {
-                            that.select= select.data[0].id;
-                            that.selectOptions = select.data;
+                        .then(axios.spread(function (line, workStation) {
+                            that.lineOptions = line.data;
+                            that.line = line.data[0].indexno;
+                            that.select= workStation.data[0].id;
+                            that.selectOptions = workStation.data;
                             that.loadingShowData(1)
 
                         }));
@@ -198,7 +222,7 @@
             loadingShowData(data){
                 let that = this;
                 axios.all([
-                    axios.post(" " + url + "/sys/showTableTitle", {"name": "zysx"}),
+                    axios.post(" " + url + "/sys/showTableTitle", {"name": "zuoyejizhunshangchuan"}),
                     axios.post(" " + url + "/sysconfig/showNoticeList", {"id": data})
                 ])
                     .then(axios.spread(function (title, table) {
@@ -207,9 +231,24 @@
                     }));
             },
 
+            //更改生产线
+            changeSCX() {
+                axios.post(" " + url + "/sysconfig/getGongxuList", {"id": this.line})
+                    .then((res) => {
+                        if (res.data ==="-1") {
+                            this.select = "";
+                            this.selectOptions = [];
+                        }
+                        else {
+                            this.select = res.data[0].id;
+                            this.selectOptions = res.data;
+                        }
+                    });
+            },
+
+
             //查询
             doSearch(){
-                console.log(this.select);
                 if (this.select) {
                     this.loadingShowData(this.select)
                 }
@@ -450,7 +489,7 @@
             .handle-box {
                 height: 80px;
                 line-height: 80px;
-                padding-left: 50px;
+                padding-left: 20px;
                 .handle-input {
                     width: 300px;
                     display: inline-block;
@@ -467,9 +506,6 @@
             .table {
                 width: 100%;
                 font-size: 14px;
-            }
-            .red {
-                color: #ff0000;
             }
 
         }
