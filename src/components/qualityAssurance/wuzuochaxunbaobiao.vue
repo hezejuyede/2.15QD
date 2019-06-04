@@ -3,7 +3,7 @@
         <div class="crumbs">
             <el-breadcrumb separator="/">
                 <el-breadcrumb-item>质量管理</el-breadcrumb-item>
-                <el-breadcrumb-item>误作查询</el-breadcrumb-item>
+                <el-breadcrumb-item>误作报表</el-breadcrumb-item>
             </el-breadcrumb>
         </div>
         <div class="template-content">

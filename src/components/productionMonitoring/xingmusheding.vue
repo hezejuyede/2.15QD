@@ -94,6 +94,7 @@
                             </el-option>
                         </el-select>
                     </label>
+                    <el-button type="primary" icon="delete" class="handle-del mr10" @click="doSearch">查询</el-button>
                     <el-button type="primary" icon="delete" class="handle-del mr10" @click="showAdd">新增项目</el-button>
                     <el-button type="danger" icon="delete" class="handle-del mr10" @click="showDelete">删除项目</el-button>
                 </div>
@@ -514,17 +515,20 @@
             changeSCX() {
                 axios.post(" " + url + "/sysconfig/getGongxuList", {"id": this.line})
                     .then((res) => {
-                        if (res.data.length > 0) {
-                            this.workStation = res.data[0].id;
-                            this.workStationOptions = res.data;
-                        }
-                        else {
+                        if (res.data ==="-1") {
                             this.workStation = "";
                             this.workStationOptions = [];
                             this.shebei = "";
                             this.shebeiOptions = [];
                             this.buwei = "";
                             this.buweiOptions = [];
+                        }
+                        else {
+                            this.workStation = res.data[0].id;
+                            this.workStationOptions = res.data;
+                            this.changeSelect();
+                            this.changeSB();
+
                         }
                     });
             },
@@ -536,12 +540,14 @@
                         if (res.data.length > 0) {
                             this.shebei = res.data[0].id;
                             this.shebeiOptions = res.data;
+                            this.changeSB();
                         }
                         else {
                             this.shebei = "";
                             this.shebeiOptions = [];
                             this.buwei = "";
                             this.buweiOptions = [];
+
                         }
                     })
                     .catch((err) => {
@@ -760,6 +766,16 @@
                     this.dynamicValidateForm.domains.splice(index, 1)
                 }
             },
+
+            doSearch(){
+                if(this.buwei ){
+
+                }
+                else {
+                    this.$message.warning(`部位不能为空`);
+                }
+
+            }
 
         }
     }

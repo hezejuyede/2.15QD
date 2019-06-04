@@ -3,7 +3,7 @@
         <div class="crumbs">
             <el-breadcrumb separator="/">
                 <el-breadcrumb-item>质量管理</el-breadcrumb-item>
-                <el-breadcrumb-item>误作查询</el-breadcrumb-item>
+                <el-breadcrumb-item>船东船级意见报表</el-breadcrumb-item>
             </el-breadcrumb>
         </div>
         <div class="template-content">
@@ -27,18 +27,18 @@
                         </el-date-picker>
                     </label>
                     <label style="margin-right: 5px;margin-left: 5px">
-                        <span>误做类型</span>
+                        <span>反馈类型</span>
                         <span>:</span>
                         <el-select
                             style="width: 150px"
-                            v-model="wuzuo"
+                            v-model="chuan"
                             clearable
                             filterable
                             allow-create
                             default-first-option
-                            placeholder="请选择工位">
+                            placeholder="请选择类型">
                             <el-option
-                                v-for="item in wuzuoOptions"
+                                v-for="item in chuanOptions"
                                 :key="item.id"
                                 :label="item.name"
                                 :value="item.id">
@@ -104,8 +104,8 @@
                 select_word: '',
 
 
-                wuzuo: "1",
-                wuzuoOptions: [{"name": "客户反馈的误做", "id": "1"}, {"name": "加工线内部误做", "id": "2"}],
+                chuan: "1",
+                chuanOptions: [{"name": "船东意见反馈", "id": "1"}, {"name": "船级意见反馈", "id": "2"}],
 
 
             }
@@ -155,7 +155,7 @@
             loadingShowData(data1,data2) {
                 let that = this;
                 axios.all([
-                    axios.post(" " + url + "/sys/showTableTitle", {"name": "khfkdwz"}),
+                    axios.post(" " + url + "/sys/showTableTitle", {"name": "chuandongyijianfankui"}),
                     axios.post(" " + url + "/devType/devTypeList",{"times":data1,"type":data2})
                 ])
                     .then(axios.spread(function (title, table) {
