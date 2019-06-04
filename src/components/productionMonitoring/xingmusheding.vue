@@ -187,7 +187,6 @@
                             filterable
                             allow-create
                             default-first-option
-                            @change="changeSB"
                             placeholder="请选择部位">
                             <el-option
                                 v-for="item in buweiOptions"
@@ -311,7 +310,6 @@
                             filterable
                             allow-create
                             default-first-option
-                            @change="changeSB"
                             placeholder="请选择部位">
                             <el-option
                                 v-for="item in buweiOptions"
@@ -766,10 +764,9 @@
                     this.dynamicValidateForm.domains.splice(index, 1)
                 }
             },
-
             doSearch(){
                 if(this.buwei ){
-
+                    this.loadingShowData(this.buwei);
                 }
                 else {
                     this.$message.warning(`部位不能为空`);
