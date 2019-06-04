@@ -122,7 +122,7 @@
                 </div>
             </div>
             <!--新增弹出框 -->
-            <el-dialog title="新增点检内容" :visible.sync="addVisible" width="90%">
+            <el-dialog title="新增点检内容" :visible.sync="addVisible" width="98%">
                 <el-form ref="form" label-width="100px">
                     <el-form-item label="生产线">
                         <el-select
@@ -206,7 +206,7 @@
                             <div class="appendDivTemplate">
                                 <div class="fl" style="margin-left: 10px">
                                     <span>NO</span>
-                                    <el-input v-model="domain.no" style="width: 100px" type="number"></el-input>
+                                    <el-input v-model="domain.no" style="width: 70px" type="number"></el-input>
                                 </div>
                                 <div class="fl" style="margin-left: 10px">
                                     <span>检查项目:</span>
@@ -609,11 +609,11 @@
             //显示新增
             showAdd() {
                 this.addVisible=true;
-                this.shebei="";
+              /*  this.shebei="";
                 this.name="";
                 this.line= '';
                 this.buwei="";
-                this.workStation="";
+                this.workStation="";*/
                 this.dynamicValidateForm = {
                     domains: [{
                         no: '',
