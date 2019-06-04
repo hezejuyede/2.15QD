@@ -214,7 +214,7 @@
                             {
                                 label: '质量基准报表',
                                 index: "7-7",
-                                url: "/zhiliangjizhunbaobiao"
+                                url: "/QualityAssurance/zhiliangjizhunbaobiao"
                             }
                         ]
                     },

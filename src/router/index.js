@@ -237,6 +237,25 @@ import chuanqichuandongbaobiao from '../components/qualityAssurance/chuanqichuan
 
 
 
+//作业基准上传
+
+import zuoyejizhunshangchuan from '../components/qualityAssurance/zuoyejizhunshangchuan';
+
+//学习指示下达
+import xuexizhibiaoxiada from '../components/qualityAssurance/xuexizhibiaoxiada';
+
+//学习报告统计
+import xuexibaogaotongji from '../components/qualityAssurance/xuexibaogaotongji';
+
+//质量基准报表
+import zhiliangjizhunbaobiao from '../components/qualityAssurance/zhiliangjizhunbaobiao';
+
+
+
+
+
+
+
 
 
 //人员模块
