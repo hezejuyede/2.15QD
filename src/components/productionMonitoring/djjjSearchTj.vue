@@ -75,7 +75,6 @@
                             filterable
                             allow-create
                             default-first-option
-                            @change="changeSB"
                             placeholder="请选择设备">
                             <el-option
                                 v-for="item in shebeiOptions"
@@ -94,9 +93,6 @@
                               :header-cell-style="{background:'#A1D0FC',color:'rgba(0, 0, 0, 0.8)',fontSize:'20px'}"
                               border
                               height="450"
-                              @select-all="selectAll"
-                              @select="selectList"
-                              @row-dblclick="edit"
                               highlight-current-row
                               style="width: 98%;margin: auto">
                         <el-table-column
@@ -111,21 +107,8 @@
             </div>
             <!--新增弹出框 -->
             <el-dialog title="进行点检" :visible.sync="addVisible" width="40%">
-                <el-form ref="form"  label-width="100px">
-                    <el-form-item label="记录内容">
-                        <el-input v-model="jvnr" style="width: 200px"></el-input>
-                    </el-form-item>
-                    <el-form-item label="点检状态">
-                        <el-input v-model="djzt" style="width: 200px"></el-input>
-                    </el-form-item>
-                    <el-form-item label="备注">
-                        <el-input v-model="beizhu" style="width: 200px"></el-input>
-                    </el-form-item>
-                </el-form>
-                <span slot="footer" class="dialog-footer">
-                <el-button @click="addVisible = false" style="height:30px;width:80px">取 消</el-button>
-                <el-button type="primary" @click="doAdd" style="height:30px;width:80px">确 定</el-button>
-            </span>
+
+
             </el-dialog>
 
             <Modal :msg="message"
@@ -157,7 +140,6 @@
                 select_word: '',
 
                 addVisible: false,
-                editVisible: false,
 
 
                 workStation:"",
