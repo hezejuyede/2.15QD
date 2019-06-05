@@ -258,7 +258,7 @@ import zuoyeyaodianneirong from '../components/qualityAssurance/zuoyeyaodianneir
 import zhiliangtixingchaxuntongji from '../components/qualityAssurance/zhiliangtixingchaxuntongji';
 
 //质量基准报表
-import zhiliangtixingbaobiao from '../components/qualityAssurance/zhiliangjizhunbaobiao';
+import zhiliangtixingbaobiao from '../components/qualityAssurance/zhiliangtixingbaobiao';
 
 
 

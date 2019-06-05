@@ -3,29 +3,39 @@
         <div class="crumbs">
             <el-breadcrumb separator="/">
                 <el-breadcrumb-item>质量管理</el-breadcrumb-item>
-                <el-breadcrumb-item>作业基准上传</el-breadcrumb-item>
+                <el-breadcrumb-item>质量提醒的查询与统计</el-breadcrumb-item>
             </el-breadcrumb>
         </div>
         <div class="editorTemplate-content">
             <div class="container">
                 <div class="handle-box">
                     <label style="margin-right: 5px">
-                        <span>筛选作业基准</span>
+                        <el-input v-model="select_word" placeholder="筛选提醒内容" class="handle-input mr10" style="width: 150px"></el-input>
+                    </label>
+                    <label style="margin-right: 5px;margin-left: 5px">
+                        <span>时间</span>
                         <span>:</span>
-                        <el-input v-model="select_word" placeholder="筛选作业基准" class="handle-input mr10" style="width: 200px"></el-input>
+                        <el-date-picker
+                            style="width: 240px"
+                            v-model="examineTime"
+                            type="daterange"
+                            start-placeholder="开始日期"
+                            end-placeholder="结束日期"
+                            value-format="yyyy-MM-dd">
+                        </el-date-picker>
                     </label>
                     <label style="margin-right: 5px;margin-left: 5px">
                         <span>生产线</span>
                         <span>:</span>
                         <el-select
-                            style="width: 150px"
+                            style="width: 120px"
                             v-model="line"
                             clearable
                             filterable
                             allow-create
                             default-first-option
                             @change="changeSCX"
-                            placeholder="请选择生产线">
+                            placeholder="选择生产线">
                             <el-option
                                 v-for="item in lineOptions"
                                 :key="item.indexno"
@@ -38,6 +48,7 @@
                         <span>工位</span>
                         <span>:</span>
                         <el-select
+                            style="width: 120px"
                             v-model="select"
                             clearable
                             filterable
@@ -52,25 +63,36 @@
                             </el-option>
                         </el-select>
                     </label>
-                    <el-button type="success" class="handle-del mr10" @click="doSearch">查询基准</el-button>
-                    <el-button type="primary" class="handle-del mr10" @click="showAdd">新增基准</el-button>
-                    <el-button type="warning" class="handle-del mr10" @click="showEdit">编辑基准</el-button>
-                    <el-button type="danger"  class="handle-del mr10" @click="deleteAlert">删除基准</el-button>
+                    <label style="margin-right: 5px;margin-left: 5px">
+                        <span>学习状态</span>
+                        <span>:</span>
+                        <el-select
+                            style="width: 120px"
+                            v-model="xuexi"
+                            clearable
+                            filterable
+                            allow-create
+                            default-first-option
+                            placeholder="学习状态">
+                            <el-option
+                                v-for="item in xuexiOptions"
+                                :key="item.id"
+                                :label="item.name"
+                                :value="item.id">
+                            </el-option>
+                        </el-select>
+                    </label>
+                    <el-button type="primary" class="handle-del mr10" @click="doSearch">查询</el-button>
+                    <el-button type="danger"  class="handle-del mr10" @click="deleteAlert">导出</el-button>
                 </div>
                 <div class="">
                     <el-table class="tb-edit"
                               :data="tables"
-                              :header-cell-style="{background:'#A1D0FC',color:' rgba(0, 0, 0, 0.8)',fontSize:'20px'}"
+                              :header-cell-style="{background:'#A1D0FC',color:' rgba(0, 0, 0, 0.8)',fontSize:'16px'}"
                               border
                               height="400"
-                              @select="selectList"
-                              @row-dblclick="edit"
                               highlight-current-row
                               style="width: 98%;margin: auto">
-                        <el-table-column
-                            type="selection"
-                            width="30">
-                        </el-table-column>
                         <template v-for="(col ,index) in cols">
                             <el-table-column align="center" :prop="col.prop" :label="col.label"></el-table-column>
                         </template>
@@ -78,45 +100,7 @@
                 </div>
             </div>
         </div>
-        <!--新增弹出框 -->
-        <el-dialog title="新增作业基准" :visible.sync="addVisible" width="90%" top="50px">
-            <div class="container" style="height:500px;overflow:auto">
-                <div class="containerDiv">
-                    <quill-editor ref="myTextEditor" v-model="content" :options="editorOption"></quill-editor>
-                    <div class="containerDivBtn">
-                        <el-button class="editor-btn" type="primary" @click="doAdd">提交</el-button>
-                    </div>
-                </div>
-            </div>
-        </el-dialog>
 
-        <!--详情弹出框 -->
-        <el-dialog title="作业基准详情" :visible.sync="contentVisible" width="90%" top="50px">
-            <div class="container" style="height:500px;overflow:auto">
-                <div class="" v-html="htmlData"></div>
-            </div>
-        </el-dialog>
-
-        <!-- 编辑弹出框 -->
-        <el-dialog title="编辑作业基准" :visible.sync="editVisible" width="90%" top="50px">
-            <div class="container" style="height:500px;overflow:auto">
-                <div class="containerDiv">
-                    <quill-editor ref="myTextEditor" v-model="content" :options="editorOption" height="300"></quill-editor>
-                    <div class="containerDivBtn">
-                        <el-button class="editor-btn" type="primary" @click="saveEdit">提交</el-button>
-                    </div>
-                </div>
-            </div>
-        </el-dialog>
-
-        <!-- 删除提示框 -->
-        <el-dialog title="删除作业基准" :visible.sync="delVisible" width="300px" center>
-            <div class="del-dialog-cnt">删除不可恢复，是否确定删除？</div>
-            <span slot="footer" class="dialog-footer">
-                <el-button @click="delVisible = false" style="height:30px;width:80px">取 消</el-button>
-                <el-button type="primary" @click="deleteRow" style="height:30px;width:80px">确 定</el-button>
-            </span>
-        </el-dialog>
         <Modal :msg="message"
                :isHideModal="HideModal"></Modal>
     </div>
@@ -125,13 +109,7 @@
     import axios from 'axios'
     import url from '../../assets/js/URL'
     import Modal from '../../common/modal'
-
-
-    import 'quill/dist/quill.core.css';
-    import 'quill/dist/quill.snow.css';
-    import 'quill/dist/quill.bubble.css';
-    import { quillEditor } from 'vue-quill-editor';
-
+    import {getNowTime} from '../../assets/js/api'
 
     export default {
         name: 'WorkingProcedure',
@@ -152,22 +130,18 @@
 
                 select_word: '',
 
-                addVisible: false,
-                editVisible: false,
-                delVisible: false,
-                contentVisible:false,
+                examineTime:"",
 
 
                 line: '',
                 lineOptions: [],
+
                 select:"",
                 selectOptions: [],
 
-                id: "",
-                name: '',
-                indexno: '',
-                showindex: '',
-                code: ""
+                xuexi:"",
+                xuexiOptions:[{"name": "已学习", "id": "1"}, {"name": "未学习", "id": "2"},],
+
 
             }
         },
@@ -185,7 +159,7 @@
                 return this.tableData
             }
         },
-        components: {Modal,quillEditor},
+        components: {Modal},
         mounted() {
 
 
@@ -202,6 +176,13 @@
                     this.$router.push("/")
                 }
                 else {
+                    let time = getNowTime();
+                    let times = [];
+                    for (let i = 0; i < 2; i++) {
+                        times.push(time)
+                    }
+                    this.examineTime = times;
+
                     let that = this;
                     axios.all([
                         axios.post(" " + url + "/sys/dictionaryList", {"id": "9"}),
@@ -222,7 +203,7 @@
             loadingShowData(data){
                 let that = this;
                 axios.all([
-                    axios.post(" " + url + "/sys/showTableTitle", {"name": "zuoyejizhunshangchuan"}),
+                    axios.post(" " + url + "/sys/showTableTitle", {"name": "zhiliangtixingchaxuntongji"}),
                     axios.post(" " + url + "/sysconfig/showNoticeList", {"id": data})
                 ])
                     .then(axios.spread(function (title, table) {
@@ -267,209 +248,11 @@
 
             },
 
-            //选择那个一个
-            selectList(val) {
-                if (val.length) {
-                    let data = [];
-                    for (let i = 0; i < val.length; i++) {
-                        let a = val[i].id;
-                        data.push(a)
-                    }
-                    this.listData = data;
-                }
-                else {
-                    this.listData = [];
-                }
-            },
+            importExcel(){
 
-            //双击点击显示详情
-            edit(row, column, cell, event) {
-                this.contentVisible = true;
-                this.id = row.id;
-                axios.post(" " + url + "/sysconfig/noticeDetail", {"id": this.id})
-                    .then((res) => {
-                        this.htmlData=res.data.noticehtml;
-                    })
-                    .catch((err) => {
-                        console.log(err)
-                    });
-            },
+            }
 
-            //选择点击删除
-            deleteAlert() {
-                if (this.listData.length) {
-                    this.delVisible = true;
-                }
-                else {
-                    this.message = "请勾选要删除的行";
-                    this.HideModal = false;
-                    const that = this;
 
-                    function a() {
-                        that.message = "";
-                        that.HideModal = true;
-                    }
-
-                    setTimeout(a, 2000);
-                }
-            },
-
-            //显示编辑
-            showEdit(){
-                if (this.listData.length) {
-                    if(this.listData.length>1){
-                        this.message = "请勾选一个";
-                        this.HideModal = false;
-                        const that = this;
-
-                        function a() {
-                            that.message = "";
-                            that.HideModal = true;
-                        }
-
-                        setTimeout(a, 2000);
-                    }
-                    else {
-                        this.editVisible = true;
-                        axios.post(" " + url + "/sysconfig/noticeDetail", {"id": this.listData[0]})
-                            .then((res) => {
-                                this.content=res.data.noticehtml;
-                            })
-                            .catch((err) => {
-                                console.log(err)
-                            });
-                    }
-                }
-                else {
-                    this.message = "请勾选要编辑的行";
-                    this.HideModal = false;
-                    const that = this;
-
-                    function a() {
-                        that.message = "";
-                        that.HideModal = true;
-                    }
-
-                    setTimeout(a, 2000);
-                }
-
-            },
-
-            // 保存编辑
-            saveEdit() {
-                if (this.content) {
-                    axios.post(" " + url + "/sysconfig/updateNotice",
-                        {
-                            "id":this.listData[0],
-                            "noticehtml": this.content,
-                        }
-                    )
-                        .then((res) => {
-                            if (res.data == "1") {
-                                this.$message.success(`修改成功`);
-                                this.editVisible = false;
-                                this.loadingShowData(this.select)
-
-                            }
-                            else {
-                                this.$message.warning(`修改失败`);
-                            }
-                        })
-                        .catch((err) => {
-                            console.log(err)
-                        })
-                }
-                else {
-                    this.$message.warning(`输入不能为空`);
-                }
-
-            },
-
-            // 确定删除
-            deleteRow() {
-                axios.post(" " + url + "/sysconfig/delNotice",
-                    {
-                        "ids": this.listData,
-                    }
-                )
-                    .then((res) => {
-                        if (res.data === "1") {
-                            this.$message.success('删除成功');
-                            this.delVisible = false;
-                            this.loadingShowData(this.select)
-
-                        }
-                        else {
-                            this.$message.warning(`删除失败`);
-                        }
-                    })
-                    .catch((err) => {
-                        console.log(err)
-                    })
-            },
-
-            //显示新增
-            showAdd() {
-                if (this.select) {
-                    this.addVisible = true;
-                }
-                else {
-                    this.message = "请选择要新增的工位";
-                    this.HideModal = false;
-                    const that = this;
-
-                    function a() {
-                        that.message = "";
-                        that.HideModal = true;
-                    }
-
-                    setTimeout(a, 2000);
-                }
-
-            },
-
-            //进行新增
-            doAdd() {
-                if (this.content) {
-                    axios.post(" " + url + "/sysconfig/noticeAdd",
-                        {
-                            "stationid":this.select,
-                            "noticehtml": this.content,
-                        }
-                    )
-                        .then((res) => {
-                            if (res.data === "1") {
-                                this.$message.success(`新增成功`);
-                                this.addVisible = false;
-                                this.loadingShowData(this.select)
-                            }
-                            else {
-                                this.$message.warning(`新增失败`);
-                            }
-                        })
-                        .catch((err) => {
-                            console.log(err)
-                        })
-                }
-                else {
-                    this.$message.warning(`输入不能为空`);
-                }
-            },
-
-            onEditorChange({ editor, html, text }) {
-                this.content = html;
-            },
-
-            submit(){
-                if(this.content){
-                    console.log(this.content);
-                    this.$message.success('提交成功！');
-                }
-                else {
-                    this.$message.worning('提交内容不能为空');
-                }
-
-            },
         }
     }
 </script>
@@ -510,6 +293,24 @@
 
         }
         .container {
+            .containerDivTop{
+                padding-left: 10%;
+                .containerDivTop1{
+                    height: 50px;
+                    display: flex;
+                    align-items: center;
+                }
+                .containerDivTop2{
+                    height: 50px;
+                    display: flex;
+                    align-items: center;
+                }
+                .containerDivTop3{
+                    height: 50px;
+                    display: flex;
+                    align-items: center;
+                }
+            }
             .containerDiv {
                 width: 100%;
                 height: 100%;

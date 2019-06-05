@@ -325,6 +325,7 @@
 
                 chuanhao:"",
                 pinci:"",
+                examineTime:"",
 
                 id: "",
                 name: '',
