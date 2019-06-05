@@ -96,7 +96,6 @@
                     </label>
                     <el-button type="primary" icon="delete" class="handle-del mr10" @click="doSearch">查询</el-button>
                     <el-button type="primary" icon="delete" class="handle-del mr10" @click="showAdd">新增项目</el-button>
-                    <el-button type="danger" icon="delete" class="handle-del mr10" @click="showDelete">删除项目</el-button>
                 </div>
                 <div class="">
                     <el-table class="tb-edit"
@@ -104,17 +103,10 @@
                               :header-cell-style="{background:'#A1D0FC',color:'rgba(0, 0, 0, 0.8)',fontSize:'20px'}"
                               border
                               height="450"
-                              @select="selectList"
-                              @select-all="selectAll"
-                              @selection-change="selectionChange"
                               ref="moviesTable"
                               @row-dblclick="edit"
                               highlight-current-row
                               style="width: 98%;margin: auto">
-                        <el-table-column
-                            type="selection"
-                            width="30">
-                        </el-table-column>
                         <template v-for="(col ,index) in cols">
                             <el-table-column align="center" :prop="col.prop" :label="col.label"></el-table-column>
                         </template>
@@ -245,7 +237,7 @@
             </el-dialog>
 
             <!-- 编辑弹出框 -->
-            <el-dialog title="编辑项目" :visible.sync="editVisible" width="40%">
+            <el-dialog title="编辑项目" :visible.sync="editVisible" width="98%">
                 <el-form ref="form" label-width="100px">
                     <el-form-item label="生产线">
                         <el-select
@@ -363,18 +355,10 @@
                 </el-form>
                 <span slot="footer" class="dialog-footer">
                 <el-button @click="editVisible = false" style="height:30px;width:80px">取 消</el-button>
-                <el-button type="primary" @click="saveEdit" style="height:30px;width:80px">确 定</el-button>
+                <el-button type="primary" @click="doAdd" style="height:30px;width:80px">确 定</el-button>
             </span>
             </el-dialog>
 
-            <!-- 删除提示框 -->
-            <el-dialog title="删除项目" :visible.sync="delVisible" width="300px" center>
-                <div class="del-dialog-cnt">删除不可恢复，是否确定删除？</div>
-                <span slot="footer" class="dialog-footer">
-                <el-button @click="cancelDelete" style="height:30px;width:80px">取 消</el-button>
-                <el-button type="primary" @click="deleteRow" style="height:30px;width:80px">确 定</el-button>
-            </span>
-            </el-dialog>
 
 
             <Modal :msg="message"
@@ -576,33 +560,6 @@
                 this.loadingShowData(this.buwei);
             },
 
-            //选择那个一个
-            selectList(val) {
-                this.val = val;
-                if (val.length) {
-                    let data = [];
-                    for (let i = 0; i < val.length; i++) {
-                        let a = val[i].id;
-                        data.push(a)
-                    }
-                    this.listData = data;
-
-                }
-                else {
-                    this.listData = [];
-
-                }
-            },
-
-            //列表全部选择
-            selectAll(val) {
-                this.selectList(val)
-            },
-
-            //选择改变
-            selectionChange(val) {
-                this.selectList(val)
-            },
 
             //显示新增
             showAdd() {
@@ -636,6 +593,7 @@
                             if (res.data === "1") {
                                 this.$message.success(`新增成功`);
                                 this.addVisible = false;
+                                this.editVisible =false;
                                 this.loadingShowData(this.buwei);
 
                             }
@@ -655,99 +613,22 @@
             //双击点击行内编辑
             edit(row, column, cell, event) {
                 this.editVisible = true;
-                this.id = row.id;
-                axios.post(" " + url + "/sysconfig/deptDetail", {"id": this.id})
-                    .then((res) => {
-                        this.name = res.data.name;
-                    })
-                    .catch((err) => {
-                        console.log(err)
-                    });
+                let data = [];
+                for (var i = 0; i < this.tableData.length; i++) {
+                    var json = {
+                        no: this.tableData[i].no,
+                        xiangmu: this.tableData[i].xiangmu,
+                        neirong: this.tableData[i].neirong,
+                        fangfa: this.tableData[i].fangfa
+                    };
+                    data.push(json)
+                }
+                this.dynamicValidateForm.domains = data;
             },
 
-            // 保存编辑
-            saveEdit() {
-                if (this.shebei && this.buwei ) {
-                    axios.post(" " + url + "/sysconfig/updateDept",
-                        {
-                            "id": this.id,
-                            "shebeid": this.shebei,
-                            "buweiid": this.buwei,
-                            "list": this.dynamicValidateForm.domains
-                        }
-                    )
-                        .then((res) => {
-                            if (res.data === "1") {
-                                this.editVisible = false;
-                                this.$message.success(`修改成功`);
-                                this.loadingShowData()
-                            }
-                            else {
-                                this.$message.warning(`新增失败`);
-                            }
-                        })
-                        .catch((err) => {
-                            console.log(err)
-                        })
-                }
-                else {
-                    this.$message.warning(`输入不能为空`);
-                }
 
-            },
 
-            //选择点击显示删除
-            showDelete() {
-                if (this.listData.length) {
-                    this.delVisible = true;
-                }
-                else {
-                    this.message = "请勾选要删除的分类";
-                    this.HideModal = false;
-                    const that = this;
 
-                    function a() {
-                        that.message = "";
-                        that.HideModal = true;
-                    }
-
-                    setTimeout(a, 2000);
-                }
-            },
-
-            //取消删除
-            cancelDelete() {
-                this.delVisible = false;
-                this.listData = [];
-                if (this.val.length === 1) {
-                    for (let i = 0, l = this.val.length; i < l; i++) {
-                        this.$refs.moviesTable.toggleRowSelection(this.val[i]);
-                    }
-                }
-
-            },
-
-            // 确定删除
-            deleteRow() {
-                axios.post(" " + url + "/sysconfig/delDept",
-                    {
-                        "ids": this.listData,
-                    }
-                )
-                    .then((res) => {
-                        if (res.data === "1") {
-                            this.$message.success('删除成功');
-                            this.delVisible = false;
-                            this.loadingShowData();
-                        }
-                        else {
-                            this.$message.warning(`删除失败`);
-                        }
-                    })
-                    .catch((err) => {
-                        console.log(err)
-                    })
-            },
             //增加时间
             addDomain() {
                 this.dynamicValidateForm.domains.push({
@@ -757,6 +638,7 @@
                     fangfa: ""
                 });
             },
+
             //删除时间
             removeDomain(item) {
                 var index = this.dynamicValidateForm.domains.indexOf(item);
@@ -764,6 +646,7 @@
                     this.dynamicValidateForm.domains.splice(index, 1)
                 }
             },
+
             doSearch(){
                 if(this.buwei ){
                     this.loadingShowData(this.buwei);
