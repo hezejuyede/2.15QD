@@ -379,12 +379,6 @@
                 message: '',
                 HideModal: true,
 
-                val: [],
-
-
-                listData: [],
-
-                id: "",
 
 
                 cols: [],
@@ -394,7 +388,7 @@
 
                 addVisible: false,
                 editVisible: false,
-                delVisible: false,
+
 
 
                 shebei: "",

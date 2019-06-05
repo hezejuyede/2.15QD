@@ -116,7 +116,7 @@
                             {
                                 label: '工作管精度管理记录',
                                 index: "4-1",
-                                url: "/404"
+                                url: "/QualityAssurance/gongzuoguanjingduguanlijilv"
                             },
                             {
                                 label: '质量记录查询与统计',

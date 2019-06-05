@@ -2,22 +2,44 @@
     <div class="template">
         <div class="crumbs">
             <el-breadcrumb separator="/">
-                <el-breadcrumb-item>资源模型</el-breadcrumb-item>
-                <el-breadcrumb-item>按钮配置</el-breadcrumb-item>
+                <el-breadcrumb-item>质量模块</el-breadcrumb-item>
+                <el-breadcrumb-item>工作管精度管理记录</el-breadcrumb-item>
             </el-breadcrumb>
         </div>
         <div class="template-content">
             <div class="container">
                 <div class="handle-box">
-                    <label style="margin-right: 10px">
-                        <span>智能检索按钮</span>
+                    <label style="margin-right: 5px">
+                        <span>智能检索记录</span>
                         <span>:</span>
-                        <el-input v-model="select_word" placeholder="智能检索按钮" class="handle-input mr10"></el-input>
+                        <el-input v-model="select_word" placeholder="智能检索记录" class="handle-input mr10"
+                                  style="width: 150px"></el-input>
                     </label>
-                    <label style="margin-right: 10px;margin-left: 10px">
+                    <label style="margin-right: 10px;margin-left: 5px">
+                        <span>生产线</span>
+                        <span>:</span>
+                        <el-select
+                            style="width: 150px"
+                            v-model="line"
+                            clearable
+                            filterable
+                            allow-create
+                            default-first-option
+                            @change="changeSCX"
+                            placeholder="请选择生产线">
+                            <el-option
+                                v-for="item in lineOptions"
+                                :key="item.indexno"
+                                :label="item.name"
+                                :value="item.indexno">
+                            </el-option>
+                        </el-select>
+                    </label>
+                    <label style="margin-right: 10px;margin-left: 5px">
                         <span>工位</span>
                         <span>:</span>
                         <el-select
+                            style="width: 150px"
                             v-model="workStation"
                             clearable
                             filterable
@@ -34,8 +56,8 @@
                             </el-option>
                         </el-select>
                     </label>
-                    <el-button type="primary" icon="delete" class="handle-del mr10" @click="showAdd">新增按钮</el-button>
-                    <el-button type="danger" icon="delete" class="handle-del mr10" @click="showDelete">删除按钮</el-button>
+                    <el-button type="primary"  class="handle-del mr10" @click="showAdd">新增记录</el-button>
+                    <el-button type="danger"   class="handle-del mr10" @click="showDelete">删除记录</el-button>
                 </div>
                 <div class="">
                     <el-table class="tb-edit"
@@ -43,32 +65,49 @@
                               :header-cell-style="{background:'#A1D0FC',color:'rgba(0, 0, 0, 0.8)',fontSize:'20px'}"
                               border
                               height="450"
+                              ref="moviesTable"
                               @select-all="selectAll"
                               @select="selectList"
                               @row-dblclick="edit"
                               highlight-current-row
                               style="width: 98%;margin: auto">
-                        <el-table-column
-                            type="selection"
-                            width="30">
-                        </el-table-column>
-                        <template v-for="(col ,index) in cols">
+                        <template v-for="(col,index) in cols">
                             <el-table-column align="center" :prop="col.prop" :label="col.label"></el-table-column>
                         </template>
                     </el-table>
                 </div>
             </div>
             <!--新增弹出框 -->
-            <el-dialog title="新增按钮" :visible.sync="addVisible" width="40%">
-                <el-form ref="form"  label-width="100px">
-                    <el-form-item label="工位名称">
+            <el-dialog title="新增点检内容" :visible.sync="addVisible" width="98%">
+                <el-form ref="form" label-width="100px">
+                    <el-form-item label="生产线">
                         <el-select
+                            style="width: 150px"
+                            v-model="line"
+                            clearable
+                            filterable
+                            allow-create
+                            default-first-option
+                            @change="changeSCX"
+                            placeholder="请选择生产线">
+                            <el-option
+                                v-for="item in lineOptions"
+                                :key="item.indexno"
+                                :label="item.name"
+                                :value="item.indexno">
+                            </el-option>
+                        </el-select>
+                    </el-form-item>
+                    <el-form-item label="工位">
+                        <el-select
+                            style="width: 150px"
                             v-model="workStation"
                             clearable
                             filterable
-                            disabled
                             allow-create
                             default-first-option
+                            @change="changeSelect"
+
                             placeholder="请选择工位">
                             <el-option
                                 v-for="item in workStationOptions"
@@ -78,59 +117,46 @@
                             </el-option>
                         </el-select>
                     </el-form-item>
-                    <el-form-item label="按钮名称">
-                        <el-input v-model="name" style="width: 200px"></el-input>
+                    <el-form-item
+                        v-for="(domain, index) in dynamicValidateForm.domains"
+                        :key="domain.key"
+                        :prop="'domains.' + index + '.value'"
+                        :label="'点检内容' + (index+1)+''">
+                        <div class="appendDiv">
+                            <div class="appendDivTemplate">
+                                <div class="fl" style="margin-left: 10px">
+                                    <span>NO</span>
+                                    <el-input v-model="domain.no" style="width: 70px" type="number"></el-input>
+                                </div>
+                                <div class="fl" style="margin-left: 10px">
+                                    <span>检查项目:</span>
+                                    <el-input v-model="domain.xiangmu" style="width: 150px"></el-input>
+                                </div>
+                                <div class="fl" style="margin-left: 10px">
+                                    <span>检查内容:</span>
+                                    <el-input v-model="domain.neirong" style="width: 150px"></el-input>
+                                </div>
+                                <div class="fl" style="margin-left: 10px">
+                                    <span>检查方法:</span>
+                                    <el-input v-model="domain.fangfa" style="width: 400px"></el-input>
+                                </div>
+                                <div class="fl" style="margin-left: 10px">
+                                    <el-button
+                                        type="danger"
+                                        style="height:30px;width:120px"
+                                        @click.prevent="removeDomain(domain)">删除
+                                    </el-button>
+                                </div>
+                            </div>
+                        </div>
                     </el-form-item>
-                    <el-form-item label="事件类型">
-                        <el-select
-                            v-model="type"
-                            clearable
-                            filterable
-                            allow-create
-                            default-first-option
-                            placeholder="请输入或者选择">
-                            <el-option
-                                v-for="item in typeOptions"
-                                :key="item.indexno"
-                                :label="item.name"
-                                :value="item.indexno">
-                            </el-option>
-                        </el-select>
-                    </el-form-item>
-                    <el-form-item label="是否可点">
-                        <el-select
-                            v-model="disabled"
-                            clearable
-                            filterable
-                            allow-create
-                            default-first-option
-                            placeholder="请输入或者选择">
-                            <el-option
-                                v-for="item in disabledOptions"
-                                :key="item.id"
-                                :label="item.name"
-                                :value="item.id">
-                            </el-option>
-                        </el-select>
-                    </el-form-item>
-                    <el-form-item label="按钮颜色">
-                        <el-color-picker v-model="backgroundColor"></el-color-picker>
-                    </el-form-item>
-                    <el-form-item label="显示隐藏">
-                        <el-select
-                            v-model="showHide"
-                            clearable
-                            filterable
-                            allow-create
-                            default-first-option
-                            placeholder="请输入或者选择">
-                            <el-option
-                                v-for="item in showHideOptions"
-                                :key="item.id"
-                                :label="item.name"
-                                :value="item.id">
-                            </el-option>
-                        </el-select>
+                    <el-form-item>
+                        <el-button
+                            type="primary"
+                            @click="addDomain"
+                            style="height:30px;width:20%">
+                            新增点检项目
+                        </el-button>
                     </el-form-item>
                 </el-form>
                 <span slot="footer" class="dialog-footer">
@@ -138,17 +164,38 @@
                 <el-button type="primary" @click="doAdd" style="height:30px;width:80px">确 定</el-button>
             </span>
             </el-dialog>
+
             <!-- 编辑弹出框 -->
-            <el-dialog title="编辑按钮" :visible.sync="editVisible" width="40%">
-                <el-form ref="form"  label-width="100px">
-                    <el-form-item label="工位名称">
+            <el-dialog title="编辑项目" :visible.sync="editVisible" width="98%">
+                <el-form ref="form" label-width="100px">
+                    <el-form-item label="生产线">
                         <el-select
-                            v-model="workStation"
+                            style="width: 150px"
+                            v-model="line"
                             clearable
-                            disabled
                             filterable
                             allow-create
                             default-first-option
+                            @change="changeSCX"
+                            placeholder="请选择生产线">
+                            <el-option
+                                v-for="item in lineOptions"
+                                :key="item.indexno"
+                                :label="item.name"
+                                :value="item.indexno">
+                            </el-option>
+                        </el-select>
+                    </el-form-item>
+                    <el-form-item label="工位">
+                        <el-select
+                            style="width: 150px"
+                            v-model="workStation"
+                            clearable
+                            filterable
+                            allow-create
+                            default-first-option
+                            @change="changeSelect"
+
                             placeholder="请选择工位">
                             <el-option
                                 v-for="item in workStationOptions"
@@ -158,59 +205,46 @@
                             </el-option>
                         </el-select>
                     </el-form-item>
-                    <el-form-item label="按钮名称">
-                        <el-input v-model="name" style="width: 200px"></el-input>
+                    <el-form-item
+                        v-for="(domain, index) in dynamicValidateForm.domains"
+                        :key="domain.key"
+                        :prop="'domains.' + index + '.value'"
+                        :label="'点检内容' + (index+1)+''">
+                        <div class="appendDiv">
+                            <div class="appendDivTemplate">
+                                <div class="fl" style="margin-left: 10px">
+                                    <span>NO</span>
+                                    <el-input v-model="domain.no" style="width: 70px" type="number"></el-input>
+                                </div>
+                                <div class="fl" style="margin-left: 10px">
+                                    <span>检查项目:</span>
+                                    <el-input v-model="domain.xiangmu" style="width: 150px"></el-input>
+                                </div>
+                                <div class="fl" style="margin-left: 10px">
+                                    <span>检查内容:</span>
+                                    <el-input v-model="domain.neirong" style="width: 150px"></el-input>
+                                </div>
+                                <div class="fl" style="margin-left: 10px">
+                                    <span>检查方法:</span>
+                                    <el-input v-model="domain.fangfa" style="width: 400px"></el-input>
+                                </div>
+                                <div class="fl" style="margin-left: 10px">
+                                    <el-button
+                                        type="danger"
+                                        style="height:30px;width:120px"
+                                        @click.prevent="removeDomain(domain)">删除
+                                    </el-button>
+                                </div>
+                            </div>
+                        </div>
                     </el-form-item>
-                    <el-form-item label="事件类型">
-                        <el-select
-                            v-model="type"
-                            clearable
-                            filterable
-                            allow-create
-                            default-first-option
-                            placeholder="请输入或者选择">
-                            <el-option
-                                v-for="item in typeOptions"
-                                :key="item.indexno"
-                                :label="item.name"
-                                :value="item.indexno">
-                            </el-option>
-                        </el-select>
-                    </el-form-item>
-                    <el-form-item label="是否可点">
-                        <el-select
-                            v-model="disabled"
-                            clearable
-                            filterable
-                            allow-create
-                            default-first-option
-                            placeholder="请输入或者选择">
-                            <el-option
-                                v-for="item in disabledOptions"
-                                :key="item.id"
-                                :label="item.name"
-                                :value="item.id">
-                            </el-option>
-                        </el-select>
-                    </el-form-item>
-                    <el-form-item label="按钮颜色">
-                        <el-color-picker v-model="backgroundColor"></el-color-picker>
-                    </el-form-item>
-                    <el-form-item label="显示隐藏">
-                        <el-select
-                            v-model="showHide"
-                            clearable
-                            filterable
-                            allow-create
-                            default-first-option
-                            placeholder="请输入或者选择">
-                            <el-option
-                                v-for="item in showHideOptions"
-                                :key="item.id"
-                                :label="item.name"
-                                :value="item.id">
-                            </el-option>
-                        </el-select>
+                    <el-form-item>
+                        <el-button
+                            type="primary"
+                            @click="addDomain"
+                            style="height:30px;width:20%">
+                            新增点检项目
+                        </el-button>
                     </el-form-item>
                 </el-form>
                 <span slot="footer" class="dialog-footer">
@@ -238,14 +272,18 @@
     import url from '../../assets/js/URL'
     import Modal from '../../common/modal'
 
+
     export default {
         name: 'WorkingProcedure',
         data() {
             return {
                 message: '',
                 HideModal: true,
-                listData:[],
-                id:"",
+
+                val: [],
+
+                listData: [],
+                id: "",
 
 
                 cols: [],
@@ -258,17 +296,19 @@
                 delVisible: false,
 
 
-                workStation:"",
-                workStationOptions:[],
-                name: "",
-                type: "",
-                typeOptions: [],
-                disabled: "",
-                disabledOptions: [{"name": "可点击", "id": "1"}, {"name": "不可点击", "id": "0"}],
-                backgroundColor: "",
-                showHide: "",
-                showHideOptions: [{"name": "显示", "id": "1"}, {"name": "隐藏", "id": "0"}],
 
+                workStation: "",
+                workStationOptions: [],
+
+                line: '',
+                lineOptions: [],
+
+                dynamicValidateForm: {
+                    domains: [{
+                        gongwei: '',
+                        shuliang: "",
+                    }],
+                },
             }
         },
         computed: {
@@ -304,15 +344,16 @@
                 else {
                     let that = this;
                     axios.all([
+                        axios.post(" " + url + "/sys/dictionaryList", {"id": "9"}),
                         axios.post(" " + url + "/api/getPersonProcessList", {"name": ""}),
-                        axios.post(" " + url + "/sys/dictionaryList", {"id": "23"}),
                     ])
-                        .then(axios.spread(function (select,type) {
-                            that.workStation = select.data[0].id;
-                            that.workStationOptions = select.data;
-                            that.typeOptions = type.data;
-                            that.loadingShowData(1);
+                        .then(axios.spread(function (line, workStation) {
+                            that.lineOptions = line.data;
+                            that.line = line.data[0].indexno;
+                            that.workStation = workStation.data[0].id;
+                            that.workStationOptions = workStation.data;
                         }));
+
                 }
             },
 
@@ -320,8 +361,8 @@
             loadingShowData(data) {
                 let that = this;
                 axios.all([
-                    axios.post(" " + url + "/sys/showTableTitle", {"name": "jgxqan"}),
-                    axios.post(" " + url + "/padShow/buttonList", {"id": data})
+                    axios.post(" " + url + "/sys/showTableTitle", {"name": "gongzuoguanjingduguanlijilv"}),
+                    axios.post(" " + url + "/shebei/contentListByBuwei", {"buweiid": data})
                 ])
                     .then(axios.spread(function (title, table) {
                         that.cols = title.data;
@@ -329,9 +370,24 @@
                     }));
             },
 
+            //更改生产线
+            changeSCX() {
+                axios.post(" " + url + "/sysconfig/getGongxuList", {"id": this.line})
+                    .then((res) => {
+                        if (res.data ==="-1") {
+                            this.workStation = "";
+                            this.workStationOptions = [];
+                        }
+                        else {
+                            this.workStation = res.data[0].id;
+                            this.workStationOptions = res.data;
+                        }
+                    });
+            },
+
             //根据工位选择
             changeSelect() {
-                this.loadingShowData(this.workStation)
+
             },
 
             //选择那个一个
@@ -365,48 +421,39 @@
             },
 
             //显示新增
-            showAdd(){
-
-                if (this.workStation) {
-                    this.addVisible=true;
-                    this.name= "";
-                    this.type= "";
-                    this.disabled= "";
-                    this.backgroundColor="";
-                    this.showHide= "";
-                }
-                else {
-                    this.message = "请选择工位";
-                    this.HideModal = false;
-                    const that = this;
-
-                    function a() {
-                        that.message = "";
-                        that.HideModal = true;
-                    }
-
-                    setTimeout(a, 2000);
-                }
+            showAdd() {
+                this.addVisible=true;
+                /*  this.shebei="";
+                  this.name="";
+                  this.line= '';
+                  this.buwei="";
+                  this.workStation="";*/
+                this.dynamicValidateForm = {
+                    domains: [{
+                        no: '',
+                        jcxm: "",
+                        jcnr: "",
+                        jcff: ""
+                    }],
+                };
             },
 
             //进行新增
             doAdd() {
-                if (this.name && this.type && this.disabled &&this.backgroundColor&&this.showHide) {
-                    axios.post(" " + url + "/padShow/buttonAdd",
+                if (this.shebei && this.buwei ) {
+                    axios.post(" " + url + "/shebei/contentAdd",
                         {
-                            "gongxuid": this.workStation,
-                            "name": this.name,
-                            "type": this.type,
-                            "disabled": this.disabled,
-                            "backgroundcolor": this.backgroundColor,
-                            "show": this.showHide,
+                            "shebeid": this.shebei,
+                            "buweiid": this.buwei,
+                            "list": this.dynamicValidateForm.domains
                         }
                     )
                         .then((res) => {
-                            if (res.data.state === "1") {
+                            if (res.data === "1") {
                                 this.$message.success(`新增成功`);
                                 this.addVisible = false;
-                                this.loadingShowData(this.workStation)
+                                this.editVisible =false;
+                                this.loadingShowData(this.buwei);
 
                             }
                             else {
@@ -425,20 +472,41 @@
             //双击点击行内编辑
             edit(row, column, cell, event) {
                 this.editVisible = true;
-                this.id = row.id;
-                axios.post(" " + url + "/padShow/buttonDetail", {"id": this.id})
-                    .then((res) => {
-                        this.workStation = res.data.data.gongxuid;
-                        this.name = res.data.data.name;
-                        this.type = Number(res.data.data.type);
-                        this.disabled = res.data.data.disabled;
-                        this.backgroundColor = res.data.data.backgroundcolor;
-                        this.showHide = res.data.data.show;
-                    })
-                    .catch((err) => {
-                        console.log(err)
-                    });
+                let data = [];
+                for (var i = 0; i < this.tableData.length; i++) {
+                    var json = {
+                        no: this.tableData[i].no,
+                        xiangmu: this.tableData[i].xiangmu,
+                        neirong: this.tableData[i].neirong,
+                        fangfa: this.tableData[i].fangfa
+                    };
+                    data.push(json)
+                }
+                this.dynamicValidateForm.domains = data;
             },
+
+
+
+
+            //增加时间
+            addDomain() {
+                this.dynamicValidateForm.domains.push({
+                    no: '',
+                    xiangmu: "",
+                    neirong: "",
+                    fangfa: ""
+                });
+            },
+
+            //删除时间
+            removeDomain(item) {
+                var index = this.dynamicValidateForm.domains.indexOf(item);
+                if (index !== -1) {
+                    this.dynamicValidateForm.domains.splice(index, 1)
+                }
+            },
+
+
 
             // 保存编辑
             saveEdit() {
@@ -515,6 +583,7 @@
                     })
             },
 
+
         }
     }
 </script>
@@ -533,14 +602,14 @@
         .template-content {
             .handle-box {
                 height: 80px;
-                line-height:80px;
-                padding-left: 50px;
+                line-height: 80px;
+                padding-left: 20px;
                 .handle-input {
                     width: 300px;
                     display: inline-block;
                 }
                 .el-button {
-                    width:100px;
+                    width: 100px;
                     height: 30px;
                 }
             }
@@ -551,9 +620,6 @@
             .table {
                 width: 100%;
                 font-size: 14px;
-            }
-            .red {
-                color: #ff0000;
             }
 
         }

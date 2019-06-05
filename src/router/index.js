@@ -261,7 +261,8 @@ import zhiliangtixingchaxuntongji from '../components/qualityAssurance/zhiliangt
 import zhiliangtixingbaobiao from '../components/qualityAssurance/zhiliangtixingbaobiao';
 
 
-
+//工作管精度管理记录
+import gongzuoguanjingduguanlijilv from '../components/qualityAssurance/gongzuoguanjingduguanlijilv';
 
 
 
@@ -822,6 +823,12 @@ export default new Router({
                         {
                             path: 'zhiliangtixingbaobiao',
                             component: zhiliangtixingbaobiao,
+                            meta: {title: '质量基准报表'}
+                        }
+                        ,
+                        {
+                            path: 'gongzuoguanjingduguanlijilv',
+                            component: gongzuoguanjingduguanlijilv,
                             meta: {title: '质量基准报表'}
                         }
                     ]
