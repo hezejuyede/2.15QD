@@ -251,6 +251,14 @@ import xuexibaogaotongji from '../components/qualityAssurance/xuexibaogaotongji'
 import zhiliangjizhunbaobiao from '../components/qualityAssurance/zhiliangjizhunbaobiao';
 
 
+//作业者要点内容
+import zuoyeyaodianneirong from '../components/qualityAssurance/zuoyeyaodianneirong';
+
+//学习报告统计
+import zhiliangtixingchaxuntongji from '../components/qualityAssurance/zhiliangtixingchaxuntongji';
+
+//质量基准报表
+import zhiliangtixingbaobiao from '../components/qualityAssurance/zhiliangjizhunbaobiao';
 
 
 
@@ -779,8 +787,6 @@ export default new Router({
                             component: chuanqichuandongbaobiao,
                             meta: {title: '船东船级意见报表'}
                         },
-
-
                         {
                             path: 'zuoyejizhunshangchuan',
                             component: zuoyejizhunshangchuan,
@@ -799,6 +805,23 @@ export default new Router({
                         {
                             path: 'zhiliangjizhunbaobiao',
                             component: zhiliangjizhunbaobiao,
+                            meta: {title: '质量基准报表'}
+                        },
+
+
+                        {
+                            path: 'zuoyeyaodianneirong',
+                            component: zuoyeyaodianneirong,
+                            meta: {title: '作业者要点内容'}
+                        },
+                        {
+                            path: 'zhiliangtixingchaxuntongji',
+                            component: zhiliangtixingchaxuntongji,
+                            meta: {title: '学习报告统计'}
+                        },
+                        {
+                            path: 'zhiliangtixingbaobiao',
+                            component: zhiliangtixingbaobiao,
                             meta: {title: '质量基准报表'}
                         }
                     ]

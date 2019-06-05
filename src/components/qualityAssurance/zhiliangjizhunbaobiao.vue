@@ -110,7 +110,7 @@
                 listData:[],
 
                 id:"",
-
+                examineTime:"",
 
                 cols: [],
                 tableData: [],

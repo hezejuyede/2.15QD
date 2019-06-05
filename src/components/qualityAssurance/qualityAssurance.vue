@@ -131,25 +131,14 @@
                         url: "/404",
                         children: [
                             {
-                                label: '作业者要点内容',
+                                label: '提醒内容制作与发布',
                                 index: "5-1",
-                                url: "/QualityAssurance/OperatorMainPoints"
+                                url: "/QualityAssurance/zuoyeyaodianneirong"
                             },
-                            {
-                                label: '质量提醒查阅',
-                                index: "5-2",
-                                url: "/404"
-                            },
-                            {
-                                label: '质量提醒的修改与撤销',
-                                index: "5-3",
-                                url: "/404"
-                            }
-                            ,
                             {
                                 label: '质量提醒的查询与统计',
-                                index: "5-4",
-                                url: "/404"
+                                index: "5-2",
+                                url: "/QualityAssurance/zhiliangtixingchaxuntongji"
                             }
                         ]
                     },
@@ -209,7 +198,7 @@
                             {
                                 label: '质量提醒报表',
                                 index: "7-6",
-                                url: "/404"
+                                url: "/QualityAssurance/zhiliangtixingbaobiao"
                             },
                             {
                                 label: '质量基准报表',
