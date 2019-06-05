@@ -3,19 +3,19 @@
         <div class="crumbs">
             <el-breadcrumb separator="/">
                 <el-breadcrumb-item>质量管理</el-breadcrumb-item>
-                <el-breadcrumb-item>船级意见反馈</el-breadcrumb-item>
+                <el-breadcrumb-item>学习报告统计</el-breadcrumb-item>
             </el-breadcrumb>
         </div>
         <div class="template-content">
             <div class="container">
                 <div class="handle-box">
-                    <label style="margin-right: 10px">
-                        <span>智能检索反馈</span>
+                    <label style="margin-right: 5px">
+                        <span>检索</span>
                         <span>:</span>
-                        <el-input v-model="select_word" placeholder="智能检索反馈" class="handle-input mr10"></el-input>
+                        <el-input v-model="select_word" placeholder="智能检索" class="handle-input mr10" style="width: 150px"></el-input>
                     </label>
                     <label style="margin-right: 10px;margin-left: 10px">
-                        <span>选择查询时间</span>
+                        <span>时间</span>
                         <span>:</span>
                         <el-date-picker
                             style="width: 240px"
@@ -26,8 +26,28 @@
                             value-format="yyyy-MM-dd">
                         </el-date-picker>
                     </label>
-                    <el-button type="primary" icon="delete" class="handle-del mr10" @click="showAdd">新增反馈</el-button>
-                    <el-button type="danger" icon="delete" class="handle-del mr10" @click="showDelete">删除反馈</el-button>
+                    <label style="margin-right: 10px;margin-left: 5px">
+                        <span>学习状态</span>
+                        <span>:</span>
+                        <el-select
+                            style="width: 150px"
+                            v-model="xuexi"
+                            clearable
+                            filterable
+                            allow-create
+                            default-first-option
+                            @change="changeSCX"
+                            placeholder="请选择学习状态">
+                            <el-option
+                                v-for="item in xuexiOptions"
+                                :key="item.id"
+                                :label="item.name"
+                                :value="item.id">
+                            </el-option>
+                        </el-select>
+                    </label>
+                    <el-button type="primary"  class="handle-del mr10" @click="doSearch">查询</el-button>
+                    <el-button type="danger"  class="handle-del mr10" @click="importExcel">导出</el-button>
                 </div>
                 <div class="">
                     <el-table class="tb-edit"
@@ -35,78 +55,15 @@
                               :header-cell-style="{background:'#A1D0FC',color:'rgba(0, 0, 0, 0.8)',fontSize:'20px'}"
                               border
                               height="450"
-                              @select="selectList"
-                              @select-all="selectAll"
-                              @selection-change="selectionChange"
                               ref="moviesTable"
-                              @row-dblclick="edit"
                               highlight-current-row
                               style="width: 98%;margin: auto">
-                        <el-table-column
-                            type="selection"
-                            width="30">
-                        </el-table-column>
                         <template v-for="(col ,index) in cols">
                             <el-table-column align="center" :prop="col.prop" :label="col.label"></el-table-column>
                         </template>
                     </el-table>
                 </div>
             </div>
-            <!--新增弹出框 -->
-            <el-dialog title="新增反馈" :visible.sync="addVisible" width="40%">
-                <el-form ref="form"  label-width="100px">
-                    <el-form-item label="船号">
-                        <el-input v-model="chuanhao" style="width: 200px"></el-input>
-                    </el-form-item>
-                    <el-form-item label="管子编号">
-                        <el-input v-model="guanzibianhao" style="width: 200px"></el-input>
-                    </el-form-item>
-                    <el-form-item label="船级姓名">
-                        <el-input v-model="fankuiren" style="width: 200px"></el-input>
-                    </el-form-item>
-                    <el-form-item label="反馈意见">
-                        <el-input v-model="wuzuoxiangqing" style="width: 300px"></el-input>
-                    </el-form-item>
-                </el-form>
-                <span slot="footer" class="dialog-footer">
-                <el-button @click="addVisible = false" style="height:30px;width:80px">取 消</el-button>
-                <el-button type="primary" @click="doAdd" style="height:30px;width:80px">确 定</el-button>
-            </span>
-            </el-dialog>
-
-            <!-- 编辑弹出框 -->
-            <el-dialog title="编辑反馈" :visible.sync="editVisible" width="40%">
-                <el-form ref="form"  label-width="100px">
-                    <el-form-item label="分类名称">
-                        <el-form-item label="船号">
-                            <el-input v-model="chuanhao" style="width: 200px"></el-input>
-                        </el-form-item>
-                        <el-form-item label="管子编号">
-                            <el-input v-model="guanzibianhao" style="width: 200px"></el-input>
-                        </el-form-item>
-                        <el-form-item label="船级姓名">
-                            <el-input v-model="fankuiren" style="width: 200px"></el-input>
-                        </el-form-item>
-                        <el-form-item label="反馈意见">
-                            <el-input v-model="wuzuoxiangqing" style="width: 300px"></el-input>
-                        </el-form-item>
-                    </el-form-item>
-                </el-form>
-                <span slot="footer" class="dialog-footer">
-                <el-button @click="editVisible = false" style="height:30px;width:80px">取 消</el-button>
-                <el-button type="primary" @click="saveEdit" style="height:30px;width:80px">确 定</el-button>
-            </span>
-            </el-dialog>
-
-            <!-- 删除提示框 -->
-            <el-dialog title="删除反馈" :visible.sync="delVisible" width="300px" center>
-                <div class="del-dialog-cnt">删除不可恢复，是否确定删除？</div>
-                <span slot="footer" class="dialog-footer">
-                <el-button @click="cancelDelete" style="height:30px;width:80px">取 消</el-button>
-                <el-button type="primary" @click="deleteRow" style="height:30px;width:80px">确 定</el-button>
-            </span>
-            </el-dialog>
-
 
             <Modal :msg="message"
                    :isHideModal="HideModal"></Modal>
@@ -139,16 +96,8 @@
 
                 select_word: '',
 
-                addVisible: false,
-                editVisible: false,
-                delVisible: false,
-
-
-                chuanhao: "",
-                guanzibianhao:"",
-                fankuiren:"",
-                wuzuoxiangqing:""
-
+                xuexi: "1",
+                xuexiOptions: [{"name": "已学习", "id": "1"}, {"name": "未学习", "id": "2"}],
 
             }
         },
@@ -189,7 +138,7 @@
                         times.push(time)
                     }
                     this.examineTime = times;
-                    this.loadingShowData(this.examineTime,1);
+                    this.loadingShowData(this.examineTime,this.xuexi);
                 }
             },
 
@@ -197,8 +146,8 @@
             loadingShowData(data1,data2) {
                 let that = this;
                 axios.all([
-                    axios.post(" " + url + "/sys/showTableTitle", {"name": "chuandongyijianfankui"}),
-                    axios.post(" " + url + "/devType/devTypeList",{"times":data1,"type":data2})
+                    axios.post(" " + url + "/sys/showTableTitle", {"name": "xuexibaogaotongji"}),
+                    axios.post(" " + url + "/devType/devTypeList",{"times":data1,"state":data2})
                 ])
                     .then(axios.spread(function (title, table) {
                         that.cols = title.data;
@@ -206,178 +155,30 @@
                     }));
             },
 
-
-
-            //选择那个一个
-            selectList(val) {
-                this.val =val;
-                if (val.length) {
-                    let data = [];
-                    for (let i = 0; i < val.length; i++) {
-                        let a = val[i].id;
-                        data.push(a)
-                    }
-                    this.listData = data;
-
-                }
-                else {
-                    this.listData=[];
-
-                }
-            },
-
-            //列表全部选择
-            selectAll(val) {
-                this.selectList(val)
-            },
-
-            //选择改变
-            selectionChange(val) {
-                this.selectList(val)
-            },
-
-            //显示新增
-            showAdd(){
-                this.addVisible=true;
-                this.chuanhao = "";
-                this.guanzibianhao = "";
-                this.fankuiren = "";
-                this.wuzuoxiangqing = "";
-            },
-
-            //进行新增
-            doAdd() {
-                if (this.chuanhao && this.guanzibianhao && this.fankuiren && this.wuzuoxiangqing) {
-                    axios.post(" " + url + "/devType/devTypeAdd",
-                        {
-                            "type":1,
-                            "chuanhao":  this.chuanhao,
-                            "guanzibianhao":  this.guanzibianhao,
-                            "fankuiren":  this.fankuiren,
-                            "wuzuoxiangqing":  this.wuzuoxiangqing
-                        }
-                    )
-                        .then((res) => {
-                            if (res.data === "1") {
-                                this.$message.success(`新增成功`);
-                                this.addVisible = false;
-                                this.loadingShowData(this.examineTime,1);
-
-                            }
-                            else {
-                                this.$message.warning(res.data.message);
-                            }
-                        })
-                        .catch((err) => {
-                            console.log(err)
-                        })
-                }
-                else {
-                    this.$message.warning(`输入不能为空`);
-                }
-            },
-
-            //双击点击行内编辑
-            edit(row, column, cell, event) {
-                this.editVisible = true;
-                this.id = row.id;
-                axios.post(" " + url + "/devType/devTypeDetail", {"id": this.id})
+            //更改生产线
+            changeSCX() {
+                axios.post(" " + url + "/sysconfig/getGongxuList", {"id": this.line})
                     .then((res) => {
-                        this.chuanhao =res.data.chuanhao;
-                        this.guanzibianhao =res.data.guanzibianhao;
-                        this.fankuiren = res.data.fankuiren;
-                        this.wuzuoxiangqing = res.data.wuzuoxiangqing;
-                    })
-                    .catch((err) => {
-                        console.log(err)
+                        if (res.data ==="-1") {
+                            this.workStation = "";
+                            this.workStationOptions = [];
+                        }
+                        else {
+                            this.workStation = res.data[0].id;
+                            this.workStationOptions = res.data;
+                        }
                     });
             },
 
-            // 保存编辑
-            saveEdit() {
-                if (this.chuanhao && this.guanzibianhao && this.fankuiren && this.wuzuoxiangqing) {
-                    axios.post(" " + url + "/devType/updateDevType",
-                        {
-                            "type":1,
-                            "id": this.id,
-                            "chuanhao":  this.chuanhao,
-                            "guanzibianhao":  this.guanzibianhao,
-                            "fankuiren":  this.fankuiren,
-                            "wuzuoxiangqing":  this.wuzuoxiangqing
-                        }
-                    )
-                        .then((res) => {
-                            if (res.data === "1") {
-                                this.editVisible = false;
-                                this.$message.success("修改成功");
-                                this.loadingShowData(this.examineTime,1);
-                            }
-                            else {
-                                this.$message.warning(res.data.message);
-                            }
-                        })
-                        .catch((err) => {
-                            console.log(err)
-                        })
-                }
-                else {
-                    this.$message.warning(`输入不能为空`);
-                }
 
+            doSearch(){
+                this.loadingShowData(this.examineTime,this.xuexi);
             },
 
-            //选择点击显示删除
-            showDelete() {
-                if (this.listData.length) {
-                    this.delVisible = true;
-                }
-                else {
-                    this.message = "请勾选要删除的分类";
-                    this.HideModal = false;
-                    const that = this;
+            importExcel(){
 
-                    function a() {
-                        that.message = "";
-                        that.HideModal = true;
-                    }
+            }
 
-                    setTimeout(a, 2000);
-                }
-            },
-
-            //取消删除
-            cancelDelete() {
-                this.delVisible = false;
-                this.listData = [];
-                if (this.val.length === 1) {
-                    for (let i = 0, l = this.val.length; i < l; i++) {
-                        this.$refs.moviesTable.toggleRowSelection(this.val[i]);
-                    }
-                }
-
-            },
-
-            // 确定删除
-            deleteRow() {
-                axios.post(" " + url + "/devType/delDevType",
-                    {
-                        "ids": this.listData,
-                    }
-                )
-                    .then((res) => {
-                        if (res.data === "1") {
-                            this.$message.success("删除成功");
-                            this.delVisible = false;
-                            this.loadingShowData(this.examineTime,1);
-                        }
-                        else {
-                            this.$message.warning(res.data.message);
-                        }
-                    })
-                    .catch((err) => {
-                        console.log(err)
-                    })
-            },
 
         }
     }
