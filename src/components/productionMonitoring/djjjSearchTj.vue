@@ -55,7 +55,6 @@
                             allow-create
                             default-first-option
                             @change="changeSelect"
-
                             placeholder="请选择工位">
                             <el-option
                                 v-for="item in workStationOptions"
@@ -84,8 +83,8 @@
                             </el-option>
                         </el-select>
                     </label>
-                    <el-button type="primary" icon="delete" class="handle-del mr10" @click="showAdd">查询</el-button>
-                    <el-button type="success" icon="delete" class="handle-del mr10" @click="showAdd">导出</el-button>
+                    <el-button type="primary" icon="delete" class="handle-del mr10" @click="doSearch">查询</el-button>
+                    <el-button type="success" icon="delete" class="handle-del mr10" @click="importExcel">导出</el-button>
                 </div>
                 <div class="">
                     <el-table class="tb-edit"
@@ -96,19 +95,47 @@
                               highlight-current-row
                               style="width: 98%;margin: auto">
                         <el-table-column
-                            type="selection"
-                            width="30">
+                            align="center"
+                            prop="intime"
+                            label="时间">
                         </el-table-column>
-                        <template v-for="(col ,index) in cols">
+                        <el-table-column
+                            align="center"
+                            prop="shebeiname"
+                            label="设备">
+                        </el-table-column>
+                        <el-table-column
+                            align="center"
+                            prop="bujianname"
+                            label="明细">
+                            <template scope="scope">
+                                <el-button
+                                    type="success"
+                                    style="width: 100%;height: 35px;display: flex;align-items: center;justify-content: center"
+                                    @click="showMx(scope.row.id)">
+                                    明细
+                                </el-button>
+                            </template>
+                        </el-table-column>
+                    </el-table>
+                </div>
+            </div>
+
+            <!--点检明细 -->
+            <el-dialog  :visible.sync="mxVisible" :fullscreen="true" :center="true">
+                <div class="djDiv">
+                    <el-table class="tb-edit"
+                              :data="mxData"
+                              :header-cell-style="{background:'#A1D0FC',color:'rgba(0, 0, 0, 0.8)',fontSize:'16px'}"
+                              border
+                              height="600"
+                              highlight-current-row
+                              style="width: 98%;margin: auto">
+                        <template v-for="(col ,index) in mxCols">
                             <el-table-column align="center" :prop="col.prop" :label="col.label"></el-table-column>
                         </template>
                     </el-table>
                 </div>
-            </div>
-            <!--新增弹出框 -->
-            <el-dialog title="进行点检" :visible.sync="addVisible" width="40%">
-
-
             </el-dialog>
 
             <Modal :msg="message"
@@ -139,7 +166,7 @@
 
                 select_word: '',
 
-                addVisible: false,
+                mxVisible:false,
 
 
                 workStation:"",
@@ -150,9 +177,8 @@
                 shebei: "",
                 shebeiOptions: [],
 
-                jvnr:"",
-                djzt:"",
-                beizhu:"",
+                mxData:[],
+                mxCols:[],
             }
         },
         computed: {
@@ -235,33 +261,45 @@
             changeSCX(){
                 axios.post(" " + url + "/sysconfig/getGongxuList", {"id": this.line})
                     .then((res) => {
-                        if (res.data.length > 0) {
-                            this.workStation = res.data[0].id;
-                            this.workStationOptions = res.data;
-                        }
-                        else {
+                        if (res.data ==="-1") {
                             this.workStation = "";
                             this.workStationOptions = [];
                             this.shebei = "";
                             this.shebeiOptions = [];
+                        }
+                        else {
+                            this.workStation = res.data[0].id;
+                            this.workStationOptions = res.data;
+                            this.changeSelect();
                         }
                     });
             },
 
             //根据工位选择
             changeSelect() {
-                this.loadingShowData(this.shebei,this.examineTime)
+                axios.post(" " + url + "/shebei/shebeiList", {"jiagongxian": this.line, "stationid": this.workStation})
+                    .then((res) => {
+                        if (res.data.length > 0) {
+                            this.shebei = res.data[0].id;
+                            this.shebeiOptions = res.data;
+                            this.changeSB();
+                        }
+                        else {
+                            this.shebei = "";
+                            this.shebeiOptions = [];
+                        }
+                    })
+                    .catch((err) => {
+                        console.log(err)
+                    })
             },
 
-
-            //显示新增
-            showAdd(){
-
-                if (this.listData.length) {
-                    this.addVisible = true;
+            doSearch(){
+                if (this.shebei) {
+                    this.loadingShowData(this.shebei,this.examineTime)
                 }
                 else {
-                    this.message = "请勾选要点检的工位";
+                    this.message = "请选择设备和时间";
                     this.HideModal = false;
                     const that = this;
 
@@ -272,6 +310,26 @@
 
                     setTimeout(a, 2000);
                 }
+            },
+
+            //查看明细
+            showMx(id) {
+                this.mxVisible = true;
+                let that = this;
+                axios.all([
+                    axios.post(" " + url + "/sys/showTableTitle", {"name": "zxdsbdjjlcx"}),
+                    axios.post(" " + url + "/shebei/getShebeiRecordDetail", {"id": id})
+                ])
+                    .then(axios.spread(function (title, table) {
+                        that.mxCols = title.data;
+                        that.mxData = table.data.data;
+                    }));
+            },
+
+            //显示新增
+            importExcel(){
+
+
             },
 
 
@@ -313,10 +371,6 @@
                 width: 100%;
                 font-size: 14px;
             }
-            .red {
-                color: #ff0000;
-            }
-
         }
     }
 
