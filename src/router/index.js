@@ -266,6 +266,12 @@ import gongzuoguanjingduguanlijilv from '../components/qualityAssurance/gongzuog
 
 
 
+//质量记录查询与统计
+import zhiliangjilvchaxunyutongji from '../components/qualityAssurance/zhiliangjilvchaxunyutongji';
+
+//质量记录报表
+import zhiliangjilvbaobiao from '../components/qualityAssurance/zhiliangjilvbaobiao';
+
 
 //人员模块
 import PersonnelManagement from '../components/personnelManagement/personnelManagement';
@@ -829,12 +835,23 @@ export default new Router({
                             path: 'ListDetails',
                             component: ListDetails,
                             meta: {title: '常规自检记录'}
-                        }
-                        ,
+                        },
                         {
                             path: 'gongzuoguanjingduguanlijilv',
                             component: gongzuoguanjingduguanlijilv,
                             meta: {title: '工作管精度管理记录'}
+                        },
+
+
+                        {
+                            path: 'zhiliangjilvbaobiao',
+                            component: zhiliangjilvbaobiao,
+                            meta: {title: '质量记录报表'}
+                        },
+                        {
+                            path: 'zhiliangjilvchaxunyutongji',
+                            component: zhiliangjilvchaxunyutongji,
+                            meta: {title: '质量记录查询与统计'}
                         }
                     ]
                 },

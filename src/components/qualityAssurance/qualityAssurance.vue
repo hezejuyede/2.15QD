@@ -121,7 +121,7 @@
                             {
                                 label: '质量记录查询与统计',
                                 index: "4-1",
-                                url: "/404"
+                                url: "/QualityAssurance/zhiliangjilvchaxunyutongji"
                             }
                         ]
                     },
@@ -186,14 +186,9 @@
                                 url: "/QualityAssurance/chuanqichuandongbaobiao"
                             },
                             {
-                                label: '质量提醒报表',
-                                index: "7-4",
-                                url: "/404"
-                            },
-                            {
                                 label: '质量记录报表',
                                 index: "7-5",
-                                url: "/404"
+                                url: "/QualityAssurance/zhiliangjilvbaobiao"
                             },
                             {
                                 label: '质量提醒报表',
