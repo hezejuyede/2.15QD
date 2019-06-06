@@ -15,6 +15,18 @@
                         <el-input v-model="select_word" placeholder="智能检索记录" class="handle-input mr10"
                                   style="width: 150px"></el-input>
                     </label>
+                    <label style="margin-right: 5px;margin-left: 5px">
+                        <span>时间</span>
+                        <span>:</span>
+                        <el-date-picker
+                            style="width: 240px"
+                            v-model="examineTime"
+                            type="daterange"
+                            start-placeholder="开始日期"
+                            end-placeholder="结束日期"
+                            value-format="yyyy-MM-dd">
+                        </el-date-picker>
+                    </label>
                     <label style="margin-right: 10px;margin-left: 5px">
                         <span>生产线</span>
                         <span>:</span>
@@ -78,67 +90,84 @@
                 </div>
             </div>
             <!--新增弹出框 -->
-            <el-dialog title="新增点检内容" :visible.sync="addVisible" width="98%">
+            <el-dialog title="新增点检内容" :visible.sync="addVisible" width="60%">
                 <el-form ref="form" label-width="100px">
-                    <el-form-item label="生产线">
-                        <el-select
-                            style="width: 150px"
-                            v-model="line"
-                            clearable
-                            filterable
-                            allow-create
-                            default-first-option
-                            @change="changeSCX"
-                            placeholder="请选择生产线">
-                            <el-option
-                                v-for="item in lineOptions"
-                                :key="item.indexno"
-                                :label="item.name"
-                                :value="item.indexno">
-                            </el-option>
-                        </el-select>
+                    <el-form-item label="记录周期">
+                        <el-input v-model="zhouqi" style="width: 120px" type="number" placeholder="记录周期"></el-input>
                     </el-form-item>
-                    <el-form-item label="工位">
+                    <el-form-item label="到期报警">
                         <el-select
                             style="width: 150px"
-                            v-model="workStation"
+                            v-model="baojing"
                             clearable
                             filterable
                             allow-create
                             default-first-option
                             @change="changeSelect"
-
-                            placeholder="请选择工位">
+                            placeholder="请选择">
                             <el-option
-                                v-for="item in workStationOptions"
+                                v-for="item in baojingOptions"
                                 :key="item.id"
                                 :label="item.name"
                                 :value="item.id">
                             </el-option>
                         </el-select>
                     </el-form-item>
+                    <el-form-item label="设置月份">
+                        <el-date-picker
+                            v-model="yuefen"
+                            type="month"
+                            placeholder="选择月">
+                        </el-date-picker>
+                    </el-form-item>
                     <el-form-item
                         v-for="(domain, index) in dynamicValidateForm.domains"
                         :key="domain.key"
                         :prop="'domains.' + index + '.value'"
-                        :label="'点检内容' + (index+1)+''">
+                        :label="'工位记录' + (index+1)+''">
                         <div class="appendDiv">
                             <div class="appendDivTemplate">
                                 <div class="fl" style="margin-left: 10px">
-                                    <span>NO</span>
-                                    <el-input v-model="domain.no" style="width: 70px" type="number"></el-input>
+                                    <span>生产线</span>
+                                    <el-select
+                                        style="width: 150px"
+                                        v-model="domain.scx"
+                                        clearable
+                                        filterable
+                                        allow-create
+                                        default-first-option
+                                        @change="changeSCX"
+                                        placeholder="请选择生产线">
+                                        <el-option
+                                            v-for="item in lineOptions"
+                                            :key="item.indexno"
+                                            :label="item.name"
+                                            :value="item.indexno">
+                                        </el-option>
+                                    </el-select>
                                 </div>
                                 <div class="fl" style="margin-left: 10px">
-                                    <span>检查项目:</span>
-                                    <el-input v-model="domain.xiangmu" style="width: 150px"></el-input>
+                                    <span>工位</span>
+                                    <el-select
+                                        style="width: 150px"
+                                        v-model="domain.gongwei"
+                                        clearable
+                                        filterable
+                                        allow-create
+                                        default-first-option
+                                        @change="changeSelect"
+                                        placeholder="请选择工位">
+                                        <el-option
+                                            v-for="item in workStationOptions"
+                                            :key="item.id"
+                                            :label="item.name"
+                                            :value="item.id">
+                                        </el-option>
+                                    </el-select>
                                 </div>
                                 <div class="fl" style="margin-left: 10px">
-                                    <span>检查内容:</span>
-                                    <el-input v-model="domain.neirong" style="width: 150px"></el-input>
-                                </div>
-                                <div class="fl" style="margin-left: 10px">
-                                    <span>检查方法:</span>
-                                    <el-input v-model="domain.fangfa" style="width: 400px"></el-input>
+                                    <span>数量:</span>
+                                    <el-input v-model="domain.shuliang" style="width: 120px" type="number"></el-input>
                                 </div>
                                 <div class="fl" style="margin-left: 10px">
                                     <el-button
@@ -155,7 +184,7 @@
                             type="primary"
                             @click="addDomain"
                             style="height:30px;width:20%">
-                            新增点检项目
+                            新增工位
                         </el-button>
                     </el-form-item>
                 </el-form>
@@ -295,18 +324,24 @@
                 editVisible: false,
                 delVisible: false,
 
-
+                examineTime:"",
 
                 workStation: "",
                 workStationOptions: [],
 
                 line: '',
                 lineOptions: [],
+                zhouqi:"",
+                yuefen:"",
+
+                baojing: "",
+                baojingOptions: [{"name": "报警", "id": "1"}, {"name": "不报警", "id": "2"}],
 
                 dynamicValidateForm: {
                     domains: [{
-                        gongwei: '',
-                        shuliang: "",
+                        scx: '',
+                        gongwei: "",
+                        shuliang:""
                     }],
                 },
             }
@@ -342,6 +377,13 @@
                     this.$router.push("/")
                 }
                 else {
+                    let time = getNowTime();
+                    let times = [];
+                    for (let i = 0; i < 2; i++) {
+                        times.push(time)
+                    }
+                    this.examineTime = times;
+
                     let that = this;
                     axios.all([
                         axios.post(" " + url + "/sys/dictionaryList", {"id": "9"}),
@@ -352,6 +394,7 @@
                             that.line = line.data[0].indexno;
                             that.workStation = workStation.data[0].id;
                             that.workStationOptions = workStation.data;
+                            that.loadingShowData(1);
                         }));
 
                 }
@@ -422,18 +465,15 @@
 
             //显示新增
             showAdd() {
-                this.addVisible=true;
-                /*  this.shebei="";
-                  this.name="";
-                  this.line= '';
-                  this.buwei="";
-                  this.workStation="";*/
+                this.addVisible = true;
+                this.zhouqi = "";
+                this.yuefen = "";
+                this.baojing = '';
                 this.dynamicValidateForm = {
                     domains: [{
-                        no: '',
-                        jcxm: "",
-                        jcnr: "",
-                        jcff: ""
+                        scx: '',
+                        gongwei: "",
+                        shuliang: ""
                     }],
                 };
             },
@@ -485,16 +525,12 @@
                 this.dynamicValidateForm.domains = data;
             },
 
-
-
-
             //增加时间
             addDomain() {
                 this.dynamicValidateForm.domains.push({
-                    no: '',
-                    xiangmu: "",
-                    neirong: "",
-                    fangfa: ""
+                    scx: '',
+                    gongwei: "",
+                    shuliang:""
                 });
             },
 
@@ -505,7 +541,6 @@
                     this.dynamicValidateForm.domains.splice(index, 1)
                 }
             },
-
 
 
             // 保存编辑
