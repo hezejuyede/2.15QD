@@ -111,7 +111,7 @@
                             {
                                 label: '常规自检记录',
                                 index: "4-1",
-                                url: "/404"
+                                url: "/QualityAssurance/ListDetails"
                             },
                             {
                                 label: '工作管精度管理记录',

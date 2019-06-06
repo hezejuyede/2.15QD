@@ -337,7 +337,7 @@ import DictionaryMaintenance from '../components/systemManagement/dictionaryMain
 import HeaderMaintenance from '../components/systemManagement/headerMaintenance';
 import LoginSecurityAlert from '../components/securityManagement/loginSecurityAlert';
 
-import ListDetails from '../components/systemManagement/listDetails';
+import ListDetails from '../components/qualityAssurance/listDetails';
 
 
 import ButtonConfiguration from '../components/systemManagement/ButtonConfiguration'
@@ -824,12 +824,17 @@ export default new Router({
                             path: 'zhiliangtixingbaobiao',
                             component: zhiliangtixingbaobiao,
                             meta: {title: '质量基准报表'}
+                        },
+                        {
+                            path: 'ListDetails',
+                            component: ListDetails,
+                            meta: {title: '常规自检记录'}
                         }
                         ,
                         {
                             path: 'gongzuoguanjingduguanlijilv',
                             component: gongzuoguanjingduguanlijilv,
-                            meta: {title: '质量基准报表'}
+                            meta: {title: '工作管精度管理记录'}
                         }
                     ]
                 },
@@ -872,11 +877,6 @@ export default new Router({
                             path: '/ScreeningConditionsConfiguration',
                             component: ScreeningConditionsConfiguration,
                             meta: {title: '筛选条件配置'}
-                        },
-                        {
-                            path: '/ListDetails',
-                            component: ListDetails,
-                            meta: {title: '作业记录'}
                         },
                         {
                             path: '/ExecuteHeaderConfiguration',
