@@ -3,16 +3,16 @@
         <div class="crumbs">
             <el-breadcrumb separator="/">
                 <el-breadcrumb-item>安全管理</el-breadcrumb-item>
-                <el-breadcrumb-item>登录安全提醒</el-breadcrumb-item>
+                <el-breadcrumb-item>安全基准上传</el-breadcrumb-item>
             </el-breadcrumb>
         </div>
         <div class="editorTemplate-content">
             <div class="container">
                 <div class="handle-box">
                     <label style="margin-right: 5px">
-                        <span>筛选岗位提醒</span>
+                        <span>筛选安全基准</span>
                         <span>:</span>
-                        <el-input v-model="select_word" placeholder="筛选提醒" class="handle-input mr10" style="width: 200px"></el-input>
+                        <el-input v-model="select_word" placeholder="筛选安全基准" class="handle-input mr10" style="width: 200px"></el-input>
                     </label>
                     <label style="margin-right: 5px;margin-left: 5px">
                         <span>生产线</span>
@@ -39,7 +39,6 @@
                         <span>:</span>
                         <el-select
                             v-model="select"
-                            style="width: 150px"
                             clearable
                             filterable
                             allow-create
@@ -53,10 +52,10 @@
                             </el-option>
                         </el-select>
                     </label>
-                    <el-button type="success" icon="delete" class="handle-del mr10" @click="doSearch">查询提醒</el-button>
-                    <el-button type="primary" icon="delete" class="handle-del mr10" @click="showAdd">新增提醒</el-button>
-                    <el-button type="warning" icon="delete" class="handle-del mr10" @click="showEdit">编辑提醒</el-button>
-                    <el-button type="danger" icon="delete" class="handle-del mr10" @click="deleteAlert">删除提醒</el-button>
+                    <el-button type="success" class="handle-del mr10" @click="doSearch">查询基准</el-button>
+                    <el-button type="primary" class="handle-del mr10" @click="showAdd">新增基准</el-button>
+                    <el-button type="warning" class="handle-del mr10" @click="showEdit">编辑基准</el-button>
+                    <el-button type="danger"  class="handle-del mr10" @click="deleteAlert">删除基准</el-button>
                 </div>
                 <div class="">
                     <el-table class="tb-edit"
@@ -80,7 +79,7 @@
             </div>
         </div>
         <!--新增弹出框 -->
-        <el-dialog title="新增登录安全提醒" :visible.sync="addVisible" width="90%" top="50px">
+        <el-dialog title="新增安全基准" :visible.sync="addVisible" width="90%" top="50px">
             <div class="container" style="height:500px;overflow:auto">
                 <div class="containerDiv">
                     <quill-editor ref="myTextEditor" v-model="content" :options="editorOption"></quill-editor>
@@ -92,14 +91,14 @@
         </el-dialog>
 
         <!--详情弹出框 -->
-        <el-dialog title="安全详情" :visible.sync="contentVisible" width="90%" top="50px">
+        <el-dialog title="作业安全详情" :visible.sync="contentVisible" width="90%" top="50px">
             <div class="container" style="height:500px;overflow:auto">
-               <div class="" v-html="htmlData"></div>
+                <div class="" v-html="htmlData"></div>
             </div>
         </el-dialog>
 
         <!-- 编辑弹出框 -->
-        <el-dialog title="编辑登录安全提醒" :visible.sync="editVisible" width="90%" top="50px">
+        <el-dialog title="编辑安全基准" :visible.sync="editVisible" width="90%" top="50px">
             <div class="container" style="height:500px;overflow:auto">
                 <div class="containerDiv">
                     <quill-editor ref="myTextEditor" v-model="content" :options="editorOption" height="300"></quill-editor>
@@ -109,8 +108,9 @@
                 </div>
             </div>
         </el-dialog>
+
         <!-- 删除提示框 -->
-        <el-dialog title="删除登录安全提醒" :visible.sync="delVisible" width="300px" center>
+        <el-dialog title="删除安全基准" :visible.sync="delVisible" width="300px" center>
             <div class="del-dialog-cnt">删除不可恢复，是否确定删除？</div>
             <span slot="footer" class="dialog-footer">
                 <el-button @click="delVisible = false" style="height:30px;width:80px">取 消</el-button>
@@ -207,12 +207,13 @@
                         axios.post(" " + url + "/sys/dictionaryList", {"id": "9"}),
                         axios.post(" " + url + "/api/getPersonProcessList", {"name": ""}),
                     ])
-                        .then(axios.spread(function (line,select) {
+                        .then(axios.spread(function (line, workStation) {
                             that.lineOptions = line.data;
                             that.line = line.data[0].indexno;
-                            that.select = select.data[0].id;
-                            that.selectOptions = select.data;
-                            that.loadingShowData(1);
+                            that.select= workStation.data[0].id;
+                            that.selectOptions = workStation.data;
+                            that.loadingShowData(1)
+
                         }));
                 }
             },
@@ -221,13 +222,28 @@
             loadingShowData(data){
                 let that = this;
                 axios.all([
-                    axios.post(" " + url + "/sys/showTableTitle", {"name": "gwxz"}),
-                    axios.post(" " + url + "/sysconfig/showContextList",{"id":data})
+                    axios.post(" " + url + "/sys/showTableTitle", {"name": "zuoyejizhunshangchuan"}),
+                    axios.post(" " + url + "/sysconfig/showNoticeList", {"id": data})
                 ])
                     .then(axios.spread(function (title, table) {
                         that.cols = title.data;
                         that.tableData = table.data;
                     }));
+            },
+
+            //更改生产线
+            changeSCX() {
+                axios.post(" " + url + "/sysconfig/getGongxuList", {"id": this.line})
+                    .then((res) => {
+                        if (res.data ==="-1") {
+                            this.select = "";
+                            this.selectOptions = [];
+                        }
+                        else {
+                            this.select = res.data[0].id;
+                            this.selectOptions = res.data;
+                        }
+                    });
             },
 
 
@@ -265,18 +281,20 @@
                     this.listData = [];
                 }
             },
+
             //双击点击显示详情
             edit(row, column, cell, event) {
                 this.contentVisible = true;
                 this.id = row.id;
-                axios.post(" " + url + "/sysconfig/contextDetail", {"id": this.id})
+                axios.post(" " + url + "/sysconfig/noticeDetail", {"id": this.id})
                     .then((res) => {
-                      this.htmlData=res.data.contexthtml;
+                        this.htmlData=res.data.noticehtml;
                     })
                     .catch((err) => {
                         console.log(err)
                     });
             },
+
             //选择点击删除
             deleteAlert() {
                 if (this.listData.length) {
@@ -295,6 +313,7 @@
                     setTimeout(a, 2000);
                 }
             },
+
             //显示编辑
             showEdit(){
                 if (this.listData.length) {
@@ -312,9 +331,9 @@
                     }
                     else {
                         this.editVisible = true;
-                        axios.post(" " + url + "/sysconfig/contextDetail", {"id": this.listData[0]})
+                        axios.post(" " + url + "/sysconfig/noticeDetail", {"id": this.listData[0]})
                             .then((res) => {
-                                this.content=res.data.contexthtml;
+                                this.content=res.data.noticehtml;
                             })
                             .catch((err) => {
                                 console.log(err)
@@ -335,13 +354,14 @@
                 }
 
             },
+
             // 保存编辑
             saveEdit() {
                 if (this.content) {
-                    axios.post(" " + url + "/sysconfig/updateContext",
+                    axios.post(" " + url + "/sysconfig/updateNotice",
                         {
                             "id":this.listData[0],
-                            "contexthtml": this.content,
+                            "noticehtml": this.content,
                         }
                     )
                         .then((res) => {
@@ -349,6 +369,7 @@
                                 this.$message.success(`修改成功`);
                                 this.editVisible = false;
                                 this.loadingShowData(this.select)
+
                             }
                             else {
                                 this.$message.warning(`修改失败`);
@@ -363,9 +384,10 @@
                 }
 
             },
+
             // 确定删除
             deleteRow() {
-                axios.post(" " + url + "/sysconfig/delContext",
+                axios.post(" " + url + "/sysconfig/delNotice",
                     {
                         "ids": this.listData,
                     }
@@ -375,6 +397,7 @@
                             this.$message.success('删除成功');
                             this.delVisible = false;
                             this.loadingShowData(this.select)
+
                         }
                         else {
                             this.$message.warning(`删除失败`);
@@ -384,12 +407,11 @@
                         console.log(err)
                     })
             },
+
             //显示新增
             showAdd() {
                 if (this.select) {
                     this.addVisible = true;
-                    this.content="";
-
                 }
                 else {
                     this.message = "请选择要新增的工位";
@@ -405,13 +427,14 @@
                 }
 
             },
+
             //进行新增
             doAdd() {
                 if (this.content) {
-                    axios.post(" " + url + "/sysconfig/contextAdd",
+                    axios.post(" " + url + "/sysconfig/noticeAdd",
                         {
                             "stationid":this.select,
-                            "contexthtml": this.content,
+                            "noticehtml": this.content,
                         }
                     )
                         .then((res) => {
@@ -446,9 +469,7 @@
                     this.$message.worning('提交内容不能为空');
                 }
 
-            }
-
-
+            },
         }
     }
 </script>
@@ -485,9 +506,6 @@
             .table {
                 width: 100%;
                 font-size: 14px;
-            }
-            .red {
-                color: #ff0000;
             }
 
         }

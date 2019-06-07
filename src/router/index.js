@@ -213,9 +213,17 @@ import anquantixingchaxuntongji from '../components/securityManagement/anquantix
 import anquantixingbaobiao from '../components/securityManagement/anquantixingbaobiao';
 
 
+//安全基准上传
+import anquanjizhunshangchuan from '../components/securityManagement/anquanjizhunshangchuan.vue';
 
+//学习指示下达
+import anquanxuexizhibaoxiada from '../components/securityManagement/anquanxuexizhibaoxiada.vue';
 
+//学习报告统计
+import anquanxuexibaogaotongji from '../components/securityManagement/anquanxuexibaogaotongji.vue';
 
+//安全基准报表
+import anquanjizhunbaobiao from '../components/securityManagement/anquanjizhunbaobiao.vue';
 
 
 
@@ -962,7 +970,33 @@ export default new Router({
                             path: 'anquantixingbaobiao',
                             component: anquantixingbaobiao,
                             meta: {title: '安全提醒报表'}
+                        },
+                        {
+                            path: 'anquanjizhunshangchuan',
+                            component: anquanjizhunshangchuan,
+                            meta: {title: '安全基准上传'}
+                        },
+                        {
+                            path: 'anquanxuexizhibaoxiada',
+                            component: anquanxuexizhibaoxiada,
+                            meta: {title: '学习指示下达'}
+                        },
+                        {
+                            path: 'anquanxuexibaogaotongji',
+                            component: anquanxuexibaogaotongji,
+                            meta: {title: '学习报告统计'}
+                        },
+                        {
+                            path: 'anquanjizhunbaobiao',
+                            component: anquanjizhunbaobiao,
+                            meta: {title: '安全基准报表'}
                         }
+
+
+
+
+
+
                     ]
                 },
                 {

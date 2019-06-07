@@ -67,17 +67,17 @@
                             {
                                 label: '安全基准上传',
                                 index: "3-1",
-                                url: "/SecurityManagement/LoginSecurityAlert"
+                                url: "/SecurityManagement/anquanjizhunshangchuan"
                             },
                             {
                                 label: '学习指示下达',
                                 index: "3-2",
-                                url: "/SecurityManagement/LoginSecurityAlert"
+                                url: "/SecurityManagement/anquanxuexizhibaoxiada"
                             },
                             {
                                 label: '学习报告统计',
                                 index: "3-3",
-                                url: "/SecurityManagement/LoginSecurityAlert"
+                                url: "/SecurityManagement/anquanxuexibaogaotongji"
                             }
                         ]
                     },
@@ -109,12 +109,12 @@
                             {
                                 label: '安全基准报表',
                                 index: "5-2",
-                                url: "/SecurityManagement/LoginSecurityAlert"
+                                url: "/SecurityManagement/anquanjizhunbaobiao"
                             },
                             {
                                 label: '安全记录报表',
                                 index: "5-3",
-                                url: "/SecurityManagement/LoginSecurityAlert"
+                                url: "/SecurityManagement/anquanjizhunbaobiao"
                             }
                         ]
                     },
