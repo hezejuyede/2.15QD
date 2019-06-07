@@ -140,7 +140,7 @@
                 selectOptions: [],
 
                 xuexi:"",
-                xuexiOptions:[{"name": "已学习", "id": "1"}, {"name": "未学习", "id": "2"},],
+                xuexiOptions:[{"name": "已查阅", "id": "1"}, {"name": "未查阅", "id": "2"},],
 
 
             }
@@ -203,7 +203,7 @@
             loadingShowData(data){
                 let that = this;
                 axios.all([
-                    axios.post(" " + url + "/sys/showTableTitle", {"name": "zhiliangtixingchaxuntongji"}),
+                    axios.post(" " + url + "/sys/showTableTitle", {"name": "anquantixingchaxuntongji"}),
                     axios.post(" " + url + "/sysconfig/showNoticeList", {"id": data})
                 ])
                     .then(axios.spread(function (title, table) {

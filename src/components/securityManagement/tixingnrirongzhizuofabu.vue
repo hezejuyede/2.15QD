@@ -116,55 +116,12 @@
                         </label>
                     </div>
                     <div class="containerDivTop2">
-                        <span style="color: #dd6161">触发条件:</span>
-                        <label style="margin-right: 5px;margin-left: 5px">
-                            <span>船号</span>
-                            <span>:</span>
-                            <el-input v-model="chuanhao" style="width: 120px" placeholder="船号"></el-input>
-                        </label>
-                        <label style="margin-right: 5px;margin-left: 5px">
-                            <span>批次</span>
-                            <span>:</span>
-                            <el-select
-                                style="width: 120px"
-                                v-model="pici"
-                                clearable
-                                filterable
-                                allow-create
-                                default-first-option
-                                placeholder="请选择批次">
-                                <el-option
-                                    v-for="item in piciOptions"
-                                    :key="item.id"
-                                    :label="item.name"
-                                    :value="item.id">
-                                </el-option>
-                            </el-select>
-                        </label>
-                        <label style="margin-right: 5px;margin-left: 5px">
-                            <span>系列</span>
-                            <span>:</span>
-                            <el-select
-                                style="width: 120px"
-                                v-model="xilie"
-                                clearable
-                                filterable
-                                allow-create
-                                default-first-option
-                                placeholder="请选择系列">
-                                <el-option
-                                    v-for="item in xilieOptions"
-                                    :key="item.indexno"
-                                    :label="item.name"
-                                    :value="item.indexno">
-                                </el-option>
-                            </el-select>
-                        </label>
+                        <span style="color: #dd6161">推送条件:</span>
                         <label style="margin-right: 5px;margin-left: 5px">
                             <span>生产线</span>
                             <span>:</span>
                             <el-select
-                                style="width: 120px"
+                                style="width: 150px"
                                 v-model="line"
                                 clearable
                                 filterable
@@ -247,6 +204,99 @@
         <!-- 编辑弹出框 -->
         <el-dialog title="编辑提醒内容" :visible.sync="editVisible" width="90%" top="50px">
             <div class="container" style="height:500px;overflow:auto">
+                <div class="containerDivTop">
+                    <div class="containerDivTop1">
+                        <span style="color: #dd6161">提醒级别:</span>
+                        <label style="margin-right: 5px;margin-left: 5px">
+                            <span>类型：</span>
+                            <span>:</span>
+                            <el-select
+                                v-model="tixing"
+                                clearable
+                                filterable
+                                allow-create
+                                default-first-option
+                                @change="changeSCX"
+                                placeholder="请选择紧急类型">
+                                <el-option
+                                    v-for="item in tixingOptions"
+                                    :key="item.id"
+                                    :label="item.name"
+                                    :value="item.id">
+                                </el-option>
+                            </el-select>
+                        </label>
+                    </div>
+                    <div class="containerDivTop2">
+                        <span style="color: #dd6161">推送条件:</span>
+                        <label style="margin-right: 5px;margin-left: 5px">
+                            <span>生产线</span>
+                            <span>:</span>
+                            <el-select
+                                style="width: 150px"
+                                v-model="line"
+                                clearable
+                                filterable
+                                allow-create
+                                default-first-option
+                                @change="changeSCX"
+                                placeholder="请选择生产线">
+                                <el-option
+                                    v-for="item in lineOptions"
+                                    :key="item.indexno"
+                                    :label="item.name"
+                                    :value="item.indexno">
+                                </el-option>
+                            </el-select>
+                        </label>
+                        <label style="margin-right: 5px;margin-left: 5px">
+                            <span>工位</span>
+                            <span>:</span>
+                            <el-select
+                                style="width: 120px"
+                                v-model="select"
+                                clearable
+                                filterable
+                                allow-create
+                                default-first-option
+                                placeholder="请选择工位">
+                                <el-option
+                                    v-for="item in selectOptions"
+                                    :key="item.id"
+                                    :label="item.name"
+                                    :value="item.id">
+                                </el-option>
+                            </el-select>
+                        </label>
+                    </div>
+                    <div class="containerDivTop3">
+                        <span style="color: #dd6161">设定频率:</span>
+                        <label style="margin-right: 5px;margin-left: 5px">
+                            <span>时间段</span>
+                            <span>:</span>
+                            <el-select
+                                v-model="shijianduan"
+                                clearable
+                                filterable
+                                allow-create
+                                default-first-option
+                                @change="changeSCX"
+                                placeholder="请选择时间段">
+                                <el-option
+                                    v-for="item in shijianduanOptions"
+                                    :key="item.indexno"
+                                    :label="item.name"
+                                    :value="item.indexno">
+                                </el-option>
+                            </el-select>
+                        </label>
+                        <label style="margin-right: 5px;margin-left: 5px">
+                            <span>频次</span>
+                            <span>:</span>
+                            <el-input v-model="pinci" style="width: 200px" type="number" placeholder="频次"></el-input>
+                        </label>
+                    </div>
+                </div>
                 <div class="containerDiv">
                     <quill-editor ref="myTextEditor" v-model="content" :options="editorOption" height="300"></quill-editor>
                     <div class="containerDivBtn">
@@ -317,13 +367,7 @@
                 shijianduan:"",
                 shijianduanOptions: [{"name": "每天", "id": "1"}, {"name": "每周", "id": "2"}, {"name": "每月", "id": "2"}],
 
-                xilie:"",
-                xilieOptions:[],
 
-                pici:"",
-                piciOptions:[],
-
-                chuanhao:"",
                 pinci:"",
                 examineTime:"",
 
@@ -377,16 +421,12 @@
                     axios.all([
                         axios.post(" " + url + "/sys/dictionaryList", {"id": "9"}),
                         axios.post(" " + url + "/api/getPersonProcessList", {"name": ""}),
-                        axios.post(" " + url + "/sys/getPiciList"),
-                        axios.post(" " + url + "/sys/dictionaryList", {"id": "11"}),
                     ])
-                        .then(axios.spread(function (line, workStation,pici,xilie) {
+                        .then(axios.spread(function (line, workStation) {
                             that.lineOptions = line.data;
                             that.line = line.data[0].indexno;
                             that.select= workStation.data[0].id;
                             that.selectOptions = workStation.data;
-                            that.piciOptions = pici.data;
-                            that.xilieOptions = xilie.data;
                             that.loadingShowData(1)
 
                         }));
@@ -397,7 +437,7 @@
             loadingShowData(data){
                 let that = this;
                 axios.all([
-                    axios.post(" " + url + "/sys/showTableTitle", {"name": "tixingneirongzhizuoyufabu"}),
+                    axios.post(" " + url + "/sys/showTableTitle", {"name": "anquantixingneirongzhizuoyufabu"}),
                     axios.post(" " + url + "/sysconfig/showNoticeList", {"id": data})
                 ])
                     .then(axios.spread(function (title, table) {
@@ -669,7 +709,7 @@
         }
         .container {
             .containerDivTop{
-                padding-left: 10%;
+                padding-left: 20%;
                 .containerDivTop1{
                     height: 50px;
                     display: flex;

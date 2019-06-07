@@ -183,7 +183,7 @@
             loadingShowData(data){
                 let that = this;
                 axios.all([
-                    axios.post(" " + url + "/sys/showTableTitle", {"name": "zhiliangtixingbaobiao"}),
+                    axios.post(" " + url + "/sys/showTableTitle", {"name": "anquantixingbaobiao"}),
                     axios.post(" " + url + "/sysconfig/showNoticeList", {"id": data})
                 ])
                     .then(axios.spread(function (title, table) {
