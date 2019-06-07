@@ -3,16 +3,16 @@
         <div class="crumbs">
             <el-breadcrumb separator="/">
                 <el-breadcrumb-item>系统管理</el-breadcrumb-item>
-                <el-breadcrumb-item>登录安全提醒</el-breadcrumb-item>
+                <el-breadcrumb-item>离岗安全确认</el-breadcrumb-item>
             </el-breadcrumb>
         </div>
         <div class="editorTemplate-content">
             <div class="container">
                 <div class="handle-box">
                     <label style="margin-right: 5px">
-                        <span>筛选岗位提醒</span>
+                        <span>筛选离岗安全确认</span>
                         <span>:</span>
-                        <el-input v-model="select_word" placeholder="筛选提醒" class="handle-input mr10" style="width: 200px"></el-input>
+                        <el-input v-model="select_word" placeholder="筛选离岗安全确认" class="handle-input mr10" style="width: 200px"></el-input>
                     </label>
                     <label style="margin-right: 5px;margin-left: 5px">
                         <span>生产线</span>
@@ -38,8 +38,8 @@
                         <span>工位</span>
                         <span>:</span>
                         <el-select
+                            style="width: 120px"
                             v-model="select"
-                            style="width: 150px"
                             clearable
                             filterable
                             allow-create
@@ -53,10 +53,10 @@
                             </el-option>
                         </el-select>
                     </label>
-                    <el-button type="success" icon="delete" class="handle-del mr10" @click="doSearch">查询提醒</el-button>
-                    <el-button type="primary" icon="delete" class="handle-del mr10" @click="showAdd">新增提醒</el-button>
-                    <el-button type="warning" icon="delete" class="handle-del mr10" @click="showEdit">编辑提醒</el-button>
-                    <el-button type="danger" icon="delete" class="handle-del mr10" @click="deleteAlert">删除提醒</el-button>
+                    <el-button type="success" icon="delete" class="handle-del mr10" @click="doSearch">查询确认</el-button>
+                    <el-button type="primary" icon="delete" class="handle-del mr10" @click="showAdd">新增确认</el-button>
+                    <el-button type="warning" icon="delete" class="handle-del mr10" @click="showEdit">编辑确认</el-button>
+                    <el-button type="danger" icon="delete" class="handle-del mr10" @click="deleteAlert">删除确认</el-button>
                 </div>
                 <div class="">
                     <el-table class="tb-edit"
@@ -80,7 +80,7 @@
             </div>
         </div>
         <!--新增弹出框 -->
-        <el-dialog title="新增登录安全提醒" :visible.sync="addVisible" width="90%" top="50px">
+        <el-dialog title="新增离岗安全确认" :visible.sync="addVisible" width="90%" top="50px">
             <div class="container" style="height:500px;overflow:auto">
                 <div class="containerDiv">
                     <quill-editor ref="myTextEditor" v-model="content" :options="editorOption"></quill-editor>
@@ -92,14 +92,14 @@
         </el-dialog>
 
         <!--详情弹出框 -->
-        <el-dialog title="安全详情" :visible.sync="contentVisible" width="90%" top="50px">
+        <el-dialog title="离岗安全确认详情" :visible.sync="contentVisible" width="90%" top="50px">
             <div class="container" style="height:500px;overflow:auto">
-               <div class="" v-html="htmlData"></div>
+                <div class="" v-html="htmlData"></div>
             </div>
         </el-dialog>
 
         <!-- 编辑弹出框 -->
-        <el-dialog title="编辑登录安全提醒" :visible.sync="editVisible" width="90%" top="50px">
+        <el-dialog title="编辑离岗安全确认" :visible.sync="editVisible" width="90%" top="50px">
             <div class="container" style="height:500px;overflow:auto">
                 <div class="containerDiv">
                     <quill-editor ref="myTextEditor" v-model="content" :options="editorOption" height="300"></quill-editor>
@@ -110,7 +110,7 @@
             </div>
         </el-dialog>
         <!-- 删除提示框 -->
-        <el-dialog title="删除登录安全提醒" :visible.sync="delVisible" width="300px" center>
+        <el-dialog title="删除离岗安全确认" :visible.sync="delVisible" width="300px" center>
             <div class="del-dialog-cnt">删除不可恢复，是否确定删除？</div>
             <span slot="footer" class="dialog-footer">
                 <el-button @click="delVisible = false" style="height:30px;width:80px">取 消</el-button>
@@ -157,9 +157,9 @@
                 delVisible: false,
                 contentVisible:false,
 
-
                 line: '',
                 lineOptions: [],
+
                 select:"",
                 selectOptions: [],
 
@@ -271,7 +271,7 @@
                 this.id = row.id;
                 axios.post(" " + url + "/sysconfig/contextDetail", {"id": this.id})
                     .then((res) => {
-                      this.htmlData=res.data.contexthtml;
+                        this.htmlData=res.data.contexthtml;
                     })
                     .catch((err) => {
                         console.log(err)

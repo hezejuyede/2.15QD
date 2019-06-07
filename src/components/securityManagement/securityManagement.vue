@@ -35,12 +35,12 @@
                             {
                                 label: '登录安全提醒',
                                 index: "1-1",
-                                url: "/LoginSecurityAlert"
+                                url: "/SecurityManagement/LoginSecurityAlert"
                             },
                             {
                                 label: '离岗安全确认',
                                 index: "2-1",
-                                url: "/LoginSecurityAlert"
+                                url: "/SecurityManagement/liganganquanqueren"
                             }
                         ]
                     },

@@ -192,8 +192,15 @@ import zgsjStatistics from '../components/personnelManagement/zgsjStatistics'
 
 import SystemManagement from '../components/systemManagement/systemManagement';
 
-
+//安全模块
 import SecurityManagement from '../components/securityManagement/securityManagement';
+
+//登录安全提醒
+import LoginSecurityAlert from '../components/securityManagement/loginSecurityAlert';
+
+//离岗安全确认
+import liganganquanqueren from '../components/securityManagement/liganganquanqueren.vue';
+
 
 
 
@@ -341,7 +348,7 @@ import OperationLog from '../components/systemManagement/operationLog';
 import LoginOutLog from '../components/systemManagement/loginOutLog';
 import DictionaryMaintenance from '../components/systemManagement/dictionaryMaintenance';
 import HeaderMaintenance from '../components/systemManagement/headerMaintenance';
-import LoginSecurityAlert from '../components/securityManagement/loginSecurityAlert';
+
 
 import ListDetails from '../components/qualityAssurance/listDetails';
 
@@ -908,9 +915,14 @@ export default new Router({
                     meta: {title: '安全管理'},
                     children: [
                         {
-                            path: '/LoginSecurityAlert',
+                            path: 'LoginSecurityAlert',
                             component: LoginSecurityAlert,
                             meta: {title: '登录安全提醒'}
+                        },
+                        {
+                            path: 'liganganquanqueren',
+                            component: liganganquanqueren,
+                            meta: {title: '离岗安全确认'}
                         }
                     ]
                 },
