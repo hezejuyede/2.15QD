@@ -10,9 +10,9 @@
             <div class="container">
                 <div class="handle-box">
                     <label style="margin-right: 5px">
-                        <span>智能检索误做反馈</span>
+                        <span>智能检索记录报表</span>
                         <span>:</span>
-                        <el-input v-model="select_word" placeholder="智能检索误做反馈" class="handle-input mr10"  style="width: 200px"></el-input>
+                        <el-input v-model="select_word" placeholder="智能检索记录报表" class="handle-input mr10"  style="width: 200px"></el-input>
                     </label>
                     <label style="margin-right: 5px;margin-left:5px">
                         <span>选择查询时间</span>
@@ -26,32 +26,13 @@
                             value-format="yyyy-MM-dd">
                         </el-date-picker>
                     </label>
-                    <label style="margin-right: 5px;margin-left: 5px">
-                        <span>误做类型</span>
-                        <span>:</span>
-                        <el-select
-                            style="width: 150px"
-                            v-model="wuzuo"
-                            clearable
-                            filterable
-                            allow-create
-                            default-first-option
-                            placeholder="请选择工位">
-                            <el-option
-                                v-for="item in wuzuoOptions"
-                                :key="item.id"
-                                :label="item.name"
-                                :value="item.id">
-                            </el-option>
-                        </el-select>
-                    </label>
                     <el-button type="primary"  class="handle-del mr10" @click="doSearch">查询</el-button>
                     <el-button type="danger"  class="handle-del mr10" @click="importExcel">导出</el-button>
                 </div>
                 <div class="">
                     <el-table class="tb-edit"
                               :data="tables"
-                              :header-cell-style="{background:'#A1D0FC',color:'rgba(0, 0, 0, 0.8)',fontSize:'20px'}"
+                              :header-cell-style="{background:'#A1D0FC',color:'rgba(0, 0, 0, 0.8)',fontSize:'16px'}"
                               border
                               height="450"
                               @select="selectList"
@@ -102,10 +83,7 @@
                 tableData: [],
 
                 select_word: '',
-
-
-                wuzuo: "1",
-                wuzuoOptions: [{"name": "客户反馈的误做", "id": "1"}, {"name": "加工线内部误做", "id": "2"}],
+                
 
 
             }
@@ -155,7 +133,7 @@
             loadingShowData(data1,data2) {
                 let that = this;
                 axios.all([
-                    axios.post(" " + url + "/sys/showTableTitle", {"name": "khfkdwz"}),
+                    axios.post(" " + url + "/sys/showTableTitle", {"name": "zhiliangjilvbaobiao"}),
                     axios.post(" " + url + "/devType/devTypeList",{"times":data1,"type":data2})
                 ])
                     .then(axios.spread(function (title, table) {
