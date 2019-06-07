@@ -88,12 +88,12 @@
                             {
                                 label: '安全记录登记',
                                 index: "4-1",
-                                url: "/SecurityManagement/LoginSecurityAlert"
+                                url: "/SecurityManagement/anquanjilvdengji"
                             },
                             {
                                 label: '安全记录查询与统计',
                                 index: "4-2",
-                                url: "/SecurityManagement/LoginSecurityAlert"
+                                url: "/SecurityManagement/anquanjilvchaxuntongji"
                             },
                         ]
                     },
@@ -114,21 +114,10 @@
                             {
                                 label: '安全记录报表',
                                 index: "5-3",
-                                url: "/SecurityManagement/anquanjizhunbaobiao"
+                                url: "/SecurityManagement/anquanjilvbaobiao"
                             }
                         ]
-                    },
-                    {
-                        label: '安全监控',
-                        index: "6",
-                        children: [
-                            {
-                                label: '安全监控',
-                                index: "6-1",
-                                url: "//SecurityManagement/LoginSecurityAlert"
-                            }
-                        ]
-                    },
+                    }
                 ],
                 activeIndex: '1',
             }

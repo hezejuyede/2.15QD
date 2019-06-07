@@ -226,7 +226,14 @@ import anquanxuexibaogaotongji from '../components/securityManagement/anquanxuex
 import anquanjizhunbaobiao from '../components/securityManagement/anquanjizhunbaobiao.vue';
 
 
+//学习指示下达
+import anquanjilvbaobiao from '../components/securityManagement/anquanjilvbaobiao.vue';
 
+//学习报告统计
+import anquanjilvchaxuntongji from '../components/securityManagement/anquanjilvchaxuntongji.vue';
+
+//安全基准报表
+import anquanjilvdengji from '../components/securityManagement/anquanjilvdengji';
 
 
 
@@ -990,6 +997,21 @@ export default new Router({
                             path: 'anquanjizhunbaobiao',
                             component: anquanjizhunbaobiao,
                             meta: {title: '安全基准报表'}
+                        },
+                        {
+                            path: 'anquanjilvchaxuntongji',
+                            component: anquanjilvchaxuntongji,
+                            meta: {title: '安全记录查询与统计'}
+                        },
+                        {
+                            path: 'anquanjilvdengji',
+                            component: anquanjilvdengji,
+                            meta: {title: '安全记录登记'}
+                        },
+                        {
+                            path: 'anquanjilvbaobiao',
+                            component: anquanjilvbaobiao,
+                            meta: {title: '安全记录报表'}
                         }
 
 

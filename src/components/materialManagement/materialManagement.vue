@@ -184,18 +184,7 @@
                                 url: "/gwReportForm"
                             }
                         ]
-                    },
-                    {
-                        label: '物料监控',
-                        index: "8",
-                        children: [
-                            {
-                                label: '物料监控图',
-                                index: "8-1",
-                                url: "/404"
-                            }
-                        ]
-                    },
+                    }
                 ],
                 activeIndex: '1',
             }

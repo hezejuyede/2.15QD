@@ -201,18 +201,6 @@
                                 url: "/QualityAssurance/zhiliangjizhunbaobiao"
                             }
                         ]
-                    },
-                    {
-                        label: '质量监控',
-                        index: "8",
-                        url: "/404",
-                        children: [
-                            {
-                                label: '质量监控综合地图',
-                                index: "8-1",
-                                url: "/404"
-                            }
-                        ]
                     }
                 ],
                 activeIndex: '1',
