@@ -49,24 +49,14 @@
                         index: "2",
                         children: [
                             {
-                                label: '提醒内容编辑提醒内容制作与发布',
+                                label: '提醒内容制作与发布',
                                 index: "2-1",
-                                url: "/LoginSecurityAlert"
-                            },
-                            {
-                                label: '安全提醒的修改与撤销',
-                                index: "2-2",
-                                url: "/LoginSecurityAlert"
-                            },
-                            {
-                                label: '安全提醒查阅',
-                                index: "2-3",
-                                url: "/LoginSecurityAlert"
+                                url: "/SecurityManagement/tixingnrirongzhizuofabu"
                             },
                             {
                                 label: '安全提醒的查询与统计',
-                                index: "2-4",
-                                url: "/LoginSecurityAlert"
+                                index: "2-2",
+                                url: "/SecurityManagement/anquantixingchaxuntongji"
                             }
                         ]
                     },
@@ -77,17 +67,17 @@
                             {
                                 label: '安全基准上传',
                                 index: "3-1",
-                                url: "/LoginSecurityAlert"
+                                url: "/SecurityManagement/LoginSecurityAlert"
                             },
                             {
                                 label: '学习指示下达',
                                 index: "3-2",
-                                url: "/LoginSecurityAlert"
+                                url: "/SecurityManagement/LoginSecurityAlert"
                             },
                             {
                                 label: '学习报告统计',
                                 index: "3-3",
-                                url: "/LoginSecurityAlert"
+                                url: "/SecurityManagement/LoginSecurityAlert"
                             }
                         ]
                     },
@@ -98,12 +88,12 @@
                             {
                                 label: '安全记录登记',
                                 index: "4-1",
-                                url: "/LoginSecurityAlert"
+                                url: "/SecurityManagement/LoginSecurityAlert"
                             },
                             {
                                 label: '安全记录查询与统计',
                                 index: "4-2",
-                                url: "/LoginSecurityAlert"
+                                url: "/SecurityManagement/LoginSecurityAlert"
                             },
                         ]
                     },
@@ -114,17 +104,17 @@
                             {
                                 label: '安全提醒报表',
                                 index: "5-1",
-                                url: "/LoginSecurityAlert"
+                                url: "/SecurityManagement/anquantixingbaobiao"
                             },
                             {
                                 label: '安全基准报表',
                                 index: "5-2",
-                                url: "/LoginSecurityAlert"
+                                url: "/SecurityManagement/LoginSecurityAlert"
                             },
                             {
                                 label: '安全记录报表',
                                 index: "5-3",
-                                url: "/LoginSecurityAlert"
+                                url: "/SecurityManagement/LoginSecurityAlert"
                             }
                         ]
                     },
@@ -135,7 +125,7 @@
                             {
                                 label: '安全监控',
                                 index: "6-1",
-                                url: "/LoginSecurityAlert"
+                                url: "//SecurityManagement/LoginSecurityAlert"
                             }
                         ]
                     },

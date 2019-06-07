@@ -189,8 +189,10 @@ import zgsjStatistics from '../components/personnelManagement/zgsjStatistics'
 
 
 
-
+//系统模块
 import SystemManagement from '../components/systemManagement/systemManagement';
+
+
 
 //安全模块
 import SecurityManagement from '../components/securityManagement/securityManagement';
@@ -200,6 +202,29 @@ import LoginSecurityAlert from '../components/securityManagement/loginSecurityAl
 
 //离岗安全确认
 import liganganquanqueren from '../components/securityManagement/liganganquanqueren.vue';
+
+
+
+
+
+//提醒内容制作与发布
+import tixingnrirongzhizuofabu from '../components/securityManagement/tixingnrirongzhizuofabu';
+
+//安全提醒的查询与统计
+import anquantixingchaxuntongji from '../components/securityManagement/anquantixingchaxuntongji';
+
+//安全提醒报表
+import anquantixingbaobiao from '../components/securityManagement/anquantixingbaobiao';
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -923,6 +948,24 @@ export default new Router({
                             path: 'liganganquanqueren',
                             component: liganganquanqueren,
                             meta: {title: '离岗安全确认'}
+                        }
+                        ,
+                        {
+                            path: 'tixingnrirongzhizuofabu',
+                            component: tixingnrirongzhizuofabu,
+                            meta: {title: '提醒内容制作与发布'}
+                        }
+                        ,
+                        {
+                            path: 'anquantixingchaxuntongji',
+                            component: anquantixingchaxuntongji,
+                            meta: {title: '安全提醒的查询与统计'}
+                        }
+                        ,
+                        {
+                            path: 'anquantixingbaobiao',
+                            component: anquantixingbaobiao,
+                            meta: {title: '安全提醒报表'}
                         }
                     ]
                 },
