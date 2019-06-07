@@ -83,7 +83,7 @@
                 tableData: [],
 
                 select_word: '',
-                
+
 
 
             }
