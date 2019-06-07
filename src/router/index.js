@@ -203,10 +203,6 @@ import LoginSecurityAlert from '../components/securityManagement/loginSecurityAl
 //离岗安全确认
 import liganganquanqueren from '../components/securityManagement/liganganquanqueren.vue';
 
-
-
-
-
 //提醒内容制作与发布
 import tixingnrirongzhizuofabu from '../components/securityManagement/tixingnrirongzhizuofabu';
 
