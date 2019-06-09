@@ -108,6 +108,9 @@ import zhuwenpinbuzu from '../components/materialManagement/zhuwenpinbuzu.vue'
 //储品不足
 import chupinbuzu from '../components/materialManagement/chupinbuzu.vue'
 
+//注文金物未交货
+import zhuwenjinwuwujiaohuo from '../components/materialManagement/zhuwenjinwuwujiaohuo.vue'
+
 //储品金物报表
 import cPReportForm from '../components/materialManagement/cPReportForm.vue'
 
@@ -603,12 +606,16 @@ export default new Router({
                             path: 'zhuwenpinbuzu',
                             component: zhuwenpinbuzu,
                             meta: {title: '注文品不足'}
-                        }
-                        ,
+                        },
                         {
                             path: 'chupinbuzu',
                             component: chupinbuzu,
                             meta: {title: '储品不足'}
+                        },
+                        {
+                            path: 'zhuwenjinwuwujiaohuo',
+                            component: zhuwenjinwuwujiaohuo,
+                            meta: {title: '注文金物未交货'}
                         }
                     ]
                 },

@@ -54,27 +54,25 @@
         <!-- 编辑弹出框 -->
         <el-dialog title="资质详情" :visible.sync="editVisible" width="60%">
             <el-form ref="form" label-width="100px">
-                <template>
-                    <el-table
-                        :data="zizhiData"
-                        :header-cell-style="{background:'#A1D0FC',color:'rgba(0, 0, 0, 0.8)',fontSize:'20px'}"
-                        border
-                        height="400"
-                        @row-dblclick="editPerson"
-                        highlight-current-row
-                        style="width: 98%;margin: auto">>
-                        <el-table-column
-                            prop="zizhname"
-                            align="center"
-                            label="资质">
-                        </el-table-column>
-                        <el-table-column
-                            prop="username"
-                            align="center"
-                            label="人员">
-                        </el-table-column>
-                    </el-table>
-                </template>
+                <el-table
+                    :data="zizhiData"
+                    :header-cell-style="{background:'#A1D0FC',color:'rgba(0, 0, 0, 0.8)',fontSize:'20px'}"
+                    border
+                    height="400"
+                    @row-dblclick="editPerson"
+                    highlight-current-row
+                    style="width: 98%;margin: auto">>
+                    <el-table-column
+                        prop="zizhname"
+                        align="center"
+                        label="资质">
+                    </el-table-column>
+                    <el-table-column
+                        prop="username"
+                        align="center"
+                        label="人员">
+                    </el-table-column>
+                </el-table>
 
             </el-form>
             <span slot="footer" class="dialog-footer">
