@@ -35,12 +35,12 @@
                             {
                                 label: '托单制作',
                                 index: "1-1",
-                                url: "/ProductionOfGoldSheets"
+                                url: "/MaterialManagement/ProductionOfGoldSheets"
                             },
                             {
                                 label: '托单审批',
                                 index: "1-2",
-                                url: "/tdApproval"
+                                url: "/MaterialManagement/tdApproval"
                             },
                             {
                                 label: '出库记录（托单金物）',
@@ -55,12 +55,12 @@
                             {
                                 label: '出库查询（托单金物）',
                                 index: "1-5",
-                                url: "/tdjwOuOfStock"
+                                url: "/MaterialManagement/tdjwOuOfStock"
                             },
                             {
                                 label: '配送查询（托单金物）',
                                 index: "1-5",
-                                url: "/tdjwDelivery"
+                                url: "/MaterialManagement/tdjwDelivery"
                             }
                         ]
                     },
@@ -71,12 +71,12 @@
                             {
                                 label: '缺件登记（注文金物）',
                                 index: "2-1",
-                                url: "/zwMissingRegistration"
+                                url: "/MaterialManagement/zwMissingRegistration"
                             },
                             {
                                 label: '缺件查询（注文金物）',
                                 index: "2-2",
-                                url: "/zwMetalSearch"
+                                url: "/MaterialManagement/zwMetalSearch"
                             }
                         ]
                     },
@@ -87,12 +87,12 @@
                             {
                                 label: '缺件登记（储品金物）',
                                 index: "3-1",
-                                url: "/cPMissingRegistration"
+                                url: "/MaterialManagement/cPMissingRegistration"
                             },
                             {
                                 label: '缺件查询（储品金物）',
                                 index: "3-2",
-                                url: "/cpMetalSearch"
+                                url: "/MaterialManagement/cpMetalSearch"
                             }
                         ]
                     },
@@ -103,7 +103,7 @@
                             {
                                 label: '管吊单查询',
                                 index: "4-1",
-                                url: "/pipeOutgoing"
+                                url: "/MaterialManagement/pipeOutgoing"
                             }
                         ]
                     },
@@ -114,22 +114,22 @@
                             {
                                 label: '注文品不足',
                                 index: "5-1",
-                                url: "/404"
+                                url: "/MaterialManagement/zhuwenpinbuzu"
                             },
                             {
                                 label: '储品不足',
                                 index: "5-2",
-                                url: "/404"
+                                url: "/MaterialManagement/chupinbuzu"
                             },
                             {
                                 label: '注文金物未交货',
                                 index: "5-3",
-                                url: "/404"
+                                url: "/MaterialManagement/zhuwenpinbuzu"
                             },
                             {
                                 label: '未引当查询与统计',
                                 index: "5-4",
-                                url: "/404"
+                                url: "/MaterialManagement/zhuwenpinbuzu"
                             }
                         ]
                     },

@@ -102,6 +102,11 @@ import cpMetalSearch from '../components/materialManagement/cpMetalSearch.vue'
 import pipeOutgoing from '../components/materialManagement/pipeOutgoing.vue'
 
 
+//注文品不足
+import zhuwenpinbuzu from '../components/materialManagement/zhuwenpinbuzu.vue'
+
+//储品不足
+import chupinbuzu from '../components/materialManagement/chupinbuzu.vue'
 
 //储品金物报表
 import cPReportForm from '../components/materialManagement/cPReportForm.vue'
@@ -520,79 +525,90 @@ export default new Router({
                     meta: {title: '物料管理'},
                     children: [
                         {
-                            path: '/ProductionOfGoldSheets',
+                            path: 'ProductionOfGoldSheets',
                             component: ProductionOfGoldSheets,
                             meta: {title: '脱单金物制作'}
                         },
                         {
-                            path: '/tdApproval',
+                            path: 'tdApproval',
                             component: tdApproval,
                             meta: {title: '脱单金物审批'}
                         },
                         {
-                            path: '/tdjwOuOfStock',
+                            path: 'tdjwOuOfStock',
                             component: tdjwOuOfStock,
                             meta: {title: '出库查询（托单金物）'}
                         },
                         {
-                            path: '/tdjwDelivery',
+                            path: 'tdjwDelivery',
                             component: tdjwDelivery,
                             meta: {title: '配送查询（托单金物）'}
                         },
                         {
-                            path: '/zwMissingRegistration',
+                            path: 'zwMissingRegistration',
                             component:zwMissingRegistration,
                             meta: {title: '注文金物缺件登记'}
                         },
                         {
-                            path: '/zwMetalSearch',
+                            path: 'zwMetalSearch',
                             component: zwMetalSearch,
                             meta: {title: '注文金物查询'}
                         },
                         {
-                            path: '/cPMissingRegistration',
+                            path: 'cPMissingRegistration',
                             component:cPMissingRegistration,
                             meta: {title: '储品金物缺件登记'}
                         },
                         {
-                            path: '/cpMetalSearch',
+                            path: 'cpMetalSearch',
                             component: cpMetalSearch,
                             meta: {title: '储品金物查询'}
                         },
                         {
-                            path: '/pipeOutgoing',
+                            path: 'pipeOutgoing',
                             component: pipeOutgoing,
                             meta: {title: '管材出库'}
                         },
                         {
-                            path: '/wlReportForm',
+                            path: 'wlReportForm',
                             component: wlReportForm,
                             meta: {title: '物料数据报表'}
                         },
                         {
-                            path: '/cPReportForm',
+                            path: 'cPReportForm',
                             component: cPReportForm,
                             meta: {title: '储品金物报表'}
                         },
                         {
-                            path: '/tDJWReportForm',
+                            path: 'tDJWReportForm',
                             component: tDJWReportForm,
                             meta: {title: '托单金物报表'}
                         },
                         {
-                            path: '/zWReportForm',
+                            path: 'zWReportForm',
                             component: zWReportForm,
                             meta: {title: '注文金物报表'}
                         },
                         {
-                            path: '/wydReportForm',
+                            path: 'wydReportForm',
                             component: wydReportForm,
                             meta: {title: '未引当报表'}
                         },
                         {
-                            path: '/gwReportForm',
+                            path: 'gwReportForm',
                             component: gwReportForm,
                             meta: {title: '工位物料报表'}
+                        },
+                        {
+                            path: 'zhuwenpinbuzu',
+                            component: zhuwenpinbuzu,
+                            meta: {title: '注文品不足'}
+                        }
+                        ,
+                        {
+                            path: 'chupinbuzu',
+                            component: chupinbuzu,
+                            meta: {title: '储品不足'}
                         }
                     ]
                 },

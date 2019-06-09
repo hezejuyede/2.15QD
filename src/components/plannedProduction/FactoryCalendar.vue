@@ -9,8 +9,7 @@
         <div class="">
            <Calendar
                v-on:choseDay="clickDay"
-               v-on:changeMonth="changeDate"
-           >
+               v-on:changeMonth="changeDate">
            </Calendar>
         </div>
     </div>
