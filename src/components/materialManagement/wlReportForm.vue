@@ -3,16 +3,16 @@
         <div class="crumbs">
             <el-breadcrumb separator="/">
                 <el-breadcrumb-item>物料管理</el-breadcrumb-item>
-                <el-breadcrumb-item>注文金物报表</el-breadcrumb-item>
+                <el-breadcrumb-item>物料数据报表</el-breadcrumb-item>
             </el-breadcrumb>
         </div>
         <div class="template-content">
             <div class="container">
                 <div class="handle-box">
                     <label style="margin-right: 10px">
-                        <span>智能检索注文金物</span>
+                        <span>智能检索物料数据报表</span>
                         <span>:</span>
-                        <el-input v-model="select_word" placeholder="智能检索注文金物" class="handle-input mr10"></el-input>
+                        <el-input v-model="select_word" placeholder="智能检索物料数据报表" class="handle-input mr10"></el-input>
                     </label>
                     <label style="margin-right: 10px;margin-left: 10px">
                         <span>选择批次</span>
