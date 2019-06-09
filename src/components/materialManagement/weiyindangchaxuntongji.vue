@@ -3,7 +3,7 @@
         <div class="crumbs">
             <el-breadcrumb separator="/">
                 <el-breadcrumb-item>物料管理</el-breadcrumb-item>
-                <el-breadcrumb-item>未引当报表</el-breadcrumb-item>
+                <el-breadcrumb-item>未引当查询与统计</el-breadcrumb-item>
             </el-breadcrumb>
         </div>
         <div class="template-content">
@@ -32,7 +32,27 @@
                             </el-option>
                         </el-select>
                     </label>
+                    <label style="margin-right: 10px;margin-left: 10px">
+                        <span>未引当</span>
+                        <span>:</span>
+                        <el-select
+                            style="width: 150px"
+                            v-model="weiyindang"
+                            clearable
+                            filterable
+                            allow-create
+                            default-first-option
+                            placeholder="请选择类型">
+                            <el-option
+                                v-for="item in weiyindangOptions"
+                                :key="item.id"
+                                :label="item.name"
+                                :value="item.id">
+                            </el-option>
+                        </el-select>
+                    </label>
                     <el-button type="primary" class="handle-del mr10" @click="doSearch">查询</el-button>
+                    <el-button type="success" class="handle-del mr10" @click="importExcel">导出</el-button>
                 </div>
                 <div class="">
                     <el-table class="tb-edit"
@@ -124,17 +144,17 @@
                         .then(axios.spread(function (select) {
                             that.batchOptions = select.data;
                             that.batch = select.data[0].id;
-                            that.loadingShowData(that.batch);
+                            that.loadingShowData(that.batch,that.weiyindang);
                         }));
                 }
             },
 
             //瞬间加载数据
-            loadingShowData(data1) {
+            loadingShowData(data1,data2) {
                 let that = this;
                 axios.all([
                     axios.post(" " + url + "/sys/showTableTitle", {"name": "weiyindangchacuntongji"}),
-                    axios.post(" " + url + "/shebei/errorList", {"pici": data1})
+                    axios.post(" " + url + "/shebei/errorList", {"pici": data1,"type":data2})
                 ])
                     .then(axios.spread(function (title, table) {
                         that.cols = title.data;
@@ -144,9 +164,15 @@
 
             //进行查询
             doSearch() {
-                this.loadingShowData(this.batch);
+                this.loadingShowData(this.batch,this.weiyindang);
             },
-            
+
+
+            //查看出货记录
+            importExcel() {
+
+            },
+
 
         }
     }

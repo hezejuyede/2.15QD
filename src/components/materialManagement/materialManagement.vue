@@ -129,7 +129,7 @@
                             {
                                 label: '未引当查询与统计',
                                 index: "5-4",
-                                url: "/MaterialManagement/zhuwenpinbuzu"
+                                url: "/MaterialManagement/weiyindangchaxuntongji"
                             }
                         ]
                     },
@@ -156,32 +156,32 @@
                             {
                                 label: '物料数据报表',
                                 index: "7-1",
-                                url: "/wlReportForm"
+                                url: "/MaterialManagement/wlReportForm"
                             },
                             {
                                 label: '托单金物报表',
                                 index: "7-2",
-                                url: "/tDJWReportForm"
+                                url: "/MaterialManagement/tDJWReportForm"
                             },
                             {
                                 label: '注文金物报表',
                                 index: "7-3",
-                                url: "/zWReportForm"
+                                url: "/MaterialManagement/zWReportForm"
                             },
                             {
                                 label: '储品金物报表',
                                 index: "7-4",
-                                url: "/cPReportForm"
+                                url: "/MaterialManagement/cPReportForm"
                             },
                             {
                                 label: '未引当报表',
                                 index: "7-5",
-                                url: "/wydReportForm"
+                                url: "/MaterialManagement/wydReportForm"
                             },
                             {
                                 label: '工位物料报表',
                                 index: "7-6",
-                                url: "/gwReportForm"
+                                url: "/MaterialManagement/gwReportForm"
                             }
                         ]
                     }
