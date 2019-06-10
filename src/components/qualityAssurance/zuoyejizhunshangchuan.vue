@@ -231,7 +231,23 @@
                         times.push(time)
                     }
                     this.examineTime = times;
-                    this.loadingShowData(1)
+                    let that = this;
+                    axios.all([
+                        axios.post(" " + url + "/sys/dictionaryList", {"id": "9"}),
+                        axios.post(" " + url + "/api/getPersonProcessList", {"name": ""}),
+                    ])
+                        .then(axios.spread(function (line, workStation) {
+                            that.lineOptions = line.data;
+
+                            if(workStation.data.length>1){
+                                let json ={"name":"全部","id":"-1"};
+                                that.workStationOptions = workStation.data;
+                                that.workStationOptions.unshift(json)
+                            }
+                            that.loadingShowData(1)
+
+                        }));
+
                 }
             },
 
@@ -257,8 +273,11 @@
                             this.selectOptions = [];
                         }
                         else {
-                            this.select = res.data[0].id;
-                            this.selectOptions = res.data;
+                            if(res.data.length>1){
+                                let json ={"name":"全部","id":"-1"};
+                                this.workStationOptions = res.data;
+                                this.workStationOptions.unshift(json);
+                            }
                         }
                     });
             },
@@ -503,16 +522,8 @@
                     }
                     else {
                         this.glVisible=true;
-                        let that = this;
-                        axios.all([
-                            axios.post(" " + url + "/sys/dictionaryList", {"id": "9"}),
-                            axios.post(" " + url + "/api/getPersonProcessList", {"name": ""}),
-                        ])
-                            .then(axios.spread(function (line, workStation) {
-                                that.lineOptions = line.data;
-                                that.workStationOptions = workStation.data;
-                            }));
-
+                        this.line="";
+                        this.workStation="";
                     }
                 }
                 else {
