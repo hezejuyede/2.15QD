@@ -65,22 +65,31 @@
             </div>
 
             <!-- 编辑弹出框 -->
-            <el-dialog title="编辑反馈" :visible.sync="editVisible" width="40%">
+            <el-dialog title="查看意见" :visible.sync="editVisible" width="40%">
                 <el-form ref="form"  label-width="100px">
-                    <el-form-item label="分类名称">
+                    <el-form ref="form"  label-width="100px">
                         <el-form-item label="船号">
-                            <el-input v-model="chuanhao" style="width: 200px"></el-input>
+                            <el-input v-model="chuanhao" style="width: 200px" :disabled="true"></el-input>
                         </el-form-item>
                         <el-form-item label="管子编号">
-                            <el-input v-model="guanzibianhao" style="width: 200px"></el-input>
+                            <el-input v-model="guanzibianhao" style="width: 200px" :disabled="true"></el-input>
                         </el-form-item>
                         <el-form-item label="船级姓名">
-                            <el-input v-model="fankuiren" style="width: 200px"></el-input>
+                            <el-input v-model="fankuiren" style="width: 200px" :disabled="true"></el-input>
+                        </el-form-item>
+                        <el-form-item label="反馈时间">
+                            <el-date-picker
+                                :disabled="true"
+                                v-model="fankuishijian"
+                                type="date"
+                                value-format="yyyy-MM-dd"
+                                placeholder="选择日期">
+                            </el-date-picker>
                         </el-form-item>
                         <el-form-item label="反馈意见">
-                            <el-input v-model="wuzuoxiangqing" style="width: 300px"></el-input>
+                            <el-input v-model="wuzuoxiangqing" style="width: 300px" :disabled="true"  type="textarea"></el-input>
                         </el-form-item>
-                    </el-form-item>
+                    </el-form>
                 </el-form>
                 <span slot="footer" class="dialog-footer">
                 <el-button @click="editVisible = false" style="height:30px;width:80px">取 消</el-button>
@@ -122,6 +131,8 @@
                 editVisible: false,
 
 
+
+                fankuishijian:"",
                 chuanhao: "",
                 guanzibianhao:"",
                 fankuiren:"",
@@ -179,11 +190,11 @@
                 let that = this;
                 axios.all([
                     axios.post(" " + url + "/sys/showTableTitle", {"name": "chuandongyijianfankui"}),
-                    axios.post(" " + url + "/devType/devTypeList",{"times":data1,"type":data2})
+                    axios.post(" " + url + "/yijian/yijianList",{"times":data1,"type":data2})
                 ])
                     .then(axios.spread(function (title, table) {
                         that.cols = title.data;
-                        that.tableData = table.data;
+                        that.tableData = table.data.data;
                     }));
             },
 
@@ -213,12 +224,13 @@
             edit(row, column, cell, event) {
                 this.editVisible = true;
                 this.id = row.id;
-                axios.post(" " + url + "/devType/devTypeDetail", {"id": this.id})
+                axios.post(" " + url + "/yijian/yijianDetail", {"id": this.id})
                     .then((res) => {
-                        this.chuanhao =res.data.chuanhao;
-                        this.guanzibianhao =res.data.guanzibianhao;
-                        this.fankuiren = res.data.fankuiren;
-                        this.wuzuoxiangqing = res.data.wuzuoxiangqing;
+                        this.chuanhao =res.data.data.chuanhao;
+                        this.guanzibianhao =res.data.data.guanzibianhao;
+                        this.fankuiren = res.data.data.chuandongname;
+                        this.wuzuoxiangqing = res.data.data.yijian;
+                        this.fankuishijian = res.data.data.fankuishijian;
                     })
                     .catch((err) => {
                         console.log(err)
