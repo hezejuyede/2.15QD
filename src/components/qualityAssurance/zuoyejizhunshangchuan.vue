@@ -14,48 +14,23 @@
                         <span>:</span>
                         <el-input v-model="select_word" placeholder="筛选作业基准" class="handle-input mr10" style="width: 200px"></el-input>
                     </label>
-                    <label style="margin-right: 5px;margin-left: 5px">
-                        <span>生产线</span>
+                    <label style="margin-right: 10px;margin-left: 10px">
+                        <span>选择查询时间</span>
                         <span>:</span>
-                        <el-select
-                            style="width: 150px"
-                            v-model="line"
-                            clearable
-                            filterable
-                            allow-create
-                            default-first-option
-                            @change="changeSCX"
-                            placeholder="请选择生产线">
-                            <el-option
-                                v-for="item in lineOptions"
-                                :key="item.indexno"
-                                :label="item.name"
-                                :value="item.indexno">
-                            </el-option>
-                        </el-select>
-                    </label>
-                    <label style="margin-right: 5px;margin-left: 5px">
-                        <span>工位</span>
-                        <span>:</span>
-                        <el-select
-                            v-model="select"
-                            clearable
-                            filterable
-                            allow-create
-                            default-first-option
-                            placeholder="请选择工位">
-                            <el-option
-                                v-for="item in selectOptions"
-                                :key="item.id"
-                                :label="item.name"
-                                :value="item.id">
-                            </el-option>
-                        </el-select>
+                        <el-date-picker
+                            style="width: 240px"
+                            v-model="examineTime"
+                            type="daterange"
+                            start-placeholder="开始日期"
+                            end-placeholder="结束日期"
+                            value-format="yyyy-MM-dd">
+                        </el-date-picker>
                     </label>
                     <el-button type="success" class="handle-del mr10" @click="doSearch">查询基准</el-button>
                     <el-button type="primary" class="handle-del mr10" @click="showAdd">新增基准</el-button>
                     <el-button type="warning" class="handle-del mr10" @click="showEdit">编辑基准</el-button>
                     <el-button type="danger"  class="handle-del mr10" @click="deleteAlert">删除基准</el-button>
+                    <el-button type="info"  class="handle-del mr10" @click="guanlianjizhun">关联基准</el-button>
                 </div>
                 <div class="">
                     <el-table class="tb-edit"
@@ -117,6 +92,53 @@
                 <el-button type="primary" @click="deleteRow" style="height:30px;width:80px">确 定</el-button>
             </span>
         </el-dialog>
+
+
+
+        <!-- 关联弹出框 -->
+        <el-dialog title="关联基准" :visible.sync="glVisible" width="50%">
+            <el-form ref="form" label-width="100px">
+                <el-form-item label="生产线">
+                    <el-select
+                        style="width: 150px"
+                        v-model="line"
+                        clearable
+                        filterable
+                        allow-create
+                        default-first-option
+                        @change="changeSCX"
+                        placeholder="请选择生产线">
+                        <el-option
+                            v-for="item in lineOptions"
+                            :key="item.indexno"
+                            :label="item.name"
+                            :value="item.indexno">
+                        </el-option>
+                    </el-select>
+                </el-form-item>
+                <el-form-item label="工位">
+                    <el-select
+                        v-model="workStation"
+                        clearable
+                        filterable
+                        allow-create
+                        multiple
+                        default-first-option
+                        placeholder="请选择">
+                        <el-option
+                            v-for="item in workStationOptions"
+                            :key="item.id"
+                            :label="item.name"
+                            :value="item.id">
+                        </el-option>
+                    </el-select>
+                </el-form-item>
+            </el-form>
+            <span slot="footer" class="dialog-footer">
+                <el-button @click="glVisible = false" style="height:30px;width:80px">取 消</el-button>
+                <el-button class="handle-del mr10" type="primary" style="height:30px;width:80px" @click="saveEdit">提交</el-button>
+            </span>
+        </el-dialog>
         <Modal :msg="message"
                :isHideModal="HideModal"></Modal>
     </div>
@@ -125,7 +147,7 @@
     import axios from 'axios'
     import url from '../../assets/js/URL'
     import Modal from '../../common/modal'
-
+    import {getNowTime} from '../../assets/js/api'
 
     import 'quill/dist/quill.core.css';
     import 'quill/dist/quill.snow.css';
@@ -156,12 +178,13 @@
                 editVisible: false,
                 delVisible: false,
                 contentVisible:false,
+                glVisible:false,
 
-
+                examineTime:"",
                 line: '',
-                lineOptions: [],
-                select:"",
-                selectOptions: [],
+                lineOptions:[],
+                workStation:[],
+                workStationOptions:[],
 
                 id: "",
                 name: '',
@@ -202,19 +225,13 @@
                     this.$router.push("/")
                 }
                 else {
-                    let that = this;
-                    axios.all([
-                        axios.post(" " + url + "/sys/dictionaryList", {"id": "9"}),
-                        axios.post(" " + url + "/api/getPersonProcessList", {"name": ""}),
-                    ])
-                        .then(axios.spread(function (line, workStation) {
-                            that.lineOptions = line.data;
-                            that.line = line.data[0].indexno;
-                            that.select= workStation.data[0].id;
-                            that.selectOptions = workStation.data;
-                            that.loadingShowData(1)
-
-                        }));
+                    let time = getNowTime();
+                    let times = [];
+                    for (let i = 0; i < 2; i++) {
+                        times.push(time)
+                    }
+                    this.examineTime = times;
+                    this.loadingShowData(1)
                 }
             },
 
@@ -470,6 +487,47 @@
                 }
 
             },
+
+            guanlianjizhun(){
+                if (this.listData.length) {
+                    if (this.listData.length > 1) {
+                        this.message = "只能关联一个";
+                        this.HideModal = false;
+                        const that = this;
+                        function a() {
+                            that.message = "";
+                            that.HideModal = true;
+                        }
+
+                        setTimeout(a, 2000);
+                    }
+                    else {
+                        this.glVisible=true;
+                        let that = this;
+                        axios.all([
+                            axios.post(" " + url + "/sys/dictionaryList", {"id": "9"}),
+                            axios.post(" " + url + "/api/getPersonProcessList", {"name": ""}),
+                        ])
+                            .then(axios.spread(function (line, workStation) {
+                                that.lineOptions = line.data;
+                                that.workStationOptions = workStation.data;
+                            }));
+
+                    }
+                }
+                else {
+                    this.message = "请勾选要学习的内容";
+                    this.HideModal = false;
+                    const that = this;
+
+                    function b() {
+                        that.message = "";
+                        that.HideModal = true;
+                    }
+
+                    setTimeout(b, 2000);
+                }
+            }
         }
     }
 </script>
