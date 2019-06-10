@@ -45,7 +45,7 @@
                             </el-option>
                         </el-select>
                     </label>
-                    <el-button type="primary" icon="delete" class="handle-del mr10" @click="showAdd">查询</el-button>
+                    <el-button type="primary" icon="delete" class="handle-del mr10" @click="doSearch">查询</el-button>
                 </div>
                 <div class="">
                     <el-table class="tb-edit"
@@ -181,7 +181,7 @@
                         times.push(time)
                     }
                     this.examineTime = times;
-                    this.loadingShowData(this.examineTime,1);
+                    this.loadingShowData(this.examineTime,this.chuan);
                 }
             },
 
@@ -198,27 +198,10 @@
                     }));
             },
 
-
-
-            //选择那个一个
-            selectList(val) {
-                this.val =val;
-                if (val.length) {
-                    let data = [];
-                    for (let i = 0; i < val.length; i++) {
-                        let a = val[i].id;
-                        data.push(a)
-                    }
-                    this.listData = data;
-
-                }
-                else {
-                    this.listData=[];
-
-                }
+            //进行查询
+            doSearch(){
+                this.loadingShowData(this.examineTime,this.chuan);
             },
-
-
 
             //双击点击行内编辑
             edit(row, column, cell, event) {
@@ -239,22 +222,18 @@
 
             // 保存编辑
             saveEdit() {
-                if (this.chuanhao && this.guanzibianhao && this.fankuiren && this.wuzuoxiangqing) {
-                    axios.post(" " + url + "/devType/updateDevType",
+                if (this.chuanhao && this.guanzibianhao && this.fankuiren && this.wuzuoxiangqing && this.fankuishijian) {
+                    axios.post(" " + url + "/yijian/updateYijian",
                         {
-                            "type":1,
                             "id": this.id,
-                            "chuanhao":  this.chuanhao,
-                            "guanzibianhao":  this.guanzibianhao,
-                            "fankuiren":  this.fankuiren,
-                            "wuzuoxiangqing":  this.wuzuoxiangqing
+                            "status":  "2"
                         }
                     )
                         .then((res) => {
-                            if (res.data === "1") {
+                            if (res.data.state === "1") {
                                 this.editVisible = false;
-                                this.$message.success("修改成功");
-                                this.loadingShowData(this.examineTime,1);
+                                this.$message.success("已经阅读成功");
+                                this.loadingShowData(this.examineTime,this.chuan);
                             }
                             else {
                                 this.$message.warning(res.data.message);

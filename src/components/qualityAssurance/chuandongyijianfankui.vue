@@ -74,7 +74,7 @@
                         </el-date-picker>
                     </el-form-item>
                     <el-form-item label="反馈意见">
-                        <el-input v-model="wuzuoxiangqing" style="width: 300px"></el-input>
+                        <el-input v-model="wuzuoxiangqing" style="width: 300px" type="textarea"></el-input>
                     </el-form-item>
                 </el-form>
                 <span slot="footer" class="dialog-footer">
@@ -104,7 +104,7 @@
                         </el-date-picker>
                     </el-form-item>
                     <el-form-item label="反馈意见">
-                        <el-input v-model="wuzuoxiangqing" style="width: 300px"></el-input>
+                        <el-input v-model="wuzuoxiangqing" style="width: 300px" type="textarea"></el-input>
                     </el-form-item>
                 </el-form>
                 <span slot="footer" class="dialog-footer">
