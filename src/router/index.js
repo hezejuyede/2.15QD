@@ -3,6 +3,7 @@ import Router from 'vue-router';
 
 //主页相关路由
 import Index from '../components/index/index'
+
 import Message from '../components/index/messageIndex'
 
 //计划排产相关路由
@@ -190,9 +191,7 @@ import churukuchaxuntongji from '../components/productionMonitoring/churukuchaxu
 import shebeiguzhangchuligenzong from '../components/productionMonitoring/shebeiguzhangchuligenzong'
 
 //设备状态实时监控图
-
 import shebeizhuangtaishishijiankongtu from '../components/productionMonitoring/shebeizhuangtaishishijiankongtu'
-
 
 
 import zgsjStatistics from '../components/personnelManagement/zgsjStatistics'
@@ -1068,9 +1067,32 @@ export default new Router({
             path: '/login',
             component: resolve => require(['../components/indexLogin/Login.vue'], resolve)
         },
+
+
+
+
+
+
         {
+            path: '/MaterialManagement/QualityAssurance',
+            component: QualityAssurance,
+            meta: {title: '质量管理'}
+        },
+        {
+            path: '/QualityAssurance/PlannedProduction',
+            component: PlannedProduction,
+            meta: {title: '计划排产'}
+        },
+        {
+            path: '/QualityAssurance/ProductionMonitoring',
+            component: ProductionMonitoring,
+            meta: {title: '设备管理'}
+        },
+
+
+        /*{
             path: '*',
             redirect: '/404'
-        }
+        }*/
     ]
 })

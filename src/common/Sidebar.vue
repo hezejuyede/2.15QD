@@ -69,11 +69,6 @@
                         index: 'PersonnelManagement',
                         title: '人员管理'
                     },
-                  /*  {
-                        icon: 'el-icon-share',
-                        index: 'SecurityManagement',
-                        title: '看板管理'
-                    },*/
                     {
                         icon: 'el-icon-star-off',
                         index: 'SecurityManagement',
@@ -89,6 +84,7 @@
         },
         computed: {
             onRoutes() {
+                console.log(1);
                 return this.$route.path.replace('/', '');
             }
         },

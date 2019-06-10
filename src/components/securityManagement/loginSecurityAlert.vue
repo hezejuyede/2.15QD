@@ -265,6 +265,22 @@
                     this.listData = [];
                 }
             },
+
+            //更改生产线
+            changeSCX() {
+                axios.post(" " + url + "/sysconfig/getGongxuList", {"id": this.line})
+                    .then((res) => {
+                        if (res.data ==="-1") {
+                            this.workStation = "";
+                            this.workStationOptions = [];
+                        }
+                        else {
+                            this.workStation = res.data[0].id;
+                            this.workStationOptions = res.data;
+                        }
+                    });
+            },
+
             //双击点击显示详情
             edit(row, column, cell, event) {
                 this.contentVisible = true;
