@@ -1070,29 +1070,40 @@ export default new Router({
 
 
 
-
-
-
         {
-            path: '/MaterialManagement/QualityAssurance',
+            path: '/PlannedProduction/MaterialManagement',
+            component: MaterialManagement,
+            meta: {title: '物料管理'}
+        },
+        {
+            path: '/PlannedProduction/QualityAssurance',
             component: QualityAssurance,
             meta: {title: '质量管理'}
         },
         {
-            path: '/QualityAssurance/PlannedProduction',
-            component: PlannedProduction,
-            meta: {title: '计划排产'}
-        },
-        {
-            path: '/QualityAssurance/ProductionMonitoring',
+            path: '/PlannedProduction/ProductionMonitoring',
             component: ProductionMonitoring,
             meta: {title: '设备管理'}
         },
+        {
+            path: '/PlannedProduction/PersonnelManagement',
+            component: PersonnelManagement,
+            meta: {title: '人员管理'}
+        },
+        {
+            path: '/PlannedProduction/SecurityManagement',
+            component: SecurityManagement,
+            meta: {title: '安全管理'}
+        },
+        {
+            path: '/PlannedProduction/SystemManagement',
+            component: SystemManagement,
+            meta: {title: '系统管理'}
+        },
 
-
-        /*{
+        {
             path: '*',
             redirect: '/404'
-        }*/
+        }
     ]
 })
