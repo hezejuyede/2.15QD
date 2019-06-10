@@ -64,6 +64,14 @@
                     <el-form-item label="反馈人">
                         <el-input v-model="fankuiren" style="width: 200px"></el-input>
                     </el-form-item>
+                    <el-form-item label="反馈时间">
+                        <el-date-picker
+                            v-model="fankuishijian"
+                            type="date"
+                            value-format="yyyy-MM-dd"
+                            placeholder="选择日期">
+                        </el-date-picker>
+                    </el-form-item>
                     <el-form-item label="误作详情">
                         <el-input v-model="wuzuoxiangqing" style="width: 300px"></el-input>
                     </el-form-item>
@@ -77,19 +85,25 @@
             <!-- 编辑弹出框 -->
             <el-dialog title="编辑反馈" :visible.sync="editVisible" width="40%">
                 <el-form ref="form"  label-width="100px">
-                    <el-form-item label="分类名称">
-                        <el-form-item label="船号">
-                            <el-input v-model="chuanhao" style="width: 200px"></el-input>
-                        </el-form-item>
-                        <el-form-item label="管子编号">
-                            <el-input v-model="guanzibianhao" style="width: 200px"></el-input>
-                        </el-form-item>
-                        <el-form-item label="反馈人">
-                            <el-input v-model="name" style="width: 200px"></el-input>
-                        </el-form-item>
-                        <el-form-item label="误作详情">
-                            <el-input v-model="name"></el-input>
-                        </el-form-item>
+                    <el-form-item label="船号">
+                        <el-input v-model="chuanhao" style="width: 200px"></el-input>
+                    </el-form-item>
+                    <el-form-item label="管子编号">
+                        <el-input v-model="guanzibianhao" style="width: 200px"></el-input>
+                    </el-form-item>
+                    <el-form-item label="反馈人">
+                        <el-input v-model="fankuiren" style="width: 200px"></el-input>
+                    </el-form-item>
+                    <el-form-item label="反馈时间">
+                        <el-date-picker
+                            v-model="fankuishijian"
+                            type="date"
+                            value-format="yyyy-MM-dd"
+                            placeholder="选择日期">
+                        </el-date-picker>
+                    </el-form-item>
+                    <el-form-item label="误作详情">
+                        <el-input v-model="wuzuoxiangqing" style="width: 300px"></el-input>
                     </el-form-item>
                 </el-form>
                 <span slot="footer" class="dialog-footer">
@@ -147,7 +161,8 @@
                 chuanhao: "",
                 guanzibianhao:"",
                 fankuiren:"",
-                wuzuoxiangqing:""
+                wuzuoxiangqing:"",
+                fankuishijian:""
 
 
             }
@@ -198,11 +213,11 @@
                 let that = this;
                 axios.all([
                     axios.post(" " + url + "/sys/showTableTitle", {"name": "khfkdwz"}),
-                    axios.post(" " + url + "/devType/devTypeList",{"times":data1,"type":data2})
+                    axios.post(" " + url + "/fankui/fankuiList",{"times":data1,"type":data2})
                 ])
                     .then(axios.spread(function (title, table) {
                         that.cols = title.data;
-                        that.tableData = table.data;
+                        that.tableData = table.data.data;
                     }));
             },
 
@@ -243,23 +258,25 @@
                 this.guanzibianhao = "";
                 this.fankuiren = "";
                 this.wuzuoxiangqing = "";
+                this.fankuishijian="";
             },
 
             //进行新增
             doAdd() {
-                if (this.chuanhao && this.guanzibianhao && this.fankuiren && this.wuzuoxiangqing) {
-                    axios.post(" " + url + "/devType/devTypeAdd",
+                if (this.chuanhao && this.guanzibianhao && this.fankuiren && this.wuzuoxiangqing && this.fankuishijian) {
+                    axios.post(" " + url + "/fankui/addFankui",
                         {
                             "type":1,
                             "chuanhao":  this.chuanhao,
                             "guanzibianhao":  this.guanzibianhao,
                             "fankuiren":  this.fankuiren,
-                            "wuzuoxiangqing":  this.wuzuoxiangqing
+                            "fankuishijian":  this.fankuishijian,
+                            "fankuixiangqing":  this.wuzuoxiangqing,
                         }
                     )
                         .then((res) => {
-                            if (res.data === "1") {
-                                this.$message.success(`新增成功`);
+                            if (res.data.state === "1") {
+                                this.$message.success(res.data.message);
                                 this.addVisible = false;
                                 this.loadingShowData(this.examineTime,1);
 
@@ -281,12 +298,13 @@
             edit(row, column, cell, event) {
                 this.editVisible = true;
                 this.id = row.id;
-                axios.post(" " + url + "/devType/devTypeDetail", {"id": this.id})
+                axios.post(" " + url + "/fankui/fankuiDetail", {"id": this.id})
                     .then((res) => {
-                        this.chuanhao =res.data.chuanhao;
-                        this.guanzibianhao =res.data.guanzibianhao;
-                        this.fankuiren = res.data.fankuiren;
-                        this.wuzuoxiangqing = res.data.wuzuoxiangqing;
+                        this.chuanhao =res.data.data.chuanhao;
+                        this.guanzibianhao =res.data.data.guanzibianhao;
+                        this.fankuiren = res.data.data.fankuiren;
+                        this.wuzuoxiangqing = res.data.data.fankuixiangqing;
+                        this.fankuishijian = res.data.data.fankuishijian;
                     })
                     .catch((err) => {
                         console.log(err)
@@ -295,21 +313,22 @@
 
             // 保存编辑
             saveEdit() {
-                if (this.chuanhao && this.guanzibianhao && this.fankuiren && this.wuzuoxiangqing) {
-                    axios.post(" " + url + "/devType/updateDevType",
+                if (this.chuanhao && this.guanzibianhao && this.fankuiren && this.wuzuoxiangqing && this.fankuishijian) {
+                    axios.post(" " + url + "/fankui/updateFankui",
                         {
                             "type":1,
                             "id": this.id,
                             "chuanhao":  this.chuanhao,
                             "guanzibianhao":  this.guanzibianhao,
                             "fankuiren":  this.fankuiren,
-                            "wuzuoxiangqing":  this.wuzuoxiangqing
+                            "fankuishijian":  this.fankuishijian,
+                            "fankuixiangqing":  this.wuzuoxiangqing,
                         }
                     )
                         .then((res) => {
-                            if (res.data === "1") {
+                            if (res.data.state === "1") {
                                 this.editVisible = false;
-                                this.$message.success("修改成功");
+                                this.$message.success(res.data.message);
                                 this.loadingShowData(this.examineTime,1);
                             }
                             else {
@@ -359,14 +378,14 @@
 
             // 确定删除
             deleteRow() {
-                axios.post(" " + url + "/devType/delDevType",
+                axios.post(" " + url + "/fankui/delFankui",
                     {
                         "ids": this.listData,
                     }
                 )
                     .then((res) => {
-                        if (res.data === "1") {
-                            this.$message.success("删除成功");
+                        if (res.data.state === "1") {
+                            this.$message.success(res.data.message);
                             this.delVisible = false;
                             this.loadingShowData(this.examineTime,1);
                         }
