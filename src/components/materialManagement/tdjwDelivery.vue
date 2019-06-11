@@ -10,9 +10,9 @@
             <div class="container">
                 <div class="handle-box">
                     <label style="margin-right: 10px">
-                        <span>智能检索缺件</span>
+                        <span>智能检索托单金物</span>
                         <span>:</span>
-                        <el-input v-model="select_word" placeholder="智能检索缺件" class="handle-input mr10"></el-input>
+                        <el-input v-model="select_word" placeholder="智能检索托单金物" class="handle-input mr10"></el-input>
                     </label>
                     <label style="margin-right: 10px;margin-left: 10px">
                         <span>选择批次</span>
@@ -32,7 +32,25 @@
                             </el-option>
                         </el-select>
                     </label>
-                    <el-button type="primary" icon="delete" class="handle-del mr10" @click="doSearch">缺件查询</el-button>
+                    <label style="margin-right: 10px;margin-left: 10px">
+                        <span>配送状态</span>
+                        <span>:</span>
+                        <el-select
+                            v-model="deliveryType"
+                            clearable
+                            filterable
+                            allow-create
+                            default-first-option
+                            placeholder="请选择状态">
+                            <el-option
+                                v-for="item in deliveryTypeOptions"
+                                :key="item.id"
+                                :label="item.name"
+                                :value="item.id">
+                            </el-option>
+                        </el-select>
+                    </label>
+                    <el-button type="primary"  class="handle-del mr10" @click="doSearch">查询</el-button>
                 </div>
                 <div class="">
                     <el-table class="tb-edit"
@@ -40,6 +58,7 @@
                               :header-cell-style="{background:'#A1D0FC',color:'rgba(0, 0, 0, 0.8)',fontSize:'20px'}"
                               border
                               height="450"
+                              @row-dblclick="edit"
                               highlight-current-row
                               style="width: 98%;margin: auto">
                         <template v-for="(col ,index) in cols">
@@ -48,6 +67,44 @@
                     </el-table>
                 </div>
             </div>
+            <!-- 未配送详细清单 -->
+            <el-dialog title="未到货清单详情" :visible.sync="editVisible" width="80%">
+                <el-form ref="form" label-width="100px">
+                    <el-table
+                        :data="tcData"
+                        :header-cell-style="{background:'#A1D0FC',color:'rgba(0, 0, 0, 0.8)',fontSize:'20px'}"
+                        border
+                        height="400"
+                        @row-dblclick="editPerson"
+                        highlight-current-row
+                        style="width: 98%;margin: auto">>
+                        <el-table-column
+                            prop="zizhname"
+                            align="center"
+                            label="托单号">
+                        </el-table-column>
+                        <el-table-column
+                            prop="username"
+                            align="center"
+                            label="管理区分号">
+                        </el-table-column>
+                        <el-table-column
+                            prop="zizhname"
+                            align="center"
+                            label="行号">
+                        </el-table-column>
+                        <el-table-column
+                            prop="username"
+                            align="center"
+                            label="采购担当">
+                        </el-table-column>
+                    </el-table>
+
+                </el-form>
+                <span slot="footer" class="dialog-footer">
+                <el-button @click="editVisible = false" style="height:30px;width:80px">取 消</el-button>
+            </span>
+            </el-dialog>
 
             <Modal :msg="message"
                    :isHideModal="HideModal"></Modal>
@@ -65,14 +122,19 @@
             return {
                 message: '',
                 HideModal: true,
+                editVisible:false,
 
                 cols: [],
                 tableData: [],
+
+                tcData:[],
 
                 batch: "",
                 batchOptions: [],
 
                 select_word: '',
+                deliveryType: "1",
+                deliveryTypeOptions: [{"name": "全部", "id": "1"}, {"name": "已送货", "id": "2"}, {"name": "已配材", "id": "3"}, {"name": "未配材", "id": "3"}],
 
 
             }
@@ -124,7 +186,7 @@
             loadingShowData(data) {
                 let that = this;
                 axios.all([
-                    axios.post(" " + url + "/sys/showTableTitle", {"name": "zwjwcx"}),
+                    axios.post(" " + url + "/sys/showTableTitle", {"name": "tuodanjinwupeisongchaxun"}),
                     axios.post(" " + url + "/wuliao/jinwuZhuwenpinList", {"time": data})
                 ])
                     .then(axios.spread(function (title, table) {
@@ -133,6 +195,46 @@
                     }));
             },
 
+            //双击显示弹出框
+            edit(row, column, cell, event) {
+                if (row.id) {
+                    axios.post(" " + url + "/sysconfig/getUserbyzizhiId", {"id": row.id, "deptid": this.line})
+                        .then((res) => {
+                            if (res.data.length > 0) {
+                                this.tcData = res.data.data;
+                                this.editVisible = true;
+                            }
+                            else {
+                                this.message = "暂无数据";
+                                this.HideModal = false;
+                                const that = this;
+
+                                function a() {
+                                    that.message = "";
+                                    that.HideModal = true;
+                                }
+
+                                setTimeout(a, 2000);
+                            }
+                        })
+                        .catch((err) => {
+                            console.log(err)
+                        });
+                }
+                else {
+                    this.message = "没有ID，暂不能查询";
+                    this.HideModal = false;
+                    const that = this;
+
+                    function b() {
+                        that.message = "";
+                        that.HideModal = true;
+                    }
+
+                    setTimeout(b, 2000);
+                }
+
+            },
 
             //根据时间查询
             doSearch() {
@@ -171,7 +273,7 @@
             .handle-box {
                 height: 80px;
                 line-height: 80px;
-                padding-left: 50px;
+                padding-left: 20px;
                 .handle-input {
                     width: 300px;
                     display: inline-block;
@@ -189,10 +291,6 @@
                 width: 100%;
                 font-size: 14px;
             }
-            .red {
-                color: #ff0000;
-            }
-
         }
     }
 

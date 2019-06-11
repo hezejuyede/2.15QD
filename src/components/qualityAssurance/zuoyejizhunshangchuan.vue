@@ -76,6 +76,13 @@
         <!--详情弹出框 -->
         <el-dialog title="作业基准详情" :visible.sync="contentVisible" width="90%" top="50px">
             <div class="container" style="height:500px;overflow:auto">
+                <div class="containerDivTop2" style="width:100%;height:50px;display: flex;align-items: center;justify-items: center">
+                    <div style="width: 600px;height: 40px;margin: 0 auto">
+                        <span>学习标题</span>
+                        <span>:</span>
+                        <el-input v-model="titilename" style="width:500px"   :disabled="true"   placeholder="学习标题"></el-input>
+                    </div>
+                </div>
                 <div class="" v-html="htmlData"></div>
             </div>
         </el-dialog>
@@ -269,7 +276,7 @@
                 ])
                     .then(axios.spread(function (title, table) {
                         that.cols = title.data;
-                        that.tableData = table.data;
+                        that.tableData = table.data.data;
                     }));
             },
 
@@ -350,7 +357,7 @@
 
             //进行新增
             doAdd() {
-                if (this.content) {
+                if (this.content && this.titilename) {
                     axios.post(" " + url + "/xuexi/addXuexi",
                         {
                             "username": this.username,
@@ -359,13 +366,13 @@
                         }
                     )
                         .then((res) => {
-                            if (res.data === "1") {
-                                this.$message.success(`新增成功`);
+                            if (res.data.state === "1") {
+                                this.$message.success(res.data.message);
                                 this.addVisible = false;
-                                this.loadingShowData(this.select)
+                                this.loadingShowData(this.examineTime)
                             }
                             else {
-                                this.$message.warning(`新增失败`);
+                                this.$message.warning(res.data.message);
                             }
                         })
                         .catch((err) => {
@@ -383,7 +390,7 @@
                 this.id = row.id;
                 axios.post(" " + url + "/sysconfig/noticeDetail", {"id": this.id})
                     .then((res) => {
-                        this.htmlData=res.data.noticehtml;
+                        this.htmlData = res.data.data.context;
                     })
                     .catch((err) => {
                         console.log(err)
@@ -392,25 +399,25 @@
 
 
             //显示编辑
-            showEdit(){
+            showEdit() {
                 if (this.listData.length) {
-                    if(this.listData.length>1){
+                    if (this.listData.length > 1) {
                         this.message = "请勾选一个";
                         this.HideModal = false;
                         const that = this;
 
-                        function a() {
+                        function c() {
                             that.message = "";
                             that.HideModal = true;
                         }
 
-                        setTimeout(a, 2000);
+                        setTimeout(c, 2000);
                     }
                     else {
                         this.editVisible = true;
                         axios.post(" " + url + "/sysconfig/noticeDetail", {"id": this.listData[0]})
                             .then((res) => {
-                                this.content=res.data.noticehtml;
+                                this.content = res.data.data.context;
                             })
                             .catch((err) => {
                                 console.log(err)
@@ -505,7 +512,7 @@
                         console.log(err)
                     })
             },
-            
+
             onEditorChange({ editor, html, text }) {
                 this.content = html;
             },

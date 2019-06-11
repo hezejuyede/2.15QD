@@ -42,6 +42,7 @@
                               :header-cell-style="{background:'#A1D0FC',color:'rgba(0, 0, 0, 0.8)',fontSize:'20px'}"
                               border
                               height="450"
+                              @row-dblclick="edit"
                               highlight-current-row
                               style="width: 98%;margin: auto">
                         <template v-for="(col ,index) in cols">
@@ -50,6 +51,45 @@
                     </el-table>
                 </div>
             </div>
+
+            <!-- 编辑弹出框 -->
+            <el-dialog title="未到货清单详情" :visible.sync="editVisible" width="80%">
+                <el-form ref="form" label-width="100px">
+                    <el-table
+                        :data="tcData"
+                        :header-cell-style="{background:'#A1D0FC',color:'rgba(0, 0, 0, 0.8)',fontSize:'20px'}"
+                        border
+                        height="400"
+                        @row-dblclick="editPerson"
+                        highlight-current-row
+                        style="width: 98%;margin: auto">>
+                        <el-table-column
+                            prop="zizhname"
+                            align="center"
+                            label="托单号">
+                        </el-table-column>
+                        <el-table-column
+                            prop="username"
+                            align="center"
+                            label="管理区分号">
+                        </el-table-column>
+                        <el-table-column
+                            prop="zizhname"
+                            align="center"
+                            label="行号">
+                        </el-table-column>
+                        <el-table-column
+                            prop="username"
+                            align="center"
+                            label="采购担当">
+                        </el-table-column>
+                    </el-table>
+
+                </el-form>
+                <span slot="footer" class="dialog-footer">
+                <el-button @click="editVisible = false" style="height:30px;width:80px">取 消</el-button>
+            </span>
+            </el-dialog>
 
             <Modal :msg="message"
                    :isHideModal="HideModal"></Modal>
@@ -70,11 +110,14 @@
 
                 cols: [],
                 tableData: [],
+                tcData:[],
 
                 batch: "",
                 batchOptions: [],
 
+
                 select_word: '',
+                editVisible:false,
 
                 chunhao:"",
                 tuodanhao:"",
@@ -122,7 +165,7 @@
             loadingShowData(data1,data2,data3,data4,) {
                 let that = this;
                 axios.all([
-                    axios.post(" " + url + "/sys/showTableTitle", {"name": "zwjwcx"}),
+                    axios.post(" " + url + "/sys/showTableTitle", {"name": "tuodanjinwuchukuchaxun"}),
                     axios.post(" " + url + "/wuliao/jinwuZhuwenpinList", {"chunhao": data1,"tuodanhao": data2,"hangfan": data3,"glqf": data4})
                 ])
                     .then(axios.spread(function (title, table) {
@@ -131,6 +174,45 @@
                     }));
             },
 
+            edit(row, column, cell, event) {
+                if (row.id) {
+                    axios.post(" " + url + "/sysconfig/getUserbyzizhiId", {"id": row.id, "deptid": this.line})
+                        .then((res) => {
+                            if (res.data.length > 0) {
+                                this.zizhiData = res.data.data;
+                                this.editVisible = true;
+                            }
+                            else {
+                                this.message = "暂无数据";
+                                this.HideModal = false;
+                                const that = this;
+
+                                function a() {
+                                    that.message = "";
+                                    that.HideModal = true;
+                                }
+
+                                setTimeout(a, 2000);
+                            }
+                        })
+                        .catch((err) => {
+                            console.log(err)
+                        });
+                }
+                else {
+                    this.message = "没有ID，暂不能查询";
+                    this.HideModal = false;
+                    const that = this;
+
+                    function b() {
+                        that.message = "";
+                        that.HideModal = true;
+                    }
+
+                    setTimeout(b, 2000);
+                }
+
+            },
 
             //根据时间查询
             doSearch() {

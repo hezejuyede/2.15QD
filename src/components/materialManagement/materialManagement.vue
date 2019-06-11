@@ -45,12 +45,12 @@
                             {
                                 label: '出库记录（托单金物）',
                                 index: "1-3",
-                                url: "/404"
+                                url: "/MaterialManagement/tuodanjinwuchukujilv"
                             },
                             {
                                 label: '配送跟踪（托单金物）',
                                 index: "1-4",
-                                url: "/404"
+                                url: "/MaterialManagement/tuodanjinwupeisonggenzong"
                             },
                             {
                                 label: '出库查询（托单金物）',
