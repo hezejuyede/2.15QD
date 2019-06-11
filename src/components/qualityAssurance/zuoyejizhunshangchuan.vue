@@ -30,7 +30,6 @@
                     <el-button type="primary" class="handle-del mr10" @click="showAdd">新增基准</el-button>
                     <el-button type="warning" class="handle-del mr10" @click="showEdit">编辑基准</el-button>
                     <el-button type="danger"  class="handle-del mr10" @click="deleteAlert">删除基准</el-button>
-                    <el-button type="info"  class="handle-del mr10" @click="guanlianjizhun">关联基准</el-button>
                 </div>
                 <div class="">
                     <el-table class="tb-edit"
@@ -90,8 +89,15 @@
         <!-- 编辑弹出框 -->
         <el-dialog title="编辑作业基准" :visible.sync="editVisible" width="90%" top="50px">
             <div class="container" style="height:500px;overflow:auto">
+                <div class="containerDivTop2" style="width:100%;height:50px;display: flex;align-items: center;justify-items: center">
+                    <div style="width: 600px;height: 40px;margin: 0 auto">
+                        <span>学习标题</span>
+                        <span>:</span>
+                        <el-input v-model="titilename" style="width:500px" placeholder="学习标题"></el-input>
+                    </div>
+                </div>
                 <div class="containerDiv">
-                    <quill-editor ref="myTextEditor" v-model="content" :options="editorOption" height="300"></quill-editor>
+                    <quill-editor ref="myTextEditor" v-model="content" :options="editorOption"></quill-editor>
                     <div class="containerDivBtn">
                         <el-button class="editor-btn" type="primary" @click="saveEdit">提交</el-button>
                     </div>
@@ -105,51 +111,6 @@
             <span slot="footer" class="dialog-footer">
                 <el-button @click="delVisible = false" style="height:30px;width:80px">取 消</el-button>
                 <el-button type="primary" @click="deleteRow" style="height:30px;width:80px">确 定</el-button>
-            </span>
-        </el-dialog>
-
-        <!-- 关联弹出框 -->
-        <el-dialog title="关联基准" :visible.sync="glVisible" width="50%">
-            <el-form ref="form" label-width="100px">
-                <el-form-item label="生产线">
-                    <el-select
-                        style="width: 150px"
-                        v-model="line"
-                        clearable
-                        filterable
-                        allow-create
-                        default-first-option
-                        @change="changeSCX"
-                        placeholder="请选择生产线">
-                        <el-option
-                            v-for="item in lineOptions"
-                            :key="item.indexno"
-                            :label="item.name"
-                            :value="item.indexno">
-                        </el-option>
-                    </el-select>
-                </el-form-item>
-                <el-form-item label="工位">
-                    <el-select
-                        v-model="workStation"
-                        clearable
-                        filterable
-                        allow-create
-                        multiple
-                        default-first-option
-                        placeholder="请选择">
-                        <el-option
-                            v-for="item in workStationOptions"
-                            :key="item.id"
-                            :label="item.name"
-                            :value="item.id">
-                        </el-option>
-                    </el-select>
-                </el-form-item>
-            </el-form>
-            <span slot="footer" class="dialog-footer">
-                <el-button @click="glVisible = false" style="height:30px;width:80px">取 消</el-button>
-                <el-button class="handle-del mr10" type="primary" style="height:30px;width:80px" @click="saveEdit">提交</el-button>
             </span>
         </el-dialog>
 
@@ -176,6 +137,7 @@
                 message: '',
                 HideModal: true,
                 listData: [],
+                id: "",
                 username:"",
                 content: '',
                 titilename:"",
@@ -193,19 +155,11 @@
                 editVisible: false,
                 delVisible: false,
                 contentVisible:false,
-                glVisible:false,
+
 
                 examineTime:"",
-                line: '',
-                lineOptions:[],
-                workStation:[],
-                workStationOptions:[],
 
-                id: "",
-                name: '',
-                indexno: '',
-                showindex: '',
-                code: ""
+
 
             }
         },
@@ -248,27 +202,13 @@
                         times.push(time)
                     }
                     this.examineTime = times;
-                    let that = this;
-                    axios.all([
-                        axios.post(" " + url + "/sys/dictionaryList", {"id": "9"}),
-                        axios.post(" " + url + "/api/getPersonProcessList", {"name": ""}),
-                    ])
-                        .then(axios.spread(function (line, workStation) {
-                            that.lineOptions = line.data;
-
-                            if(workStation.data.length>1){
-                                let json ={"name":"全部","id":"-1"};
-                                that.workStationOptions = workStation.data;
-                                that.workStationOptions.unshift(json)
-                            }
-                            that.loadingShowData(that.examineTime)
-                        }));
+                    this.loadingShowData(this.examineTime)
 
                 }
             },
 
             //根据下拉显示数据
-            loadingShowData(data){
+            loadingShowData(data) {
                 let that = this;
                 axios.all([
                     axios.post(" " + url + "/sys/showTableTitle", {"name": "zuoyejizhunshangchuan"}),
@@ -284,13 +224,13 @@
             changeSCX() {
                 axios.post(" " + url + "/sysconfig/getGongxuList", {"id": this.line})
                     .then((res) => {
-                        if (res.data ==="-1") {
+                        if (res.data === "-1") {
                             this.select = "";
                             this.selectOptions = [];
                         }
                         else {
-                            if(res.data.length>1){
-                                let json ={"name":"全部","id":"-1"};
+                            if (res.data.length > 1) {
+                                let json = {"name": "全部", "id": "-1"};
                                 this.workStationOptions = res.data;
                                 this.workStationOptions.unshift(json);
                             }
@@ -299,7 +239,7 @@
             },
 
             //查询
-            doSearch(){
+            doSearch() {
                 if (this.examineTime) {
                     this.loadingShowData(this.examineTime)
                 }
@@ -307,6 +247,7 @@
                     this.message = "请选择要查询的时间";
                     this.HideModal = false;
                     const that = this;
+
                     function a() {
                         that.message = "";
                         that.HideModal = true;
@@ -350,8 +291,8 @@
             //显示新增
             showAdd() {
                 this.addVisible = true;
-                this.titilename="";
-                this.content="";
+                this.titilename = "";
+                this.content = "";
 
             },
 
@@ -388,15 +329,15 @@
             edit(row, column, cell, event) {
                 this.contentVisible = true;
                 this.id = row.id;
-                axios.post(" " + url + "/sysconfig/noticeDetail", {"id": this.id})
+                axios.post(" " + url + "/xuexi/xuexiDetail", {"id": this.id})
                     .then((res) => {
+                        this.titilename = res.data.data.titilename;
                         this.htmlData = res.data.data.context;
                     })
                     .catch((err) => {
                         console.log(err)
                     });
             },
-
 
             //显示编辑
             showEdit() {
@@ -414,10 +355,26 @@
                         setTimeout(c, 2000);
                     }
                     else {
-                        this.editVisible = true;
-                        axios.post(" " + url + "/sysconfig/noticeDetail", {"id": this.listData[0]})
+                        axios.post(" " + url + "/xuexi/xuexiDetail", {"id": this.listData[0]})
                             .then((res) => {
-                                this.content = res.data.data.context;
+                                if (res.data.data) {
+                                    this.editVisible = true;
+                                    this.titilename = res.data.data.titilename;
+                                    this.content = res.data.data.context;
+                                }
+                                else {
+                                    this.message = "暂无数据";
+                                    this.HideModal = false;
+                                    const that = this;
+
+                                    function a() {
+                                        that.message = "";
+                                        that.HideModal = true;
+                                    }
+
+                                    setTimeout(a, 2000);
+                                }
+
                             })
                             .catch((err) => {
                                 console.log(err)
@@ -444,7 +401,7 @@
                 if (this.content) {
                     axios.post(" " + url + "/xuexi/updateXuexi",
                         {
-                            "id":this.listData[0],
+                            "id": this.listData[0],
                             "username": this.username,
                             "titilename": this.titilename,
                             "context": this.content,
@@ -452,13 +409,13 @@
                     )
                         .then((res) => {
                             if (res.data.state === "1") {
-                                this.$message.success(`修改成功`);
+                                this.$message.success(res.data.message);
                                 this.editVisible = false;
-                                this.loadingShowData(this.select)
+                                this.loadingShowData(this.examineTime)
 
                             }
                             else {
-                                this.$message.warning(`修改失败`);
+                                this.$message.warning(res.data.message);
                             }
                         })
                         .catch((err) => {
@@ -492,20 +449,15 @@
 
             // 确定删除
             deleteRow() {
-                axios.post(" " + url + "/sysconfig/delNotice",
-                    {
-                        "ids": this.listData,
-                    }
-                )
+                axios.post(" " + url + "/xuexi/delXuexi", {"ids": this.listData,})
                     .then((res) => {
-                        if (res.data === "1") {
-                            this.$message.success('删除成功');
+                        if (res.data.state === "1") {
+                            this.$message.success(res.data.message);
                             this.delVisible = false;
-                            this.loadingShowData(this.select)
-
+                            this.loadingShowData(this.examineTime)
                         }
                         else {
-                            this.$message.warning(`删除失败`);
+                            this.$message.warning(res.data.message);
                         }
                     })
                     .catch((err) => {
@@ -513,53 +465,7 @@
                     })
             },
 
-            onEditorChange({ editor, html, text }) {
-                this.content = html;
-            },
 
-            submit(){
-                if(this.content){
-                    console.log(this.content);
-                    this.$message.success('提交成功！');
-                }
-                else {
-                    this.$message.worning('提交内容不能为空');
-                }
-
-            },
-
-            guanlianjizhun(){
-                if (this.listData.length) {
-                    if (this.listData.length > 1) {
-                        this.message = "只能关联一个";
-                        this.HideModal = false;
-                        const that = this;
-                        function a() {
-                            that.message = "";
-                            that.HideModal = true;
-                        }
-
-                        setTimeout(a, 2000);
-                    }
-                    else {
-                        this.glVisible=true;
-                        this.line="";
-                        this.workStation="";
-                    }
-                }
-                else {
-                    this.message = "请勾选要学习的内容";
-                    this.HideModal = false;
-                    const that = this;
-
-                    function b() {
-                        that.message = "";
-                        that.HideModal = true;
-                    }
-
-                    setTimeout(b, 2000);
-                }
-            }
         }
     }
 </script>
