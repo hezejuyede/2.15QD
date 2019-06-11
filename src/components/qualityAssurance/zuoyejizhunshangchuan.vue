@@ -291,7 +291,6 @@
                     });
             },
 
-
             //查询
             doSearch(){
                 if (this.examineTime) {
@@ -341,6 +340,43 @@
                 }
             },
 
+            //显示新增
+            showAdd() {
+                this.addVisible = true;
+                this.titilename="";
+                this.content="";
+
+            },
+
+            //进行新增
+            doAdd() {
+                if (this.content) {
+                    axios.post(" " + url + "/xuexi/addXuexi",
+                        {
+                            "username": this.username,
+                            "titilename": this.titilename,
+                            "context": this.content,
+                        }
+                    )
+                        .then((res) => {
+                            if (res.data === "1") {
+                                this.$message.success(`新增成功`);
+                                this.addVisible = false;
+                                this.loadingShowData(this.select)
+                            }
+                            else {
+                                this.$message.warning(`新增失败`);
+                            }
+                        })
+                        .catch((err) => {
+                            console.log(err)
+                        })
+                }
+                else {
+                    this.$message.warning(`输入不能为空`);
+                }
+            },
+
             //双击点击显示详情
             edit(row, column, cell, event) {
                 this.contentVisible = true;
@@ -354,24 +390,6 @@
                     });
             },
 
-            //选择点击删除
-            deleteAlert() {
-                if (this.listData.length) {
-                    this.delVisible = true;
-                }
-                else {
-                    this.message = "请勾选要删除的行";
-                    this.HideModal = false;
-                    const that = this;
-
-                    function a() {
-                        that.message = "";
-                        that.HideModal = true;
-                    }
-
-                    setTimeout(a, 2000);
-                }
-            },
 
             //显示编辑
             showEdit(){
@@ -417,14 +435,16 @@
             // 保存编辑
             saveEdit() {
                 if (this.content) {
-                    axios.post(" " + url + "/sysconfig/updateNotice",
+                    axios.post(" " + url + "/xuexi/updateXuexi",
                         {
                             "id":this.listData[0],
-                            "noticehtml": this.content,
+                            "username": this.username,
+                            "titilename": this.titilename,
+                            "context": this.content,
                         }
                     )
                         .then((res) => {
-                            if (res.data == "1") {
+                            if (res.data.state === "1") {
                                 this.$message.success(`修改成功`);
                                 this.editVisible = false;
                                 this.loadingShowData(this.select)
@@ -442,6 +462,25 @@
                     this.$message.warning(`输入不能为空`);
                 }
 
+            },
+
+            //选择点击删除
+            deleteAlert() {
+                if (this.listData.length) {
+                    this.delVisible = true;
+                }
+                else {
+                    this.message = "请勾选要删除的行";
+                    this.HideModal = false;
+                    const that = this;
+
+                    function a() {
+                        that.message = "";
+                        that.HideModal = true;
+                    }
+
+                    setTimeout(a, 2000);
+                }
             },
 
             // 确定删除
@@ -466,44 +505,7 @@
                         console.log(err)
                     })
             },
-
-            //显示新增
-            showAdd() {
-                this.addVisible = true;
-                this.titilename="";
-                this.content="";
-
-            },
-
-            //进行新增
-            doAdd() {
-                if (this.content) {
-                    axios.post(" " + url + "/xuexi/addXuexi",
-                        {
-                            "username": this.username,
-                            "titilename": this.titilename,
-                            "context": this.content,
-                        }
-                    )
-                        .then((res) => {
-                            if (res.data === "1") {
-                                this.$message.success(`新增成功`);
-                                this.addVisible = false;
-                                this.loadingShowData(this.select)
-                            }
-                            else {
-                                this.$message.warning(`新增失败`);
-                            }
-                        })
-                        .catch((err) => {
-                            console.log(err)
-                        })
-                }
-                else {
-                    this.$message.warning(`输入不能为空`);
-                }
-            },
-
+            
             onEditorChange({ editor, html, text }) {
                 this.content = html;
             },
