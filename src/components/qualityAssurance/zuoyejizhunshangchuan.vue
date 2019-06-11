@@ -39,6 +39,7 @@
                               border
                               height="400"
                               @select="selectList"
+                              @select-all="selectAll"
                               @row-dblclick="edit"
                               highlight-current-row
                               style="width: 98%;margin: auto">
@@ -56,6 +57,13 @@
         <!--新增弹出框 -->
         <el-dialog title="新增作业基准" :visible.sync="addVisible" width="90%" top="50px">
             <div class="container" style="height:500px;overflow:auto">
+                <div class="containerDivTop2" style="width:100%;height:50px;display: flex;align-items: center;justify-items: center">
+                    <div style="width: 600px;height: 40px;margin: 0 auto">
+                        <span>学习标题</span>
+                        <span>:</span>
+                        <el-input v-model="titilename" style="width:500px" placeholder="学习标题"></el-input>
+                    </div>
+                </div>
                 <div class="containerDiv">
                     <quill-editor ref="myTextEditor" v-model="content" :options="editorOption"></quill-editor>
                     <div class="containerDivBtn">
@@ -92,8 +100,6 @@
                 <el-button type="primary" @click="deleteRow" style="height:30px;width:80px">确 定</el-button>
             </span>
         </el-dialog>
-
-
 
         <!-- 关联弹出框 -->
         <el-dialog title="关联基准" :visible.sync="glVisible" width="50%">
@@ -139,6 +145,7 @@
                 <el-button class="handle-del mr10" type="primary" style="height:30px;width:80px" @click="saveEdit">提交</el-button>
             </span>
         </el-dialog>
+
         <Modal :msg="message"
                :isHideModal="HideModal"></Modal>
     </div>
@@ -162,8 +169,9 @@
                 message: '',
                 HideModal: true,
                 listData: [],
-
+                username:"",
                 content: '',
+                titilename:"",
                 editorOption: {
                     placeholder: ''
                 },
@@ -225,6 +233,8 @@
                     this.$router.push("/")
                 }
                 else {
+                    const info = JSON.parse(userInfo);
+                    this.username = info.username;
                     let time = getNowTime();
                     let times = [];
                     for (let i = 0; i < 2; i++) {
@@ -244,8 +254,7 @@
                                 that.workStationOptions = workStation.data;
                                 that.workStationOptions.unshift(json)
                             }
-                            that.loadingShowData(1)
-
+                            that.loadingShowData(that.examineTime)
                         }));
 
                 }
@@ -256,7 +265,7 @@
                 let that = this;
                 axios.all([
                     axios.post(" " + url + "/sys/showTableTitle", {"name": "zuoyejizhunshangchuan"}),
-                    axios.post(" " + url + "/sysconfig/showNoticeList", {"id": data})
+                    axios.post(" " + url + "/xuexi/xuexiList", {"times": data})
                 ])
                     .then(axios.spread(function (title, table) {
                         that.cols = title.data;
@@ -285,14 +294,13 @@
 
             //查询
             doSearch(){
-                if (this.select) {
-                    this.loadingShowData(this.select)
+                if (this.examineTime) {
+                    this.loadingShowData(this.examineTime)
                 }
                 else {
-                    this.message = "请选择要查询的工位";
+                    this.message = "请选择要查询的时间";
                     this.HideModal = false;
                     const that = this;
-
                     function a() {
                         that.message = "";
                         that.HideModal = true;
@@ -305,6 +313,21 @@
 
             //选择那个一个
             selectList(val) {
+                if (val.length) {
+                    let data = [];
+                    for (let i = 0; i < val.length; i++) {
+                        let a = val[i].id;
+                        data.push(a)
+                    }
+                    this.listData = data;
+                }
+                else {
+                    this.listData = [];
+                }
+            },
+
+            //列表全部选择
+            selectAll(val) {
                 if (val.length) {
                     let data = [];
                     for (let i = 0; i < val.length; i++) {
@@ -446,31 +469,20 @@
 
             //显示新增
             showAdd() {
-                if (this.select) {
-                    this.addVisible = true;
-                }
-                else {
-                    this.message = "请选择要新增的工位";
-                    this.HideModal = false;
-                    const that = this;
-
-                    function a() {
-                        that.message = "";
-                        that.HideModal = true;
-                    }
-
-                    setTimeout(a, 2000);
-                }
+                this.addVisible = true;
+                this.titilename="";
+                this.content="";
 
             },
 
             //进行新增
             doAdd() {
                 if (this.content) {
-                    axios.post(" " + url + "/sysconfig/noticeAdd",
+                    axios.post(" " + url + "/xuexi/addXuexi",
                         {
-                            "stationid":this.select,
-                            "noticehtml": this.content,
+                            "username": this.username,
+                            "titilename": this.titilename,
+                            "context": this.content,
                         }
                     )
                         .then((res) => {

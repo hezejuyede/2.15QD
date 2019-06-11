@@ -84,7 +84,6 @@
         },
         computed: {
             onRoutes() {
-                console.log(1);
                 return this.$route.path.replace('/', '');
             }
         },
