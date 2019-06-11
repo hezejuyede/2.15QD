@@ -165,22 +165,30 @@
                         </el-select>
                     </el-form-item>
                     <el-form-item label="学习基准">
+                        <el-date-picker
+                            style="width: 240px"
+                            v-model="examineTime"
+                            type="daterange"
+                            start-placeholder="开始日期"
+                            end-placeholder="结束日期"
+                            value-format="yyyy-MM-dd">
+                        </el-date-picker>
                         <el-select
                             style="width: 150px"
                             v-model="jizhun"
                             clearable
                             filterable
-                            multiple
                             allow-create
                             default-first-option
                             placeholder="请选择工位">
                             <el-option
                                 v-for="item in jizhunOptions"
                                 :key="item.id"
-                                :label="item.name"
+                                :label="item.titilename"
                                 :value="item.id">
                             </el-option>
                         </el-select>
+                        <el-button type="primary" @click="searchJZ" style="height:30px;width:80px">查询</el-button>
                     </el-form-item>
                 </el-form>
                 <span slot="footer" class="dialog-footer">
@@ -197,7 +205,6 @@
                         :header-cell-style="{background:'#A1D0FC',color:'rgba(0, 0, 0, 0.8)',fontSize:'20px'}"
                         border
                         height="400"
-                        @row-dblclick="editPerson"
                         highlight-current-row
                         style="width: 98%;margin: auto">>
                         <el-table-column
@@ -451,14 +458,35 @@
 
             //双击点击行内编辑
             edit(row, column, cell, event) {
-                this.editVisible = true;
+
                 this.id = row.id;
-                axios.post(" " + url + "/devType/devTypeDetail", {"id": this.id})
+                axios.post(" " + url + "/xuexi/getxuexiRelation", {"id": this.id})
                     .then((res) => {
-                        this.chuanhao =res.data.chuanhao;
-                        this.guanzibianhao =res.data.guanzibianhao;
-                        this.fankuiren = res.data.fankuiren;
-                        this.wuzuoxiangqing = res.data.wuzuoxiangqing;
+                        if(res.data.state==="1"){
+                            if(res.data.data.length>0){
+                                this.editVisible = true;
+                                this.jizhun=res.data.data[0].xuexiid;
+                                this.line=1;
+                                let data = [];
+                                for(let i=0;i<res.data.data.length;i++){
+                                    data.push(res.data.data[i].gongweiid)
+                                }
+                                this.workStation=data;
+                            }
+                            else {
+                                this.message = "暂无数据";
+                                this.HideModal = false;
+                                const that = this;
+
+                                function b() {
+                                    that.message = "";
+                                    that.HideModal = true;
+                                }
+
+                                setTimeout(b, 2000);
+                            }
+
+                        }
                     })
                     .catch((err) => {
                         console.log(err)
