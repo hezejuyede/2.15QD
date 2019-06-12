@@ -14,43 +14,17 @@
                         <span>:</span>
                         <el-input v-model="select_word" placeholder="筛选安全基准" class="handle-input mr10" style="width: 200px"></el-input>
                     </label>
-                    <label style="margin-right: 5px;margin-left: 5px">
-                        <span>生产线</span>
+                    <label style="margin-right: 10px;margin-left: 10px">
+                        <span>选择查询时间</span>
                         <span>:</span>
-                        <el-select
-                            style="width: 150px"
-                            v-model="line"
-                            clearable
-                            filterable
-                            allow-create
-                            default-first-option
-                            @change="changeSCX"
-                            placeholder="请选择生产线">
-                            <el-option
-                                v-for="item in lineOptions"
-                                :key="item.indexno"
-                                :label="item.name"
-                                :value="item.indexno">
-                            </el-option>
-                        </el-select>
-                    </label>
-                    <label style="margin-right: 5px;margin-left: 5px">
-                        <span>工位</span>
-                        <span>:</span>
-                        <el-select
-                            v-model="select"
-                            clearable
-                            filterable
-                            allow-create
-                            default-first-option
-                            placeholder="请选择工位">
-                            <el-option
-                                v-for="item in selectOptions"
-                                :key="item.id"
-                                :label="item.name"
-                                :value="item.id">
-                            </el-option>
-                        </el-select>
+                        <el-date-picker
+                            style="width: 240px"
+                            v-model="examineTime"
+                            type="daterange"
+                            start-placeholder="开始日期"
+                            end-placeholder="结束日期"
+                            value-format="yyyy-MM-dd">
+                        </el-date-picker>
                     </label>
                     <el-button type="success" class="handle-del mr10" @click="doSearch">查询基准</el-button>
                     <el-button type="primary" class="handle-del mr10" @click="showAdd">新增基准</el-button>
@@ -64,6 +38,7 @@
                               border
                               height="400"
                               @select="selectList"
+                              @select-all="selectAll"
                               @row-dblclick="edit"
                               highlight-current-row
                               style="width: 98%;margin: auto">
@@ -81,6 +56,13 @@
         <!--新增弹出框 -->
         <el-dialog title="新增安全基准" :visible.sync="addVisible" width="90%" top="50px">
             <div class="container" style="height:500px;overflow:auto">
+                <div class="containerDivTop2" style="width:100%;height:50px;display: flex;align-items: center;justify-items: center">
+                    <div style="width: 600px;height: 40px;margin: 0 auto">
+                        <span>学习标题</span>
+                        <span>:</span>
+                        <el-input v-model="titilename" style="width:500px" placeholder="学习标题"></el-input>
+                    </div>
+                </div>
                 <div class="containerDiv">
                     <quill-editor ref="myTextEditor" v-model="content" :options="editorOption"></quill-editor>
                     <div class="containerDivBtn">
@@ -91,8 +73,15 @@
         </el-dialog>
 
         <!--详情弹出框 -->
-        <el-dialog title="作业安全详情" :visible.sync="contentVisible" width="90%" top="50px">
+        <el-dialog title="安全基准详情" :visible.sync="contentVisible" width="90%" top="50px">
             <div class="container" style="height:500px;overflow:auto">
+                <div class="containerDivTop2" style="width:100%;height:50px;display: flex;align-items: center;justify-items: center">
+                    <div style="width: 600px;height: 40px;margin: 0 auto">
+                        <span>学习标题</span>
+                        <span>:</span>
+                        <el-input v-model="titilename" style="width:500px"   :disabled="true"   placeholder="学习标题"></el-input>
+                    </div>
+                </div>
                 <div class="" v-html="htmlData"></div>
             </div>
         </el-dialog>
@@ -100,8 +89,15 @@
         <!-- 编辑弹出框 -->
         <el-dialog title="编辑安全基准" :visible.sync="editVisible" width="90%" top="50px">
             <div class="container" style="height:500px;overflow:auto">
+                <div class="containerDivTop2" style="width:100%;height:50px;display: flex;align-items: center;justify-items: center">
+                    <div style="width: 600px;height: 40px;margin: 0 auto">
+                        <span>学习标题</span>
+                        <span>:</span>
+                        <el-input v-model="titilename" style="width:500px" placeholder="学习标题"></el-input>
+                    </div>
+                </div>
                 <div class="containerDiv">
-                    <quill-editor ref="myTextEditor" v-model="content" :options="editorOption" height="300"></quill-editor>
+                    <quill-editor ref="myTextEditor" v-model="content" :options="editorOption"></quill-editor>
                     <div class="containerDivBtn">
                         <el-button class="editor-btn" type="primary" @click="saveEdit">提交</el-button>
                     </div>
@@ -117,6 +113,7 @@
                 <el-button type="primary" @click="deleteRow" style="height:30px;width:80px">确 定</el-button>
             </span>
         </el-dialog>
+
         <Modal :msg="message"
                :isHideModal="HideModal"></Modal>
     </div>
@@ -125,7 +122,7 @@
     import axios from 'axios'
     import url from '../../assets/js/URL'
     import Modal from '../../common/modal'
-
+    import {getNowTime} from '../../assets/js/api'
 
     import 'quill/dist/quill.core.css';
     import 'quill/dist/quill.snow.css';
@@ -140,8 +137,10 @@
                 message: '',
                 HideModal: true,
                 listData: [],
-
+                id: "",
+                username:"",
                 content: '',
+                titilename:"",
                 editorOption: {
                     placeholder: ''
                 },
@@ -158,16 +157,9 @@
                 contentVisible:false,
 
 
-                line: '',
-                lineOptions: [],
-                select:"",
-                selectOptions: [],
+                examineTime:"",
 
-                id: "",
-                name: '',
-                indexno: '',
-                showindex: '',
-                code: ""
+
 
             }
         },
@@ -202,32 +194,29 @@
                     this.$router.push("/")
                 }
                 else {
-                    let that = this;
-                    axios.all([
-                        axios.post(" " + url + "/sys/dictionaryList", {"id": "9"}),
-                        axios.post(" " + url + "/api/getPersonProcessList", {"name": ""}),
-                    ])
-                        .then(axios.spread(function (line, workStation) {
-                            that.lineOptions = line.data;
-                            that.line = line.data[0].indexno;
-                            that.select= workStation.data[0].id;
-                            that.selectOptions = workStation.data;
-                            that.loadingShowData(1)
+                    const info = JSON.parse(userInfo);
+                    this.username = info.username;
+                    let time = getNowTime();
+                    let times = [];
+                    for (let i = 0; i < 2; i++) {
+                        times.push(time)
+                    }
+                    this.examineTime = times;
+                    this.loadingShowData(this.examineTime)
 
-                        }));
                 }
             },
 
             //根据下拉显示数据
-            loadingShowData(data){
+            loadingShowData(data) {
                 let that = this;
                 axios.all([
                     axios.post(" " + url + "/sys/showTableTitle", {"name": "zuoyejizhunshangchuan"}),
-                    axios.post(" " + url + "/sysconfig/showNoticeList", {"id": data})
+                    axios.post(" " + url + "/xuexi/xuexiList", {"times": data})
                 ])
                     .then(axios.spread(function (title, table) {
                         that.cols = title.data;
-                        that.tableData = table.data;
+                        that.tableData = table.data.data;
                     }));
             },
 
@@ -235,25 +224,27 @@
             changeSCX() {
                 axios.post(" " + url + "/sysconfig/getGongxuList", {"id": this.line})
                     .then((res) => {
-                        if (res.data ==="-1") {
+                        if (res.data === "-1") {
                             this.select = "";
                             this.selectOptions = [];
                         }
                         else {
-                            this.select = res.data[0].id;
-                            this.selectOptions = res.data;
+                            if (res.data.length > 1) {
+                                let json = {"name": "全部", "id": "-1"};
+                                this.workStationOptions = res.data;
+                                this.workStationOptions.unshift(json);
+                            }
                         }
                     });
             },
 
-
             //查询
-            doSearch(){
-                if (this.select) {
-                    this.loadingShowData(this.select)
+            doSearch() {
+                if (this.examineTime) {
+                    this.loadingShowData(this.examineTime)
                 }
                 else {
-                    this.message = "请选择要查询的工位";
+                    this.message = "请选择要查询的时间";
                     this.HideModal = false;
                     const that = this;
 
@@ -282,58 +273,108 @@
                 }
             },
 
+            //列表全部选择
+            selectAll(val) {
+                if (val.length) {
+                    let data = [];
+                    for (let i = 0; i < val.length; i++) {
+                        let a = val[i].id;
+                        data.push(a)
+                    }
+                    this.listData = data;
+                }
+                else {
+                    this.listData = [];
+                }
+            },
+
+            //显示新增
+            showAdd() {
+                this.addVisible = true;
+                this.titilename = "";
+                this.content = "";
+
+            },
+
+            //进行新增
+            doAdd() {
+                if (this.content && this.titilename) {
+                    axios.post(" " + url + "/xuexi/addXuexi",
+                        {
+                            "username": this.username,
+                            "titilename": this.titilename,
+                            "context": this.content,
+                        }
+                    )
+                        .then((res) => {
+                            if (res.data.state === "1") {
+                                this.$message.success(res.data.message);
+                                this.addVisible = false;
+                                this.loadingShowData(this.examineTime)
+                            }
+                            else {
+                                this.$message.warning(res.data.message);
+                            }
+                        })
+                        .catch((err) => {
+                            console.log(err)
+                        })
+                }
+                else {
+                    this.$message.warning(`输入不能为空`);
+                }
+            },
+
             //双击点击显示详情
             edit(row, column, cell, event) {
                 this.contentVisible = true;
                 this.id = row.id;
-                axios.post(" " + url + "/sysconfig/noticeDetail", {"id": this.id})
+                axios.post(" " + url + "/xuexi/xuexiDetail", {"id": this.id})
                     .then((res) => {
-                        this.htmlData=res.data.noticehtml;
+                        this.titilename = res.data.data.titilename;
+                        this.htmlData = res.data.data.context;
                     })
                     .catch((err) => {
                         console.log(err)
                     });
             },
 
-            //选择点击删除
-            deleteAlert() {
-                if (this.listData.length) {
-                    this.delVisible = true;
-                }
-                else {
-                    this.message = "请勾选要删除的行";
-                    this.HideModal = false;
-                    const that = this;
-
-                    function a() {
-                        that.message = "";
-                        that.HideModal = true;
-                    }
-
-                    setTimeout(a, 2000);
-                }
-            },
-
             //显示编辑
-            showEdit(){
+            showEdit() {
                 if (this.listData.length) {
-                    if(this.listData.length>1){
+                    if (this.listData.length > 1) {
                         this.message = "请勾选一个";
                         this.HideModal = false;
                         const that = this;
 
-                        function a() {
+                        function c() {
                             that.message = "";
                             that.HideModal = true;
                         }
 
-                        setTimeout(a, 2000);
+                        setTimeout(c, 2000);
                     }
                     else {
-                        this.editVisible = true;
-                        axios.post(" " + url + "/sysconfig/noticeDetail", {"id": this.listData[0]})
+                        axios.post(" " + url + "/xuexi/xuexiDetail", {"id": this.listData[0]})
                             .then((res) => {
-                                this.content=res.data.noticehtml;
+                                if (res.data.data) {
+                                    this.editVisible = true;
+                                    this.titilename = res.data.data.titilename;
+                                    this.content = res.data.data.context;
+                                }
+                                else {
+                                    this.message = "暂无数据";
+                                    this.HideModal = false;
+                                    const that = this;
+
+                                    function a() {
+                                        that.message = "";
+                                        that.HideModal = true;
+                                    }
+
+                                    setTimeout(a, 2000);
+                                }
+
                             })
                             .catch((err) => {
                                 console.log(err)
@@ -358,21 +399,23 @@
             // 保存编辑
             saveEdit() {
                 if (this.content) {
-                    axios.post(" " + url + "/sysconfig/updateNotice",
+                    axios.post(" " + url + "/xuexi/updateXuexi",
                         {
-                            "id":this.listData[0],
-                            "noticehtml": this.content,
+                            "id": this.listData[0],
+                            "username": this.username,
+                            "titilename": this.titilename,
+                            "context": this.content,
                         }
                     )
                         .then((res) => {
-                            if (res.data == "1") {
-                                this.$message.success(`修改成功`);
+                            if (res.data.state === "1") {
+                                this.$message.success(res.data.message);
                                 this.editVisible = false;
-                                this.loadingShowData(this.select)
+                                this.loadingShowData(this.examineTime)
 
                             }
                             else {
-                                this.$message.warning(`修改失败`);
+                                this.$message.warning(res.data.message);
                             }
                         })
                         .catch((err) => {
@@ -385,36 +428,13 @@
 
             },
 
-            // 确定删除
-            deleteRow() {
-                axios.post(" " + url + "/sysconfig/delNotice",
-                    {
-                        "ids": this.listData,
-                    }
-                )
-                    .then((res) => {
-                        if (res.data === "1") {
-                            this.$message.success('删除成功');
-                            this.delVisible = false;
-                            this.loadingShowData(this.select)
-
-                        }
-                        else {
-                            this.$message.warning(`删除失败`);
-                        }
-                    })
-                    .catch((err) => {
-                        console.log(err)
-                    })
-            },
-
-            //显示新增
-            showAdd() {
-                if (this.select) {
-                    this.addVisible = true;
+            //选择点击删除
+            deleteAlert() {
+                if (this.listData.length) {
+                    this.delVisible = true;
                 }
                 else {
-                    this.message = "请选择要新增的工位";
+                    this.message = "请勾选要删除的行";
                     this.HideModal = false;
                     const that = this;
 
@@ -425,51 +445,27 @@
 
                     setTimeout(a, 2000);
                 }
-
             },
 
-            //进行新增
-            doAdd() {
-                if (this.content) {
-                    axios.post(" " + url + "/sysconfig/noticeAdd",
-                        {
-                            "stationid":this.select,
-                            "noticehtml": this.content,
+            // 确定删除
+            deleteRow() {
+                axios.post(" " + url + "/xuexi/delXuexi", {"ids": this.listData,})
+                    .then((res) => {
+                        if (res.data.state === "1") {
+                            this.$message.success(res.data.message);
+                            this.delVisible = false;
+                            this.loadingShowData(this.examineTime)
                         }
-                    )
-                        .then((res) => {
-                            if (res.data === "1") {
-                                this.$message.success(`新增成功`);
-                                this.addVisible = false;
-                                this.loadingShowData(this.select)
-                            }
-                            else {
-                                this.$message.warning(`新增失败`);
-                            }
-                        })
-                        .catch((err) => {
-                            console.log(err)
-                        })
-                }
-                else {
-                    this.$message.warning(`输入不能为空`);
-                }
+                        else {
+                            this.$message.warning(res.data.message);
+                        }
+                    })
+                    .catch((err) => {
+                        console.log(err)
+                    })
             },
 
-            onEditorChange({ editor, html, text }) {
-                this.content = html;
-            },
 
-            submit(){
-                if(this.content){
-                    console.log(this.content);
-                    this.$message.success('提交成功！');
-                }
-                else {
-                    this.$message.worning('提交内容不能为空');
-                }
-
-            },
         }
     }
 </script>

@@ -92,32 +92,6 @@
                             </el-option>
                         </el-select>
                     </el-form-item>
-                    <el-form-item label="学习基准">
-                        <el-date-picker
-                            style="width: 240px"
-                            v-model="examineTime"
-                            type="daterange"
-                            start-placeholder="开始日期"
-                            end-placeholder="结束日期"
-                            value-format="yyyy-MM-dd">
-                        </el-date-picker>
-                        <el-select
-                            style="width: 150px"
-                            v-model="jizhun"
-                            clearable
-                            filterable
-                            allow-create
-                            default-first-option
-                            placeholder="请选择工位">
-                            <el-option
-                                v-for="item in jizhunOptions"
-                                :key="item.id"
-                                :label="item.titilename"
-                                :value="item.id">
-                            </el-option>
-                        </el-select>
-                        <el-button type="primary" @click="searchJZ" style="height:30px;width:80px">查询</el-button>
-                    </el-form-item>
                 </el-form>
                 <span slot="footer" class="dialog-footer">
                 <el-button @click="addVisible = false" style="height:30px;width:80px">取 消</el-button>
@@ -163,32 +137,6 @@
                                 :value="item.id">
                             </el-option>
                         </el-select>
-                    </el-form-item>
-                    <el-form-item label="学习基准">
-                        <el-date-picker
-                            style="width: 240px"
-                            v-model="examineTime"
-                            type="daterange"
-                            start-placeholder="开始日期"
-                            end-placeholder="结束日期"
-                            value-format="yyyy-MM-dd">
-                        </el-date-picker>
-                        <el-select
-                            style="width: 150px"
-                            v-model="jizhun"
-                            clearable
-                            filterable
-                            allow-create
-                            default-first-option
-                            placeholder="请选择工位">
-                            <el-option
-                                v-for="item in jizhunOptions"
-                                :key="item.id"
-                                :label="item.titilename"
-                                :value="item.id">
-                            </el-option>
-                        </el-select>
-                        <el-button type="primary" @click="searchJZ" style="height:30px;width:80px">查询</el-button>
                     </el-form-item>
                 </el-form>
                 <span slot="footer" class="dialog-footer">
@@ -404,35 +352,46 @@
 
             //显示新增
             showAdd(){
-                this.addVisible=true;
-                this.line = "";
-                this.workStation = "";
-                this.examineTime = "";
-                this.jizhun = "";
-            },
+                if (this.listData.length) {
+                    if (this.listData.length > 1) {
+                        this.message = "只能选择一个";
+                        this.HideModal = false;
+                        const that = this;
 
-            //查询基准
-            searchJZ(){
-                axios.post(" " + url + "/xuexi/xuexiList", {"times": this.examineTime})
-                    .then((res) => {
-                    if (res.data.state === "1") {
-                        this.jizhunOptions = res.data.data;
+                        function b() {
+                            that.message = "";
+                            that.HideModal = true;
+                        }
+
+                        setTimeout(b, 2000);
                     }
                     else {
-                        this.$message.warning(res.data.message);
+                        this.addVisible=true;
+                        this.line = "";
+                        this.workStation = "";
                     }
-                })
-                    .catch((err) => {
-                        console.log(err)
-                    })
+                }
+                else {
+                    this.message = "请勾选";
+                    this.HideModal = false;
+                    const that = this;
+
+                    function a() {
+                        that.message = "";
+                        that.HideModal = true;
+                    }
+
+                    setTimeout(a, 2000);
+                }
+
             },
 
             //进行新增
             doAdd() {
-                if (this.jizhun && this.workStation) {
+                if (this.workStation) {
                     axios.post(" " + url + "/xuexi/xuexiRelation",
                         {
-                            "id":  this.jizhun,
+                            "id":  this.listData[0],
                             "ids": this.workStation
                         }
                     )
@@ -463,7 +422,6 @@
                         if(res.data.state==="1"){
                             if(res.data.data.length>0){
                                 this.editVisible = true;
-                                this.jizhun=res.data.data[0].xuexiid;
                                 this.line=1;
                                 let data = [];
                                 let arr =res.data.data;
@@ -496,10 +454,10 @@
 
             // 保存编辑
             saveEdit() {
-                if (this.jizhun && this.workStation) {
+                if (this.workStation) {
                     axios.post(" " + url + "/xuexi/xuexiRelation",
                         {
-                            "id":  this.jizhun,
+                            "id":  this.id,
                             "ids": this.workStation
                         }
                     )
