@@ -220,8 +220,6 @@
                 workStationOptions: [],
                 line: '',
                 lineOptions: [],
-                jizhunOptions:[],
-                jizhun:"",
 
 
 
@@ -268,12 +266,10 @@
                     axios.all([
                         axios.post(" " + url + "/sys/dictionaryList", {"id": "9"}),
                         axios.post(" " + url + "/api/getPersonProcessList", {"name": ""}),
-                        axios.post(" " + url + "/xuexi/xuexiList", {"times": that.examineTime})
                     ])
-                        .then(axios.spread(function (line, workStation,jizhun) {
+                        .then(axios.spread(function (line, workStation) {
                             that.lineOptions = line.data;
                             that.workStationOptions = workStation.data;
-                            that.jizhunOptions = jizhun.data.data;
                             that.loadingShowData(that.examineTime)
                         }));
                 }

@@ -266,7 +266,7 @@
                         axios.post(" " + url + "/sys/dictionaryList", {"id": "9"}),
                         axios.post(" " + url + "/api/getPersonProcessList", {"name": ""}),
                     ])
-                        .then(axios.spread(function (line, workStation,jizhun) {
+                        .then(axios.spread(function (line, workStation) {
                             that.lineOptions = line.data;
                             that.workStationOptions = workStation.data;
                             that.loadingShowData(that.examineTime)
