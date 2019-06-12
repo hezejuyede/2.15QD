@@ -220,9 +220,6 @@
                 workStationOptions: [],
                 line: '',
                 lineOptions: [],
-                jizhunOptions:[],
-                jizhun:"",
-
 
 
             }
@@ -268,12 +265,10 @@
                     axios.all([
                         axios.post(" " + url + "/sys/dictionaryList", {"id": "9"}),
                         axios.post(" " + url + "/api/getPersonProcessList", {"name": ""}),
-                        axios.post(" " + url + "/xuexi/xuexiList", {"times": that.examineTime})
                     ])
                         .then(axios.spread(function (line, workStation,jizhun) {
                             that.lineOptions = line.data;
                             that.workStationOptions = workStation.data;
-                            that.jizhunOptions = jizhun.data.data;
                             that.loadingShowData(that.examineTime)
                         }));
                 }
@@ -284,7 +279,7 @@
                 let that = this;
                 axios.all([
                     axios.post(" " + url + "/sys/showTableTitle", {"name": "xiadaxuexizhishi"}),
-                    axios.post(" " + url + "/xuexi/xuexiListNew",{"times":data1})
+                    axios.post(" " + url + "/anquan/xuexiListNew",{"times":data1})
                 ])
                     .then(axios.spread(function (title, table) {
                         that.cols = title.data;
@@ -389,7 +384,7 @@
             //进行新增
             doAdd() {
                 if (this.workStation) {
-                    axios.post(" " + url + "/xuexi/xuexiRelation",
+                    axios.post(" " + url + "/anquan/xuexiRelation",
                         {
                             "id":  this.listData[0],
                             "ids": this.workStation
@@ -417,7 +412,7 @@
             //双击点击行内编辑
             edit(row, column, cell, event) {
                 this.id = row.id;
-                axios.post(" " + url + "/xuexi/getxuexiRelation", {"id": this.id})
+                axios.post(" " + url + "/anquan/getxuexiRelation", {"id": this.id})
                     .then((res) => {
                         if(res.data.state==="1"){
                             if(res.data.data.length>0){
@@ -455,7 +450,7 @@
             // 保存编辑
             saveEdit() {
                 if (this.workStation) {
-                    axios.post(" " + url + "/xuexi/xuexiRelation",
+                    axios.post(" " + url + "/anquan/xuexiRelation",
                         {
                             "id":  this.id,
                             "ids": this.workStation

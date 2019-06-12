@@ -212,7 +212,7 @@
                 let that = this;
                 axios.all([
                     axios.post(" " + url + "/sys/showTableTitle", {"name": "zuoyejizhunshangchuan"}),
-                    axios.post(" " + url + "/xuexi/xuexiList", {"times": data})
+                    axios.post(" " + url + "/anquan/xuexiList", {"times": data})
                 ])
                     .then(axios.spread(function (title, table) {
                         that.cols = title.data;
@@ -220,23 +220,6 @@
                     }));
             },
 
-            //更改生产线
-            changeSCX() {
-                axios.post(" " + url + "/sysconfig/getGongxuList", {"id": this.line})
-                    .then((res) => {
-                        if (res.data === "-1") {
-                            this.select = "";
-                            this.selectOptions = [];
-                        }
-                        else {
-                            if (res.data.length > 1) {
-                                let json = {"name": "全部", "id": "-1"};
-                                this.workStationOptions = res.data;
-                                this.workStationOptions.unshift(json);
-                            }
-                        }
-                    });
-            },
 
             //查询
             doSearch() {
@@ -299,7 +282,7 @@
             //进行新增
             doAdd() {
                 if (this.content && this.titilename) {
-                    axios.post(" " + url + "/xuexi/addXuexi",
+                    axios.post(" " + url + "/anquan/addXuexi",
                         {
                             "username": this.username,
                             "titilename": this.titilename,
@@ -329,7 +312,7 @@
             edit(row, column, cell, event) {
                 this.contentVisible = true;
                 this.id = row.id;
-                axios.post(" " + url + "/xuexi/xuexiDetail", {"id": this.id})
+                axios.post(" " + url + "/anquan/xuexiDetail", {"id": this.id})
                     .then((res) => {
                         this.titilename = res.data.data.titilename;
                         this.htmlData = res.data.data.context;
@@ -355,7 +338,7 @@
                         setTimeout(c, 2000);
                     }
                     else {
-                        axios.post(" " + url + "/xuexi/xuexiDetail", {"id": this.listData[0]})
+                        axios.post(" " + url + "/anquan/xuexiDetail", {"id": this.listData[0]})
                             .then((res) => {
                                 if (res.data.data) {
                                     this.editVisible = true;
@@ -399,7 +382,7 @@
             // 保存编辑
             saveEdit() {
                 if (this.content) {
-                    axios.post(" " + url + "/xuexi/updateXuexi",
+                    axios.post(" " + url + "/anquan/updateXuexi",
                         {
                             "id": this.listData[0],
                             "username": this.username,
@@ -449,7 +432,7 @@
 
             // 确定删除
             deleteRow() {
-                axios.post(" " + url + "/xuexi/delXuexi", {"ids": this.listData,})
+                axios.post(" " + url + "/anquan/delXuexi", {"ids": this.listData,})
                     .then((res) => {
                         if (res.data.state === "1") {
                             this.$message.success(res.data.message);
