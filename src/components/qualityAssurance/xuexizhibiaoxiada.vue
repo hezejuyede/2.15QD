@@ -198,7 +198,7 @@
             </el-dialog>
 
             <!-- 查看工位学习状态 -->
-            <el-dialog title="查看工位学习状态" :visible.sync="stateVisible" width="40%" @click="cancel">
+            <el-dialog title="查看工位学习状态" :visible.sync="stateVisible" width="60%" @click="cancel">
                 <el-form ref="form" label-width="100px">
                     <el-table
                         :data="stateData"
@@ -208,22 +208,22 @@
                         highlight-current-row
                         style="width: 98%;margin: auto">>
                         <el-table-column
-                            prop="zizhname"
+                            prop="linename"
                             align="center"
                             label="生产线">
                         </el-table-column>
                         <el-table-column
-                            prop="username"
+                            prop="stationname"
                             align="center"
-                            label="工作">
+                            label="工位">
                         </el-table-column>
                         <el-table-column
-                            prop="zizhname"
+                            prop="username"
                             align="center"
                             label="人员">
                         </el-table-column>
                         <el-table-column
-                            prop="username"
+                            prop="status"
                             align="center"
                             label="学习状态">
                         </el-table-column>
@@ -362,7 +362,6 @@
                 this.loadingShowData(this.examineTime)
             },
 
-
             //选择那个一个
             selectList(val) {
                 this.val =val;
@@ -458,7 +457,6 @@
 
             //双击点击行内编辑
             edit(row, column, cell, event) {
-
                 this.id = row.id;
                 axios.post(" " + url + "/xuexi/getxuexiRelation", {"id": this.id})
                     .then((res) => {
@@ -468,8 +466,9 @@
                                 this.jizhun=res.data.data[0].xuexiid;
                                 this.line=1;
                                 let data = [];
-                                for(let i=0;i<res.data.data.length;i++){
-                                    data.push(res.data.data[i].gongweiid)
+                                let arr =res.data.data;
+                                for(let i=0;i<arr.length;i++){
+                                    data.push(arr[i].gongweiid)
                                 }
                                 this.workStation=data;
                             }
@@ -485,7 +484,9 @@
 
                                 setTimeout(b, 2000);
                             }
-
+                        }
+                        else {
+                            this.$message.warning(res.data.message);
                         }
                     })
                     .catch((err) => {
@@ -505,7 +506,7 @@
                         .then((res) => {
                             if (res.data.state === "1") {
                                 this.$message.success(res.data.message);
-                                this.addVisible = false;
+                                this.editVisible = false;
                                 this.loadingShowData(this.examineTime);
                             }
                             else {
@@ -520,6 +521,7 @@
                     this.$message.warning(`输入不能为空`);
                 }
             },
+
             //学习状态
             showState(){
                 if (this.listData.length) {
@@ -563,7 +565,7 @@
                     }
                 }
                 else {
-                    this.message = "请选择要编辑的工艺路线";
+                    this.message = "请勾选";
                     this.HideModal = false;
                     const that = this;
 
