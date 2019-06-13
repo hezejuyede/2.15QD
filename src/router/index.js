@@ -216,6 +216,9 @@ import liganganquanqueren from '../components/securityManagement/liganganquanque
 //提醒内容制作与发布
 import tixingnrirongzhizuofabu from '../components/securityManagement/tixingnrirongzhizuofabu';
 
+//提醒内容手动发布
+import anquanyaodianneirongshougong from '../components/securityManagement/anquanyaodianneirongshougong';
+
 //安全提醒的查询与统计
 import anquantixingchaxuntongji from '../components/securityManagement/anquantixingchaxuntongji';
 
@@ -1010,6 +1013,11 @@ export default new Router({
                             meta: {title: '提醒内容制作与发布'}
                         }
                         ,
+                        {
+                            path: 'anquanyaodianneirongshougong',
+                            component: anquanyaodianneirongshougong,
+                            meta: {title: '提醒内容手动提醒'}
+                        },
                         {
                             path: 'anquantixingchaxuntongji',
                             component: anquantixingchaxuntongji,

@@ -54,8 +54,13 @@
                                 url: "/SecurityManagement/tixingnrirongzhizuofabu"
                             },
                             {
-                                label: '安全提醒的查询与统计',
+                                label: '提醒内容手动发布',
                                 index: "2-2",
+                                url: "/SecurityManagement/anquanyaodianneirongshougong"
+                            },
+                            {
+                                label: '安全提醒的查询与统计',
+                                index: "2-3",
                                 url: "/SecurityManagement/anquantixingchaxuntongji"
                             }
                         ]
