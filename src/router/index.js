@@ -409,6 +409,7 @@ import HeaderMaintenance from '../components/systemManagement/headerMaintenance'
 
 import ListDetails from '../components/qualityAssurance/listDetails';
 
+import DigitalSignage from '../components/digitalSignage/DigitalSignage'
 
 import ButtonConfiguration from '../components/systemManagement/ButtonConfiguration'
 import DetailsTextConfiguration from '../components/systemManagement/DetailsTextConfiguration'
@@ -1094,8 +1095,6 @@ export default new Router({
             component: resolve => require(['../components/indexLogin/Login.vue'], resolve)
         },
 
-
-
         {
             path: '/PlannedProduction/MaterialManagement',
             component: MaterialManagement,
@@ -1121,10 +1120,12 @@ export default new Router({
             component: SecurityManagement,
             meta: {title: '安全管理'}
         },
+
+
         {
-            path: '/PlannedProduction/SystemManagement',
-            component: SystemManagement,
-            meta: {title: '系统管理'}
+            path: '/digitalSignage',
+            component: DigitalSignage,
+            meta: {title: '电子看板'}
         },
 
         {

@@ -75,6 +75,11 @@
                         title: '安全管理'
                     },
                     {
+                        icon: 'el-icon-data-line',
+                        index: '/digitalSignage',
+                        title: '电子看板'
+                    },
+                    {
                         icon: 'el-icon-setting',
                         index: 'SystemManagement',
                         title: '系统管理'
