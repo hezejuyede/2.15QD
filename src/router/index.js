@@ -229,6 +229,10 @@ import anquanjizhunshangchuan from '../components/securityManagement/anquanjizhu
 //学习指示下达
 import anquanxuexizhibaoxiada from '../components/securityManagement/anquanxuexizhibaoxiada.vue';
 
+
+//学习报告统计
+import anquanjilvfenlei from '../components/securityManagement/anquanjilvfenlei.vue';
+
 //学习报告统计
 import anquanxuexibaogaotongji from '../components/securityManagement/anquanxuexibaogaotongji.vue';
 
@@ -1027,6 +1031,11 @@ export default new Router({
                             path: 'anquanjizhunbaobiao',
                             component: anquanjizhunbaobiao,
                             meta: {title: '安全基准报表'}
+                        },
+                        {
+                            path: 'anquanjilvfenlei',
+                            component: anquanjilvfenlei,
+                            meta: {title: '安全记录分类'}
                         },
                         {
                             path: 'anquanjilvchaxuntongji',

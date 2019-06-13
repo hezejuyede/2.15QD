@@ -86,13 +86,18 @@
                         index: "4",
                         children: [
                             {
-                                label: '安全记录登记',
+                                label: '安全记录分类',
                                 index: "4-1",
+                                url: "/SecurityManagement/anquanjilvfenlei"
+                            },
+                            {
+                                label: '安全记录登记',
+                                index: "4-2",
                                 url: "/SecurityManagement/anquanjilvdengji"
                             },
                             {
                                 label: '安全记录查询与统计',
-                                index: "4-2",
+                                index: "4-3",
                                 url: "/SecurityManagement/anquanjilvchaxuntongji"
                             },
                         ]
