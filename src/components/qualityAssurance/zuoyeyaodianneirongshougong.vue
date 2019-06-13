@@ -362,7 +362,7 @@
                 let that = this;
                 axios.all([
                     axios.post(" " + url + "/sys/showTableTitle", {"name": "tixingneirongshoudong"}),
-                    axios.post(" " + url + "/anquan/tuisongList", {"times": data})
+                    axios.post(" " + url + "/zhiliang/tuisongList", {"times": data})
                 ])
                     .then(axios.spread(function (title, table) {
                         that.cols = title.data;
@@ -387,7 +387,7 @@
 
             //查询
             doSearch(){
-                if (thisexamineTime) {
+                if (this.examineTime) {
                     this.loadingShowData(this.examineTime)
                 }
                 else {
@@ -455,7 +455,7 @@
             //进行新增
             doAdd() {
                 if (this.content && this.select && this.tixing && this.titleName ) {
-                    axios.post(" " + url + "/anquan/tuisongAdd",
+                    axios.post(" " + url + "/zhiliang/tuisongAdd",
                         {
                             "ids":this.select,
                             "tuisong":{"title":this.titleName,"typeid":this.tixing,"neirong":this.content,"createman":this.userId},
@@ -484,7 +484,7 @@
             //双击点击显示详情
             edit(row, column, cell, event) {
                 this.id = row.id;
-                axios.post(" " + url + "/anquan/tuisongDetail", {"id": this.id})
+                axios.post(" " + url + "/zhiliang/tuisongDetail", {"id": this.id})
                     .then((res) => {
                         if (res.data.state === "1") {
                             if (JSON.stringify(res.data.data) !== "{}") {
@@ -531,7 +531,7 @@
                         setTimeout(b, 2000);
                     }
                     else {
-                        axios.post(" " + url + "/anquan/tuisongDetail", {"id": this.listData[0]})
+                        axios.post(" " + url + "/zhiliang/tuisongDetail", {"id": this.listData[0]})
                             .then((res) => {
                                 if (res.data.state === "1") {
                                     if (JSON.stringify(res.data.data) !== "{}") {
@@ -582,7 +582,7 @@
             // 保存编辑
             saveEdit() {
                 if (this.content && this.select && this.tixing && this.titleName ) {
-                    axios.post(" " + url + "/anquan/tuisongUpdate",
+                    axios.post(" " + url + "/zhiliang/tuisongUpdate",
                         {
                             "ids":this.select,
                             "tuisong":{"id":this.listData[0],"title":this.titleName,"typeid":this.tixing,"neirong":this.content,"createman":this.userId},
@@ -630,7 +630,7 @@
 
             // 确定删除
             deleteRow() {
-                axios.post(" " + url + "/anquan/tuisongDel",
+                axios.post(" " + url + "/zhiliang/tuisongDel",
                     {
                         "ids": this.listData,
                     }

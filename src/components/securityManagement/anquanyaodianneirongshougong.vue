@@ -387,7 +387,7 @@
 
             //查询
             doSearch(){
-                if (thisexamineTime) {
+                if (this.examineTime) {
                     this.loadingShowData(this.examineTime)
                 }
                 else {
