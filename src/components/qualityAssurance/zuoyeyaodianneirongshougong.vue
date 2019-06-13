@@ -3,7 +3,7 @@
         <div class="crumbs">
             <el-breadcrumb separator="/">
                 <el-breadcrumb-item>质量管理</el-breadcrumb-item>
-                <el-breadcrumb-item>提醒内容制作与发布</el-breadcrumb-item>
+                <el-breadcrumb-item>提醒内容手动提醒</el-breadcrumb-item>
             </el-breadcrumb>
         </div>
         <div class="editorTemplate-content">
@@ -36,6 +36,9 @@
                               border
                               height="400"
                               @select="selectList"
+                              @select-all="selectAll"
+                              @selection-change="selectionChange"
+                              ref="moviesTable"
                               @row-dblclick="edit"
                               highlight-current-row
                               style="width: 98%;margin: auto">
@@ -107,7 +110,7 @@
                                 clearable
                                 filterable
                                 allow-create
-
+                                multiple
                                 default-first-option
                                 placeholder="请选择工位">
                                 <el-option
@@ -119,83 +122,10 @@
                             </el-select>
                         </label>
                     </div>
-                    <div class="containerDivTop2">
-                        <span style="color: #dd6161">触发条件:</span>
-                        <label style="margin-right: 5px;margin-left: 5px">
-                            <span>船号</span>
-                            <span>:</span>
-                            <el-input v-model="chuanhao" style="width: 150px" placeholder="船号"></el-input>
-                        </label>
-                        <label style="margin-right: 5px;margin-left: 5px">
-                            <span>批次</span>
-                            <span>:</span>
-                            <el-select
-                                style="width: 150px"
-                                v-model="pici"
-                                clearable
-                                filterable
-                                allow-create
-                                default-first-option
-                                placeholder="请选择批次">
-                                <el-option
-                                    v-for="item in piciOptions"
-                                    :key="item.id"
-                                    :label="item.name"
-                                    :value="item.id">
-                                </el-option>
-                            </el-select>
-                        </label>
-                        <label style="margin-right: 5px;margin-left: 5px">
-                            <span>系列</span>
-                            <span>:</span>
-                            <el-select
-                                style="width: 150px"
-                                v-model="xilie"
-                                clearable
-                                filterable
-                                allow-create
-                                default-first-option
-                                placeholder="请选择系列">
-                                <el-option
-                                    v-for="item in xilieOptions"
-                                    :key="item.indexno"
-                                    :label="item.name"
-                                    :value="item.indexno">
-                                </el-option>
-                            </el-select>
-                        </label>
-                    </div>
-                    <div class="containerDivTop3">
-                        <span style="color: #dd6161">设定频率:</span>
-                        <label style="margin-right: 5px;margin-left: 5px">
-                            <span>时间段</span>
-                            <span>:</span>
-                            <el-select
-                                v-model="shijianduan"
-                                clearable
-                                filterable
-                                allow-create
-                                default-first-option
-                                @change="changeSCX"
-                                placeholder="请选择时间段">
-                                <el-option
-                                    v-for="item in shijianduanOptions"
-                                    :key="item.indexno"
-                                    :label="item.name"
-                                    :value="item.indexno">
-                                </el-option>
-                            </el-select>
-                        </label>
-                        <label style="margin-right: 5px;margin-left: 5px">
-                            <span>频次</span>
-                            <span>:</span>
-                            <el-input v-model="pinci" style="width: 200px" type="number" placeholder="频次"></el-input>
-                        </label>
-                    </div>
                     <div class="containerDivTop3">
                         <span style="color: #dd6161">提醒标题:</span>
                         <label style="margin-right: 5px;margin-left: 5px">
-                            <el-input v-model="pinci" style="width: 500px" placeholder="标题"></el-input>
+                            <el-input v-model="titleName" style="width: 500px" placeholder="标题"></el-input>
                         </label>
                     </div>
                 </div>
@@ -210,14 +140,95 @@
 
         <!--详情弹出框 -->
         <el-dialog title="作业提醒内容" :visible.sync="contentVisible" width="90%" top="50px">
-            <div class="container" style="height:500px;overflow:auto">
+            <div class="container" style="height:600px;overflow:auto">
+                <div class="containerDivTop">
+                    <div class="containerDivTop3">
+                        <span style="color: #dd6161">提醒标题:</span>
+                        <label style="margin-right: 5px;margin-left: 5px">
+                            <el-input v-model="titleName" style="width: 500px" placeholder="标题" :disabled="true"></el-input>
+                        </label>
+                    </div>
+                </div>
                 <div class="" v-html="htmlData"></div>
             </div>
         </el-dialog>
 
         <!-- 编辑弹出框 -->
         <el-dialog title="编辑提醒内容" :visible.sync="editVisible" width="90%" top="50px">
-            <div class="container" style="height:500px;overflow:auto">
+            <div class="container" style="height:600px;overflow:auto">
+                <div class="containerDivTop">
+                    <div class="containerDivTop1">
+                        <span style="color: #dd6161">提醒级别:</span>
+                        <label style="margin-right: 5px;margin-left: 5px">
+                            <span>类型</span>
+                            <span>:</span>
+                            <el-select
+                                v-model="tixing"
+                                clearable
+                                filterable
+                                allow-create
+                                default-first-option
+                                @change="changeSCX"
+                                placeholder="请选择紧急类型">
+                                <el-option
+                                    v-for="item in tixingOptions"
+                                    :key="item.id"
+                                    :label="item.name"
+                                    :value="item.id">
+                                </el-option>
+                            </el-select>
+                        </label>
+                    </div>
+                    <div class="containerDivTop2">
+                        <span style="color: #dd6161">发送人:</span>
+                        <label style="margin-right: 5px;margin-left: 5px">
+                            <span>生产线</span>
+                            <span>:</span>
+                            <el-select
+                                style="width: 150px"
+                                v-model="line"
+                                clearable
+                                filterable
+                                allow-create
+                                default-first-option
+                                @change="changeSCX"
+                                placeholder="请选择生产线">
+                                <el-option
+                                    v-for="item in lineOptions"
+                                    :key="item.indexno"
+                                    :label="item.name"
+                                    :value="item.indexno">
+                                </el-option>
+                            </el-select>
+                        </label>
+                        <label style="margin-right: 5px;margin-left: 5px">
+                            <span>工位</span>
+                            <span>:</span>
+                            <el-select
+                                style="width: 120px"
+                                v-model="select"
+                                clearable
+                                filterable
+                                allow-create
+                                multiple
+                                default-first-option
+                                placeholder="请选择工位">
+                                <el-option
+                                    v-for="item in selectOptions"
+                                    :key="item.id"
+                                    :label="item.name"
+                                    :value="item.id">
+                                </el-option>
+                            </el-select>
+                        </label>
+                    </div>
+                    <div class="containerDivTop3">
+                        <span style="color: #dd6161">提醒标题:</span>
+                        <label style="margin-right: 5px;margin-left: 5px">
+                            <el-input v-model="titleName" style="width: 500px" placeholder="标题"></el-input>
+                        </label>
+                    </div>
+                </div>
                 <div class="containerDiv">
                     <quill-editor ref="myTextEditor" v-model="content" :options="editorOption" height="300"></quill-editor>
                     <div class="containerDivBtn">
@@ -258,7 +269,7 @@
                 message: '',
                 HideModal: true,
                 listData: [],
-
+                userId:"",
                 content: '',
                 editorOption: {
                     placeholder: ''
@@ -276,7 +287,7 @@
                 contentVisible:false,
 
 
-                line: '',
+                line:'',
                 lineOptions: [],
 
                 select:"",
@@ -285,24 +296,9 @@
                 tixing:"",
                 tixingOptions:[{"name": "紧急提醒", "id": "1"}, {"name": "一般提醒", "id": "2"},],
 
-                shijianduan:"",
-                shijianduanOptions: [{"name": "每天", "id": "1"}, {"name": "每周", "id": "2"}, {"name": "每月", "id": "2"}],
+                titleName:"",
 
-                xilie:"",
-                xilieOptions:[],
-
-                pici:"",
-                piciOptions:[],
-
-                chuanhao:"",
-                pinci:"",
                 examineTime:"",
-
-                id: "",
-                name: '',
-                indexno: '',
-                showindex: '',
-                code: ""
 
             }
         },
@@ -337,29 +333,27 @@
                     this.$router.push("/")
                 }
                 else {
+                    const userInfo = localStorage.getItem("userInfo");
+                    const info = JSON.parse(userInfo);
+                    this.userId = info.username;
+
                     let time = getNowTime();
                     let times = [];
                     for (let i = 0; i < 2; i++) {
                         times.push(time)
                     }
                     this.examineTime = times;
-
                     let that = this;
                     axios.all([
                         axios.post(" " + url + "/sys/dictionaryList", {"id": "9"}),
                         axios.post(" " + url + "/api/getPersonProcessList", {"name": ""}),
-                        axios.post(" " + url + "/sys/getPiciList"),
-                        axios.post(" " + url + "/sys/dictionaryList", {"id": "11"}),
                     ])
-                        .then(axios.spread(function (line, workStation,pici,xilie) {
+                        .then(axios.spread(function (line, workStation) {
                             that.lineOptions = line.data;
-                            that.line = line.data[0].indexno;
-                            that.select= workStation.data[0].id;
                             that.selectOptions = workStation.data;
-                            that.piciOptions = pici.data;
-                            that.xilieOptions = xilie.data;
                             that.loadingShowData(that.examineTime);
                         }));
+
                 }
             },
 
@@ -656,6 +650,8 @@
                         console.log(err)
                     })
             },
+
+
 
         }
     }

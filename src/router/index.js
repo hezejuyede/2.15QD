@@ -311,6 +311,10 @@ import zhiliangjizhunbaobiao from '../components/qualityAssurance/zhiliangjizhun
 //作业者要点内容
 import zuoyeyaodianneirong from '../components/qualityAssurance/zuoyeyaodianneirong';
 
+
+//提醒内容手动提醒
+import zuoyeyaodianneirongshougong from '../components/qualityAssurance/zuoyeyaodianneirongshougong';
+
 //学习报告统计
 import zhiliangtixingchaxuntongji from '../components/qualityAssurance/zhiliangtixingchaxuntongji';
 
@@ -897,6 +901,11 @@ export default new Router({
                             path: 'zuoyeyaodianneirong',
                             component: zuoyeyaodianneirong,
                             meta: {title: '作业者要点内容'}
+                        },
+                        {
+                            path: 'zuoyeyaodianneirongshougong',
+                            component: zuoyeyaodianneirongshougong,
+                            meta: {title: '提醒内容手动提醒'}
                         },
                         {
                             path: 'zhiliangtixingchaxuntongji',

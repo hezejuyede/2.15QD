@@ -136,8 +136,13 @@
                                 url: "/QualityAssurance/zuoyeyaodianneirong"
                             },
                             {
-                                label: '质量提醒的查询与统计',
+                                label: '提醒内容手动提醒',
                                 index: "5-2",
+                                url: "/QualityAssurance/zuoyeyaodianneirongshougong"
+                            },
+                            {
+                                label: '质量提醒的查询与统计',
+                                index: "5-3",
                                 url: "/QualityAssurance/zhiliangtixingchaxuntongji"
                             }
                         ]
