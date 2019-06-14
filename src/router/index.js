@@ -1095,6 +1095,9 @@ export default new Router({
             component: resolve => require(['../components/indexLogin/Login.vue'], resolve)
         },
 
+
+
+
         {
             path: '/PlannedProduction/MaterialManagement',
             component: MaterialManagement,
@@ -1120,6 +1123,230 @@ export default new Router({
             component: SecurityManagement,
             meta: {title: '安全管理'}
         },
+        {
+            path: '/PlannedProduction/SystemManagement',
+            component: SystemManagement,
+            meta: {title: '系统管理'}
+        },
+
+
+
+
+
+        {
+            path: '/MaterialManagement/PlannedProduction',
+            component: PlannedProduction,
+            meta: {title: '生产管理'}
+        },
+        {
+            path: '/MaterialManagement/QualityAssurance',
+            component: QualityAssurance,
+            meta: {title: '质量管理'}
+        },
+        {
+            path: '/MaterialManagement/ProductionMonitoring',
+            component: ProductionMonitoring,
+            meta: {title: '设备管理'}
+        },
+        {
+            path: '/MaterialManagement/PersonnelManagement',
+            component: PersonnelManagement,
+            meta: {title: '人员管理'}
+        },
+        {
+            path: '/MaterialManagement/SecurityManagement',
+            component: SecurityManagement,
+            meta: {title: '安全管理'}
+        },
+        {
+            path: '/MaterialManagement/SystemManagement',
+            component: SystemManagement,
+            meta: {title: '系统管理'}
+        },
+
+
+
+
+
+        {
+            path: '/QualityAssurance/PlannedProduction',
+            component: PlannedProduction,
+            meta: {title: '生产管理'}
+        },
+        {
+            path: '/QualityAssurance/MaterialManagement',
+            component: MaterialManagement,
+            meta: {title: '物料管理'}
+        },
+        {
+            path: '/QualityAssurance/ProductionMonitoring',
+            component: ProductionMonitoring,
+            meta: {title: '设备管理'}
+        },
+        {
+            path: '/QualityAssurance/PersonnelManagement',
+            component: PersonnelManagement,
+            meta: {title: '人员管理'}
+        },
+        {
+            path: '/QualityAssurance/SecurityManagement',
+            component: SecurityManagement,
+            meta: {title: '安全管理'}
+        },
+        {
+            path: '/QualityAssurance/SystemManagement',
+            component: SystemManagement,
+            meta: {title: '系统管理'}
+        },
+
+
+
+
+
+        {
+            path: '/PersonnelManagement/PlannedProduction',
+            component: PlannedProduction,
+            meta: {title: '生产管理'}
+        },
+        {
+            path: '/PersonnelManagement/MaterialManagement',
+            component: MaterialManagement,
+            meta: {title: '物料管理'}
+        },
+        {
+            path: '/PersonnelManagement/ProductionMonitoring',
+            component: ProductionMonitoring,
+            meta: {title: '设备管理'}
+        },
+        {
+            path: '/PersonnelManagement/QualityAssurance',
+            component: QualityAssurance,
+            meta: {title: '质量管理'}
+        },
+        {
+            path: '/PersonnelManagement/SecurityManagement',
+            component: SecurityManagement,
+            meta: {title: '安全管理'}
+        },
+        {
+            path: '/PersonnelManagement/SystemManagement',
+            component: SystemManagement,
+            meta: {title: '系统管理'}
+        },
+
+
+
+
+        {
+            path: '/ProductionMonitoring/PlannedProduction',
+            component: PlannedProduction,
+            meta: {title: '生产管理'}
+        },
+        {
+            path: '/ProductionMonitoring/MaterialManagement',
+            component: MaterialManagement,
+            meta: {title: '物料管理'}
+        },
+        {
+            path: '/ProductionMonitoring/PersonnelManagement',
+            component: PersonnelManagement,
+            meta: {title: '人员管理'}
+        },
+        {
+            path: '/ProductionMonitoring/QualityAssurance',
+            component: QualityAssurance,
+            meta: {title: '质量管理'}
+        },
+        {
+            path: '/ProductionMonitoring/SecurityManagement',
+            component: SecurityManagement,
+            meta: {title: '安全管理'}
+        },
+        {
+            path: '/ProductionMonitoring/SystemManagement',
+            component: SystemManagement,
+            meta: {title: '系统管理'}
+        },
+
+
+
+
+
+
+
+
+        {
+            path: '/SecurityManagement/PlannedProduction',
+            component: PlannedProduction,
+            meta: {title: '生产管理'}
+        },
+        {
+            path: '/SecurityManagement/MaterialManagement',
+            component: MaterialManagement,
+            meta: {title: '物料管理'}
+        },
+        {
+            path: '/SecurityManagement/ProductionMonitoring',
+            component: ProductionMonitoring,
+            meta: {title: '设备管理'}
+        },
+        {
+            path: '/SecurityManagement/QualityAssurance',
+            component: QualityAssurance,
+            meta: {title: '质量管理'}
+        },
+        {
+            path: '/SecurityManagement/PersonnelManagement',
+            component: PersonnelManagement,
+            meta: {title: '人员管理'}
+        },
+        {
+            path: '/SecurityManagement/SystemManagement',
+            component: SystemManagement,
+            meta: {title: '系统管理'}
+        },
+
+
+
+
+        {
+            path: '/SystemManagement/PlannedProduction',
+            component: PlannedProduction,
+            meta: {title: '生产管理'}
+        },
+        {
+            path: '/SystemManagement/MaterialManagement',
+            component: MaterialManagement,
+            meta: {title: '物料管理'}
+        },
+        {
+            path: '/SystemManagement/ProductionMonitoring',
+            component: ProductionMonitoring,
+            meta: {title: '设备管理'}
+        },
+        {
+            path: '/SystemManagement/QualityAssurance',
+            component: QualityAssurance,
+            meta: {title: '质量管理'}
+        },
+        {
+            path: '/SystemManagement/PersonnelManagement',
+            component: PersonnelManagement,
+            meta: {title: '人员管理'}
+        },
+        {
+            path: '/SystemManagement/SecurityManagement',
+            component: SecurityManagement,
+            meta: {title: '安全管理'}
+        },
+
+
+
+
+
+
+
+
 
 
         {
