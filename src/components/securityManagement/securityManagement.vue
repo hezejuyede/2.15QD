@@ -37,11 +37,11 @@
                                 index: "1-1",
                                 url: "/SecurityManagement/LoginSecurityAlert"
                             },
-                            {
+                           /* {
                                 label: '离岗安全确认',
                                 index: "2-1",
                                 url: "/SecurityManagement/liganganquanqueren"
-                            }
+                            }*/
                         ]
                     },
                     {
