@@ -14,25 +14,46 @@
                         <span>:</span>
                         <el-input v-model="select_word" placeholder="筛选资质" style="width: 200px"></el-input>
                     </label>
-                    <label style="margin-right: 10px;margin-left: 10px">
-                        <span> 部门选择</span>
+                    <label style="margin-right: 10px;margin-left: 5px">
+                        <span>生产线</span>
                         <span>:</span>
                         <el-select
+                            style="width: 150px"
                             v-model="line"
                             clearable
                             filterable
                             allow-create
                             default-first-option
-                            @change="changeScx"
-                            placeholder="请输入或者选择部门">
+                            @change="changeSCX"
+                            placeholder="请选择生产线">
                             <el-option
                                 v-for="item in lineOptions"
+                                :key="item.indexno"
+                                :label="item.name"
+                                :value="item.indexno">
+                            </el-option>
+                        </el-select>
+                    </label>
+                    <label style="margin-right: 10px;margin-left: 5px">
+                        <span>工位</span>
+                        <span>:</span>
+                        <el-select
+                            style="width: 150px"
+                            v-model="workStation"
+                            clearable
+                            filterable
+                            allow-create
+                            default-first-option
+                            placeholder="请选择工位">
+                            <el-option
+                                v-for="item in workStationOptions"
                                 :key="item.id"
                                 :label="item.name"
                                 :value="item.id">
                             </el-option>
                         </el-select>
                     </label>
+                    <el-button type="primary" icon="delete" class="handle-del mr10" @click="doSearch">查询</el-button>
                 </div>
                 <div class="">
                     <el-table class="tb-edit"
@@ -95,13 +116,14 @@
             return {
                 message: '',
                 HideModal: true,
+                workStation: "",
+                workStationOptions: [],
+                line: '',
+                lineOptions: [],
 
 
                 cols: [],
                 tableData: [],
-
-                line:"",
-                lineOptions:[],
 
                 select_word: '',
 
@@ -144,15 +166,16 @@
                 else {
                     let that = this;
                     axios.all([
-                        axios.post(" " + url + "/sysconfig/deptList"),
+                        axios.post(" " + url + "/sys/dictionaryList", {"id": "9"}),
+                        axios.post(" " + url + "/api/getPersonProcessList", {"name": ""}),
                     ])
-                        .then(axios.spread(function (line) {
-                            that.line = line.data[3].id;
+                        .then(axios.spread(function (line, workStation) {
                             that.lineOptions = line.data;
-                            that.loadingShowData(that.line)
+                            that.line = line.data[0].indexno;
+                            that.workStation = workStation.data[0].id;
+                            that.workStationOptions = workStation.data;
+                            that.loadingShowData(that.workStation)
                         }));
-
-
                 }
             },
 
@@ -169,11 +192,33 @@
                     }));
             },
 
-
-            //改变生产线得到新数据
-            changeScx() {
-                this.loadingShowData(this.line)
+            //更改生产线
+            changeSCX() {
+                axios.post(" " + url + "/sysconfig/getGongxuList", {"id": this.line})
+                    .then((res) => {
+                        if (res.data ==="-1") {
+                            this.workStation = "";
+                            this.workStationOptions = [];
+                        }
+                        else {
+                            this.workStation = res.data[0].id;
+                            this.workStationOptions = res.data;
+                        }
+                    });
             },
+
+            //根据工位选择
+            changeSelect() {
+                this.loadingShowData(this.workStation)
+            },
+
+
+
+            doSearch(){
+                this.loadingShowData(this.workStation)
+            },
+
+
             //双击点击行内编辑
             editPerson(row, column, cell, event) {
                 this.editVisible = true;

@@ -65,24 +65,43 @@
                 <el-form-item label="用户名">
                     <el-input v-model="name" disabled placeholder="用户名" style="width: 150px"></el-input>
                 </el-form-item>
-                <el-form-item label="资质">
+                <el-form-item label="生产线">
                     <el-select
-                        v-model="zizhiname"
-                        style="width:200px"
+                        style="width: 150px"
+                        v-model="line"
+                        clearable
+                        filterable
+                        allow-create
+                        default-first-option
+                        @change="changeSCX"
+                        placeholder="请选择生产线">
+                        <el-option
+                            v-for="item in lineOptions"
+                            :key="item.indexno"
+                            :label="item.name"
+                            :value="item.indexno">
+                        </el-option>
+                    </el-select>
+                </el-form-item>
+                <el-form-item label="工位">
+                    <el-select
+                        style="width: 150px"
+                        v-model="workStation"
                         clearable
                         filterable
                         allow-create
                         default-first-option
                         multiple
-                        placeholder="请选择资质">
+                        placeholder="请选择工位">
                         <el-option
-                            v-for="item in zizhinameOptions"
+                            v-for="item in workStationOptions"
                             :key="item.id"
                             :label="item.name"
                             :value="item.id">
                         </el-option>
                     </el-select>
                 </el-form-item>
+
             </el-form>
             <span slot="footer" class="dialog-footer">
                 <el-button @click="addVisible = false" style="height:30px;width:80px">取 消</el-button>
@@ -108,12 +127,15 @@
                 listData: [],
                 listType: [],
 
+                workStation: "",
+                workStationOptions: [],
+
+                line: '',
+                lineOptions: [],
 
                 cols: [],
                 tableData: [],
 
-                zizhinameOptions: [],
-                zizhiname: "",
 
                 dept: "",
                 deptOptions: [],
@@ -162,11 +184,13 @@
                     let that = this;
                     axios.all([
                         axios.post(" " + url + "/sysconfig/deptList"),
-                        axios.post(" " + url + "/sysconfig/zizhiList"),
+                        axios.post(" " + url + "/sys/dictionaryList", {"id": "9"}),
+                        axios.post(" " + url + "/api/getPersonProcessList", {"name": ""}),
                     ])
-                        .then(axios.spread(function (dept, zizhiname) {
+                        .then(axios.spread(function (dept,line, workStation) {
                             that.deptOptions = dept.data;
-                            that.zizhinameOptions = zizhiname.data;
+                            that.lineOptions = line.data;
+                            that.workStationOptions = workStation.data;
                             that.loadingShowData();
 
                         }));
@@ -259,11 +283,11 @@
             },
             //进行新增资质
             doAdd() {
-                if (this.name && this.zizhiname) {
+                if (this.name && this.workStation) {
                     axios.post(" " + url + "/sysconfig/saveUserZizhi",
                         {
                             "id": this.listData[0],
-                            "ids": this.zizhiname
+                            "ids": this.workStation
                         }
                     )
                         .then((res) => {
@@ -286,7 +310,19 @@
                     this.$message.warning(`输入不能为空`);
                 }
             },
-
+            //更改生产线
+            changeSCX() {
+                axios.post(" " + url + "/sysconfig/getGongxuList", {"id": this.line})
+                    .then((res) => {
+                        if (res.data ==="-1") {
+                            this.workStation = "";
+                            this.workStationOptions = [];
+                        }
+                        else {
+                            this.workStationOptions = res.data;
+                        }
+                    });
+            },
 
         }
     }

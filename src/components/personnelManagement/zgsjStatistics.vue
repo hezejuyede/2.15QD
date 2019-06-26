@@ -148,7 +148,7 @@
             loadingShowData(data1, data2) {
                 let that = this;
                 axios.all([
-                    axios.post(" " + url + "/sys/showTableTitle", {"name": "zgsjcxtj"}),
+                    axios.post(" " + url + "/sys/showTableTitle", {"name": "zgsjtj"}),
                     axios.post(" " + url + "/timeTongji/userTimesum", {"deptid": data1, "times": data2,})
                 ])
                     .then(axios.spread(function (title, table) {
