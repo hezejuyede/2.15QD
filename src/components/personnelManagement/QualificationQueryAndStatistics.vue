@@ -34,25 +34,6 @@
                             </el-option>
                         </el-select>
                     </label>
-                    <label style="margin-right: 10px;margin-left: 5px">
-                        <span>工位</span>
-                        <span>:</span>
-                        <el-select
-                            style="width: 150px"
-                            v-model="workStation"
-                            clearable
-                            filterable
-                            allow-create
-                            default-first-option
-                            placeholder="请选择工位">
-                            <el-option
-                                v-for="item in workStationOptions"
-                                :key="item.id"
-                                :label="item.name"
-                                :value="item.id">
-                            </el-option>
-                        </el-select>
-                    </label>
                     <el-button type="primary" icon="delete" class="handle-del mr10" @click="doSearch">查询</el-button>
                 </div>
                 <div class="">
@@ -167,14 +148,11 @@
                     let that = this;
                     axios.all([
                         axios.post(" " + url + "/sys/dictionaryList", {"id": "9"}),
-                        axios.post(" " + url + "/api/getPersonProcessList", {"name": ""}),
                     ])
                         .then(axios.spread(function (line, workStation) {
                             that.lineOptions = line.data;
                             that.line = line.data[0].indexno;
-                            that.workStation = workStation.data[0].id;
-                            that.workStationOptions = workStation.data;
-                            that.loadingShowData(that.workStation)
+                            that.loadingShowData(that.line)
                         }));
                 }
             },
@@ -184,7 +162,7 @@
                 let that = this;
                 axios.all([
                     axios.post(" " + url + "/sys/showTableTitle", {"name": "zzcxtj"}),
-                    axios.post(" " + url + "/sysconfig/tongjiZizhi", {"deptid": data1})
+                    axios.post(" " + url + "/sysconfig/tongjiZizhi", {"lineNo": data1})
                 ])
                     .then(axios.spread(function (title, table) {
                         that.cols = title.data;
@@ -201,21 +179,16 @@
                             this.workStationOptions = [];
                         }
                         else {
+                            this.loadingShowData(this.line);
                             this.workStation = res.data[0].id;
                             this.workStationOptions = res.data;
                         }
                     });
             },
 
-            //根据工位选择
-            changeSelect() {
-                this.loadingShowData(this.workStation)
-            },
-
-
 
             doSearch(){
-                this.loadingShowData(this.workStation)
+                this.loadingShowData(this.line)
             },
 
 
@@ -223,7 +196,7 @@
             editPerson(row, column, cell, event) {
                 this.editVisible = true;
                 this.id = row.id;
-                axios.post(" " + url + "/sysconfig/getUserbyzizhiId", {"id": this.id,"deptid":this.line})
+                axios.post(" " + url + "/sysconfig/getUserbyzizhiId", {"id": this.id})
                     .then((res) => {
                         this.zizhiData = res.data.data;
                     })
