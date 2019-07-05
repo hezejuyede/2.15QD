@@ -1,8 +1,5 @@
 <template>
     <div class="plannedProduction">
-        <div class="">
-            <el-button type="primary" @click="doAdd" style="height:30px;width:80px">确 定</el-button>
-        </div>
         <div class="plannedProduction-nav">
             <el-menu :default-active="activeIndex" class="el-menu-demo" mode="horizontal">
                 <div  v-for="(item,index) in navBarData"  :class="{'navDivColor':index === num}">
@@ -87,18 +84,6 @@
                 this.num = Num-1;
                 this.$router.push(url);
             },
-
-            doAdd(){
-            axios.post(" " + url + "/menu/addMenu", {"id": "8","name":this.navBarData})
-                .then((res) => {
-                    if(res.data.state==="1"){
-                        alert("hah")
-                    }
-                })
-                .catch((err) => {
-                    console.log(err)
-                });
-        }
 
         }
     }

@@ -32,7 +32,7 @@
                             </el-option>
                         </el-select>
                     </label>
-                    <el-button type="success"  class="handle-del mr10" @click="doSearchPerson">查询权限</el-button>
+                    <el-button type="success"  class="handle-del mr10" @click="doSearchPerson">查询</el-button>
                 </div>
                 <div class="">
                     <el-table class="tb-edit"
@@ -55,10 +55,10 @@
         <el-dialog title="菜单权限设定" :visible.sync="addVisible" width="40%">
             <el-form ref="form" label-width="100px">
                 <el-tree
-                    :data="data"
+                    :data="treeData"
                     show-checkbox
-                    default-expand-all
                     node-key="id"
+                    :default-checked-keys="[5,6]"
                     ref="tree"
                     highlight-current
                     :props="defaultProps">
@@ -88,45 +88,8 @@
                 HideModal: true,
                 listData: [],
 
-                data: [
-                    {
-                        id: 1,
-                        label: '一级 1',
-                        children: [{
-                            id: 4,
-                            label: '二级 1-1',
-                            children: [{
-                                id: 9,
-                                label: '三级 1-1-1'
-                            }, {
-                                id: 10,
-                                label: '三级 1-1-2'
-                            }]
-                        }]
-                    },
-                    {
-                        id: 2,
-                        label: '一级 2',
-                        children: [{
-                            id: 5,
-                            label: '二级 2-1'
-                        }, {
-                            id: 6,
-                            label: '二级 2-2'
-                        }]
-                    },
-                    {
-                        id: 3,
-                        label: '一级 3',
-                        children: [{
-                            id: 7,
-                            label: '二级 3-1'
-                        }, {
-                            id: 8,
-                            label: '二级 3-2'
-                        }]
-                    }
-                ],
+                treeData: [],
+                selection:[],
                 defaultProps: {
                     children: 'children',
                     label: 'label'
@@ -144,7 +107,6 @@
                 addVisible: false,
 
 
-                id: "",
                 name: '',
 
             }
@@ -195,7 +157,7 @@
             loadingShowData(data1) {
                 let that = this;
                 axios.all([
-                    axios.post(" " + url + "/sys/showTableTitle", {"name": "ryzzsd"}),
+                    axios.post(" " + url + "/sys/showTableTitle", {"name": "caidanquanxian"}),
                     axios.post(" " + url + "/sysconfig/personList", {"deptid": data1,})
                 ])
                     .then(axios.spread(function (title, table) {
@@ -211,8 +173,32 @@
             },
 
             //显示编辑
-            edit() {
-                this.addVisible=true
+            edit(row, column, cell, event) {
+                this.name = row.name;
+                if(this.name){
+                    this.addVisible=true;
+                    axios.post(" " + url + "/menu/getAllMenu", {"name": this.name})
+                        .then((res) => {
+                            if(res.data.state==="1"){
+                                if(JSON.stringify(res.data.data) !== "{}"){
+                                    this.treeData=res.data.data.list;
+                                    this.selection=res.data.data.ids;
+                                }
+                                else {
+                                    this.$message.warning("暂无数据");
+                                }
+                            }
+                            else {
+                                this.$message.warning(res.data.message);
+                            }
+                        })
+                        .catch((err) => {
+                            console.log(err)
+                        });
+                }
+                else {
+                    this.$message.warning("找不到这个用户");
+                }
             },
             //清空选中
             resetChecked(){
@@ -221,7 +207,32 @@
             ,
             //进行添加
             doAdd(){
-                console.log( this.$refs.tree.getCheckedNodes());
+                let arr = this.$refs.tree.getCheckedNodes();
+                let data = [];
+                arr.forEach((e,i,) => {
+                   data.push(e.id)
+                });
+                if(data.length>0){
+                    axios.post(" " + url + "/menu/getAllMenu", {"name": this.name})
+                        .then((res) => {
+                            if(res.data.state==="1"){
+                                if(JSON.stringify(res.data.data) !== "{}"){
+                                    this.treeData=res.data.data.list;
+                                    this.selection=res.data.data.ids;
+                                }
+                                else {
+                                    this.$message.warning("暂无数据");
+                                }
+                            }
+                            else {
+                                this.$message.warning(res.data.message);
+                            }
+                        })
+                        .catch((err) => {
+                            console.log(err)
+                        });
+                }
+                console.log(data);
             }
 
 
