@@ -17,175 +17,18 @@
                 <router-view></router-view>
             </keep-alive>
         </div>
+
     </div>
 </template>
 <script type="text/ecmascript-6">
-
-
+    import axios from 'axios'
+    import url from '../../assets/js/URL'
     export default {
         name: 'plannedProduction',
         data() {
             return {
                 num:0,
-                navBarData: [
-                    {
-                        label: '托单金物',
-                        index: "1",
-                        children: [
-                            {
-                                label: '托单制作',
-                                index: "1-1",
-                                url: "/MaterialManagement/ProductionOfGoldSheets"
-                            },
-                            {
-                                label: '托单审批',
-                                index: "1-2",
-                                url: "/MaterialManagement/tdApproval"
-                            },
-                            {
-                                label: '出库记录（托单金物）',
-                                index: "1-3",
-                                url: "/MaterialManagement/tuodanjinwuchukujilv"
-                            },
-                            {
-                                label: '配送跟踪（托单金物）',
-                                index: "1-4",
-                                url: "/MaterialManagement/tuodanjinwupeisonggenzong"
-                            },
-                            {
-                                label: '出库查询（托单金物）',
-                                index: "1-5",
-                                url: "/MaterialManagement/tdjwOuOfStock"
-                            },
-                            {
-                                label: '配送查询（托单金物）',
-                                index: "1-5",
-                                url: "/MaterialManagement/tdjwDelivery"
-                            }
-                        ]
-                    },
-                    {
-                        label: '注文金物',
-                        index: "2",
-                        children: [
-                            {
-                                label: '缺件登记（注文金物）',
-                                index: "2-1",
-                                url: "/MaterialManagement/zwMissingRegistration"
-                            },
-                            {
-                                label: '缺件查询（注文金物）',
-                                index: "2-2",
-                                url: "/MaterialManagement/zwMetalSearch"
-                            }
-                        ]
-                    },
-                    {
-                        label: '储品金物',
-                        index: "3",
-                        children: [
-                            {
-                                label: '缺件登记（储品金物）',
-                                index: "3-1",
-                                url: "/MaterialManagement/cPMissingRegistration"
-                            },
-                            {
-                                label: '缺件查询（储品金物）',
-                                index: "3-2",
-                                url: "/MaterialManagement/cpMetalSearch"
-                            }
-                        ]
-                    },
-                    {
-                        label: '管材出库',
-                        index: "4",
-                        children: [
-                            {
-                                label: '管吊单查询',
-                                index: "4-1",
-                                url: "/MaterialManagement/pipeOutgoing"
-                            }
-                        ]
-                    },
-                    {
-                        label: '未引当跟踪',
-                        index: "5",
-                        children: [
-                            {
-                                label: '注文品不足',
-                                index: "5-1",
-                                url: "/MaterialManagement/zhuwenpinbuzu"
-                            },
-                            {
-                                label: '储品不足',
-                                index: "5-2",
-                                url: "/MaterialManagement/chupinbuzu"
-                            },
-                            {
-                                label: '注文金物未交货',
-                                index: "5-3",
-                                url: "/MaterialManagement/zhuwenjinwuwujiaohuo"
-                            },
-                            {
-                                label: '未引当查询与统计',
-                                index: "5-4",
-                                url: "/MaterialManagement/weiyindangchaxuntongji"
-                            }
-                        ]
-                    },
-                  /*  {
-                        label: '工位物料管理',
-                        index: "6",
-                        children: [
-                            {
-                                label: '加工线工位物料管理',
-                                index: "6-1",
-                                url: "/404"
-                            },
-                            {
-                                label: '金物担当物料管理',
-                                index: "6-2",
-                                url: "/404"
-                            }
-                        ]
-                    },*/
-                    {
-                        label: '物料报表',
-                        index: "7",
-                        children: [
-                            {
-                                label: '物料数据报表',
-                                index: "7-1",
-                                url: "/MaterialManagement/wlReportForm"
-                            },
-                            {
-                                label: '托单金物报表',
-                                index: "7-2",
-                                url: "/MaterialManagement/tDJWReportForm"
-                            },
-                            {
-                                label: '注文金物报表',
-                                index: "7-3",
-                                url: "/MaterialManagement/zWReportForm"
-                            },
-                            {
-                                label: '储品金物报表',
-                                index: "7-4",
-                                url: "/MaterialManagement/cPReportForm"
-                            },
-                            {
-                                label: '未引当报表',
-                                index: "7-5",
-                                url: "/MaterialManagement/wydReportForm"
-                            },
-                            {
-                                label: '工位物料报表',
-                                index: "7-6",
-                                url: "/MaterialManagement/gwReportForm"
-                            }
-                        ]
-                    }
-                ],
+                navBarData: [],
                 activeIndex: '1',
             }
         },
@@ -206,14 +49,34 @@
 
                 }
                 else {
-                    this.$router.push(this.navBarData[0].children[0].url);
-
+                    let Info = JSON.parse(userInfo);
+                    let username = Info.username;
+                    axios.post(" " + url + "/menu/getSubMenu", {"id":3 ,"name":username})
+                        .then((res) => {
+                            if(res.data.state==="1"){
+                                if(res.data.data.length>0){
+                                    this.navBarData=res.data.data;
+                                    this.$router.push(this.navBarData[0].children[0].url);
+                                }
+                                else {
+                                    this.$message.warning("暂无数据");
+                                }
+                            }
+                            else {
+                                this.$message.warning(res.data.message);
+                            }
+                        })
+                        .catch((err) => {
+                            console.log(err)
+                        });
                 }
             },
+
             //点击前往那个子组件
             goToNavBar(index, url) {
                 this.$router.push(url);
             },
+
 
             //点击导航前往哪一个页面
             handleSelect(index, url) {
@@ -221,7 +84,6 @@
                 this.num = Num-1;
                 this.$router.push(url);
             }
-
 
         }
     }

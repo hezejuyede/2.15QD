@@ -20,194 +20,15 @@
     </div>
 </template>
 <script type="text/ecmascript-6">
-
+    import axios from 'axios'
+    import url from '../../assets/js/URL'
 
     export default {
         name: 'plannedProduction',
         data() {
             return {
                 num:0,
-                navBarData: [
-                    {
-                        label: '不具合跟踪',
-                        index: "1",
-                        children: [
-                           /* {
-                                label: '设计不具合异常',
-                                index: "1-1",
-                                url: "/404"
-                            },
-                            {
-                                label: '图面工艺不具合异常',
-                                index: "1-2",
-                                url: "/404"
-                            },
-                            {
-                                label: ' 产品不具合异常',
-                                index: "1-3",
-                                url: "/404"
-                            },
-                            {
-                                label: '前道工序不具合异常',
-                                index: "1-4",
-                                url: "/404"
-                            },*/
-                            {
-                                label: '不具合查询与统计',
-                                index: "1-5",
-                                url: "/QualityAssurance/ExceptionQuery"
-                            }
-                        ]
-                    },
-                    {
-                        label: '误作跟踪',
-                        index: "2",
-                        url: "/404",
-                        children: [
-                            {
-                                label: '客户反馈的误作',
-                                index: "2-1",
-                                url: "/QualityAssurance/kehufankuiwuzuo"
-                            },
-                            {
-                                label: "加工线内部误作",
-                                index: "2-2",
-                                url: "/QualityAssurance/jiagongxianneibuwuzuo"
-                            },
-                            {
-                                label: '误作查询与统计',
-                                index: "2-3",
-                                url: "/QualityAssurance/wuzuotongji"
-                            }
-                        ]
-                    },
-                    {
-                        label: '船东船级意见反馈',
-                        index: "3",
-                        url: "/404",
-                        children: [
-                            {
-                                label: '船东意见反馈',
-                                index: "3-1",
-                                url: "/QualityAssurance/chuandongyijianfankui"
-                            },
-                            {
-                                label: '船级意见反馈',
-                                index: "3-2",
-                                url: "/QualityAssurance/chuanjiyijianfankui"
-                            },
-                            {
-                                label: '船东船级意见的查询与统计',
-                                index: "3-3",
-                                url: "/QualityAssurance/chuanjichuandongchaxuntongji"
-                            }
-                        ]
-                    },
-                    {
-                        label: '作业工位质量记录',
-                        index: "4",
-                        url: "/404",
-                        children: [
-                            {
-                                label: '常规自检记录',
-                                index: "4-1",
-                                url: "/QualityAssurance/ListDetails"
-                            },
-                            {
-                                label: '工作管精度管理记录',
-                                index: "4-1",
-                                url: "/QualityAssurance/gongzuoguanjingduguanlijilv"
-                            },
-                            {
-                                label: '质量记录查询与统计',
-                                index: "4-1",
-                                url: "/QualityAssurance/zhiliangjilvchaxunyutongji"
-                            }
-                        ]
-                    },
-                    {
-                        label: '质量提醒推送',
-                        index: "5",
-                        url: "/404",
-                        children: [
-                            {
-                                label: '提醒内容制作与发布',
-                                index: "5-1",
-                                url: "/QualityAssurance/zuoyeyaodianneirong"
-                            },
-                            {
-                                label: '提醒内容手动提醒',
-                                index: "5-2",
-                                url: "/QualityAssurance/zuoyeyaodianneirongshougong"
-                            },
-                            {
-                                label: '质量提醒的查询与统计',
-                                index: "5-3",
-                                url: "/QualityAssurance/zhiliangtixingchaxuntongji"
-                            }
-                        ]
-                    },
-                    {
-                        label: '质量基准学习',
-                        index: "6",
-                        url: "/404",
-                        children: [
-                            {
-                                label: '作业基准上传',
-                                index: "6-1",
-                                url: "/QualityAssurance/zuoyejizhunshangchuan"
-                            },
-                            {
-                                label: '学习指示下达',
-                                index: "6-2",
-                                url: "/QualityAssurance/xuexizhibiaoxiada"
-                            },
-                            {
-                                label: '学习报告统计',
-                                index: "6-3",
-                                url: "/QualityAssurance/xuexibaogaotongji"
-                            }
-                        ]
-
-                    },
-                    {
-                        label: '质量报表',
-                        index: "7",
-                        url: "/404",
-                        children: [
-                            {
-                                label: '不具合报表',
-                                index: "7-1",
-                                url: "/404"
-                            },
-                            {
-                                label: '误作报表',
-                                index: "7-2",
-                                url: "/QualityAssurance/wuzuochaxun"
-                            },
-                            {
-                                label: '船东船级意见报表',
-                                index: "7-3",
-                                url: "/QualityAssurance/chuanqichuandongbaobiao"
-                            },
-                            {
-                                label: '质量记录报表',
-                                index: "7-5",
-                                url: "/QualityAssurance/zhiliangjilvbaobiao"
-                            },
-                            {
-                                label: '质量提醒报表',
-                                index: "7-6",
-                                url: "/QualityAssurance/zhiliangtixingbaobiao"
-                            },
-                            {
-                                label: '质量基准报表',
-                                index: "7-7",
-                                url: "/QualityAssurance/zhiliangjizhunbaobiao"
-                            }
-                        ]
-                    }
-                ],
+                navBarData: [],
                 activeIndex: '1',
             }
         },
@@ -228,10 +49,29 @@
 
                 }
                 else {
-                    this.$router.push(this.navBarData[0].children[0].url);
-
+                    let Info = JSON.parse(userInfo);
+                    let username = Info.username;
+                    axios.post(" " + url + "/menu/getSubMenu", {"id":"128" ,"name":username})
+                        .then((res) => {
+                            if(res.data.state==="1"){
+                                if(res.data.data.length>0){
+                                    this.navBarData=res.data.data;
+                                    this.$router.push(this.navBarData[0].children[0].url);
+                                }
+                                else {
+                                    this.$message.warning("暂无数据");
+                                }
+                            }
+                            else {
+                                this.$message.warning(res.data.message);
+                            }
+                        })
+                        .catch((err) => {
+                            console.log(err)
+                        });
                 }
             },
+
             //点击前往那个子组件
             goToNavBar(index, url) {
                 this.$router.push(url);
@@ -242,7 +82,8 @@
                 let Num = parseInt(index.substr(0,1));
                 this.num = Num-1;
                 this.$router.push(url);
-            }
+            },
+
 
 
         }

@@ -23,171 +23,15 @@
     </div>
 </template>
 <script type="text/ecmascript-6">
-
+    import axios from 'axios'
+    import url from '../../assets/js/URL'
 
     export default {
         name: 'plannedProduction',
         data() {
             return {
                 num:0,
-                navBarData: [
-                    {
-                        label: '资源模型',
-                        index: "1",
-                        children: [
-                            {
-                                label: '工序管理',
-                                index: "1-1",
-                                url: "/WorkingProcedure"
-                            },
-                            {
-                                label: '工艺路线',
-                                index: "1-2",
-                                url: "/ProcessRoute"
-                            },
-                            {
-                                label: ' 工作日历',
-                                index: "1-3",
-                                url: "/FactoryCalendar"
-                            },
-                            {
-                                label: '班次管理',
-                                index: "1-4",
-                                url: "/ShiftManagement"
-                            },
-                            {
-                                label: '工位负荷监测',
-                                index: "1-5",
-                                url: "/LoadMonitoring"
-                            }
-                        ]
-                    },
-                    {
-                        label: '计划排产',
-                        index: "2",
-                        url: "/WorkingProcedure",
-                        children: [
-                            {
-                                label: '船号设置',
-                                index: "2-1",
-                                url: "/ShipType"
-                            },
-                            {
-                                label: '管加工数据导入(正常)',
-                                index: "2-2",
-                                url: "/InformationImport"
-                            },
-                            {
-                                label: '管加工数据导入(特别)',
-                                index: "2-3",
-                                url: "/TBImport"
-                            },
-                            {
-                                label: '导入数据查询',
-                                index: "2-4",
-                                url: "/ImportDataQuery"
-                            },
-                            {
-                                label: '导入数据审核',
-                                index: "2-5",
-                                url: "/DataImportAudit"
-                            }
-
-                            /*,
-                            {
-                                label: '计划排产',
-                                index: "2-5",
-                                url: "/Production"
-                            }*/
-                        ]
-                    },
-                   /* {
-                        label: '任务派发',
-                        index: "3",
-                        url: "/ProcessRoute",
-                        children: [
-                            {
-                                label: '任务派发',
-                                index: "3-1",
-                                url: "/Distribute"
-                            }
-                        ]
-                    },*/
-                   /* {
-                        label: '排产分析',
-                        index: "4",
-                        url: "/FactoryCalendar",
-                        children: [
-                            {
-                                label: '排产分析',
-                                index: "4-1",
-                                url: "/404"
-                            }
-                        ]
-                    },*/
-                    {
-                        label: '生产调度',
-                        index: "3",
-                        url: "/ResourceModel",
-                        children: [
-                            {
-                                label: '任务调度',
-                                index: "3-1",
-                                url: "/TaskScheduling"
-                            },
-                            {
-                                label: '生产调度日志',
-                                index: "3-2",
-                                url: "/ProductionSchedulingLog"
-                            }
-                        ]
-                    },
-                   /* {
-                        label: ' 生产监控',
-                        index: "6",
-                        url: "/InformationImport",
-                        children: [
-                            {
-                                label: ' 生产进度',
-                                index: "6-1",
-                                url: "/404"
-                            },
-                            {
-                                label: '工位动态',
-                                index: "6-2",
-                                url: "/404"
-                            },
-                            {
-                                label: ' 视频监控',
-                                index: "6-3",
-                                url: "/404"
-                            }
-                        ]
-
-                    },*/
-                    {
-                        label: '任务跟踪',
-                        index: "4",
-                        url: "/WorksheetPlanning",
-                        children: [
-                            {
-                                label: ' 生产进度',
-                                index: "4-1",
-                                url: "/ProductionSchedule"
-                            },
-                            {
-                                label: '工位动态',
-                                index: "4-2",
-                                url: "/WorkstationDynamics"
-                            },
-                            /*{
-                                label: ' 视频监控',
-                                index: "9-3",
-                                url: "/404"
-                            }*/
-                        ]
-                    }
-                ],
+                navBarData: [],
                 activeIndex: '1',
             }
         },
@@ -208,16 +52,26 @@
 
                 }
                 else {
-                    this.$router.push(this.navBarData[0].children[0].url);
-                  /*  let NavBar = localStorage.getItem("navBar");
-                    if(NavBar ===null){
-
-                    }
-                    else {
-                        let navBar = JSON.parse(NavBar);
-                        this.num = parseInt(navBar.num);
-                        this.$router.push(navBar.url);
-                    }*/
+                    let Info = JSON.parse(userInfo);
+                    let username = Info.username;
+                    axios.post(" " + url + "/menu/getSubMenu", {"id":"2" ,"name":username})
+                        .then((res) => {
+                            if(res.data.state==="1"){
+                                if(res.data.data.length>0){
+                                    this.navBarData=res.data.data;
+                                    this.$router.push(this.navBarData[0].children[0].url);
+                                }
+                                else {
+                                    this.$message.warning("暂无数据");
+                                }
+                            }
+                            else {
+                                this.$message.warning(res.data.message);
+                            }
+                        })
+                        .catch((err) => {
+                            console.log(err)
+                        });
                 }
             },
 
@@ -230,6 +84,7 @@
                 localStorage.setItem("navBar",Json);
                 this.$router.push(url);
             }
+
 
 
         }

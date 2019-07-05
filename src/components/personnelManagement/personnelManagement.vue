@@ -21,151 +21,15 @@
     </div>
 </template>
 <script type="text/ecmascript-6">
-
+    import axios from 'axios'
+    import url from '../../assets/js/URL'
 
     export default {
         name: 'plannedProduction',
         data() {
             return {
                 num: 0,
-                navBarData: [
-                    {
-                        label: '人员权限设置',
-                        index: "1",
-                        children: [
-                            {
-                                label: '部门设定',
-                                index: "1-1",
-                                url: "/DepartmentManagement"
-                            },
-                            {
-                                label: '角色设定',
-                                index: "1-2",
-                                url: "/RoleManagement"
-                            },
-                            {
-                                label: '岗位设定',
-                                index: "1-3",
-                                url: "/PostManagement"
-                            },
-                            {
-                                label: '人员设定',
-                                index: "1-4",
-                                url: "/PersonnelSetting"
-                            },
-                            {
-                                label: '菜单权限',
-                                index: "1-5",
-                                url: "/MenuPermissions"
-                            },
-                        ]
-                    },
-                    {
-                        label: '上岗资质管理',
-                        index: "2",
-                        children: [
-                            {
-                                label: '资质设定',
-                                index: "2-1",
-                                url: "/QualificationSetting"
-                            },
-                            {
-                                label: '人员资质设定',
-                                index: "2-2",
-                                url: "/personnelQualificationSetting"
-                            },
-                            {
-                                label: "资质查询与统计",
-                                index: "2-3",
-                                url: "/QualificationQueryAndStatistics"
-                            }
-                        ]
-                    },
-                    {
-                        label: '人员绩效跟踪',
-                        index: "3",
-                        children: [
-                            {
-                                label: '人员工作记录查询',
-                                index: "3-1",
-                                url: "/rYGZJVCX"
-                            },
-                            {
-                                label: '人员不良记录统计',
-                                index: "3-2",
-                                url: "/rYBLJVTJ"
-                            },
-                            {
-                                label: '人员作业效率跟踪',
-                                index: "3-3",
-                                url: "/rYZYXLGZ"
-                            }
-                        ]
-                    },
-                    {
-                        label: '人员报表',
-                        index: "4",
-                        children: [
-                            {
-                                label: '人员资质报表',
-                                index: "4-1",
-                                url: "/ryzzReportForm"
-                            },
-                            {
-                                label: '人员上岗率报表',
-                                index: "4-2",
-                                url: "/rysglReportForm"
-                            },
-                            {
-                                label: '不良记录报表',
-                                index: "4-3",
-                                url: "/bljlReportForm"
-                            },
-                            {
-                                label: '人员效率报表',
-                                index: "4-4",
-                                url: "/ryxlReportForm"
-                            },
-                            {
-                                label: '人员总体绩效评估报表',
-                                index: "4-5",
-                                url: "/ryztjxpgReportForm"
-                            }
-                        ]
-                    },
-                    {
-                        label: '人员时间管理',
-                        index: "5",
-                        children: [
-                            {
-                                label: '在岗时间查询',
-                                index: "5-1",
-                                url: "/sLGYCStatistics"
-                            },
-                            {
-                                label: '在岗时间统计',
-                                index: "5-1",
-                                url: "/zgsjStatistics"
-                            },
-                            {
-                                label: '上离岗异常统计',
-                                index: "5-2",
-                                url: "/zGTimeStatistics"
-                            }
-                        ]
-                    },
-                    {
-                        label: '人员监控',
-                        index: "6",
-                        children: [
-                            {
-                                label: '人员动态分布图',
-                                index: "6-1",
-                                url: "/StaffDynamics"
-                            }
-                        ]
-                    }
-                ],
+                navBarData: [],
                 activeIndex: '1',
             }
         },
@@ -186,8 +50,26 @@
 
                 }
                 else {
-                    this.$router.push(this.navBarData[0].children[0].url);
-
+                    let Info = JSON.parse(userInfo);
+                    let username = Info.username;
+                    axios.post(" " + url + "/menu/getSubMenu", {"id":"5" ,"name":username})
+                        .then((res) => {
+                            if(res.data.state==="1"){
+                                if(res.data.data.length>0){
+                                    this.navBarData=res.data.data;
+                                    this.$router.push(this.navBarData[0].children[0].url);
+                                }
+                                else {
+                                    this.$message.warning("暂无数据");
+                                }
+                            }
+                            else {
+                                this.$message.warning(res.data.message);
+                            }
+                        })
+                        .catch((err) => {
+                            console.log(err)
+                        });
                 }
             },
             //点击前往那个子组件

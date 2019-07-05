@@ -33,58 +33,14 @@
 
 <script>
     import bus from '../assets/js/bus';
+    import axios from 'axios'
+    import url from '../assets/js/URL'
 
     export default {
         data() {
             return {
                 collapse: false,
-                items: [
-                    {
-                        icon: 'el-icon-s-home',
-                        index: '/',
-                        title: '系统首页'
-                    },
-                    {
-                        icon: 'el-icon-tickets',
-                        index: 'PlannedProduction',
-                        title: '生产管理'
-                    },
-                    {
-                        icon: 'el-icon-shopping-cart-1',
-                        index: 'MaterialManagement',
-                        title: '物料管理'
-                    },
-                    {
-                        icon: 'el-icon-star-on',
-                        index: 'QualityAssurance',
-                        title: '质量管理'
-                    },
-                    {
-                        icon: 'el-icon-view',
-                        index: 'ProductionMonitoring',
-                        title: '设备管理'
-                    },
-                    {
-                        icon: 'el-icon-news',
-                        index: 'PersonnelManagement',
-                        title: '人员管理'
-                    },
-                    {
-                        icon: 'el-icon-star-off',
-                        index: 'SecurityManagement',
-                        title: '安全管理'
-                    },
-                    {
-                        icon: 'el-icon-data-line',
-                        index: '/digitalSignage',
-                        title: '电子看板'
-                    },
-                    {
-                        icon: 'el-icon-setting',
-                        index: 'SystemManagement',
-                        title: '系统管理'
-                    }
-                ]
+                items: []
             }
         },
         computed: {
@@ -96,7 +52,38 @@
             // 通过 Event Bus 进行组件间通信，来折叠侧边栏
             bus.$on('collapse', msg => {
                 this.collapse = msg;
-            })
+            });
+            this.getAdminState();
+        },
+        methods: {
+            //页面加载检查用户是否登陆，没有登陆就加载登陆页面
+            getAdminState() {
+                const userInfo = localStorage.getItem("userInfo");
+                if (userInfo === null) {
+
+                }
+                else {
+                    let Info = JSON.parse(userInfo);
+                    let username = Info.username;
+                    axios.post(" " + url + "/menu/getFirstMenu", {"name":username})
+                        .then((res) => {
+                            if(res.data.state==="1"){
+                                if(res.data.data.length>0){
+                                    this.items=res.data.data;
+                                }
+                                else {
+                                    this.$message.warning("暂无数据");
+                                }
+                            }
+                            else {
+                                this.$message.warning(res.data.message);
+                            }
+                        })
+                        .catch((err) => {
+                            console.log(err)
+                        });
+                }
+            },
         }
     }
 </script>

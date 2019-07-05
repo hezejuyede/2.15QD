@@ -1,5 +1,8 @@
 <template>
     <div class="plannedProduction">
+        <div class="">
+            <el-button type="primary" @click="doAdd" style="height:30px;width:80px">确 定</el-button>
+        </div>
         <div class="plannedProduction-nav">
             <el-menu :default-active="activeIndex" class="el-menu-demo" mode="horizontal">
                 <div  v-for="(item,index) in navBarData"  :class="{'navDivColor':index === num}">
@@ -20,6 +23,8 @@
     </div>
 </template>
 <script type="text/ecmascript-6">
+    import axios from 'axios'
+    import url from '../../assets/js/URL'
 
 
     export default {
@@ -27,70 +32,7 @@
         data() {
             return {
                 num:0,
-                navBarData: [
-                    {
-                        label: '日志管理',
-                        index: "1",
-                        children: [
-                            {
-                                label: '运行日志',
-                                index: "1-1",
-                                url: "/OperationLog"
-                            },
-                            {
-                                label: '登录日志',
-                                index: "1-2",
-                                url: "/LoginOutLog"
-                            }
-                        ]
-                    },
-                    {
-                        label: '系统配置',
-                        index: "2",
-                        children: [
-                            {
-                                label: '字典管理',
-                                index: "2-1",
-                                url: "/DictionaryMaintenance"
-                            },
-                            {
-                                label: '表头维护',
-                                index: "2-2",
-                                url: "/HeaderMaintenance"
-                            },
-                            {
-                                label: '作业记录',
-                                index: "2-3",
-                                url: "/ListDetails"
-                            },
-                            {
-                                label: '按钮配置',
-                                index: "2-3",
-                                url: "/ButtonConfiguration"
-                            },
-                            {
-                                label: '详情头部配置',
-                                index: "2-4",
-                                url: "/DetailsTextConfiguration"
-                            },
-                            {
-                                label: '筛选条件配置',
-                                index: "2-5",
-                                url: "/ScreeningConditionsConfiguration"
-                            },
-                            {
-                                label: '执行端表头配置',
-                                index: "2-6",
-                                url: "/ExecuteHeaderConfiguration"
-                            }
-                        ]
-                    },
-                    {
-                        label: '接口管理',
-                        index: "3",
-                        children: []
-                    },
-                ],
+                navBarData: [],
                 activeIndex: '1',
             }
         },
@@ -111,7 +53,26 @@
 
                 }
                 else {
-                    this.$router.push(this.navBarData[0].children[0].url);
+                    let Info = JSON.parse(userInfo);
+                    let username = Info.username;
+                    axios.post(" " + url + "/menu/getSubMenu", {"id":"8" ,"name":username})
+                        .then((res) => {
+                            if(res.data.state==="1"){
+                                if(res.data.data.length>0){
+                                    this.navBarData=res.data.data;
+                                    this.$router.push(this.navBarData[0].children[0].url);
+                                }
+                                else {
+                                    this.$message.warning("暂无数据");
+                                }
+                            }
+                            else {
+                                this.$message.warning(res.data.message);
+                            }
+                        })
+                        .catch((err) => {
+                            console.log(err)
+                        });
 
                 }
             },
@@ -125,8 +86,19 @@
                 let Num = parseInt(index.substr(0,1));
                 this.num = Num-1;
                 this.$router.push(url);
-            }
+            },
 
+            doAdd(){
+            axios.post(" " + url + "/menu/addMenu", {"id": "8","name":this.navBarData})
+                .then((res) => {
+                    if(res.data.state==="1"){
+                        alert("hah")
+                    }
+                })
+                .catch((err) => {
+                    console.log(err)
+                });
+        }
 
         }
     }

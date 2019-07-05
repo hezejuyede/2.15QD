@@ -20,7 +20,8 @@
     </div>
 </template>
 <script type="text/ecmascript-6">
-
+    import axios from 'axios'
+    import url from '../../assets/js/URL'
 
     export default {
         name: 'plannedProduction',
@@ -37,11 +38,6 @@
                                 index: "1-1",
                                 url: "/SecurityManagement/LoginSecurityAlert"
                             },
-                           /* {
-                                label: '离岗安全确认',
-                                index: "2-1",
-                                url: "/SecurityManagement/liganganquanqueren"
-                            }*/
                         ]
                     },
                     {
@@ -149,7 +145,26 @@
 
                 }
                 else {
-                    this.$router.push(this.navBarData[0].children[0].url);
+                    let Info = JSON.parse(userInfo);
+                    let username = Info.username;
+                    axios.post(" " + url + "/menu/getSubMenu", {"id":"6" ,"name":username})
+                        .then((res) => {
+                            if(res.data.state==="1"){
+                                if(res.data.data.length>0){
+                                    this.navBarData=res.data.data;
+                                    this.$router.push(this.navBarData[0].children[0].url);
+                                }
+                                else {
+                                    this.$message.warning("暂无数据");
+                                }
+                            }
+                            else {
+                                this.$message.warning(res.data.message);
+                            }
+                        })
+                        .catch((err) => {
+                            console.log(err)
+                        });
 
                 }
             },

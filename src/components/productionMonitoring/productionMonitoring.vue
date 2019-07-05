@@ -21,120 +21,15 @@
     </div>
 </template>
 <script type="text/ecmascript-6">
-
+    import axios from 'axios'
+    import url from '../../assets/js/URL'
 
     export default {
         name: 'productionMonitoring',
         data() {
             return {
                 num: 0,
-                navBarData: [
-                    {
-                        label: '设备点检',
-                        index: "1",
-                        children: [
-                            {
-                                label: '设备设定',
-                                index: "1-1",
-                                url: "/ProductionMonitoring/guanlianshebeisheding"
-                            },
-                            {
-                                label: '部位设定',
-                                index: "1-2",
-                                url: "/ProductionMonitoring/workStationInspectionRecord"
-                            },
-                            {
-                                label: '点检项目设定',
-                                index: "1-3",
-                                url: "/ProductionMonitoring/xingmusheding"
-                            },
-                            {
-                                label: '工位点检项目设定',
-                                index: "1-4",
-                                url: "/ProductionMonitoring/InspectionItemSetting"
-                            },
-                            {
-                                label: '点检记录查询与统计',
-                                index: "1-5",
-                                url: "/ProductionMonitoring/djjjSearchTj"
-                            }
-                        ]
-                    },
-                    {
-                        label: '耗材与备件管理',
-                        index: "2",
-                        children: [
-                            {
-                                label: '定义分类名称',
-                                index: "2-1",
-                                url: "/ProductionMonitoring/dingyifenlei"
-                            },
-                            {
-                                label: '定义耗材名称',
-                                index: "2-2",
-                                url: "/ProductionMonitoring/dingyihancaiku"
-                            },
-                            {
-                                label: '入库登记',
-                                index: "2-3",
-                                url: "/ProductionMonitoring/rukudengji"
-                            },
-                            {
-                                label: '出库登记',
-                                index: "2-4",
-                                url: "/ProductionMonitoring/chukudengji"
-                            },
-                            {
-                                label: '出入库查询与统计',
-                                index: "2-4",
-                                url: "/ProductionMonitoring/churukuchaxuntongji"
-                            }
-                        ]
-                    },
-                    {
-                        label: '设备故障跟踪',
-                        index: "3",
-                        children: [
-                            {
-                                label: '设备故障处理跟踪',
-                                index: "3-1",
-                                url: "/ProductionMonitoring/shebeiguzhangchuligenzong"
-                            }
-                        ]
-                    },
-                    {
-                        label: '设备报表',
-                        index: "4",
-                        children: [
-                            {
-                                label: '设备归属报表',
-                                index: "4-1",
-                                url: "/ProductionMonitoring/sbgsReportForm"
-                            },
-                            {
-                                label: '点检不良率报表',
-                                index: "4-2",
-                                url: "/ProductionMonitoring/djblvReportForm"
-                            },
-                            {
-                                label: '设备故障率报表',
-                                index: "4-3",
-                                url: "/ProductionMonitoring/sbgzvReportForm"
-                            }
-                        ]
-                    },
-                    {
-                        label: '设备监控',
-                        index: "5",
-                        children: [
-                            {
-                                label: '设备状态实时监控图',
-                                index: "5-1",
-                                url: "/ProductionMonitoring/shebeizhuangtaishishijiankongtu"
-                            }
-                        ]
-                    }
-                ],
+                navBarData: [],
                 activeIndex: '1',
             }
         },
@@ -155,9 +50,29 @@
 
                 }
                 else {
-                    this.$router.push(this.navBarData[0].children[0].url);
+                    let Info = JSON.parse(userInfo);
+                    let username = Info.username;
+                    axios.post(" " + url + "/menu/getSubMenu", {"id":"4" ,"name":username})
+                        .then((res) => {
+                            if(res.data.state==="1"){
+                                if(res.data.data.length>0){
+                                    this.navBarData=res.data.data;
+                                    this.$router.push(this.navBarData[0].children[0].url);
+                                }
+                                else {
+                                    this.$message.warning("暂无数据");
+                                }
+                            }
+                            else {
+                                this.$message.warning(res.data.message);
+                            }
+                        })
+                        .catch((err) => {
+                            console.log(err)
+                        });
                 }
             },
+
             //点击前往那个子组件
             goToNavBar(index, url) {
                 this.$router.push(url);
@@ -168,7 +83,7 @@
                 let Num = parseInt(index.substr(0, 1));
                 this.num = Num - 1;
                 this.$router.push(url);
-            }
+            },
 
 
         }
