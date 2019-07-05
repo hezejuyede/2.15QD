@@ -53,6 +53,11 @@
                                 index: "1-4",
                                 url: "/PersonnelSetting"
                             },
+                            {
+                                label: '菜单权限',
+                                index: "1-5",
+                                url: "/MenuPermissions"
+                            },
                         ]
                     },
                     {

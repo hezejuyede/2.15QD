@@ -347,6 +347,9 @@ import DepartmentManagement from '../components/personnelManagement/departmentMa
 //人员管理
 import PersonnelSetting from '../components/personnelManagement/PersonnelSetting';
 
+//菜单权限
+import MenuPermissions from '../components/personnelManagement/MenuPermissions';
+
 //岗位管理
 import PostManagement from '../components/personnelManagement/postManagement';
 
@@ -736,6 +739,11 @@ export default new Router({
                             path: '/PersonnelSetting',
                             component: PersonnelSetting,
                             meta: {title: '人员设定'}
+                        },
+                        {
+                            path: '/MenuPermissions',
+                            component: MenuPermissions,
+                            meta: {title: '菜单权限'}
                         },
                         {
                             path: '/PostManagement',
