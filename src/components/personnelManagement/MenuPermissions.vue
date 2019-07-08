@@ -206,23 +206,21 @@
             }
             ,
             //进行添加
-            doAdd(){
+            doAdd() {
                 let arr = this.$refs.tree.getCheckedNodes();
                 let data = [];
-                arr.forEach((e,i,) => {
-                   data.push(e.id)
+                arr.forEach((e, i,) => {
+                    if (e.id !== 1 && e.id !== 2 && e.id !== 3 && e.id !== 4 && e.id !== 5 && e.id !== 6 && e.id !== 7 && e.id !== 8 && e.id !== 128) {
+                        data.push(e.id)
+                    }
                 });
-                if(data.length>0){
-                    axios.post(" " + url + "/menu/getAllMenu", {"name": this.name})
+                console.log(data);
+                if (data.length > 0) {
+                    axios.post(" " + url + "/menu/saveUserMenu", {"username": this.name, "ids": data})
                         .then((res) => {
-                            if(res.data.state==="1"){
-                                if(JSON.stringify(res.data.data) !== "{}"){
-                                    this.treeData=res.data.data.list;
-                                    this.selection=res.data.data.ids;
-                                }
-                                else {
-                                    this.$message.warning("暂无数据");
-                                }
+                            if (res.data.state === "1") {
+                                this.$message.success(res.data.message);
+                                this.addVisible=false;
                             }
                             else {
                                 this.$message.warning(res.data.message);
@@ -232,7 +230,9 @@
                             console.log(err)
                         });
                 }
-                console.log(data);
+                else {
+                    this.$message.warning("选择不能为空");
+                }
             }
 
 
