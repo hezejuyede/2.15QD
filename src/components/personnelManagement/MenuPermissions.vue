@@ -211,7 +211,7 @@
                 let arr = this.$refs.tree.getCheckedNodes();
                 let data = [];
                 arr.forEach((e, i,) => {
-                    if (e.id !== 2 && e.id !== 3 && e.id !== 4 && e.id !== 5 && e.id !== 6 && e.id !== 8 && e.id !== 128) {
+                    if (e.id !== 1 && e.id !== 2 && e.id !== 3 && e.id !== 4 && e.id !== 5 && e.id !== 6 && e.id !== 8 && e.id !== 7 && e.id !== 128) {
                         data.push(e.id)
                     }
                 });

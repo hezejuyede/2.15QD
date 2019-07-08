@@ -65,7 +65,7 @@
                 else {
                     let Info = JSON.parse(userInfo);
                     let username = Info.username;
-                    axios.post(" " + url + "/menu/getFirstMenu", {"name":username})
+                    axios.post(" " + url + "/menu/getFirstMenu", {"username":username})
                         .then((res) => {
                             if(res.data.state==="1"){
                                 if(res.data.data.length>0){
