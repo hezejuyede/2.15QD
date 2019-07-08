@@ -58,7 +58,7 @@
                     :data="treeData"
                     show-checkbox
                     node-key="id"
-                    :default-checked-keys="[5,6]"
+                    :default-checked-keys="selection"
                     ref="tree"
                     highlight-current
                     :props="defaultProps">
@@ -177,12 +177,13 @@
                 this.name = row.name;
                 if(this.name){
                     this.addVisible=true;
-                    axios.post(" " + url + "/menu/getAllMenu", {"name": this.name})
+                    axios.post(" " + url + "/menu/getAllMenu", {"username": this.name})
                         .then((res) => {
                             if(res.data.state==="1"){
                                 if(JSON.stringify(res.data.data) !== "{}"){
                                     this.treeData=res.data.data.list;
                                     this.selection=res.data.data.ids;
+                                    console.log(this.selection)
                                 }
                                 else {
                                     this.$message.warning("暂无数据");
@@ -210,11 +211,10 @@
                 let arr = this.$refs.tree.getCheckedNodes();
                 let data = [];
                 arr.forEach((e, i,) => {
-                    if (e.id !== 1 && e.id !== 2 && e.id !== 3 && e.id !== 4 && e.id !== 5 && e.id !== 6 && e.id !== 7 && e.id !== 8 && e.id !== 128) {
+                    if (e.id !== 2 && e.id !== 3 && e.id !== 4 && e.id !== 5 && e.id !== 6 && e.id !== 8 && e.id !== 128) {
                         data.push(e.id)
                     }
                 });
-                console.log(data);
                 if (data.length > 0) {
                     axios.post(" " + url + "/menu/saveUserMenu", {"username": this.name, "ids": data})
                         .then((res) => {
