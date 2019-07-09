@@ -3,7 +3,7 @@
         <div class="crumbs">
             <el-breadcrumb separator="/">
                 <el-breadcrumb-item>物料管理</el-breadcrumb-item>
-                <el-breadcrumb-item>脱单金物制作</el-breadcrumb-item>
+                <el-breadcrumb-item>托单金物制作</el-breadcrumb-item>
             </el-breadcrumb>
         </div>
         <div class="template-content">
@@ -12,7 +12,7 @@
                     <label style="margin-right: 10px">
                         <span>智能检索托单金物</span>
                         <span>:</span>
-                        <el-input v-model="select_word" placeholder="智能检索脱单金物" style="width: 150px"></el-input>
+                        <el-input v-model="select_word" placeholder="智能检索托单金物" style="width: 150px"></el-input>
                     </label>
                     <label style="margin-right: 10px;margin-left: 10px">
                         <span>选择查询时间</span>
