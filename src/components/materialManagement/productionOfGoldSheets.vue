@@ -9,13 +9,13 @@
         <div class="template-content">
             <div class="container">
                 <div class="handle-box">
-                    <label style="margin-right: 10px">
-                        <span>智能检索托单金物</span>
+                    <label style="margin-right: 5px">
+                        <span>检索托单金物</span>
                         <span>:</span>
                         <el-input v-model="select_word" placeholder="智能检索托单金物" style="width: 150px"></el-input>
                     </label>
                     <label style="margin-right: 10px;margin-left: 10px">
-                        <span>选择查询时间</span>
+                        <span>选择时间</span>
                         <span>:</span>
                         <el-date-picker
                             v-model="examineTime"
@@ -25,7 +25,26 @@
                             value-format="yyyy-MM-dd">
                         </el-date-picker>
                     </label>
-
+                    <label style="margin-right: 10px;margin-left: 5px">
+                        <span>有效</span>
+                        <span>:</span>
+                        <el-select
+                            v-model="effective"
+                            style="width: 120px"
+                            @change="changeEffective"
+                            clearable
+                            filterable
+                            allow-create
+                            default-first-option
+                            placeholder="输入或选择">
+                            <el-option
+                                v-for="item in effectiveOptions"
+                                :key="item.id"
+                                :label="item.name"
+                                :value="item.id">
+                            </el-option>
+                        </el-select>
+                    </label>
                     <el-button type="success" @click="doSearch">查询</el-button>
                     <el-button type="primary" @click="showAdd">新图添加</el-button>
                     <el-button type="danger" @click="showModify">追加改正</el-button>
@@ -715,8 +734,11 @@
 
                 cols: [],
                 tableData: [],
+                tableData2:[],
 
                 select_word: '',
+                effective:"",
+                effectiveOptions:[{"name": "有效", "id": "1"}, {"name": "无效", "id": "2"}],
 
                 addVisible: false,
                 editVisible: false,
@@ -784,6 +806,7 @@
                     .then(axios.spread(function (title, table) {
                         that.cols = title.data;
                         that.tableData = table.data;
+                        that.tableData2 = table.data;
                     }));
             },
 
@@ -1151,6 +1174,27 @@
                     })
             },
 
+            //改变选择
+            changeEffective() {
+                let arr = [];
+                if (this.effective === "1") {
+                    for (let i = 0; i < this.tableData2.length; i++) {
+                        if (this.tableData2[i].statusStr === "有效") {
+                            arr.push(this.tableData2[i])
+                        }
+                    }
+                    this.tableData = arr;
+                }
+                else if (this.effective === "2") {
+                    for (let i = 0; i < this.tableData2.length; i++) {
+                        if (this.tableData2[i].statusStr === "无效") {
+                            arr.push(this.tableData2[i])
+                        }
+                    }
+                    this.tableData = arr;
+                }
+            }
+
 
         }
     }
@@ -1171,7 +1215,7 @@
             .handle-box {
                 height: 80px;
                 line-height: 80px;
-                padding-left: 50px;
+                padding-left: 10px;
                 .handle-input {
                     width: 300px;
                     display: inline-block;
