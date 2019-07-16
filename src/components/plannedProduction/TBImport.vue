@@ -1404,6 +1404,7 @@
                 this.cols = [];
                 this.listData = [];
                 this.getList();
+
             },
 
             //请求列表
@@ -1442,6 +1443,7 @@
                         }));
                 }
                 else if (this.num === 2) {
+
                     let that = this;
                     axios.all([
                         axios.post(" " + url + "/sys/showTableTitle", {"name": "zjg"}),
@@ -2024,7 +2026,15 @@
                 this.batch = "";
                 this.scx = "";
                 this.fileType = "";
-                this.importPipeType = "";
+                if(this.num===1){
+                    this.importPipeType="4";
+                }
+                else if (this.num===6){
+                    this.importPipeType="3";
+                }
+                else {
+                    this.importPipeType="";
+                }
             },
 
 
@@ -2094,6 +2104,7 @@
             setScx(scx) {
                 this.Data = {"lineNo": scx, "type": this.type, "pici": this.batch, 'guanType': this.importPipeType}
             },
+
             //上传
             submitUpload() {
                 if (this.batch && this.fileType && this.scx && this.importPipeType) {
