@@ -84,6 +84,11 @@ import tdjwOuOfStock from '../components/materialManagement/tdjwOuOfStock'
 //配送查询（托单金物）
 import tdjwDelivery from '../components/materialManagement/tdjwDelivery'
 
+//出库记录（托单金物）
+import tuodanjinwuchukujilv from '../components/materialManagement/tuodanjinwuchukujilv'
+
+//配送跟踪（托单金物）
+import tuodanjinwupeisonggenzong from '../components/materialManagement/tuodanjinwupeisonggenzong'
 
 
 //注文金物缺件登记
@@ -553,6 +558,16 @@ export default new Router({
                             path: 'tdApproval',
                             component: tdApproval,
                             meta: {title: '脱单金物审批'}
+                        },
+                        {
+                            path: 'tuodanjinwuchukujilv',
+                            component: tuodanjinwuchukujilv,
+                            meta: {title: '出库记录（托单金物）'}
+                        },
+                        {
+                            path: 'tuodanjinwupeisonggenzong',
+                            component: tuodanjinwupeisonggenzong,
+                            meta: {title: '配送跟踪（托单金物）'}
                         },
                         {
                             path: 'tdjwOuOfStock',
