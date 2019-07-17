@@ -10,15 +10,16 @@
             <div class="container">
                 <div class="handle-box">
                     <label style="margin-right: 5px">
-                        <span>检索未引当</span>
+                        <span>智能检索工位物料</span>
                         <span>:</span>
-                        <el-input v-model="select_word" placeholder="检索未引当" class="handle-input mr10"></el-input>
+                        <el-input v-model="select_word" placeholder="智能检索工位物料" style="width: 200px" class="handle-input mr10"></el-input>
                     </label>
-                    <label style="margin-right: 10px;margin-left: 10px">
-                        <span>选择批次</span>
+                    <label style="margin-right: 10px;margin-left: 5px">
+                        <span>批次</span>
                         <span>:</span>
                         <el-select
                             v-model="batch"
+                            style="width: 150px"
                             clearable
                             filterable
                             allow-create
@@ -32,12 +33,33 @@
                             </el-option>
                         </el-select>
                     </label>
-                    <el-button type="primary" class="handle-del mr10" @click="doSearch">查询</el-button>
+                    <label style="margin-right: 10px;margin-left: 5px">
+                        <span>工位</span>
+                        <span>:</span>
+                        <el-select
+                            v-model="workStation"
+                            style="width: 150px"
+                            clearable
+                            filterable
+                            allow-create
+                            default-first-option
+                            placeholder="请选择工位">
+                            <el-option
+                                v-for="item in workStationOptions"
+                                :key="item.id"
+                                :label="item.name"
+                                :value="item.id">
+                            </el-option>
+                        </el-select>
+                    </label>
+                    <el-button type="primary" @click="doSearch">查询报表</el-button>
+                    <el-button type="success" @click="importPrinting">导出Excel</el-button>
                 </div>
                 <div class="">
                     <el-table class="tb-edit"
                               :data="tables"
-                              :header-cell-style="{background:'#A1D0FC',color:'rgba(0, 0, 0, 0.8)',fontSize:'14px'}"
+                              id="rebateSetTable"
+                              :header-cell-style="{background:'#A1D0FC',color:'rgba(0, 0, 0, 0.8)',fontSize:'20px'}"
                               border
                               height="450"
                               highlight-current-row
@@ -58,6 +80,8 @@
     import axios from 'axios'
     import url from '../../assets/js/URL'
     import Modal from '../../common/modal'
+    import FileSaver from 'file-saver'
+    import XLSX from 'xlsx'
 
     export default {
         name: 'WorkingProcedure',
@@ -65,24 +89,17 @@
             return {
                 message: '',
                 HideModal: true,
-                select_word: '',
-                listData: [],
-                id: "",
-
 
                 cols: [],
                 tableData: [],
 
-
                 batch: "",
                 batchOptions: [],
+                workStation: "",
+                workStationOptions: [],
 
-                weiyindang:"1",
-                weiyindangOptions: [
-                    {"name": "注文品不足", "id": "1"},
-                    {"name": "储品不足", "id": "2"},
-                    {"name": "注文金物未交货", "id": "3"}
-                ],
+                select_word: '',
+
 
             }
         },
@@ -120,21 +137,24 @@
                     let that = this;
                     axios.all([
                         axios.post(" " + url + "/sys/getPiciList"),
+                        axios.post(" " + url + "/api/getPersonProcessList", {"name": ""})
                     ])
-                        .then(axios.spread(function (select) {
-                            that.batchOptions = select.data;
-                            that.batch = select.data[0].id;
+                        .then(axios.spread(function (batch,workStation) {
+                            that.batchOptions = batch.data;
+                            that.batch = batch.data[0].id;
+                            that.workStation = workStation.data[1].id;
+                            that.workStationOptions = workStation.data;
                             that.loadingShowData(that.batch);
                         }));
                 }
             },
 
             //瞬间加载数据
-            loadingShowData(data1) {
+            loadingShowData(data1,data2) {
                 let that = this;
                 axios.all([
-                    axios.post(" " + url + "/sys/showTableTitle", {"name": "weiyindangchacuntongji"}),
-                    axios.post(" " + url + "/shebei/errorList", {"pici": data1})
+                    axios.post(" " + url + "/sys/showTableTitle", {"name": "gongweiwuliaobaobiao"}),
+                    axios.post(" " + url + "/wuliao/jinwuZhuwenpinList", {"pici": data1,"stationid":data2})
                 ])
                     .then(axios.spread(function (title, table) {
                         that.cols = title.data;
@@ -142,11 +162,42 @@
                     }));
             },
 
-            //进行查询
+
+            //查询
             doSearch() {
-                this.loadingShowData(this.batch);
+                if (this.batch) {
+                    this.loadingShowData(this.batch,this.workStation)
+                }
+                else {
+                    this.message = "查询批次不能为空";
+                    this.HideModal = false;
+                    const that = this;
+
+                    function a() {
+                        that.message = "";
+                        that.HideModal = true;
+                    }
+
+                    setTimeout(a, 2000);
+                }
+
             },
 
+
+            //导出打印
+            importPrinting(){
+                let wb = XLSX.utils.table_to_book(document.querySelector('#rebateSetTable'));
+                /* get binary string as output */
+                let wbout = XLSX.write(wb, { bookType: 'xlsx', bookSST: true, type: 'array' });
+                try {
+                    FileSaver.saveAs(new Blob([wbout], { type: 'application/octet-stream' }), '未引当报表.xlsx');
+                } catch (e)
+                {
+                    if (typeof console !== 'undefined')
+                        console.log(e, wbout)
+                }
+                return wbout
+            }
 
         }
     }
@@ -167,7 +218,7 @@
             .handle-box {
                 height: 80px;
                 line-height: 80px;
-                padding-left: 20px;
+                padding-left: 50px;
                 .handle-input {
                     width: 300px;
                     display: inline-block;
@@ -185,9 +236,13 @@
                 width: 100%;
                 font-size: 14px;
             }
+            .red {
+                color: #ff0000;
+            }
 
         }
     }
 
 
 </style>
+
