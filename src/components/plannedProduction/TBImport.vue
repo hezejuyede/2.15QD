@@ -553,8 +553,8 @@
                     <el-form-item label="单元名称">
                         <el-input v-model="danyuanmingcheng" style="width: 200px" placeholder="单元名称"></el-input>
                     </el-form-item>
-                    <el-form-item label="一贯号">
-                        <el-input v-model="caizhi" style="width: 200px" placeholder="一贯号"></el-input>
+                    <el-form-item label="材质">
+                        <el-input v-model="caizhi" style="width: 200px" placeholder="材质"></el-input>
                     </el-form-item>
                     <el-form-item label="外径">
                         <el-input v-model="waijing" style="width: 200px" placeholder="外径"></el-input>
@@ -1706,7 +1706,7 @@
                 }
                 else if (index === 2) {
                     if (this.chuanhao && this.danyuanmingcheng && this.caizhi && this.waijing && this.bihou && this.changdu &&
-                        this.genshu && this.yudingri && this.tuzhi && this.naturi && this.wanchengri && this.songchuri) {
+                        this.genshu &&  this.tuzhi) {
                         axios.post(" " + url + "/teshu/addZhijia",
                             {
                                 "chuanhao": this.chuanhao,
@@ -1913,7 +1913,7 @@
                 }
                 else if (index === 2) {
                     if (this.chuanhao && this.danyuanmingcheng && this.caizhi && this.waijing && this.bihou && this.changdu &&
-                        this.genshu && this.yudingri && this.tuzhi && this.naturi && this.wanchengri && this.songchuri) {
+                        this.genshu && this.tuzhi) {
                         axios.post(" " + url + "/teshu/updateZhijia",
                             {
                                 "id": this.id,
