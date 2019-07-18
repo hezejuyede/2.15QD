@@ -59,6 +59,7 @@
                               :data="tables"
                               :header-cell-style="{background:'#A1D0FC',color:'rgba(0, 0, 0, 0.8)',fontSize:'14px'}"
                               border
+                              id="rebateSetTable"
                               height="450"
                               highlight-current-row
                               style="width: 98%;margin: auto">
@@ -78,6 +79,8 @@
     import axios from 'axios'
     import url from '../../assets/js/URL'
     import Modal from '../../common/modal'
+    import FileSaver from 'file-saver'
+    import XLSX from 'xlsx'
 
     export default {
         name: 'WorkingProcedure',
@@ -168,8 +171,19 @@
             },
 
 
-            //查看出货记录
+            //导出Excel
             importExcel() {
+                let wb = XLSX.utils.table_to_book(document.querySelector('#rebateSetTable'));
+                /* get binary string as output */
+                let wbout = XLSX.write(wb, { bookType: 'xlsx', bookSST: true, type: 'array' });
+                try {
+                    FileSaver.saveAs(new Blob([wbout], { type: 'application/octet-stream' }), '未引当查询统计表.xlsx');
+                } catch (e)
+                {
+                    if (typeof console !== 'undefined')
+                        console.log(e, wbout)
+                }
+                return wbout
 
             },
 
