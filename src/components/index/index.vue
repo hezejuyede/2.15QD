@@ -1,181 +1,102 @@
 <template>
-    <div>
-        <div class="">
-           <!-- <img src="../../assets/img/WechatIMG119.jpeg"  style="width: 100%" alt="">-->
+    <div class="template">
+        <div id="banner">
+            <swiper :options="swiperOption" ref="mySwiper">
+                <swiper-slide v-for="(item,index) in bannerImg" :key="item.id">
+                    <img :src="item.img"
+                         style="width: 100%">
+                </swiper-slide>
+                <div class="swiper-pagination" slot="pagination"></div>
+                <div class="swiper-scrollbar" slot="scrollbar"></div>
+            </swiper>
         </div>
-        <el-row :gutter="20">
-            <el-col :span="8">
-                <el-card shadow="hover" class="mgb20" style="height:252px;">
-                    <div class="user-info">
-                        <img src="static/img/img.jpg" class="user-avator" alt="">
-                        <div class="user-info-cont">
-                            <div class="user-info-name">{{name}}</div>
-                            <div>{{role}}</div>
-                        </div>
-                    </div>
-                    <div class="user-info-list">上次登录时间：<span>2019-7-12</span></div>
-                    <div class="user-info-list">上次登录地点：<span>南通</span></div>
-                </el-card>
-            </el-col>
-        </el-row>
     </div>
 </template>
-
-<script>
-    import Schart from 'vue-schart';
+<script type="text/ecmascript-6">
+    import axios from 'axios'
+    import url from '../../assets/js/URL'
+    import Modal from '../../common/modal'
+    import {swiper, swiperSlide} from 'vue-awesome-swiper';
+    require('swiper/dist/css/swiper.css');
 
     export default {
-        name: 'dashboard',
+        name: 'WorkingProcedure',
         data() {
             return {
-                name: localStorage.getItem('ms_username'),
-                todoList: [
-                    {
-                        title: '今天要修复100个bug',
-                        status: false,
-                    },
-                    {
-                        title: '今天要修复100个bug',
-                        status: false,
-                    },
-                    {
-                        title: '今天要写100行代码加几个bug吧',
-                        status: false,
-                    },
-                    {
-                        title: '今天要修复100个bug',
-                        status: false,
-                    },
-                    {
-                        title: '今天要修复100个bug',
-                        status: true,
-                    },
-                    {
-                        title: '今天要写100行代码加几个bug吧',
-                        status: true,
-                    }
-                ]
+                message: '',
+                HideModal: true,
+                bannerImg: [
+                    {"img": require("../../assets/img/banner01.jpg")},
+                    {"img": require("../../assets/img/banner02.jpg")},
+                    {"img": require("../../assets/img/banner03.jpg")}
+                ],
+                swiperOption: {
+                    direction: "horizontal",
+                    loop: true,
+                    pagination: ".swiper-pagination",
+                    prevButton: ".swiper-button-prev",
+                    nextButton: ".swiper-button-next",
+                    autoplay: 3000,
+                    autoplayDisableOnInteraction: false,
+                }
             }
-        },
-        components: {
-            Schart
         },
         computed: {
-            role() {
-                return this.name === 'admin' ? '超级管理员' : '普通用户';
+            //模糊检索
+            tables: function () {
+                var search = this.select_word;
+                if (search) {
+                    return this.tableData.filter(function (dataNews) {
+                        return Object.keys(dataNews).some(function (key) {
+                            return String(dataNews[key]).indexOf(search) > -1
+                        })
+                    })
+                }
+                return this.tableData
             }
         },
-        created(){
+        components: {Modal,swiper, swiperSlide,},
+        mounted() {
 
 
         },
-        activated(){
-
+        created() {
+            this.getAdminState();
         },
         methods: {
 
+            //页面加载检查用户是否登陆，没有登陆就加载登陆页面
+            getAdminState() {
+                const userInfo = localStorage.getItem("userInfo");
+                if (userInfo === null) {
+                    this.$router.push("/")
+                }
+                else {
+                    let that = this;
+                    axios.all([
+                        axios.post(" " + url + "/api/getPersonProcessList", {"name": ""}),
+                        axios.post(" " + url + "/sys/dictionaryList", {"id": "23"}),
+                    ])
+                        .then(axios.spread(function (select, type) {
+                            that.workStation = select.data[0].id;
+                            that.workStationOptions = select.data;
+                            that.typeOptions = type.data;
+                            that.loadingShowData(1);
+                        }));
+                }
+            },
+
         }
     }
-
 </script>
+<style scoped lang="less" rel="stylesheet/less">
+    @import "../../assets/less/base";
 
+    .template {
+        width: 100%;
+        height: 100%;
+        background-color: @color-white;
 
-<style scoped>
-
-
-    .grid-content {
-        display: flex;
-        align-items: center;
-        height: 100px;
-    }
-
-    .grid-cont-right {
-        flex: 1;
-        text-align: center;
-        font-size: 14px;
-        color: #999;
-    }
-
-    .grid-num {
-        font-size: 30px;
-        font-weight: bold;
-    }
-
-    .grid-con-icon {
-        font-size: 50px;
-        width: 100px;
-        height: 100px;
-        text-align: center;
-        line-height: 100px;
-        color: #fff;
-    }
-
-    .grid-con-1 .grid-con-icon {
-        background: rgb(45, 140, 240);
-    }
-
-    .grid-con-1 .grid-num {
-        color: rgb(45, 140, 240);
-    }
-
-    .grid-con-2 .grid-con-icon {
-        background: rgb(100, 213, 114);
-    }
-
-    .grid-con-2 .grid-num {
-        color: rgb(45, 140, 240);
-    }
-
-    .grid-con-3 .grid-con-icon {
-        background: rgb(242, 94, 67);
-    }
-
-    .grid-con-3 .grid-num {
-        color: rgb(242, 94, 67);
-    }
-
-    .user-info {
-        display: flex;
-        align-items: center;
-        padding-bottom: 20px;
-        border-bottom: 2px solid #ccc;
-        margin-bottom: 20px;
-    }
-
-    .user-avator {
-        width: 120px;
-        height: 120px;
-        border-radius: 50%;
-    }
-
-    .user-info-cont {
-        padding-left: 50px;
-        flex: 1;
-        font-size: 14px;
-        color: #999;
-    }
-
-    .user-info-cont div:first-child {
-        font-size: 30px;
-        color: #222;
-    }
-
-    .user-info-list {
-        font-size: 14px;
-        color: #999;
-        line-height: 25px;
-    }
-
-    .user-info-list span {
-        margin-left: 70px;
-    }
-
-    .mgb20 {
-        margin-bottom: 20px;
-    }
-
-    .todo-item {
-        font-size: 14px;
     }
 
 
