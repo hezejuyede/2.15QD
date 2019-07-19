@@ -153,7 +153,7 @@
             loadingShowData(data1,data2) {
                 let that = this;
                 axios.all([
-                    axios.post(" " + url + "/sys/showTableTitle", {"name": "gongweiwuliaobaobiao"}),
+                    axios.post(" " + url + "/sys/showTableTitle", {"name": "wu;iaoshujubaobiao"}),
                     axios.post(" " + url + "/wuliao/jinwuZhuwenpinList", {"pici": data1,"stationid":data2})
                 ])
                     .then(axios.spread(function (title, table) {

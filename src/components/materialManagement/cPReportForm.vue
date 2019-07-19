@@ -12,14 +12,13 @@
                     <label style="margin-right: 5px">
                         <span>智能检索储品金物</span>
                         <span>:</span>
-                        <el-input v-model="select_word" placeholder="智能检索储品金物" style="width: 200px" class="handle-input mr10"></el-input>
+                        <el-input v-model="select_word" placeholder="智能检索储品金物" class="handle-input mr10"></el-input>
                     </label>
                     <label style="margin-right: 10px;margin-left: 5px">
                         <span>批次</span>
                         <span>:</span>
                         <el-select
                             v-model="batch"
-                            style="width: 150px"
                             clearable
                             filterable
                             allow-create
@@ -27,25 +26,6 @@
                             placeholder="请选择批次">
                             <el-option
                                 v-for="item in batchOptions"
-                                :key="item.id"
-                                :label="item.name"
-                                :value="item.id">
-                            </el-option>
-                        </el-select>
-                    </label>
-                    <label style="margin-right: 10px;margin-left: 5px">
-                        <span>工位</span>
-                        <span>:</span>
-                        <el-select
-                            v-model="workStation"
-                            style="width: 150px"
-                            clearable
-                            filterable
-                            allow-create
-                            default-first-option
-                            placeholder="请选择工位">
-                            <el-option
-                                v-for="item in workStationOptions"
                                 :key="item.id"
                                 :label="item.name"
                                 :value="item.id">
@@ -95,8 +75,6 @@
 
                 batch: "",
                 batchOptions: [],
-                workStation: "",
-                workStationOptions: [],
 
                 select_word: '',
 
@@ -136,25 +114,22 @@
                 else {
                     let that = this;
                     axios.all([
-                        axios.post(" " + url + "/sys/getPiciList"),
-                        axios.post(" " + url + "/api/getPersonProcessList", {"name": ""})
+                        axios.post(" " + url + "/sys/getPiciList")
                     ])
-                        .then(axios.spread(function (batch,workStation) {
+                        .then(axios.spread(function (batch) {
                             that.batchOptions = batch.data;
                             that.batch = batch.data[0].id;
-                            that.workStation = workStation.data[1].id;
-                            that.workStationOptions = workStation.data;
                             that.loadingShowData(that.batch);
                         }));
                 }
             },
 
             //瞬间加载数据
-            loadingShowData(data1,data2) {
+            loadingShowData(data1) {
                 let that = this;
                 axios.all([
-                    axios.post(" " + url + "/sys/showTableTitle", {"name": "gongweiwuliaobaobiao"}),
-                    axios.post(" " + url + "/wuliao/jinwuZhuwenpinList", {"pici": data1,"stationid":data2})
+                    axios.post(" " + url + "/sys/showTableTitle", {"name": "chupinjinwubaobiao"}),
+                    axios.post(" " + url + "/wuliao/jinwuZhuwenpinList", {"pici": data1})
                 ])
                     .then(axios.spread(function (title, table) {
                         that.cols = title.data;
@@ -166,7 +141,7 @@
             //查询
             doSearch() {
                 if (this.batch) {
-                    this.loadingShowData(this.batch,this.workStation)
+                    this.loadingShowData(this.batch)
                 }
                 else {
                     this.message = "查询批次不能为空";

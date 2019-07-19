@@ -12,14 +12,13 @@
                     <label style="margin-right: 5px">
                         <span>智能检索未引当</span>
                         <span>:</span>
-                        <el-input v-model="select_word" placeholder="智能检索未引当" style="width: 300px" class="handle-input mr10"></el-input>
+                        <el-input v-model="select_word" placeholder="智能检索未引当" class="handle-input mr10"></el-input>
                     </label>
                     <label style="margin-right: 10px;margin-left: 5px">
                         <span>批次</span>
                         <span>:</span>
                         <el-select
                             v-model="batch"
-                            style="width: 200px"
                             clearable
                             filterable
                             allow-create
@@ -126,11 +125,11 @@
             },
 
             //瞬间加载数据
-            loadingShowData(data1,data2) {
+            loadingShowData(data1) {
                 let that = this;
                 axios.all([
                     axios.post(" " + url + "/sys/showTableTitle", {"name": "weiyindangbaobiao"}),
-                    axios.post(" " + url + "/wuliao/jinwuZhuwenpinList", {"pici": data1,"stationid":data2})
+                    axios.post(" " + url + "/wuliao/jinwuZhuwenpinList", {"pici": data1})
                 ])
                     .then(axios.spread(function (title, table) {
                         that.cols = title.data;
@@ -142,7 +141,7 @@
             //查询
             doSearch() {
                 if (this.batch) {
-                    this.loadingShowData(this.batch,this.workStation)
+                    this.loadingShowData(this.batch)
                 }
                 else {
                     this.message = "查询批次不能为空";
