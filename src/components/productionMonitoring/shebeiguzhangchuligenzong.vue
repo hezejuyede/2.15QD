@@ -234,6 +234,8 @@
                     this.$router.push("/")
                 }
                 else {
+                    const info = JSON.parse(userInfo);
+                    this.userId =info.username;
                     let time = getNowTime();
                     let times = [];
                     for (let i = 0; i < 2; i++) {
@@ -388,6 +390,7 @@
                     axios.post(" " + url + "/shebei/errorUpdate",
                         {
                             "id":this.listData[0],
+                            "username":this.userId,
                             "errortypeid": this.cljg,
                             "beizhu": this.beizhu,
                         }
