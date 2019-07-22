@@ -1,6 +1,6 @@
 <template>
     <div class="template ">
-        <a href="http://157.116.13.36:8075/webroot/decision/view/form?viewlet=dapingdemo.frm"  target="_blank" class="">
+        <a href="http://157.116.13.17:8080/WebReport/ReportServer?formlet=dapingdemo.frm"  target="_blank" class="">
             <img src="../../assets/img/DigitalSignage.png" style="width: 100%;height: 100%" alt="">
         </a>
     </div>

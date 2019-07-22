@@ -1,6 +1,7 @@
 <template>
     <div class="template">
-        <iframe src="http://157.116.13.36:8075/webroot/decision/view/form?viewlet=dapingdemo.frm" style="width: 100%;height: 100%"></iframe>
+       <!-- <iframe src="http://157.116.13.17:8080/WebReport/ReportServer?formlet=dapingdemo.frm" style="width: 100%;height: 100%"></iframe>-->
+        <iframe src="http://www.nacks.com.cn" style="width: 100%;height: 100%"></iframe>
        <!-- <div id="banner">
             <swiper :options="swiperOption" ref="mySwiper">
                 <swiper-slide v-for="(item,index) in bannerImg" :key="item.id">
