@@ -1,6 +1,7 @@
 <template>
     <div class="template">
-        <div id="banner">
+        <iframe src="http://157.116.13.36:8075/webroot/decision/view/form?viewlet=dapingdemo.frm" style="width: 100%;height: 100%"></iframe>
+       <!-- <div id="banner">
             <swiper :options="swiperOption" ref="mySwiper">
                 <swiper-slide v-for="(item,index) in bannerImg" :key="item.id">
                     <img :src="item.img"
@@ -9,7 +10,7 @@
                 <div class="swiper-pagination" slot="pagination"></div>
                 <div class="swiper-scrollbar" slot="scrollbar"></div>
             </swiper>
-        </div>
+        </div>-->
     </div>
 </template>
 <script type="text/ecmascript-6">
