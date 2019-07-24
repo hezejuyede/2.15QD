@@ -1396,15 +1396,59 @@ export default new Router({
         },
 
 
+
+
+
+
+        {
+            path: '/PlannedProduction/digitalSignage',
+            component: DigitalSignage,
+            meta: {title: '电子看板'}
+        },
+        {
+            path: '/MaterialManagement/digitalSignage',
+            component: DigitalSignage,
+            meta: {title: '电子看板'}
+        },
+        {
+            path: '/ProductionMonitoring/digitalSignage',
+            component: DigitalSignage,
+            meta: {title: '电子看板'}
+        },
+        {
+            path: '/QualityAssurance/digitalSignage',
+            component: DigitalSignage,
+            meta: {title: '电子看板'}
+        },
+        {
+            path: '/PersonnelManagement/digitalSignage',
+            component: DigitalSignage,
+            meta: {title: '电子看板'}
+        },
+        {
+            path: '/SecurityManagement/digitalSignage',
+            component:DigitalSignage,
+            meta: {title: '电子看板'}
+        },
+        {
+            path: '/SystemManagement/digitalSignage',
+            component:DigitalSignage,
+            meta: {title: '电子看板'}
+        },
+        {
+            path: '/digitalSignage/digitalSignage',
+            component:DigitalSignage,
+            meta: {title: '电子看板'}
+        },
         {
             path: '/digitalSignage',
             component: DigitalSignage,
             meta: {title: '电子看板'}
         },
 
-       /* {
+        {
             path: '*',
             redirect: '/404'
-        }*/
+        }
     ]
 })
