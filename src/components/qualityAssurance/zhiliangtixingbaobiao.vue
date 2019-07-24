@@ -63,8 +63,8 @@
                             </el-option>
                         </el-select>
                     </label>
-                    <el-button type="primary" class="handle-del mr10" @click="doSearch">查询</el-button>
-                    <el-button type="danger"  class="handle-del mr10" @click="deleteAlert">导出</el-button>
+                    <el-button type="primary"  @click="doSearch">查询</el-button>
+                    <el-button type="success"   @click="importExcel">导出Excel</el-button>
                 </div>
                 <div class="">
                     <el-table class="tb-edit"
@@ -72,6 +72,7 @@
                               :header-cell-style="{background:'#A1D0FC',color:' rgba(0, 0, 0, 0.8)',fontSize:'16px'}"
                               border
                               height="400"
+                              id="rebateSetTable"
                               highlight-current-row
                               style="width: 98%;margin: auto">
                         <template v-for="(col ,index) in cols">
@@ -91,6 +92,10 @@
     import url from '../../assets/js/URL'
     import Modal from '../../common/modal'
     import {getNowTime} from '../../assets/js/api'
+
+
+    import FileSaver from 'file-saver'
+    import XLSX from 'xlsx'
 
     export default {
         name: 'WorkingProcedure',
@@ -228,8 +233,19 @@
 
             },
 
+            //导出Excel
             importExcel(){
-
+                let wb = XLSX.utils.table_to_book(document.querySelector('#rebateSetTable'));
+                /* get binary string as output */
+                let wbout = XLSX.write(wb, { bookType: 'xlsx', bookSST: true, type: 'array' });
+                try {
+                    FileSaver.saveAs(new Blob([wbout], { type: 'application/octet-stream' }), '质量提醒报表.xlsx');
+                } catch (e)
+                {
+                    if (typeof console !== 'undefined')
+                        console.log(e, wbout)
+                }
+                return wbout
             }
 
 

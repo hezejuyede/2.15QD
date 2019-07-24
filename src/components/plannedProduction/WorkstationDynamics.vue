@@ -157,7 +157,13 @@
             //无完成查询
             doSearchWwc(){
                 if (this.batch) {
-                    this.loadingShowData(this.batch)
+                    axios.post(" " + url + "/dynamic/getStationDynamicList", {"pici": this.batch})
+                        .then((res) => {
+                            this.tableData = res.data
+                        })
+                        .catch((err) => {
+                            console.log(err)
+                        })
                 }
                 else {
                     this.message = "查询批次不能为空";

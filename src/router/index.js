@@ -1119,7 +1119,11 @@ export default new Router({
         },
 
 
-
+        {
+            path: '/MaterialManagement/MaterialManagement',
+            component: MaterialManagement,
+            meta: {title: '物料管理'}
+        },
 
         {
             path: '/PlannedProduction/MaterialManagement',
@@ -1171,6 +1175,13 @@ export default new Router({
             component: ProductionMonitoring,
             meta: {title: '设备管理'}
         },
+        {
+            path: '/ProductionMonitoring/ProductionMonitoring',
+            component: ProductionMonitoring,
+            meta: {title: '设备管理'}
+        },
+
+
         {
             path: '/MaterialManagement/PersonnelManagement',
             component: PersonnelManagement,
@@ -1252,6 +1263,11 @@ export default new Router({
             meta: {title: '安全管理'}
         },
         {
+            path: '/SecurityManagement/SecurityManagement',
+            component: SecurityManagement,
+            meta: {title: '安全管理'}
+        },
+        {
             path: '/PersonnelManagement/SystemManagement',
             component: SystemManagement,
             meta: {title: '系统管理'}
@@ -1272,6 +1288,11 @@ export default new Router({
         },
         {
             path: '/ProductionMonitoring/PersonnelManagement',
+            component: PersonnelManagement,
+            meta: {title: '人员管理'}
+        },
+        {
+            path: '/PersonnelManagement/PersonnelManagement',
             component: PersonnelManagement,
             meta: {title: '人员管理'}
         },
@@ -1319,12 +1340,23 @@ export default new Router({
             meta: {title: '质量管理'}
         },
         {
+            path: '/QualityAssurance/QualityAssurance',
+            component: QualityAssurance,
+            meta: {title: '质量管理'}
+        },
+        {
             path: '/SecurityManagement/PersonnelManagement',
             component: PersonnelManagement,
             meta: {title: '人员管理'}
         },
         {
             path: '/SecurityManagement/SystemManagement',
+            component: SystemManagement,
+            meta: {title: '系统管理'}
+        },
+
+        {
+            path: '/SystemManagement/SystemManagement',
             component: SystemManagement,
             meta: {title: '系统管理'}
         },
@@ -1364,23 +1396,15 @@ export default new Router({
         },
 
 
-
-
-
-
-
-
-
-
         {
             path: '/digitalSignage',
             component: DigitalSignage,
             meta: {title: '电子看板'}
         },
 
-        {
+       /* {
             path: '*',
             redirect: '/404'
-        }
+        }*/
     ]
 })

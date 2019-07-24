@@ -12,9 +12,9 @@
                     <label style="margin-right: 10px">
                         <span>检索点检不良率</span>
                         <span>:</span>
-                        <el-input v-model="select_word" placeholder="检索点检不良率" class="handle-input mr10" style="width: 200px"></el-input>
+                        <el-input v-model="select_word" placeholder="检索点检不良率" class="handle-input mr10" style="width: 150px"></el-input>
                     </label>
-                    <label style="margin-right: 10px;margin-left: 10px">
+                    <label style="margin-right: 10px;margin-left: 5px">
                         <span>选择查询时间</span>
                         <span>:</span>
                         <el-date-picker
@@ -46,7 +46,7 @@
                             </el-option>
                         </el-select>
                     </label>
-                    <label style="margin-right: 10px;margin-left:5px">
+                    <label style="margin-right: 5px;margin-left:5px">
                         <span>工位</span>
                         <span>:</span>
                         <el-select
@@ -66,7 +66,8 @@
                             </el-option>
                         </el-select>
                     </label>
-                    <el-button type="primary" icon="delete" class="handle-del mr10" @click="doSearch">查询报表</el-button>
+                    <el-button type="primary" @click="doSearch">查询报表</el-button>
+                    <el-button type="success" @click="importPrinting">导出Excel</el-button>
                 </div>
                 <div class="">
                     <el-table class="tb-edit"
@@ -74,6 +75,7 @@
                               :header-cell-style="{background:'#A1D0FC',color:'rgba(0, 0, 0, 0.8)',fontSize:'20px'}"
                               border
                               height="450"
+                              id="rebateSetTable"
                               highlight-current-row
                               style="width: 98%;margin: auto">
                         <template v-for="(col ,index) in cols">
@@ -93,6 +95,9 @@
     import url from '../../assets/js/URL'
     import Modal from '../../common/modal'
     import {getNowTime} from '../../assets/js/api'
+
+    import FileSaver from 'file-saver'
+    import XLSX from 'xlsx'
 
     export default {
         name: 'WorkingProcedure',
@@ -214,6 +219,21 @@
                     setTimeout(a, 2000);
                 }
 
+            },
+
+            //导出打印
+            importPrinting(){
+                let wb = XLSX.utils.table_to_book(document.querySelector('#rebateSetTable'));
+                /* get binary string as output */
+                let wbout = XLSX.write(wb, { bookType: 'xlsx', bookSST: true, type: 'array' });
+                try {
+                    FileSaver.saveAs(new Blob([wbout], { type: 'application/octet-stream' }), '点检不良率报表.xlsx');
+                } catch (e)
+                {
+                    if (typeof console !== 'undefined')
+                        console.log(e, wbout)
+                }
+                return wbout
             }
 
         }
@@ -252,9 +272,6 @@
             .table {
                 width: 100%;
                 font-size: 14px;
-            }
-            .red {
-                color: #ff0000;
             }
 
         }
