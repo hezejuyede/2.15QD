@@ -26,7 +26,8 @@
                         </el-option>
                     </el-select>
                 </label>
-                <el-button type="primary" icon="delete" class="handle-del mr10" @click="doSearch">查询</el-button>
+                <el-button type="primary" class="handle-del mr10" @click="doSearch">查询</el-button>
+                <el-button type="success" class="handle-del mr10" @click="doSearchWwc">未完成管查询</el-button>
             </div>
             <div class="contentDiv">
                 <div class="productionContentTable clearfix">
@@ -34,15 +35,14 @@
                         {{batch}}
                     </div>
                     <div class="productionContentTableRight fr">
-                        <div class="tableDiv" v-for="(item,index) in tableData"
-                             :class="[classColor1,{
+                        <div class="tableDiv" v-for="(item,index) in tableData">
+                            <div class="tableDivTop" :class="[classColor1,{
                         classColor2:item.status===2,
                         classColor3:item.status===3,
                         classColor4:item.status===4,
                         classColor5:item.status===5,
                         classColor6:item.status===6,
                         }]">
-                            <div class="tableDivTop">
                                 <div class="tableDivTop-text">{{item.stationName}}</div>
                                 <div class="tableDivTime">{{item.time}}</div>
                             </div>
@@ -154,6 +154,25 @@
                 }
             },
 
+            //无完成查询
+            doSearchWwc(){
+                if (this.batch) {
+                    this.loadingShowData(this.batch)
+                }
+                else {
+                    this.message = "查询批次不能为空";
+                    this.HideModal = false;
+                    const that = this;
+
+                    function a() {
+                        that.message = "";
+                        that.HideModal = true;
+                    }
+
+                    setTimeout(a, 2000);
+                }
+            },
+
 
             //显示表格
             showModal(index,stationid) {
@@ -239,6 +258,7 @@
                             justify-content: center;
                             border-right: 1px solid @color-background-d;
                             position: relative;
+                            color: @color-blue;
                             .tableDivTop-text{
                                 width: 40%;
                                 height: 30px;
@@ -273,7 +293,6 @@
                                 justify-content: center;
                                 flex-direction: column;
                                 font-size: @font-size-small-s;
-                                color: @color-background-dd;
 
                                 .tableTemplate-number {
                                     width: 100%;
@@ -284,6 +303,7 @@
                                     align-items: center;
                                     justify-content: center;
                                     cursor: pointer;
+
 
                                 }
                                 .tableTemplate-title {
