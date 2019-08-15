@@ -9,6 +9,15 @@ import '../static/css/icon.css';
 import "babel-polyfill";
 import "./assets/less/base.less"
 import echarts from 'echarts';
+
+import Viewer from 'v-viewer'
+import 'viewerjs/dist/viewer.css'
+
+Vue.use(Viewer, {
+    defaultOptions: {
+        zIndex: 9999
+    }
+})
 Vue.use(ElementUI, { size: 'small' });
 Vue.prototype.$axios = axios;
 Vue.prototype.$echarts = echarts;

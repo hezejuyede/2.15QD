@@ -59,6 +59,10 @@ import WorkstationDynamics from '../components/plannedProduction/WorkstationDyna
 //任务调度
 import TaskScheduling from '../components/plannedProduction/TaskScheduling'
 
+//查看一品图
+import viewPicture from '../components/plannedProduction/viewPicture'
+
+
 //物料配送路由
 
 //生成工序计划路由
@@ -547,6 +551,11 @@ export default new Router({
                             path: '/TaskScheduling',
                             component: TaskScheduling,
                             meta: {title: '任务调度'}
+                        },
+                        {
+                            path: '/viewPicture',
+                            component: viewPicture,
+                            meta: {title: '一品图查看'}
                         }
                     ]
                 },
