@@ -14,6 +14,7 @@ import Message from '../components/index/messageIndex'
 import PlannedProduction from '../components/plannedProduction/PlannedProduction'
 //船型管理
 import ShipType from '../components/plannedProduction/ShipType'
+import shipTypeSetting from '../components/plannedProduction/shipTypeSetting'
 
 //特别流程管数据导入
 import TBImport from '../components/plannedProduction/TBImport'
@@ -455,6 +456,11 @@ export default new Router({
                         {
                             path: '/ShipType',
                             component: ShipType,
+                            meta: {title: '船好管理'}
+                        },
+                        {
+                            path: '/shipTypeSetting',
+                            component: shipTypeSetting,
                             meta: {title: '船型管理'}
                         },
                         {
