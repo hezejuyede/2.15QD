@@ -74,21 +74,21 @@
                 </div>
                 <div class="selectTab">
                     <label style="margin-right: 10px;margin-left: 10px">
-                        <span>前管状态</span>
+                        <span>处理状态</span>
                         <span>:</span>
                         <el-select
-                            v-model="gzType"
+                            v-model="chuLiType"
                             style="width: 150px;"
                             clearable
                             filterable
                             allow-create
                             default-first-option
-                            placeholder="当前管状态">
+                            placeholder="处理状态">
                             <el-option
-                                v-for="item in gzTypeOptions"
-                                :key="item.indexno"
+                                v-for="item in chuLiTypeOptions"
+                                :key="item.id"
                                 :label="item.name"
-                                :value="item.indexno">
+                                :value="item.id">
                             </el-option>
                         </el-select>
                     </label>
@@ -101,7 +101,7 @@
             <div class="exceptionQueryTable">
                 <el-table
                     :data="tableData"
-                    :header-cell-style="{background:'#A1D0FC',color:' rgba(0, 0, 0, 0.8)',fontSize:'18px'}"
+                    :header-cell-style="{background:'#A1D0FC',color:' rgba(0, 0, 0, 0.8)',fontSize:'14px'}"
                     border
                     height="400"
                     @row-click="clickTable"
@@ -135,6 +135,12 @@
                         label="录入原因"
                         align="center"
                         min-width="20%">
+                    </el-table-column>
+                    <el-table-column
+                        prop="chulibumen"
+                        label="处理部门"
+                        align="center"
+                        min-width="15%">
                     </el-table-column>
                     <el-table-column
                         prop="zerenren"
@@ -178,6 +184,40 @@
         <!-- 编辑弹出框 -->
         <el-dialog title="处理异常" :visible.sync="editVisible" width="70%">
             <el-form ref="form"  label-width="100px">
+                <el-form-item label="处理部门">
+                    <el-select
+                        style="width: 300px"
+                        v-model="dept"
+                        clearable
+                        filterable
+                        allow-create
+                        default-first-option
+                        placeholder="处理部门">
+                        <el-option
+                            v-for="item in deptOptions"
+                            :key="item.name"
+                            :label="item.name"
+                            :value="item.name">
+                        </el-option>
+                    </el-select>
+                </el-form-item>
+                <el-form-item label="处理状态">
+                    <el-select
+                        v-model="chuLiType"
+                        style="width: 300px"
+                        clearable
+                        filterable
+                        allow-create
+                        default-first-option
+                        placeholder="处理状态">
+                        <el-option
+                            v-for="item in chuLiTypeOptions"
+                            :key="item.id"
+                            :label="item.name"
+                            :value="item.id">
+                        </el-option>
+                    </el-select>
+                </el-form-item>
                 <el-form-item label="录入原因" >
                     <el-input v-model="yuanyin"></el-input>
                 </el-form-item>
@@ -226,8 +266,6 @@
                 ycType: '',
                 ycTypeOptions: [],
 
-                gzType: '',
-                gzTypeOptions: [],
 
                 editVisible: false,
 
@@ -237,9 +275,12 @@
                 sunshigongshi: '',
                 cailiaoqingkuang: "",
                 pc:"",
-                pcOptions:[]
+                pcOptions:[],
+                dept:"",
+                deptOptions:[],
 
-
+                chuLiType: "2",
+                chuLiTypeOptions: [{"name": "已处理", "id": "1"}, {"name": "未处理", "id": "2"}],
             }
         },
         components: {Modal},
@@ -268,62 +309,40 @@
                         axios.post(" " + url + "/sys/dictionaryList", {"id": 1}),
                         axios.post(" " + url + "/sys/dictionaryList", {"id": 3}),
                         axios.post(" " + url + "/sys/getPiciList"),
+                        axios.post(" " + url + "/sysconfig/deptList")
                     ])
-                        .then(axios.spread(function (gx, yc, gz,PC) {
+                        .then(axios.spread(function (gx, yc, gz,PC,dept) {
                             that.gxTypeOptions = gx.data;
                             that.ycTypeOptions = yc.data;
                             that.gzTypeOptions = gz.data;
-                            that.gxType = gx.data[0].id;
-                            that.ycType = yc.data[0].indexno;
-                            that.gzType = gz.data[0].indexno;
-                            that.pc = PC.data[0].id;
-                            that.pcOptions=PC.data;
-
-                            axios.post(" " + url + "/shengchanError/errorEventList", {
-                                "pici": that.pc,
-                                "id": that.gxType,
-                                "errorId": that.ycType,
-                                "status": that.gzType
-                            })
-                                .then((res) => {
-                                    that.tableData = res.data;
-                                })
-                                .catch((err) => {
-                                    console.log(err)
-                                })
+                            that.pcOptions = PC.data;
+                            that.deptOptions = dept.data;
+                            that.loadingShowData(that.gxType, that.ycType, that.chuLiType, that.pc)
                         }));
                 }
             },
 
+
+            //瞬间加载数据
+            loadingShowData(data1,data2,data3,data4) {
+                axios.post(" " + url + "/shengchanError/errorEventList", {
+                    "id": data1,
+                    "errorId": data2,
+                    "chulizhuangtai": data3,
+                    "pici": data4
+                })
+                    .then((res) => {
+                        this.tableData = res.data;
+                    })
+                    .catch((err) => {
+                        console.log(err)
+                    })
+            },
+
+
             //进行查询
             doSearch() {
-                if (this.gxType && this.ycType && this.gzType && this.pc) {
-                    axios.post(" " + url + "/shengchanError/errorEventList", {
-                        "id": this.gxType,
-                        "errorId": this.ycType,
-                        "status": this.gzType,
-                        "pici": this.pc
-                    })
-                        .then((res) => {
-                            this.tableData = res.data;
-                        })
-                        .catch((err) => {
-                            console.log(err)
-                        })
-                }
-                else {
-                    this.message = "请完善查询信息";
-                    this.HideModal = false;
-                    const that = this;
-
-                    function a() {
-                        that.message = "";
-                        that.HideModal = true;
-                    }
-
-                    setTimeout(a, 2000);
-                }
-
+                this.loadingShowData(this.gxType, this.ycType, this.chuLiType, this.pc);
             },
 
             //点击显示编辑
@@ -340,12 +359,14 @@
                 this.chuliduice = data.chulijieguo;
                 this.sunshigongshi = parseInt(data.shunshigongsi);
                 this.cailiaoqingkuang = data.cailiaoqingkuang;
+                this.chulizhuangtai=data.chulizhuangtai;
+                this.dept =data.chulibumen;
                 this.editVisible = true;
             },
 
             // 保存编辑
             saveEdit() {
-                if (this.yuanyin && this.zerenren && this.chuliduice && this.sunshigongshi && this.cailiaoqingkuang) {
+                if (this.yuanyin && this.zerenren && this.chuliduice && this.sunshigongshi && this.cailiaoqingkuang &&this.dept && this.chuLiType) {
                     axios.post(" " + url + "/shengchanError/curErrorEvent", {
                         "userId": this.username,
                         "id": this.gzId,
@@ -354,23 +375,14 @@
                         "chuliduiche": this.chuliduice,
                         "shunshigongsi": this.sunshigongshi,
                         "cailiaoqingkuang":this.cailiaoqingkuang,
+                        "chulibumen":this.dept,
+                        "chulizhuangtai":this.chuLiType,
                         "status":1 ,
                     })
                         .then((res) => {
                             if (res.data === "1") {
-                                axios.post(" " + url + "/shengchanError/errorEventList", {
-                                    "id": this.gxType,
-                                    "errorId": this.ycType,
-                                    "status": this.gzType
-                                })
-                                    .then((res) => {
-                                        this.editVisible = false;
-                                        this.$message.success(`提交第成功`);
-                                        this.tableData = res.data;
-                                    })
-                                    .catch((err) => {
-                                        console.log(err)
-                                    })
+                                this.editVisible=false;
+                                this.loadingShowData(this.gxType, this.ycType, this.chuLiType, this.pc);
                             }
                         })
                         .catch((err) => {
