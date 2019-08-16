@@ -46,9 +46,6 @@
                     <el-form-item label="分类名称">
                         <el-input v-model="name" style="width: 200px"></el-input>
                     </el-form-item>
-                    <el-form-item label="资产编号">
-                        <el-input v-model="bianhao" style="width: 200px"></el-input>
-                    </el-form-item>
                 </el-form>
                 <span slot="footer" class="dialog-footer">
                 <el-button @click="addVisible = false" style="height:30px;width:80px">取 消</el-button>
@@ -61,9 +58,6 @@
                 <el-form ref="form"  label-width="100px">
                     <el-form-item label="分类名称">
                         <el-input v-model="name" style="width: 200px"></el-input>
-                    </el-form-item>
-                    <el-form-item label="资产编号">
-                        <el-input v-model="bianhao" style="width: 200px"></el-input>
                     </el-form-item>
                 </el-form>
                 <span slot="footer" class="dialog-footer">
@@ -210,11 +204,10 @@
 
             //进行新增
             doAdd() {
-                if (this.name && this.bianhao ) {
+                if (this.name) {
                     axios.post(" " + url + "/devType/devTypeAdd",
                         {
                             "name": this.name,
-                            "bianhao":this.bianhao
                         }
                     )
                         .then((res) => {
@@ -244,7 +237,6 @@
                 axios.post(" " + url + "/devType/devTypeDetail", {"id": this.id})
                     .then((res) => {
                         this.name = res.data.name;
-                        this.bianhao = res.data.bianhao;
                     })
                     .catch((err) => {
                         console.log(err)

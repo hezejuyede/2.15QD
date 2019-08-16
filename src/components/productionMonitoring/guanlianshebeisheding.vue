@@ -82,6 +82,9 @@
                     <el-form-item label="设备名称">
                         <el-input v-model="shebei" style="width: 200px"></el-input>
                     </el-form-item>
+                    <el-form-item label="资产编号">
+                        <el-input v-model="bianhao" style="width: 200px"></el-input>
+                    </el-form-item>
                     <el-form-item label="生产线">
                         <el-select
                             v-model="line"
@@ -129,6 +132,9 @@
                 <el-form ref="form"  label-width="100px">
                     <el-form-item label="设备名称">
                         <el-input v-model="shebei" style="width: 200px"></el-input>
+                    </el-form-item>
+                    <el-form-item label="资产编号">
+                        <el-input v-model="bianhao" style="width: 200px"></el-input>
                     </el-form-item>
                     <el-form-item label="生产线">
                         <el-select
@@ -216,6 +222,7 @@
                 line: '',
                 lineOptions: [],
                 shebei:"",
+                bianhao:"",
                 djzq:""
 
             }
@@ -331,17 +338,19 @@
                 this.line = "";
                 this.shebei = "";
                 this.djzq = "";
+                this.bianhao="";
             },
 
             //进行新增
             doAdd() {
-                if (this.shebei && this.workStation && this.line &&this.djzq) {
+                if (this.shebei && this.workStation && this.line &&this.djzq && this.bianhao) {
                     axios.post(" " + url + "/shebei/shebeiAdd",
                         {
                             "stationid": this.workStation,
                             "jiagongxian": this.line,
                             "name": this.shebei,
                             "zhouqi": this.djzq,
+                            "bianhao":this.bianhao
                         }
                     )
                         .then((res) => {
@@ -373,6 +382,7 @@
                         this.line = res.data.jiagongxian;
                         this.shebei = res.data.name;
                         this.djzq = res.data.zhouqi;
+                       this.bianhao = res.data.bianhao;
                     })
                     .catch((err) => {
                         console.log(err)
@@ -381,7 +391,7 @@
 
             // 保存编辑
             saveEdit() {
-                if (this.shebei && this.workStation && this.line &&this.djzq) {
+                if (this.shebei && this.workStation && this.line &&this.djzq && this.bianhao) {
                     axios.post(" " + url + "/shebei/shebeiUpdate",
                         {
                             "id":this.id,
@@ -389,6 +399,7 @@
                             "jiagongxian": this.line,
                             "name": this.shebei,
                             "zhouqi": this.djzq,
+                            "bianhao":this.bianhao
                         }
                     )
                         .then((res) => {
