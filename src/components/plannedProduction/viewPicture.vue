@@ -14,7 +14,7 @@
                         <span>:</span>
                         <el-select
                             v-model="pc"
-                            style="width: 150px;"
+                            style="width: 200px;"
                             clearable
                             filterable
                             allow-create
@@ -28,19 +28,19 @@
                             </el-option>
                         </el-select>
                     </label>
-                    <label style="margin-right: 10px">
+                    <label style="margin-right: 10px;margin-left: 10px">
                         <span>一贯号</span>
                         <span>:</span>
-                        <el-input v-model="yiguanhao" placeholder="输入一贯号" style="width: 300px"></el-input>
+                        <el-input v-model="yiguanhao" placeholder="输入一贯号" style="width:200px"></el-input>
                     </label>
-                    <label style="margin-right: 10px">
+                    <label style="margin-right: 10px;margin-left: 10px">
                         <span>Code号</span>
                         <span>:</span>
-                        <el-input v-model="code" placeholder="输入Code号" style="width: 300px"></el-input>
+                        <el-input v-model="code" placeholder="输入Code号" style="width: 200px"></el-input>
                     </label>
-                    <el-button type="primary" @click="showAdd">查询</el-button>
+                    <el-button type="primary" @click="doSearch">查询</el-button>
                 </div>
-                <div class="">
+                <div class="handle-bottom" style="overflow: auto">
                     <viewer :images="imgs">
                         <img v-for="src in imgs" :src="src.url" :key="src.title" style="width: 100%;height: 100%">
                     </viewer>
@@ -64,7 +64,7 @@
                 message: '',
                 HideModal: true,
 
-                imgUrl: "",
+                url: "",
                 imgs: [],
                 pici: "",
                 yiguanhao: "",
@@ -106,13 +106,14 @@
             doSearch() {
                 if (this.pc && this.code && this.yiguanhao) {
                     axios.post(" " + url + "/yipintu/getYipintuImg.html", {
-                        "pici": this.pici,
+                        "pici": this.pc,
                         "yiguanhao": this.yiguanhao,
                         "code": this.code
                     })
                         .then((res) => {
                             if (res.data.imgurl) {
                                 this.url = url + res.data.imgurl;
+                                this.imgs = [{"url": this.url}];
                             }
                             else {
                                 this.message = "没有查到一品图";
@@ -164,6 +165,10 @@
                     width:100px;
                     height: 30px;
                 }
+            }
+            .handle-bottom{
+                height: 450px;
+                background-color: #D24D57;
             }
 
         }
