@@ -67,6 +67,22 @@ export function getYTime() {
     return NowDate;
 }
 
+export function getMonth() {
+    let time = new Date().getTime()-24*60*60*1000;
+    let date = new Date(time);
+    let HG = '-';
+    let year = date.getFullYear();
+    let month = date.getMonth() + 1;
+
+
+
+    if (month >= 1 && month <= 9) {
+        month = "0" + month;
+    }
+
+    let nowMonth = year + HG + month;
+    return nowMonth;
+}
 
 
 export function disableHistory (url) {
