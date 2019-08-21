@@ -1,5 +1,5 @@
 <template>
-    <div class="template">
+    <div class="template clearfix">
         <div class="crumbs">
             <el-breadcrumb separator="/">
                 <el-breadcrumb-item>资源模型</el-breadcrumb-item>
@@ -216,10 +216,10 @@
                     return 'F0-row';
                 }
                 else if (row.working === 1) {
-                    return 'info-row';
+                    return 'lan';
                 }
                 else if (row.working === 2) {
-                    return 'success-row';
+                    return 'lv';
                 }
             },
 
@@ -232,7 +232,6 @@
     .template {
         width: 100%;
         height: 100%;
-        background-color: @color-white;
         .crumbs {
             height: 50px;
             padding-top: 20px;
@@ -252,17 +251,7 @@
                     height: 30px;
                 }
             }
-            .del-dialog-cnt {
-                font-size: 16px;
-                text-align: center
-            }
-            .table {
-                width: 100%;
-                font-size: 14px;
-            }
-            .red {
-                color: #ff0000;
-            }
+
         }
     }
 </style>

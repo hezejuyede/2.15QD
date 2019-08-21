@@ -168,7 +168,6 @@
             }
             .handle-bottom{
                 height: 450px;
-                background-color: #D24D57;
             }
 
         }
