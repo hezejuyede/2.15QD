@@ -668,6 +668,11 @@ export default new Router({
                             path: 'zhuwenjinwuwujiaohuo',
                             component: zhuwenjinwuwujiaohuo,
                             meta: {title: '注文金物未交货'}
+                        },
+                        {
+                            path: 'digitalSignage',
+                            component: DigitalSignage,
+                            meta: {title: '电子看板'},
                         }
                     ]
                 },
@@ -753,6 +758,11 @@ export default new Router({
                             component: shebeiguzhangchuligenzong,
                             meta: {title: '设备故障处理跟踪'}
                         },
+                        {
+                            path: 'digitalSignage',
+                            component: DigitalSignage,
+                            meta: {title: '电子看板'},
+                        }
                     ]
                 },
                 {
@@ -980,7 +990,13 @@ export default new Router({
                             path: 'zhiliangjilvchaxunyutongji',
                             component: zhiliangjilvchaxunyutongji,
                             meta: {title: '质量记录查询与统计'}
-                        }
+                        },
+                        {
+                            path: 'digitalSignage',
+                            component: DigitalSignage,
+                            meta: {title: '电子看板'},
+                        },
+
                     ]
                 },
                 {
@@ -1107,19 +1123,18 @@ export default new Router({
                             path: 'anquanjilvbaobiao',
                             component: anquanjilvbaobiao,
                             meta: {title: '安全记录报表'}
-                        }
-
-
-
-
-
-
+                        },
+                        {
+                            path: 'digitalSignage',
+                            component: DigitalSignage,
+                            meta: {title: '电子看板'},
+                        },
                     ]
                 },
                 {
                     path: '/digitalSignage',
                     component: DigitalSignage,
-                    meta: {title: '电子看板'}
+                    meta: {title: '电子看板'},
                 },
                 {
                     path: '/404',

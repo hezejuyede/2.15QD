@@ -32,6 +32,7 @@
                     this.$router.push("/")
                 }
                 else {
+                    this.$router.push("/digitalSignage");
 
                 }
             },
