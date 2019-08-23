@@ -1117,6 +1117,11 @@ export default new Router({
                     ]
                 },
                 {
+                    path: '/digitalSignage',
+                    component: DigitalSignage,
+                    meta: {title: '电子看板'}
+                },
+                {
                     path: '/404',
                     component: resolve => require(['../components/errPage/404.vue'], resolve),
                     meta: {title: '404'}
@@ -1369,7 +1374,6 @@ export default new Router({
             component: SystemManagement,
             meta: {title: '系统管理'}
         },
-
         {
             path: '/SystemManagement/SystemManagement',
             component: SystemManagement,
@@ -1409,7 +1413,6 @@ export default new Router({
             component: SecurityManagement,
             meta: {title: '安全管理'}
         },
-
 
 
 
@@ -1455,12 +1458,6 @@ export default new Router({
             component:DigitalSignage,
             meta: {title: '电子看板'}
         },
-        {
-            path: '/digitalSignage',
-            component: DigitalSignage,
-            meta: {title: '电子看板'}
-        },
-
         {
             path: '*',
             redirect: '/404'

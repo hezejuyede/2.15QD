@@ -1,7 +1,5 @@
 <template>
-    <div class="template">
-
-    </div>
+    <div class="template"></div>
 </template>
 <script type="text/ecmascript-6">
     import axios from 'axios'

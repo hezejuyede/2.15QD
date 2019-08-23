@@ -1,11 +1,8 @@
 <template>
     <div class="template ">
-        <a href="http://157.116.13.17:8080/WebReport/ReportServer?formlet=dapingdemo.frm"  target="_blank" class="">
-            <img src="../../assets/img/DigitalSignage.png" style="width: 100%;height: 100%" alt="">
-        </a>
+        <a href="http://157.116.13.17:8080/WebReport/ReportServer?formlet=dapingdemo.frm"  target="_blank" class=""></a>
     </div>
 </template>
-
 <script type="text/ecmascript-6">
     export default {
         name: 'WorkingProcedure',
@@ -50,8 +47,13 @@
     .template {
         width: 100%;
         height: 100%;
-        background-color: @color-white;
-
+        background-image: url("../../assets/img/DigitalSignage.png");
+        background-size: cover;
+        a{
+            display: block;
+            width: 100%;
+            height: 100%;
+        }
     }
 
 
