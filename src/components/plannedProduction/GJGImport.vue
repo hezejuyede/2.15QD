@@ -269,6 +269,7 @@
                 pc: "",
                 batch: "",
                 batchOptions: [],
+                userid:"",
 
                 type: "",
                 fileType: "",
@@ -301,6 +302,8 @@
                     this.$router.push("/")
                 }
                 else {
+                    let Info = JSON.parse(userInfo);
+                    this.userid = Info.username;
                    this.loadingShow();
                 }
             },
@@ -308,19 +311,19 @@
             //设置批次
             setPc(batch) {
                 this.pc = this.batch;
-                this.Data = {"lineNo": this.SCX, "type": this.type, "pici": this.pc}
+                this.Data = {"lineNo": this.SCX, "type": this.type, "pici": this.pc,"userid":this.userid}
             },
 
             //设置类型
             setType(fileType) {
                 this.type = this.fileType;
-                this.Data = {"lineNo": this.SCX, "type": this.type, "pici": this.pc}
+                this.Data = {"lineNo": this.SCX, "type": this.type, "pici": this.pc,"userid":this.userid}
             },
 
             //设置生产线
             setScx(scx) {
                 this.SCX = this.scx;
-                this.Data = {"lineNo": this.SCX, "type": this.type, "pici": this.pc}
+                this.Data = {"lineNo": this.SCX, "type": this.type, "pici": this.pc,"userid":this.userid}
             },
 
 
