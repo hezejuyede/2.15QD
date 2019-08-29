@@ -66,7 +66,6 @@
                             clearable
                             filterable
                             allow-create
-                            disabled
                             default-first-option
                             placeholder="请输入或者选择船型">
                             <el-option
@@ -76,6 +75,9 @@
                                 :value="item.id">
                             </el-option>
                         </el-select>
+                    </el-form-item>
+                    <el-form-item label="船号">
+                        <el-input v-model="chuanhao" style="width: 220px"></el-input>
                     </el-form-item>
                     <el-form-item label="起工日">
                         <el-date-picker
@@ -102,12 +104,11 @@
                         </el-date-picker>
                     </el-form-item>
                     <el-form-item label="船东">
-                        <el-input v-model="chuandong"></el-input>
+                        <el-input v-model="chuandong" style="width: 220px"></el-input>
                     </el-form-item>
                     <el-form-item label="船级">
-                        <el-input v-model="chuanji"></el-input>
+                        <el-input v-model="chuanji" style="width: 220px"></el-input>
                     </el-form-item>
-
                 </el-form>
                 <span slot="footer" class="dialog-footer">
                 <el-button @click="addVisible = false" style="height:30px;width:80px">取 消</el-button>
@@ -123,7 +124,6 @@
                             clearable
                             filterable
                             allow-create
-                            disabled
                             default-first-option
                             placeholder="请输入或者选择船型">
                             <el-option
@@ -133,6 +133,9 @@
                                 :value="item.id">
                             </el-option>
                         </el-select>
+                    </el-form-item>
+                    <el-form-item label="船号">
+                        <el-input v-model="chuanhao" style="width: 220px"></el-input>
                     </el-form-item>
                     <el-form-item label="起工日">
                         <el-date-picker
@@ -159,10 +162,10 @@
                         </el-date-picker>
                     </el-form-item>
                     <el-form-item label="船东">
-                        <el-input v-model="chuandong"></el-input>
+                        <el-input v-model="chuandong" style="width: 220px"></el-input>
                     </el-form-item>
                     <el-form-item label="船级">
-                        <el-input v-model="chuanji"></el-input>
+                        <el-input v-model="chuanji" style="width: 220px"></el-input>
                     </el-form-item>
                 </el-form>
                 <span slot="footer" class="dialog-footer">
@@ -212,6 +215,7 @@
                 jiaochuanri: "",
                 chuandong: "",
                 chuanji: "",
+                chuanhao:"",
 
                 shipType: '',
                 shipTypeOptions: []
@@ -262,6 +266,7 @@
                     this.jiaochuanri = "";
                     this.chuandong = "";
                     this.chuanji = "";
+                    this.chuanhao="";
                     this.addVisible = true;
                 }
                 else {
@@ -290,6 +295,7 @@
                             "jiaochuanri": this.jiaochuanri,
                             "chuandong": this.chuandong,
                             "chuanji": this.chuanji,
+                            "chuanhao":this.chuanhao
                         }
                     )
                         .then((res) => {
@@ -330,6 +336,7 @@
                         this.jiaochuanri = res.data.jiaochuanri;
                         this.chuandong = res.data.chuandong;
                         this.chuanji = res.data.chuanji;
+                        this.chuanhao = res.data.chuanhao;
                     })
                     .catch((err) => {
                         console.log(err)
@@ -348,6 +355,7 @@
                             "jiaochuanri": this.jiaochuanri,
                             "chuandong": this.chuandong,
                             "chuanji": this.chuanji,
+                            "chuanhao":this.chuanhao
                         }
                     )
                         .then((res) => {
