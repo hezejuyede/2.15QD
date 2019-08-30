@@ -20,6 +20,7 @@
                         <el-date-picker
                             v-model="time"
                             type="month"
+                            @change="changeMonth(time)"
                             value-format="yyyy-MM"
                             placeholder="选择月">
                         </el-date-picker>
@@ -27,20 +28,19 @@
                     <el-button type="success" icon="delete" class="handle-del mr10" @click="doSearch">查询
                     </el-button>
                 </div>
-                <div class="">
-                    <el-table class="tb-edit"
-                              :data="tables"
-                              :header-cell-style="{background:'#A1D0FC',color:'rgba(0, 0, 0, 0.8)',fontSize:'20px'}"
-                              border
-                              height="450"
-                              highlight-current-row
-                              @row-dblclick="edit"
-                              :row-class-name="tableRowClassName"
-                              style="width: 98%;margin: auto">
-                        <template v-for="(col ,index) in cols">
-                            <el-table-column align="center" :prop="col.prop" :label="col.label"></el-table-column>
-                        </template>
-                    </el-table>
+                <div class="handle-Div">
+                    <div class="calendarDiv">
+                        <ele-calendar
+                            :defaultValue="monthTime"
+                            :render-content="renderContent"
+                            @pick="pick"
+                            border
+                            currentmonth
+                            :data="datedef"
+                            :prop="prop">
+                        </ele-calendar>
+                    </div>
+
                 </div>
             </div>
 
@@ -79,6 +79,7 @@
                 <el-button type="primary" @click="saveEdit" style="height:30px;width:80px">确 定</el-button>
             </span>
         </el-dialog>
+
         <Modal :msg="message"
                :isHideModal="HideModal"></Modal>
     </div>
@@ -88,6 +89,8 @@
     import url from '../../assets/js/URL'
     import Modal from '../../common/modal'
     import {getMonth} from '../../assets/js/api'
+    import eleCalendar from 'ele-calendar'
+    import 'ele-calendar/dist/vue-calendar.css'
 
     export default {
         name: 'WorkingProcedure',
@@ -99,12 +102,16 @@
                 id: "",
                 working: "",
                 workingOptions: [{"name": "休息日", "id": 0}, {"name": "上班日", "id": 1}, {"name": "出图日", "id": 2}],
-                time: "",
+                tdayTimeime: "",
+                time:"",
                 dayTime: "",
+                monthTime:"",
 
                 cols: [],
                 tableData: [],
                 editVisible: false,
+                datedef:[],
+                prop:'date',
 
                 select_word: '',
 
@@ -125,7 +132,7 @@
                 return this.tableData
             }
         },
-        components: {Modal},
+        components: {Modal,eleCalendar},
         mounted() {
 
 
@@ -143,7 +150,6 @@
                 }
                 else {
                     this.time = getMonth();
-                    console.log(this.time)
                     this.loadingShowData(this.time)
                 }
             },
@@ -210,6 +216,61 @@
 
             },
 
+            //改变月份
+            changeMonth(time){
+                this.monthTime=time;
+            },
+
+            pick(){
+
+            },
+            renderContent(h,parmas) {
+                console.log(this.tableData)
+                const loop = data => {
+                    console.log(data.defvalue)
+                    if (data.defvalue.column == 6) {
+                        return data.defvalue.value ? (
+                            <div class="flex2 selected">
+                            {data.defvalue.text}
+                    <span>休息日</span>
+                        </div>
+                    ) : (
+                        <div class="flex2">
+                            {data.defvalue.text}
+                    <span>休息日</span>
+                        </div>
+                    )
+                    }
+                    else if (data.defvalue.column == 0) {
+                        return data.defvalue.value ? (
+                            <div class="flex2 selected">
+                            {data.defvalue.text}
+                    <span>休息日</span>
+                        </div>
+                    ) : (
+                        <div class="flex2">
+                            {data.defvalue.text}
+                    <span>休息日</span>
+                        </div>
+                    )
+                    }
+                    else {
+                        return data.defvalue.value ? (
+                            <div class="flex2 selected">
+                            {data.defvalue.text}
+                    <span class="flex2">工作日</span>
+                        </div>
+                    ) : (
+                        <div class="flex2">
+                            {data.defvalue.text}
+                    <span >工作日</span>
+                        </div>
+                    )
+                    }
+                }
+                return <div style="min-height:60px;">{loop(parmas)}</div>
+            },
+
             //根据状态显示不同颜色
             tableRowClassName({row, rowIndex}) {
                 if (row.working === 0) {
@@ -251,7 +312,25 @@
                     height: 30px;
                 }
             }
+            .handle-Div{
+                width: 100%;
+                height: 480px;
+                overflow:auto;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                .calendarDiv{
+                    width: 800px;
+                    height: 450px;
+                }
+            }
 
+
+        }
+        .flex2{
+            width: 100px;
+            height: 100px;
+            background-color: #EB7347;
         }
     }
 </style>
