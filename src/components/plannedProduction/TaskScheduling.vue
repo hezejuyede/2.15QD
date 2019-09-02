@@ -37,13 +37,13 @@
                     <el-input v-model="pie" placeholder="PIE" style="width: 100px"></el-input>
                 </div>
                 <div class="operationTab">
-                    <button   @click="doSearch">查询</button>
+                    <el-button   type="primary" @click="doSearch">查询</el-button>
                 </div>
                 <div class="operationTab">
-                    <button   @click="editState">修改状态</button>
+                    <el-button   type="success" @click="editState">修改状态</el-button>
                 </div>
                 <div class="operationTab">
-                    <button   @click="editYxj">修改优先级</button>
+                    <el-button   type="warning" @click="editYxj">修改优先级</el-button>
                 </div>
                <!-- <div class="operationTab">
                     <button   @click="editRoute">修改工艺路线</button>
@@ -364,6 +364,7 @@
                     setTimeout(a, 2000);
                 }
             },
+
             //进行状态修改
             doEditState() {
                 if (this.state) {
@@ -392,6 +393,7 @@
                 }
 
             },
+
             //弹出 优先级修改框
             editYxj() {
                 if (this.listData.length) {
@@ -412,6 +414,7 @@
                     setTimeout(a, 2000);
                 }
             },
+
             //进行优先级修改
             doEditYxj() {
                 if (this.yxj) {
@@ -523,10 +526,12 @@
                 };
                 this.routeData.push(list)
             },
+
             // 选择哪一行
             selectRow (val) {
                 this.selectlistRow = val;
             },
+
             // 删除选中行
             delData() {
                 for (let i = 0; i < this.selectlistRow.length; i++) {
@@ -632,18 +637,10 @@
                     display: flex;
                     align-items: center;
                     justify-content: center;
-                    button {
+                    .el-button {
                         width: 80%;
                         height: 35px;
                         text-align: center;
-                        line-height: 35px;
-                        border: none;
-                        border-radius: 10%;
-                        background-color: @color-blue;
-                        color: @color-white;
-                        font-size: 12px;
-                        margin-left: 10px;
-                        margin-right: 10px;
                     }
                 }
                 .operationTabRight{

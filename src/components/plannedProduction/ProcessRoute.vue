@@ -53,8 +53,8 @@
                         </el-select>
                     </label>
 
-                    <button @click="showAddWorkingProcedure">新增工艺路线</button>
-                    <button @click="editYs" class="color">编辑约束条件</button>
+                    <el-button type="primary" @click="showAddWorkingProcedure">新增工艺路线</el-button>
+                    <el-button type="success" @click="editYs">编辑约束条件</el-button>
                     <!-- <button @click="deleteWorkStation" class="colorRed">删除工艺路线</button>-->
                 </div>
                 <div class="">
@@ -1001,16 +1001,8 @@
                     margin-right: 20px;
                 }
                 button {
-                    width: 120px;
+                    width: 130px;
                     height: 35px;
-                    text-align: center;
-                    line-height: 35px;
-                    border: none;
-                    border-radius: 10%;
-                    background-color: @color-blue;
-                    color: @color-white;
-                    font-size: 16px;
-                    margin-left: 20px;
                 }
                 .color {
                     background-color: @color-bg-lv;
@@ -1026,9 +1018,6 @@
             .table {
                 width: 100%;
                 font-size: 14px;
-            }
-            .red {
-                color: #ff0000;
             }
 
         }

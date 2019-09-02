@@ -42,7 +42,7 @@
                     <el-input v-model="pie" placeholder="请输入PIE"></el-input>
                 </div>
                 <div class="operationTab">
-                    <button @click="doSearch">查询</button>
+                    <el-button type="primary" @click="doSearch">查询</el-button>
                 </div>
             </div>
             <div class="productionContentTable">
@@ -233,18 +233,9 @@
                     display: flex;
                     align-items: center;
                     justify-content: center;
-                    button {
-                        width: 100px;
+                    .el-button {
+                        width: 130px;
                         height: 35px;
-                        text-align: center;
-                        line-height: 35px;
-                        border: none;
-                        border-radius: 10%;
-                        background-color: @color-blue;
-                        color: @color-white;
-                        font-size: 16px;
-                        margin-left: 10px;
-                        margin-right: 10px;
                     }
                 }
             }
