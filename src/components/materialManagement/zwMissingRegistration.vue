@@ -34,6 +34,7 @@
                     </label>
                     <el-button type="primary" @click="doSearch">查询注文金物</el-button>
                     <el-button type="success" @click="showAdd">缺件记录</el-button>
+                    <el-button type="warning" @click="showReplenishment">补货</el-button>
                 </div>
                 <div class="">
                     <el-table class="tb-edit"
@@ -71,6 +72,32 @@
                 <el-button type="primary" @click="doAdd" style="height:30px;width:80px">确 定</el-button>
             </span>
         </el-dialog>
+
+        <!--补货弹出框 -->
+        <el-dialog title="补货" :visible.sync="replenishmentVisible" width="40%">
+            <el-form ref="form"  label-width="100px">
+                <el-form-item label="是否补货">
+                    <el-select
+                        v-model="replenishment"
+                        clearable
+                        filterable
+                        allow-create
+                        default-first-option
+                        placeholder="请选择工位">
+                        <el-option
+                            v-for="item in replenishmentOptions"
+                            :key="item.id"
+                            :label="item.name"
+                            :value="item.id">
+                        </el-option>
+                    </el-select>
+                </el-form-item>
+            </el-form>
+            <span slot="footer" class="dialog-footer">
+                <el-button @click="replenishmentVisible = false" style="height:30px;width:80px">取 消</el-button>
+                <el-button type="primary" @click="doReplenishment" style="height:30px;width:80px">确 定</el-button>
+            </span>
+        </el-dialog>
     </div>
 </template>
 <script type="text/ecmascript-6">
@@ -93,6 +120,9 @@
                 qjNumber: "",
                 select_word: '',
                 addVisible: false,
+                replenishmentVisible: false,
+                replenishment:"",
+                replenishmentOptions:[{"name": "已补货", "id": "2"}, {"name": "未补货", "id": "1"}],
 
             }
         },
@@ -250,6 +280,31 @@
                     this.$message.warning(`输入不能为空`);
                 }
             },
+
+            //显示补货弹框
+            showReplenishment() {
+                if (this.listData.length) {
+                    this.replenishmentVisible = true;
+                }
+                else {
+                    this.message = "请勾选要补货的清单";
+                    this.HideModal = false;
+                    const that = this;
+
+                    function a() {
+                        that.message = "";
+                        that.HideModal = true;
+                    }
+
+                    setTimeout(a, 2000);
+                }
+            },
+
+            //进行补货
+            doReplenishment() {
+
+            }
+
 
         }
     }
