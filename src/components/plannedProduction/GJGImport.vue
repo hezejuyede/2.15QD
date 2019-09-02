@@ -8,7 +8,7 @@
         </div>
         <div class="importTitle">
             <div class="upData fl">
-                <button @click="showUpData">正常出图数据导入</button>
+                <el-button  type="warning" @click="showUpData">正常出图数据导入</el-button>
             </div>
             <div class="search fl">
                 <div class="">
@@ -34,11 +34,12 @@
                     <span>:</span>
                     <el-select
                         v-model="batch"
+                        style="width: 120px"
                         clearable
                         filterable
                         allow-create
                         default-first-option
-                        placeholder="请输入或者选择批次">
+                        placeholder="输入或选择批次">
                         <el-option
                             v-for="item in batchOptions"
                             :key="item.id"
@@ -51,13 +52,14 @@
                     <span>生产线</span>
                     <span>:</span>
                     <el-select
+                        style="width: 120px"
                         v-model="scx"
                         @input="setScx(scx)"
                         clearable
                         filterable
                         allow-create
                         default-first-option
-                        placeholder="请输入或者选择生产线">
+                        placeholder="输入或选择生产线">
                         <el-option
                             v-for="item in scxOptions"
                             :key="item.indexno"
@@ -67,9 +69,9 @@
                     </el-select>
                 </div>
                 <div class="">
-                    <button @click="doSearch">查询</button>
-                    <button @click="showExamine" style="background-color: #03DD02">审核</button>
-                    <button @click="doDelete" style="background-color: #dd6161">删除</button>
+                    <el-button type="primary" @click="doSearch">查询</el-button>
+                    <el-button type="success" @click="showExamine">审核</el-button>
+                    <el-button type="danger" @click="doDelete">删除</el-button>
                 </div>
             </div>
         </div>
@@ -730,27 +732,20 @@
             padding-left: 20px;
         }
         .importTitle {
-            padding-left: 2%;
+            padding-left: 1%;
             height: 80px;
             .upData {
-                width: 10%;
+                width: 15%;
                 height: 80px;
                 line-height: 80px;
-                button {
+                .el-button {
                     width: 100%;
                     height: 35px;
-                    text-align: center;
-                    line-height: 35px;
-                    border: none;
-                    border-radius: 10%;
-                    background-color: @color-blue;
-                    color: @color-white;
                     font-size: 16px;
-                    margin-left: 5%;
                 }
             }
             .search {
-                width: 90%;
+                width: 85%;
                 height: 80px;
                 display: flex;
                 align-items: center;
@@ -761,17 +756,10 @@
                     line-height: 80px;
                     margin-right: 2%;
                     margin-left: 1%;
-                    button {
-                        width: 80px;
+                    .el-button {
+                        width: 130px;
                         height: 35px;
-                        text-align: center;
-                        line-height: 35px;
-                        border: none;
-                        border-radius: 10%;
-                        background-color: @color-blue;
-                        color: @color-white;
                         font-size: 16px;
-                        margin-left: 5%;;
                     }
                 }
 
