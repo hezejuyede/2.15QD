@@ -41,7 +41,7 @@
                               :data="tables"
                               :header-cell-style="{background:'#A1D0FC',color:'rgba(0, 0, 0, 0.8)',fontSize:'20px'}"
                               border
-                              height="450"
+                              height="400"
                               @select-all="selectAll"
                               @select="selectList"
                               highlight-current-row
@@ -54,6 +54,16 @@
                             <el-table-column align="center" :prop="col.prop" :label="col.label"></el-table-column>
                         </template>
                     </el-table>
+                </div>
+                <div class="" style="display: flex;align-items: center;justify-content: center;margin-top: 10px">
+                    <el-pagination
+                        background
+                        layout="prev, pager, next"
+                        @current-change="currentChange"
+                        @next-click="nextClick"
+                        @prev-click="prevClick"
+                        :total="pageNum">
+                    </el-pagination>
                 </div>
             </div>
 
@@ -123,6 +133,8 @@
                 replenishmentVisible: false,
                 replenishment:"",
                 replenishmentOptions:[{"name": "已补货", "id": "2"}, {"name": "未补货", "id": "1"}],
+                page:1,
+                pageNum:100,
 
             }
         },
@@ -174,7 +186,7 @@
                 let that = this;
                 axios.all([
                     axios.post(" " + url + "/sys/showTableTitle", {"name": "zwjwcx"}),
-                    axios.post(" " + url + "/wuliao/jinwuZhuwenpinList", {"time": data})
+                    axios.post(" " + url + "/wuliao/jinwuZhuwenpinList", {"pici": data})
                 ])
                     .then(axios.spread(function (title, table) {
                         that.cols = title.data;
@@ -243,33 +255,31 @@
                     this.message = "请勾选要登记的清单";
                     this.HideModal = false;
                     const that = this;
-
                     function a() {
                         that.message = "";
                         that.HideModal = true;
                     }
-
                     setTimeout(a, 2000);
                 }
             },
 
             //进行新增
             doAdd() {
-                if (this.qjNumber ) {
-                    axios.post(" " + url + "/padShow/buttonAdd",
+                if (this.qjNumber) {
+                    axios.post(" " + url + "/wuliao/markZhuwenpinQueLiao",
                         {
-                            "qjNumber": this.qjNumber,
+                            "id": this.listData[0],
+                            "queliaoshunum": parseInt(this.qjNumber)
                         }
                     )
                         .then((res) => {
                             if (res.data.state === "1") {
-                                this.$message.success(`登记成功`);
+                                this.$message.success(res.data.message);
                                 this.addVisible = false;
-                                this.loadingShowData(this.workStation)
-
+                                this.loadingShowData(this.batch)
                             }
                             else {
-                                this.$message.warning(`登记失败`);
+                                this.$message.warning(res.data.message);
                             }
                         })
                         .catch((err) => {
@@ -302,8 +312,46 @@
 
             //进行补货
             doReplenishment() {
+                if (this.replenishment) {
+                    axios.post(" " + url + "/wuliao/markZhuwenpinQueLiao",
+                        {
+                            "id": this.listData[0],
+                            "queliaoshunum": parseInt(this.qjNumber)
+                        }
+                    )
+                        .then((res) => {
+                            if (res.data.state === "1") {
+                                this.$message.success(res.data.message);
+                                this.addVisible = false;
+                                this.loadingShowData(this.batch)
+                            }
+                            else {
+                                this.$message.warning(res.data.message);
+                            }
+                        })
+                        .catch((err) => {
+                            console.log(err)
+                        })
+                }
+                else {
+                    this.$message.warning(`输入不能为空`);
+                }
+            },
 
-            }
+            //页面发送改变
+            currentChange(val) {
+                this.page = val;
+            },
+
+            //前一页
+            prevClick(val) {
+                this.page = val;
+            },
+
+            //后一页
+            nextClick(val) {
+                this.page = val;
+            },
 
 
         }
@@ -331,7 +379,7 @@
                     display: inline-block;
                 }
                 .el-button {
-                    width: 100px;
+                    width: 130px;
                     height: 30px;
                 }
             }

@@ -34,13 +34,14 @@
                     </label>
                     <el-button type="primary" @click="doSearch">查询储品金物</el-button>
                     <el-button type="success" @click="showAdd">缺件记录</el-button>
+                    <el-button type="warning" @click="showReplenishment">补货</el-button>
                 </div>
                 <div class="">
                     <el-table class="tb-edit"
                               :data="tables"
                               :header-cell-style="{background:'#A1D0FC',color:'rgba(0, 0, 0, 0.8)',fontSize:'20px'}"
                               border
-                              height="450"
+                              height="400"
                               @select-all="selectAll"
                               @select="selectList"
                               highlight-current-row
@@ -53,6 +54,17 @@
                             <el-table-column align="center" :prop="col.prop" :label="col.label"></el-table-column>
                         </template>
                     </el-table>
+
+                </div>
+                <div class="" style="display: flex;align-items: center;justify-content: center;margin-top: 10px">
+                    <el-pagination
+                        background
+                        layout="prev, pager, next"
+                        @current-change="currentChange"
+                        @next-click="nextClick"
+                        @prev-click="prevClick"
+                        :total="pageNum">
+                    </el-pagination>
                 </div>
             </div>
 
@@ -119,6 +131,8 @@
                 select_word: '',
                 addVisible: false,
                 replenishmentVisible:false,
+                page:1,
+                pageNum:100,
 
                 replenishment:"",
                 replenishmentOptions:[{"name": "已补货", "id": "2"}, {"name": "未补货", "id": "1"}],
@@ -302,7 +316,22 @@
             //进行补货
             doReplenishment() {
 
-            }
+            },
+
+            //页面发送改变
+            currentChange(val) {
+                this.page = val;
+            },
+
+            //前一页
+            prevClick(val) {
+                this.page = val;
+            },
+
+            //后一页
+            nextClick(val) {
+                this.page = val;
+            },
 
         }
     }
@@ -329,7 +358,7 @@
                     display: inline-block;
                 }
                 .el-button {
-                    width: 100px;
+                    width: 130px;
                     height: 30px;
                 }
             }
