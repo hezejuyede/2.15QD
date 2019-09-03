@@ -37,6 +37,7 @@
                               height="450"
                               @row-dblclick="edit"
                               highlight-current-row
+                              :row-class-name="tableRowClassName"
                               style="width: 98%;margin: auto">
                         <template v-for="(col ,index) in cols">
                             <el-table-column align="center" :prop="col.prop" :label="col.label"></el-table-column>
@@ -567,6 +568,13 @@
                         console.log(err)
                     })
 
+            },
+
+            //根据状态显示不同颜色
+            tableRowClassName({row, rowIndex}) {
+                if(row.status === 2){
+                    return 'success-row ';
+                }
             },
 
 
