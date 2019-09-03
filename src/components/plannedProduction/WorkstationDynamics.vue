@@ -228,7 +228,7 @@
                     display: inline-block;
                 }
                 .el-button {
-                    width: 100px;
+                    width: 150px;
                     height: 30px;
                 }
             }

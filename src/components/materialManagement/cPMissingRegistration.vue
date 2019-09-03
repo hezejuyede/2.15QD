@@ -23,7 +23,7 @@
                             filterable
                             allow-create
                             default-first-option
-                            placeholder="请选择批次">
+                            placeholder="是否补货">
                             <el-option
                                 v-for="item in batchOptions"
                                 :key="item.id"
@@ -33,7 +33,7 @@
                         </el-select>
                     </label>
                     <el-button type="primary" @click="doSearch">查询储品金物</el-button>
-                    <el-button type="success" @click="showAdd">缺件记录</el-button>
+                    <el-button type="success" @click="showAdd">缺件登记</el-button>
                     <el-button type="warning" @click="showReplenishment">补货</el-button>
                 </div>
                 <div class="">
@@ -187,7 +187,7 @@
                 let that = this;
                 axios.all([
                     axios.post(" " + url + "/sys/showTableTitle", {"name": "zwjwcx"}),
-                    axios.post(" " + url + "/wuliao/jinwuZhuwenpinList", {"time": data})
+                    axios.post(" " + url + "/wuliao/wuliao/jinwuZhuwenpinList", {"pici": data})
                 ])
                     .then(axios.spread(function (title, table) {
                         that.cols = title.data;
@@ -195,8 +195,7 @@
                     }));
             },
 
-
-            //根据时间查询
+            //根据批次查询
             doSearch() {
                 if (this.batch) {
                     this.loadingShowData(this.batch)
@@ -215,7 +214,6 @@
                 }
 
             },
-
 
             //选择那个一个
             selectList(val) {
@@ -247,7 +245,7 @@
                 }
             },
 
-            //显示新增
+            //显示缺货登陆
             showAdd(){
                 if (this.listData.length) {
                     this.addVisible = true;
@@ -266,23 +264,23 @@
                 }
             },
 
-            //进行新增
+            //进行缺货登陆
             doAdd() {
-                if (this.qjNumber ) {
-                    axios.post(" " + url + "/padShow/buttonAdd",
+                if (this.qjNumber) {
+                    axios.post(" " + url + "/wuliao/markChupinQueLiao",
                         {
-                            "qjNumber": this.qjNumber,
+                            "id": this.listData[0],
+                            "queliaoshunum": parseInt(this.qjNumber)
                         }
                     )
                         .then((res) => {
                             if (res.data.state === "1") {
-                                this.$message.success(`登记成功`);
+                                this.$message.success(res.data.message);
                                 this.addVisible = false;
-                                this.loadingShowData(this.workStation)
-
+                                this.loadingShowData(this.batch)
                             }
                             else {
-                                this.$message.warning(`登记失败`);
+                                this.$message.warning(res.data.message);
                             }
                         })
                         .catch((err) => {
@@ -315,7 +313,29 @@
 
             //进行补货
             doReplenishment() {
-
+                if (this.replenishment) {
+                    axios.post(" " + url + "/wuliao/markChupinBuhuo",
+                        {
+                            "id": this.replenishment
+                        }
+                    )
+                        .then((res) => {
+                            if (res.data.state === "1") {
+                                this.$message.success(res.data.message);
+                                this.addVisible = false;
+                                this.loadingShowData(this.batch)
+                            }
+                            else {
+                                this.$message.warning(res.data.message);
+                            }
+                        })
+                        .catch((err) => {
+                            console.log(err)
+                        })
+                }
+                else {
+                    this.$message.warning(`输入不能为空`);
+                }
             },
 
             //页面发送改变
@@ -369,9 +389,6 @@
             .table {
                 width: 100%;
                 font-size: 14px;
-            }
-            .red {
-                color: #ff0000;
             }
 
         }

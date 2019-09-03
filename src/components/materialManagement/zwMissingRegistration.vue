@@ -33,7 +33,7 @@
                         </el-select>
                     </label>
                     <el-button type="primary" @click="doSearch">查询注文金物</el-button>
-                    <el-button type="success" @click="showAdd">缺件记录</el-button>
+                    <el-button type="success" @click="showAdd">缺件登记</el-button>
                     <el-button type="warning" @click="showReplenishment">补货</el-button>
                 </div>
                 <div class="">
@@ -93,7 +93,7 @@
                         filterable
                         allow-create
                         default-first-option
-                        placeholder="请选择工位">
+                        placeholder="请选择是否补货">
                         <el-option
                             v-for="item in replenishmentOptions"
                             :key="item.id"
@@ -250,6 +250,8 @@
             showAdd(){
                 if (this.listData.length) {
                     this.addVisible = true;
+                    this.qjNumber="";
+
                 }
                 else {
                     this.message = "请勾选要登记的清单";
@@ -295,6 +297,7 @@
             showReplenishment() {
                 if (this.listData.length) {
                     this.replenishmentVisible = true;
+                    this.replenishment="";
                 }
                 else {
                     this.message = "请勾选要补货的清单";
@@ -313,16 +316,15 @@
             //进行补货
             doReplenishment() {
                 if (this.replenishment) {
-                    axios.post(" " + url + "/wuliao/markZhuwenpinQueLiao",
+                    axios.post(" " + url + "/wuliao/markZhuwenpinBuhuo",
                         {
-                            "id": this.listData[0],
-                            "queliaoshunum": parseInt(this.qjNumber)
+                            "id": this.replenishment
                         }
                     )
                         .then((res) => {
                             if (res.data.state === "1") {
                                 this.$message.success(res.data.message);
-                                this.addVisible = false;
+                                this.replenishmentVisible= false;
                                 this.loadingShowData(this.batch)
                             }
                             else {
