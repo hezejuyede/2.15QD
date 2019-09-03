@@ -15,22 +15,16 @@
                         <el-input v-model="select_word" placeholder="智能检索金物规格" class="handle-input mr10"></el-input>
                     </label>
                     <label style="margin-right: 10px;margin-left: 10px">
-                        <span>选择批次</span>
+                        <span>选择查询时间</span>
                         <span>:</span>
-                        <el-select
-                            v-model="batch"
-                            clearable
-                            filterable
-                            allow-create
-                            default-first-option
-                            placeholder="请选择批次">
-                            <el-option
-                                v-for="item in batchOptions"
-                                :key="item.id"
-                                :label="item.name"
-                                :value="item.id">
-                            </el-option>
-                        </el-select>
+                        <el-date-picker
+                            style="width: 230px"
+                            v-model="examineTime"
+                            type="daterange"
+                            start-placeholder="开始日期"
+                            end-placeholder="结束日期"
+                            value-format="yyyy-MM-dd">
+                        </el-date-picker>
                     </label>
                     <el-button type="primary" @click="doSearch">查询金物规格</el-button>
                     <el-button type="success" @click="showAdd">出库登记</el-button>
@@ -80,6 +74,7 @@
     import axios from 'axios'
     import url from '../../assets/js/URL'
     import Modal from '../../common/modal'
+    import {getNowTime} from '../../assets/js/api'
 
     export default {
         name: 'WorkingProcedure',
@@ -90,9 +85,11 @@
 
                 cols: [],
                 tableData: [],
+
                 listData: [],
-                batch: "",
-                batchOptions: [],
+
+                examineTime:"",
+
                 jwAllNumber: "",
                 sjNumber: "",
                 select_word: '',
@@ -131,15 +128,13 @@
                     this.$router.push("/")
                 }
                 else {
-                    let that = this;
-                    axios.all([
-                        axios.post(" " + url + "/sys/getPiciList"),
-                    ])
-                        .then(axios.spread(function (select) {
-                            that.batchOptions = select.data;
-                            that.batch = select.data[0].id;
-                            that.loadingShowData(that.batch);
-                        }));
+                    let time = getNowTime();
+                    let times = [];
+                    for (let i = 0; i < 2; i++) {
+                        times.push(time)
+                    }
+                    this.examineTime = times;
+                    this.loadingShowData(this.examineTime);
                 }
             },
 
@@ -147,8 +142,8 @@
             loadingShowData(data) {
                 let that = this;
                 axios.all([
-                    axios.post(" " + url + "/sys/showTableTitle", {"name": "tuodanjinwuchukujilv"}),
-                    axios.post(" " + url + "/wuliao/jinwuZhuwenpinList", {"time": data})
+                    axios.post(" " + url + "/sys/showTableTitle", {"name": "tuodanjinwuchukuchaxun"}),
+                    axios.post(" " + url + "/wuliao/tuodanchuku/tuodanjinwuList", {"time": data})
                 ])
                     .then(axios.spread(function (title, table) {
                         that.cols = title.data;
