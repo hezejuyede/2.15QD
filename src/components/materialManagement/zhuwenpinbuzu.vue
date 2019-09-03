@@ -14,25 +14,31 @@
                         <span>:</span>
                         <el-input v-model="select_word" placeholder="检索注文品" class="handle-input mr10" style="width: 150px"></el-input>
                     </label>
-                    <label style="margin-right: 5px;margin-left: 5px">
-                        <span>时间</span>
+                    <label style="margin-right: 10px;margin-left: 10px">
+                        <span>选择批次</span>
                         <span>:</span>
-                        <el-date-picker
-                            style="width: 240px"
-                            v-model="examineTime"
-                            type="daterange"
-                            start-placeholder="开始日期"
-                            end-placeholder="结束日期"
-                            value-format="yyyy-MM-dd">
-                        </el-date-picker>
+                        <el-select
+                            v-model="batch"
+                            clearable
+                            filterable
+                            allow-create
+                            default-first-option
+                            placeholder="请选择批次">
+                            <el-option
+                                v-for="item in batchOptions"
+                                :key="item.id"
+                                :label="item.name"
+                                :value="item.id">
+                            </el-option>
+                        </el-select>
                     </label>
-                    <el-button type="primary"  class="handle-del mr10" @click="doSearch">查询</el-button>
-                    <el-button type="success"  class="handle-del mr10" @click="contactDesign">联络设计</el-button>
+                    <el-button type="primary"   @click="doSearch">查询</el-button>
+                  <!--  <el-button type="success"   @click="contactDesign">联络设计</el-button>-->
                 </div>
                 <div class="">
                     <el-table class="tb-edit"
                               :data="tables"
-                              :header-cell-style="{background:'#A1D0FC',color:'rgba(0, 0, 0, 0.8)',fontSize:'14px'}"
+                              :header-cell-style="{background:'#A1D0FC',color:'rgba(0, 0, 0, 0.8)',fontSize:'11px'}"
                               border
                               height="450"
                               @row-dblclick="edit"
@@ -149,7 +155,8 @@
                 lxVisible: false,
 
 
-                examineTime:"",
+                batch: "",
+                batchOptions: [],
 
                 cljg:"",
                 cljgOptions: [
@@ -202,13 +209,15 @@
                     this.$router.push("/")
                 }
                 else {
-                    let time = getNowTime();
-                    let times = [];
-                    for (let i = 0; i < 2; i++) {
-                        times.push(time)
-                    }
-                    this.examineTime = times;
-                    this.loadingShowData(this.examineTime);
+                    let that = this;
+                    axios.all([
+                        axios.post(" " + url + "/sys/getPiciList"),
+                    ])
+                        .then(axios.spread(function (select) {
+                            that.batchOptions = select.data;
+                            that.batch = select.data[0].id;
+                            that.loadingShowData(that.batch);
+                        }));
                 }
             },
 
@@ -217,7 +226,7 @@
                 let that = this;
                 axios.all([
                     axios.post(" " + url + "/sys/showTableTitle", {"name": "zhuwenpinbuzu"}),
-                    axios.post(" " + url + "/shebei/errorList", {"time":data1})
+                    axios.post(" " + url + "/wuliao/wyd/zhuwenpin/list", {"pici":data1})
                 ])
                     .then(axios.spread(function (title, table) {
                         that.cols = title.data;
@@ -270,7 +279,7 @@
 
             //进行查询
             doSearch(){
-                this.loadingShowData(this.examineTime);
+                this.loadingShowData(this.batch);
             },
 
             //双击点击处理
@@ -278,6 +287,7 @@
                 this.addVisible = true;
                 this.id = row.id;
             },
+
             //进行处理
             doAdd() {
                 if (this.cljg) {
@@ -307,6 +317,7 @@
                     this.$message.warning(`输入不能为空`);
                 }
             },
+
 
             //联系担当
             contactDesign(){
@@ -400,7 +411,7 @@
                     display: inline-block;
                 }
                 .el-button {
-                    width:100px;
+                    width:130px;
                     height: 30px;
                 }
             }

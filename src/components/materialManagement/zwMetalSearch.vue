@@ -32,7 +32,7 @@
                             </el-option>
                         </el-select>
                     </label>
-                    <el-button type="primary" icon="delete" class="handle-del mr10" @click="doSearch">缺件查询</el-button>
+                    <el-button type="primary" @click="doSearch">缺件查询</el-button>
                 </div>
                 <div class="">
                     <el-table class="tb-edit"
@@ -124,8 +124,8 @@
             loadingShowData(data) {
                 let that = this;
                 axios.all([
-                    axios.post(" " + url + "/sys/showTableTitle", {"name": "zwjwcx"}),
-                    axios.post(" " + url + "/wuliao/jinwuZhuwenpinList", {"time": data})
+                    axios.post(" " + url + "/sys/showTableTitle", {"name": "zhuwenjinwuquejianchaxun"}),
+                    axios.post(" " + url + "/wuliao/jinwuZhuwenpinList", {"pici": data})
                 ])
                     .then(axios.spread(function (title, table) {
                         that.cols = title.data;

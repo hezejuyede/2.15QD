@@ -10,9 +10,9 @@
             <div class="container">
                 <div class="handle-box">
                     <label style="margin-right: 10px">
-                        <span>智能检索缺件</span>
+                        <span>智能检索管吊单</span>
                         <span>:</span>
-                        <el-input v-model="select_word" placeholder="智能检索缺件" class="handle-input mr10"></el-input>
+                        <el-input v-model="select_word" placeholder="智能检索管吊单" class="handle-input mr10"></el-input>
                     </label>
                     <label style="margin-right: 10px;margin-left: 10px">
                         <span>选择批次</span>
@@ -32,12 +32,12 @@
                             </el-option>
                         </el-select>
                     </label>
-                    <el-button type="primary" icon="delete" class="handle-del mr10" @click="doSearch">缺件查询</el-button>
+                    <el-button type="primary" @click="doSearch">查询</el-button>
                 </div>
                 <div class="">
                     <el-table class="tb-edit"
                               :data="tables"
-                              :header-cell-style="{background:'#A1D0FC',color:'rgba(0, 0, 0, 0.8)',fontSize:'20px'}"
+                              :header-cell-style="{background:'#A1D0FC',color:'rgba(0, 0, 0, 0.8)',fontSize:'18px'}"
                               border
                               height="450"
                               highlight-current-row
@@ -124,8 +124,8 @@
             loadingShowData(data) {
                 let that = this;
                 axios.all([
-                    axios.post(" " + url + "/sys/showTableTitle", {"name": "zwjwcx"}),
-                    axios.post(" " + url + "/wuliao/jinwuZhuwenpinList", {"time": data})
+                    axios.post(" " + url + "/sys/showTableTitle", {"name": "guandiaodanchaxun"}),
+                    axios.post(" " + url + "/wuliao/jinwuZhuwenpinList", {"pici": data})
                 ])
                     .then(axios.spread(function (title, table) {
                         that.cols = title.data;
@@ -177,7 +177,7 @@
                     display: inline-block;
                 }
                 .el-button {
-                    width: 100px;
+                    width: 130px;
                     height: 30px;
                 }
             }
@@ -189,10 +189,6 @@
                 width: 100%;
                 font-size: 14px;
             }
-            .red {
-                color: #ff0000;
-            }
-
         }
     }
 
