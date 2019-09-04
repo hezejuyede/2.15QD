@@ -37,7 +37,6 @@
                               height="450"
                               @row-dblclick="edit"
                               highlight-current-row
-                              :row-class-name="tableRowClassName"
                               style="width: 98%;margin: auto">
                         <template v-for="(col ,index) in cols">
                             <el-table-column align="center" :prop="col.prop" :label="col.label"></el-table-column>
@@ -127,6 +126,7 @@
                                         :data="excelData"
                                         :header-cell-style="{background:'#ffffff',border: '1px solid #303133',color:'rgba(0, 0, 0, 1)'}"
                                         :cell-style="{border: '1px solid #303133'}"
+                                        :row-class-name="tableRowClassName"
                                         style="width: 992px;border: 1px solid #303133">
                                         <el-table-column
                                             align="center"
@@ -573,7 +573,7 @@
 
             //根据状态显示不同颜色
             tableRowClassName({row, rowIndex}) {
-                if(row.lingqustatus === 2){
+                if(row.lingqustatus === "2"){
                     return 'success-row ';
                 }
             },
