@@ -573,7 +573,7 @@
 
             //根据状态显示不同颜色
             tableRowClassName({row, rowIndex}) {
-                if(row.status === 2){
+                if(row.lingqustatus === 2){
                     return 'success-row ';
                 }
             },
