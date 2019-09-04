@@ -154,11 +154,11 @@
                                             align="center"
                                             prop="mingchengchicun"
                                             label="名称尺寸"
-                                            width="260">
+                                            width="210">
                                             <template slot-scope="scope">
                                                 <input
                                                     v-model="scope.row.mingchengchicun"
-                                                    style="width:300px"/>
+                                                    style="width:210px"/>
                                             </template>
                                         </el-table-column>
                                         <el-table-column
@@ -253,10 +253,11 @@
                                             align="center"
                                             prop="lingqunum"
                                             label="领取数量"
-                                            width="50">
+                                            width="90">
                                             <template slot-scope="scope">
                                                 <input
-                                                    v-model="scope.row.beizhu"
+                                                    v-model="scope.row.lingqunum"
+                                                    type="number"
                                                     style="width:80px"/>
                                             </template>
                                         </el-table-column>
