@@ -124,7 +124,7 @@
             loadingShowData(data) {
                 let that = this;
                 axios.all([
-                    axios.post(" " + url + "/sys/showTableTitle", {"name": "zhuwenjinwuquejianchaxun"}),
+                    axios.post(" " + url + "/sys/showTableTitle", {"name": "zwjwcx"}),
                     axios.post(" " + url + "/wuliao/jinwuZhuwenpinList", {"pici": data})
                 ])
                     .then(axios.spread(function (title, table) {
