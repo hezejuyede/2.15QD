@@ -460,7 +460,7 @@
             loadingShowData(data) {
                 let that = this;
                 axios.all([
-                    axios.post(" " + url + "/sys/showTableTitle", {"name": "tuodanjinwu"}),
+                    axios.post(" " + url + "/sys/showTableTitle", {"name": "tuodanjinwuchukuchaxun"}),
                     axios.post(" " + url + "/wuliao/tuodanchuku/tuodanjinwuList", {"times": data})
                 ])
                     .then(axios.spread(function (title, table) {
