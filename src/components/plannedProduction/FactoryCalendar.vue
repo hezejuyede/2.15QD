@@ -32,8 +32,10 @@
                     <div class="calendarDiv">
                         <ele-calendar
                             :defaultValue="monthTime"
+                            value-format="yyyy-MM"
                             :render-content="renderContent"
                             @pick="pick"
+                            @date-change="dateChange"
                             border
                             currentmonth
                             :data="datedef"
@@ -43,7 +45,6 @@
 
                 </div>
             </div>
-
         </div>
         <!-- 编辑弹出框 -->
         <el-dialog title="编辑日历" :visible.sync="editVisible" width="40%">
@@ -109,6 +110,7 @@
 
                 cols: [],
                 tableData: [],
+                dateArr:[],
                 editVisible: false,
                 datedef:[],
                 prop:'date',
@@ -164,27 +166,36 @@
                     .then(axios.spread(function (title, table) {
                         that.cols = title.data;
                         that.tableData = table.data;
+                        let data = [];
+                        for (let i=0;i<that.tableData.length;i++){
+                            let curDate =that.tableData[i].curDate;
+                            let date =curDate.substr(8,1);
+                            if(date==="0"){
+                                let dateA =curDate.substr(9,1);
+                                let json={
+                                    date:parseInt(dateA),
+                                    working:that.tableData[i].working,
+                                };
+                                data.push(json)
+                            }
+                            else {
+                                let dateB =curDate.substr(8,2);
+                                let json={
+                                    date:parseInt(dateB),
+                                    working:that.tableData[i].working,
+                                };
+                                data.push(json)
+                            }
+                        }
+                        that.dateArr = data;
                     }));
             },
 
 
-            //进行人员查询
+            //进行查询
             doSearch() {
+                this.monthTime = this.time;
                 this.loadingShowData(this.time);
-            },
-
-            //双击点击行内编辑
-            edit(row, column, cell, event) {
-                this.editVisible = true;
-                this.id = row.id;
-                axios.post(" " + url + "/sysconfig/getCalendarDetail", {"id": this.id})
-                    .then((res) => {
-                        this.working = res.data.data.working;
-                        this.dayTime = res.data.data.curDate;
-                    })
-                    .catch((err) => {
-                        console.log(err)
-                    });
             },
 
             // 保存编辑
@@ -219,69 +230,92 @@
             //改变月份
             changeMonth(time){
                 this.monthTime=time;
+                this.loadingShowData(time);
+            },
+            //日期改变
+            dateChange(data){
+                this.loadingShowData(data);
             },
 
-            pick(){
-
+            //点击日期
+            pick(data, event, row, dome) {
+                this.monthTime = this.time;
+                this.editVisible = true;
+                let time;
+                if (row.text <= 9) {
+                    time = data + "-" + 0 + row.text;
+                }
+                else {
+                    time = data + "-" + row.text;
+                }
+                this.dayTime = time;
+                for (let i = 0; i < this.tableData.length; i++) {
+                    if (this.tableData[i].curDate === this.dayTime) {
+                        this.id = this.tableData[i].id;
+                    }
+                }
             },
+
+            //自定义日历内容
             renderContent(h,parmas) {
-                console.log(this.tableData)
                 const loop = data => {
-                    console.log(data.defvalue)
-                    if (data.defvalue.column == 6) {
+                    let json = {};
+                    for (let i = 0; i < this.dateArr.length; i++) {
+                        if(this.dateArr[i].date === data.defvalue.text){
+                            json = {
+                                Lunar: data.defvalue.Lunar,
+                                column: data.defvalue.column,
+                                disabled: data.defvalue.disabled,
+                                row: data.defvalue.row,
+                                text: data.defvalue.text,
+                                type: data.defvalue.type,
+                                value: data.defvalue.value,
+                                working: this.dateArr[i].working
+                            };
+                        }
+                    }
+                    data.defvalue = json;
+                    if (data.defvalue.working === 1) {
                         return data.defvalue.value ? (
                             <div class="flex2 selected">
-                            {data.defvalue.text}
-                    <span>休息日</span>
+                            {data.defvalue.text}号:
+                    <span>上班日</span>
                         </div>
                     ) : (
                         <div class="flex2">
-                            {data.defvalue.text}
-                    <span>休息日</span>
+                            {data.defvalue.text}号:
+                    <span>上班日</span>
                         </div>
                     )
                     }
-                    else if (data.defvalue.column == 0) {
+                    else if (data.defvalue.working === 2) {
                         return data.defvalue.value ? (
-                            <div class="flex2 selected">
-                            {data.defvalue.text}
-                    <span>休息日</span>
-                        </div>
+                            <div style="background: #00CCFF;color:#ffffff">
+                            {data.defvalue.text}号:
+                            <span >出图日</span>
+                            </div>
                     ) : (
-                        <div class="flex2">
-                            {data.defvalue.text}
-                    <span>休息日</span>
+                        <div style="background: #00CCFF;color:#ffffff">
+                            {data.defvalue.text}号:
+                            <span>出图日</span>
                         </div>
                     )
                     }
-                    else {
+                    else if (data.defvalue.working === 0){
                         return data.defvalue.value ? (
-                            <div class="flex2 selected">
-                            {data.defvalue.text}
-                    <span class="flex2">工作日</span>
-                        </div>
+                            <div>
+                            {data.defvalue.text}号:
+                            <span>休息日</span>
+                            </div>
                     ) : (
-                        <div class="flex2">
-                            {data.defvalue.text}
-                    <span >工作日</span>
+                        <div>
+                        {data.defvalue.text}号:
+                        <span >休息日</span>
                         </div>
                     )
                     }
-                }
+                };
                 return <div style="min-height:60px;">{loop(parmas)}</div>
-            },
-
-            //根据状态显示不同颜色
-            tableRowClassName({row, rowIndex}) {
-                if (row.working === 0) {
-                    return 'F0-row';
-                }
-                else if (row.working === 1) {
-                    return 'lan';
-                }
-                else if (row.working === 2) {
-                    return 'lv';
-                }
             },
 
         }
@@ -326,11 +360,6 @@
             }
 
 
-        }
-        .flex2{
-            width: 100px;
-            height: 100px;
-            background-color: #EB7347;
         }
     }
 </style>
