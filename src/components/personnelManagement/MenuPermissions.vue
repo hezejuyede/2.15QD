@@ -39,7 +39,7 @@
                               :data="tables"
                               :header-cell-style="{background:'#A1D0FC',color:'rgba(0, 0, 0, 0.8)',fontSize:'20px'}"
                               border
-                              height="400"
+                              :height="this.tableHeight"
                               @row-dblclick="edit"
                               highlight-current-row
                               style="width: 98%;margin: auto">
@@ -108,6 +108,7 @@
 
 
                 name: '',
+                tableHeight:Number,
 
             }
         },
@@ -142,6 +143,7 @@
                     this.$router.push("/")
                 }
                 else {
+                    this.setTableHeight();
                     let that = this;
                     axios.all([
                         axios.post(" " + url + "/sysconfig/deptList"),
@@ -151,6 +153,18 @@
                             that.loadingShowData();
                         }));
                 }
+            },
+            //根据屏幕设置Table高度
+            setTableHeight() {
+                if (/Android|webOS|iPhone|iPod|BlackBerry/i.test(navigator.userAgent)) {
+                    var H = window.screen.height;
+                    this.tableHeight = H - 300 + "px";
+                }
+                else {
+                    var h = document.body.clientHeight;
+                    this.tableHeight = h - 300 + "px";
+                }
+
             },
 
             //瞬间加载数据
