@@ -53,6 +53,7 @@
                           :data="tableData"
                           :header-cell-style="{background:'#f7f7f7',color:'rgba(0, 0, 0, 1)',fontSize:'14px'}"
                           border
+                          :height="this.tableHeight"
                           highlight-current-row
                           @cell-click="clickTable"
                           style="width: 98%;margin: auto">
@@ -149,7 +150,8 @@
                 batch:"",
 
 
-                examineTime:""
+                examineTime:"",
+                tableHeight:Number,
             }
         },
         components: {Modal},
@@ -169,6 +171,22 @@
                 if (userInfo === null) {
                     this.$router.push("/")
                 }
+                else {
+                    this.setTableHeight();
+                }
+            },
+
+            //根据屏幕设置Table高度
+            setTableHeight() {
+                if (/Android|webOS|iPhone|iPod|BlackBerry/i.test(navigator.userAgent)) {
+                    var H = window.screen.height;
+                    this.tableHeight = H - 300 + "px";
+                }
+                else {
+                    var h = document.body.clientHeight;
+                    this.tableHeight = h - 300 + "px";
+                }
+
             },
 
 

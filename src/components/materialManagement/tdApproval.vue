@@ -53,7 +53,7 @@
                               :data="tables"
                               :header-cell-style="{background:'#A1D0FC',color:'rgba(0, 0, 0, 0.8)',fontSize:'14px'}"
                               border
-                              height="450"
+                              :height="this.tableHeight"
                               @select-all="selectAll"
                               @select="selectList"
                               highlight-current-row
@@ -427,6 +427,8 @@
                 zuoyezhe:"",
                 roleid:"",
 
+                tableHeight:Number,
+
                 approvalState:"1",
                 approvalStateOptions:[{"name":"待审批","index":"1"},{"name":"审批通过","index":"2"}]
 
@@ -472,9 +474,21 @@
                     const info = JSON.parse(userInfo);
                     this.zuoyezhe = info.username;
                     this.roleid = info.roleid;
-
+                    this.setTableHeight();
                     this.loadingShowData(this.examineTime,this.approvalState,this.roleid);
                 }
+            },
+            //根据屏幕设置Table高度
+            setTableHeight() {
+                if (/Android|webOS|iPhone|iPod|BlackBerry/i.test(navigator.userAgent)) {
+                    var H = window.screen.height;
+                    this.tableHeight = H - 300 + "px";
+                }
+                else {
+                    var h = document.body.clientHeight;
+                    this.tableHeight = h - 300 + "px";
+                }
+
             },
 
             //瞬间加载数据
