@@ -103,7 +103,7 @@
                     :data="tableData"
                     :header-cell-style="{background:'#A1D0FC',color:' rgba(0, 0, 0, 0.8)',fontSize:'14px'}"
                     border
-                    height="400"
+                    :height="this.tableHeight"
                     @row-click="clickTable"
                     style="width: 98%;margin: 0 auto">
                     <el-table-column
@@ -281,6 +281,7 @@
 
                 chuLiType: "2",
                 chuLiTypeOptions: [{"name": "已处理", "id": "1"}, {"name": "未处理", "id": "2"}],
+                tableHeight:Number,
             }
         },
         components: {Modal},
@@ -301,6 +302,7 @@
                     this.$router.push("/")
                 }
                 else {
+                    this.setTableHeight();
                     let Info = JSON.parse(userInfo);
                     this.username = Info.username;
                     let that = this;
@@ -320,6 +322,18 @@
                             that.loadingShowData(that.gxType, that.ycType, that.chuLiType, that.pc)
                         }));
                 }
+            },
+            //根据屏幕设置Table高度
+            setTableHeight() {
+                if (/Android|webOS|iPhone|iPod|BlackBerry/i.test(navigator.userAgent)) {
+                    var H = window.screen.height;
+                    this.tableHeight = H - 330 + "px";
+                }
+                else {
+                    var h = document.body.clientHeight;
+                    this.tableHeight = h - 330 + "px";
+                }
+
             },
 
 
