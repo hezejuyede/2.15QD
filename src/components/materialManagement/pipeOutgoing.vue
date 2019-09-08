@@ -125,7 +125,7 @@
                 let that = this;
                 axios.all([
                     axios.post(" " + url + "/sys/showTableTitle", {"name": "guandiaodanchaxun"}),
-                    axios.post(" " + url + "/wuliao/jinwuZhuwenpinList", {"pici": data})
+                    axios.post(" " + url + "/wuliao/guandiaodan/list", {"pici": data})
                 ])
                     .then(axios.spread(function (title, table) {
                         that.cols = title.data;
