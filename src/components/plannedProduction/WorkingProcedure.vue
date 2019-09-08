@@ -41,7 +41,7 @@
                               :data="tables"
                               :header-cell-style="{background:'#A1D0FC',color:'rgba(0, 0, 0, 0.8)',fontSize:'20px'}"
                               border
-                              height="450"
+                              :height="this.tableHeight"
                               @select="selectList"
                               @row-dblclick="editWorkStation"
                               highlight-current-row
@@ -105,6 +105,7 @@
                 <el-button type="primary" @click="doAddWorkStation" style="height:30px;width:80px">确 定</el-button>
             </span>
             </el-dialog>
+
             <!-- 编辑弹出框 -->
             <el-dialog title="编辑工序" :visible.sync="editVisible" width="60%">
                 <el-form ref="form"  label-width="100px">
@@ -154,6 +155,7 @@
                 <el-button type="primary" @click="saveEdit" style="height:30px;width:80px">确 定</el-button>
             </span>
             </el-dialog>
+
             <!-- 删除提示框 -->
             <el-dialog title="删除工序" :visible.sync="delVisible" width="300px" center>
                 <div class="del-dialog-cnt">删除不可恢复，是否确定删除？</div>
@@ -205,7 +207,8 @@
                 line: '',
                 shangxian:"",
                 xiaxian:"",
-                lineOptions:[]
+                lineOptions:[],
+                tableHeight:Number,
 
             }
         },
@@ -241,7 +244,21 @@
                 }
                 else {
                     this.loading();
+                    this.setTableHeight();
                 }
+            },
+
+            //根据屏幕设置Table高度
+            setTableHeight() {
+                if (/Android|webOS|iPhone|iPod|BlackBerry/i.test(navigator.userAgent)) {
+                    var H = window.screen.height;
+                    this.tableHeight = H - 300 + "px";
+                }
+                else {
+                    var h = document.body.clientHeight;
+                    this.tableHeight = h - 300 + "px";
+                }
+
             },
 
             //选择那个一个
@@ -344,6 +361,7 @@
                 }
 
             },
+
             // 确定删除
             deleteRow() {
                 axios.post(" " + url + "/sysconfig/gongxuDel",
@@ -512,9 +530,6 @@
             .table {
                 width: 100%;
                 font-size: 14px;
-            }
-            .red {
-                color: #ff0000;
             }
 
         }

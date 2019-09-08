@@ -8,35 +8,9 @@
         </div>
         <div class="template-content">
             <div class="container">
-               <!-- <div class="handle-box">
-                    <label style="margin-right: 10px">
-                        <span>智能检索工位</span>
-                        <span>:</span>
-                        <el-input v-model="select_word" placeholder="智能检索工位" class="handle-input mr10"></el-input>
-                    </label>
-                    <label style="margin-right: 10px;margin-left: 10px">
-                        <span>工位</span>
-                        <span>:</span>
-                        <el-select
-                            v-model="workStation"
-                            clearable
-                            filterable
-                            allow-create
-                            default-first-option
-                            @change="changeSelect"
-
-                            placeholder="请选择工位">
-                            <el-option
-                                v-for="item in workStationOptions"
-                                :key="item.id"
-                                :label="item.name"
-                                :value="item.id">
-                            </el-option>
-                        </el-select>
-                    </label>
-                </div>-->
-                <div class="handle-div">
-                    <div v-for="(item,index) in dataFH"   :id="item.id" :style="{width: '25%', height: '300px'}" class="fl"></div>
+                <div class="handle-div" ref="handleDiv">
+                    <div v-for="(item,index) in dataFH" :id="item.id" :style="{width: '25%', height: '300px'}"
+                         class="fl"></div>
                 </div>
             </div>
         </div>
@@ -69,7 +43,8 @@
         },
         components: {},
         mounted() {
-            this.drawLine()
+            this.drawLine();
+            this.setTableHeight();
         },
         created() {
             this.getAdminState();
@@ -101,6 +76,22 @@
                         });
                 }
             },
+
+            //根据屏幕设置Table高度
+            setTableHeight() {
+                if (/Android|webOS|iPhone|iPod|BlackBerry/i.test(navigator.userAgent)) {
+                    var H = window.screen.height;
+                    let div = this.$refs.handleDiv;
+                    div.style.height = H - 200 + "px";
+                }
+                else {
+                    var h = document.body.clientHeight;
+                    let div = this.$refs.handleDiv;
+                    div.style.height = h - 200 + "px";
+                }
+
+            },
+
 
             drawLine() {
                 setTimeout(()=>{
@@ -177,7 +168,6 @@
             }
             .handle-div{
                 width: 100%;
-                height: 500px;
                 overflow: auto;
             }
 

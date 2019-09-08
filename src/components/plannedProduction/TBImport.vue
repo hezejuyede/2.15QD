@@ -71,7 +71,7 @@
                                 :key="0"
                                 :header-cell-style="{background:'#A1D0FC',color:'rgba(0, 0, 0, 0.8)',fontSize:'12px'}"
                                 border
-                                height="380"
+                                :height="this.tableHeight"
                                 highlight-current-row
                                 @row-dblclick="showEdit"
                                 style="width: 98%;margin: auto">
@@ -1337,6 +1337,8 @@
                 shenqingren: "",
                 shenqingtime: "",
 
+                tableHeight:Number,
+
             }
         },
         components: {Modal},
@@ -1372,6 +1374,7 @@
                     this.$router.push("/")
                 }
                 else {
+                    this.setTableHeight();
                     let that = this;
                     axios.all([
                         axios.post(" " + url + "/sys/getPiciList"),
@@ -1387,6 +1390,19 @@
                             that.getList()
                         }));
                 }
+            },
+
+            //根据屏幕设置Table高度
+            setTableHeight() {
+                if (/Android|webOS|iPhone|iPod|BlackBerry/i.test(navigator.userAgent)) {
+                    var H = window.screen.height;
+                    this.tableHeight = H - 360 + "px";
+                }
+                else {
+                    var h = document.body.clientHeight;
+                    this.tableHeight = h -360 + "px";
+                }
+
             },
 
             //底部导航跳转

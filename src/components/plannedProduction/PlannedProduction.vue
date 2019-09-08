@@ -99,7 +99,7 @@
         background-color: @color-white;
         .plannedProduction-nav {
             width: 100%;
-            height: 10%;
+            height: 60px;
             .el-menu-demo {
                 display: flex;
                 > div {

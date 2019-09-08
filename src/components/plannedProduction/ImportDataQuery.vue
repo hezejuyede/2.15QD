@@ -59,7 +59,7 @@
                               :data="tableData"
                               :header-cell-style="{background:'#A1D0FC',color:'rgba(0, 0, 0, 0.8)',fontSize:'18px'}"
                               border
-                              height="350"
+                              :height="this.tableHeight"
                               highlight-current-row
                               style="width: 98%;margin: auto">
                         <template v-for="(col ,index) in cols">
@@ -105,7 +105,8 @@
                     }
                 ],
 
-                navBar: []
+                navBar: [],
+                tableHeight:Number,
 
             }
         },
@@ -127,6 +128,7 @@
                     this.$router.push("/")
                 }
                 else {
+                    this.setTableHeight();
                     let that = this;
                     axios.all([
                         axios.post(" " + url + "/sys/getPiciList"),
@@ -147,6 +149,19 @@
                                 }));
                         }));
                 }
+            },
+
+            //根据屏幕设置Table高度
+            setTableHeight() {
+                if (/Android|webOS|iPhone|iPod|BlackBerry/i.test(navigator.userAgent)) {
+                    var H = window.screen.height;
+                    this.tableHeight = H - 380 + "px";
+                }
+                else {
+                    var h = document.body.clientHeight;
+                    this.tableHeight = h - 380 + "px";
+                }
+
             },
 
             //进行查询
