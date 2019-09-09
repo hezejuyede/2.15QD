@@ -22,7 +22,7 @@
                     </label>
                 </div>
                 <div class="operationTab">
-                    <button @click="doSearch">查询</button>
+                    <el-button type="primary" @click="doSearch">查询</el-button>
                 </div>
             </div>
             <div class="loginOutLogContentTable">
@@ -167,11 +167,11 @@
             height: 50px;
             padding-top: 20px;
             padding-left: 20px;
+            border-bottom: 1px solid@color-F0;
         }
         .loginOutLogContent {
-          margin-top: 10px;
             .loginOutLogContentTab {
-                height: 100px;
+                height: 80px;
                 display: flex;
                 .timeTab {
                     flex: 2;
@@ -184,17 +184,9 @@
                     display: flex;
                     align-items: center;
                     justify-content: center;
-                    button {
-                        width: 50%;
+                   .el-button {
+                        width: 180px;
                         height: 35px;
-                        text-align: center;
-                        line-height: 35px;
-                        border: none;
-                        border-radius: 10%;
-                        background-color: @color-blue;
-                        color: @color-white;
-                        font-size: 16px;
-                        margin-left: 5%;
                     }
                 }
             }
