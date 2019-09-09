@@ -294,7 +294,7 @@
                             if (res.data.state === "1") {
                                 this.$message.success(res.data.message);
                                 this.addVisible = false;
-                                this.loadingShowData(this.examineTime,2);
+                                this.loadingShowData(this.examineTime,1);
 
                             }
                             else {

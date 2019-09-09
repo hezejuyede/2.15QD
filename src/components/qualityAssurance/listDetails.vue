@@ -34,8 +34,9 @@
                             </el-option>
                         </el-select>
                     </label>
-                    <el-button type="primary" icon="delete" class="handle-del mr10" @click="showAddPerson">新增记录</el-button>
-                    <el-button type="danger" icon="delete" class="handle-del mr10" @click="deletePerson">删除记录</el-button>
+                    <el-button type="success"   @click="doSearch">查询记录</el-button>
+                    <el-button type="primary"   @click="showAddPerson">新增记录</el-button>
+                    <el-button type="danger"    @click="deletePerson">删除记录</el-button>
                 </div>
                 <div class="">
                     <el-table class="tb-edit"
@@ -279,6 +280,25 @@
                         that.cols = title.data;
                         that.tableData = table.data;
                     }));
+            },
+
+            doSearch(){
+                if(this.select){
+                    this.loadingShowData(this.select);
+                }
+                else {
+                    this.message = "请选择工位";
+                    this.HideModal = false;
+                    const that = this;
+
+                    function a() {
+                        that.message = "";
+                        that.HideModal = true;
+                    }
+
+                    setTimeout(a, 2000);
+                }
+
             },
 
             //下拉查询

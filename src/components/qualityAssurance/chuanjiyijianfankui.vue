@@ -295,7 +295,6 @@
                                 this.$message.success(res.data.message);
                                 this.addVisible = false;
                                 this.loadingShowData(this.examineTime,2);
-
                             }
                             else {
                                 this.$message.warning(res.data.message);
