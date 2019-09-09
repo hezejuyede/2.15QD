@@ -626,13 +626,12 @@
             height: 50px;
             padding-top: 20px;
             padding-left: 20px;
+            border-bottom: 1px solid @color-background-d;
         }
         .productionContent {
             .productionContentTab {
                 height: 80px;
                 display: flex;
-                border-top: 1px solid @color-background-d;
-                border-bottom: 1px solid @color-background-d;
                 .batchTab1{
                     flex:1;
                     display: flex;
@@ -663,7 +662,6 @@
                 }
             }
             .productionContentTable{
-                padding-top: 10px;
             }
         }
     }

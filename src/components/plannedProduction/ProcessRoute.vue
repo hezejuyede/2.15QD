@@ -1003,7 +1003,6 @@
             padding-left: 20px;
         }
         .WorkingProcedure-content {
-            padding-top: 10px;
             .handle-box {
                 height: 80px;
                 line-height: 80px;

@@ -327,11 +327,11 @@
             setTableHeight() {
                 if (/Android|webOS|iPhone|iPod|BlackBerry/i.test(navigator.userAgent)) {
                     var H = window.screen.height;
-                    this.tableHeight = H - 330 + "px";
+                    this.tableHeight = H - 300 + "px";
                 }
                 else {
                     var h = document.body.clientHeight;
-                    this.tableHeight = h - 330 + "px";
+                    this.tableHeight = h - 300 + "px";
                 }
 
             },
@@ -420,11 +420,13 @@
             height: 50px;
             padding-top: 20px;
             padding-left: 20px;
+            border-bottom: 1px solid @color-F0;
         }
         .exceptionQueryContent {
             .exceptionQueryContentTab {
-                height: 100px;
+                height: 80px;
                 display: flex;
+
                 .selectTab {
                     flex: 1;
                     display: flex;

@@ -59,7 +59,7 @@
                         filterable
                         allow-create
                         default-first-option
-                        placeholder="输入或选择生产线">
+                        placeholder="输入选择生产线">
                         <el-option
                             v-for="item in scxOptions"
                             :key="item.indexno"
@@ -745,6 +745,7 @@
             height: 50px;
             padding-top: 20px;
             padding-left: 20px;
+            border-bottom: 1px solid @color-F0;
         }
         .importTitle {
             padding-left: 1%;
@@ -781,7 +782,6 @@
             }
         }
         .productionContentTable {
-            margin-top: 20px;
         }
         .select {
             margin-left: 2%;
