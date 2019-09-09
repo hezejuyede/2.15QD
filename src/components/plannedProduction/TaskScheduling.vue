@@ -322,7 +322,7 @@
                 }
 
             },
-            
+
             //选择那个一个
             selectList(val) {
                 if (val.length) {
