@@ -55,7 +55,7 @@
                         </template>
                     </el-table>
                 </div>
-                <div class="" style="display: flex;align-items: center;justify-content: center;margin-top: 10px">
+            <!--    <div class="" style="display: flex;align-items: center;justify-content: center;margin-top: 10px">
                     <el-pagination
                         background
                         layout="prev, pager, next"
@@ -64,7 +64,7 @@
                         @prev-click="prevClick"
                         :total="pageNum">
                     </el-pagination>
-                </div>
+                </div>-->
             </div>
 
             <Modal :msg="message"
@@ -108,6 +108,7 @@
                 <el-button type="primary" @click="doReplenishment" style="height:30px;width:80px">确 定</el-button>
             </span>
         </el-dialog>
+
     </div>
 </template>
 <script type="text/ecmascript-6">
@@ -125,14 +126,15 @@
                 cols: [],
                 tableData: [],
                 listData: [],
+                buhuoState:[],
                 batch: "",
                 batchOptions: [],
                 qjNumber: "",
                 select_word: '',
                 addVisible: false,
                 replenishmentVisible: false,
-                replenishment:"",
-                replenishmentOptions:[{"name": "已补货", "id": "2"}, {"name": "未补货", "id": "1"}],
+                replenishment:"2",
+                replenishmentOptions:[{"name": "已补货", "id": "2"}],
                 page:1,
                 pageNum:100,
 
@@ -236,14 +238,20 @@
             selectList(val) {
                 if (val.length) {
                     let data = [];
+                    let state = [];
                     for (let i = 0; i < val.length; i++) {
                         let a = val[i].id;
-                        data.push(a)
+                        let b = val[i].buhuostatus;
+                        data.push(a);
+                        state.push(b);
                     }
                     this.listData = data;
+                    this.buhuoState=state;
+                    console.log(this.buhuoState)
                 }
                 else {
-                    this.listData=[];
+                    this.listData = [];
+                    this.buhuoState=[];
                 }
             },
 
@@ -251,14 +259,20 @@
             selectAll(val) {
                 if (val.length) {
                     let data = [];
+                    let state = [];
                     for (let i = 0; i < val.length; i++) {
                         let a = val[i].id;
-                        data.push(a)
+                        let b = val[i].buhuostatus;
+                        data.push(a);
+                        state.push(b);
                     }
                     this.listData = data;
+                    this.buhuoState=state;
+                    console.log(this.buhuoState)
                 }
                 else {
                     this.listData = [];
+                    this.buhuoState=[];
                 }
             },
 
@@ -312,8 +326,12 @@
             //显示补货弹框
             showReplenishment() {
                 if (this.listData.length) {
-                    this.replenishmentVisible = true;
-                    this.replenishment="";
+                    if(this.listData.length === 1 && this.buhuoState[0]==="1"){
+                        this.replenishmentVisible = true;
+                    }
+                    else {
+                        this.$message.warning("缺货才能补货");
+                    }
                 }
                 else {
                     this.message = "请勾选要补货的清单";
@@ -334,7 +352,7 @@
                 if (this.replenishment) {
                     axios.post(" " + url + "/wuliao/markZhuwenpinBuhuo",
                         {
-                            "id": this.replenishment
+                            "id": this.listData[0]
                         }
                     )
                         .then((res) => {
