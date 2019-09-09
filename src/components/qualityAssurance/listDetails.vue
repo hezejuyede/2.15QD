@@ -2,7 +2,7 @@
     <div class="dictionaryMaintenance">
         <div class="crumbs">
             <el-breadcrumb separator="/">
-                <el-breadcrumb-item>系统管理</el-breadcrumb-item>
+                <el-breadcrumb-item>质量管理</el-breadcrumb-item>
                 <el-breadcrumb-item>作业记录</el-breadcrumb-item>
             </el-breadcrumb>
         </div>
@@ -24,7 +24,6 @@
                             allow-create
                             @change="changeSelect"
                             default-first-option
-
                             placeholder="请选择工位">
                             <el-option
                                 v-for="item in selectOptions"
@@ -110,6 +109,7 @@
                 <el-button type="primary" @click="doAddPerson" style="height:30px;width:80px">确 定</el-button>
             </span>
         </el-dialog>
+
         <!-- 编辑弹出框 -->
         <el-dialog title="编辑作业质量记录" :visible.sync="editVisible" width="60%">
             <el-form ref="form" label-width="100px">
@@ -161,6 +161,7 @@
                 <el-button type="primary" @click="saveEdit" style="height:30px;width:80px">确 定</el-button>
             </span>
         </el-dialog>
+
         <!-- 删除提示框 -->
         <el-dialog title="删除作业质量记录" :visible.sync="delVisible" width="300px" center>
             <div class="del-dialog-cnt">删除不可恢复，是否确定删除？</div>
@@ -169,6 +170,7 @@
                 <el-button type="primary" @click="deleteRow" style="height:30px;width:80px">确 定</el-button>
             </span>
         </el-dialog>
+
         <Modal :msg="message"
                :isHideModal="HideModal"></Modal>
     </div>

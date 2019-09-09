@@ -402,6 +402,7 @@
 
                 }
             },
+
             //根据屏幕设置Table高度
             setTableHeight() {
                 if (/Android|webOS|iPhone|iPod|BlackBerry/i.test(navigator.userAgent)) {
