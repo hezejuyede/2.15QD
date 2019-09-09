@@ -307,11 +307,9 @@
                                     console.log(err)
                                 })
                         }));
-
-
-                  this.loading()
                 }
             },
+
             //根据屏幕设置Table高度
             setTableHeight() {
                 if (/Android|webOS|iPhone|iPod|BlackBerry/i.test(navigator.userAgent)) {
@@ -324,6 +322,7 @@
                 }
 
             },
+            
             //选择那个一个
             selectList(val) {
                 if (val.length) {
@@ -568,12 +567,7 @@
                         let a = this.routeData[i].stationname;
                         data.push(a)
                     }
-
-                    axios.post(" " + url + "/shengchan/updateGongyiluxian",
-                        {
-                            "ids": data,
-                            "id":this.id
-                        }
+                    axios.post(" " + url + "/shengchan/updateGongyiluxian", {"ids": data, "id":this.id}
                     )
                         .then((res) => {
                             if (res.data === "1") {

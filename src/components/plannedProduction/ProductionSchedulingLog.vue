@@ -35,9 +35,6 @@
                               :header-cell-style="{background:'#A1D0FC',color:'rgba(0, 0, 0, 0.8)',fontSize:'20px'}"
                               border
                               :height="this.tableHeight"
-                              @select-all="selectAll"
-                              @select="selectList"
-                              @row-dblclick="edit"
                               highlight-current-row
                               style="width: 98%;margin: auto">
                         <el-table-column
