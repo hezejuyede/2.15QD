@@ -10,9 +10,9 @@
             <div class="container">
                 <div class="handle-box">
                     <label style="margin-right: 10px">
-                        <span>智能检索管子编号</span>
+                        <span>智能检索配送信息</span>
                         <span>:</span>
-                        <el-input v-model="select_word" placeholder="智能检索管子编号" class="handle-input mr10"></el-input>
+                        <el-input v-model="select_word" placeholder="智能检索配送信息" class="handle-input mr10"></el-input>
                     </label>
                     <label style="margin-right: 10px;margin-left: 10px">
                         <span>选择批次</span>
@@ -33,7 +33,7 @@
                         </el-select>
                     </label>
                     <el-button type="primary" @click="doSearch">查询</el-button>
-                    <el-button type="success" @click="showDelete">配送</el-button>
+                    <el-button type="success" @click="showReplenishment">已配材</el-button>
                 </div>
                 <div class="">
                     <el-table class="tb-edit"
@@ -60,22 +60,34 @@
             <Modal :msg="message"
                    :isHideModal="HideModal"></Modal>
         </div>
-        <!--查看图纸 -->
-        <el-dialog title="一品图查看" :visible.sync="drawingVisible" :fullscreen="true" :center="true">
-            <div class="container">
-                <div class="drawingImg" style="width: 100%;height: 100%">
-                    <img :src="url" alt="" style="display:block;width: 100%;height: 100%">
-                </div>
-            </div>
-        </el-dialog>
-        <!-- 删除提示框 -->
-        <el-dialog title="配送" :visible.sync="delVisible" width="300px" center>
-            <div class="del-dialog-cnt">配送不可恢复，是否确定配送？</div>
+
+
+        <!--配材出框 -->
+        <el-dialog title="配材" :visible.sync="replenishmentVisible" width="40%">
+            <el-form ref="form"  label-width="100px">
+                <el-form-item label="是否配材">
+                    <el-select
+                        v-model="replenishment"
+                        clearable
+                        filterable
+                        allow-create
+                        default-first-option
+                        placeholder="请选择是否配材">
+                        <el-option
+                            v-for="item in replenishmentOptions"
+                            :key="item.id"
+                            :label="item.name"
+                            :value="item.id">
+                        </el-option>
+                    </el-select>
+                </el-form-item>
+            </el-form>
             <span slot="footer" class="dialog-footer">
-                <el-button @click="delVisible = false" style="height:30px;width:80px">取 消</el-button>
-                <el-button type="primary" @click="deleteRow" style="height:30px;width:80px">确 定</el-button>
+                <el-button @click="replenishmentVisible = false" style="height:30px;width:80px">取 消</el-button>
+                <el-button type="primary" @click="doReplenishment" style="height:30px;width:80px">确 定</el-button>
             </span>
         </el-dialog>
+
     </div>
 </template>
 <script type="text/ecmascript-6">
@@ -89,17 +101,20 @@
             return {
                 message: '',
                 HideModal: true,
-                url:"",
-                cols: [],
-                tableData: [],
+
                 listData: [],
+
                 batch: "",
                 batchOptions: [],
-                jwAllNumber: "",
-                sjNumber: "",
+
+                cols: [],
+                tableData: [],
+
                 select_word: '',
-                delVisible: false,
-                drawingVisible:false
+
+                replenishmentVisible:false,
+                replenishment: "2",
+                replenishmentOptions: [{"name": "已配材", "id": "2"}]
 
             }
         },
@@ -164,7 +179,7 @@
                 let that = this;
                 axios.all([
                     axios.post(" " + url + "/sys/showTableTitle", {"name": "tuodanjinwupeisonggenzong"}),
-                    axios.post(" " + url + "/wuliao/jinwuZhuwenpinList", {"time": data})
+                    axios.post(" " + url + "/wuliao/jinwuZhuwenpinList", {"pici": data})
                 ])
                     .then(axios.spread(function (title, table) {
                         that.cols = title.data;
@@ -172,56 +187,6 @@
                     }));
             },
 
-            //双击点击行内编辑
-            edit(row, column, cell, event) {
-                if(row.id){
-                    let pici = "";
-                    let yiguanhao = "";
-                    let code = "";
-                    for (let i = 0; i < this.tableData.length; i++) {
-                        if (row.id === this.titleData[i].id) {
-                            pici = this.titleData[i].pici;
-                            yiguanhao = this.titleData[i].yiguanhao;
-                            code = this.titleData[i].daihao;
-                        }
-                    }
-                    axios.post(" " + url + "/yipintu/getYipintuImg.html", {"pici": pici, "yiguanhao": yiguanhao, "code": code})
-                        .then((res) => {
-                            if (res.data.imgurl) {
-                                this.editVisible = true;
-                                this.url = url + res.data.imgurl;
-                                this.drawingVisible = true;
-                            }
-                            else {
-                                this.message = "没有查到一品图";
-                                this.HideModal = false;
-                                const that = this;
-
-                                function a() {
-                                    that.message = "";
-                                    that.HideModal = true;
-                                }
-
-                                setTimeout(a, 2000);
-                            }
-                        })
-                        .catch((err) => {
-                            console.log(err)
-                        })
-                }
-                else {
-                    this.message = "没有查到ID";
-                    this.HideModal = false;
-                    const that = this;
-
-                    function a() {
-                        that.message = "";
-                        that.HideModal = true;
-                    }
-
-                    setTimeout(a, 2000);
-                }
-            },
 
             //根据批次查询
             doSearch() {
@@ -242,7 +207,6 @@
                 }
 
             },
-
 
             //选择那个一个
             selectList(val) {
@@ -274,13 +238,18 @@
                 }
             },
 
-            //显示配送
-            showDelete() {
+            //显示补货弹框
+            showReplenishment() {
                 if (this.listData.length) {
-                    this.delVisible = true;
+                    if(this.listData.length === 1){
+                        this.replenishmentVisible = true;
+                    }
+                    else {
+                        this.$message.warning("只能选一个");
+                    }
                 }
                 else {
-                    this.message = "请勾选要配送的物料";
+                    this.message = "请勾选";
                     this.HideModal = false;
                     const that = this;
 
@@ -293,29 +262,32 @@
                 }
             },
 
-            //进行配送
-            deleteRow() {
-                axios.post(" " + url + "/padShow/buttonDel",
-                    {
-                        "ids": this.listData,
-                    }
-                )
-                    .then((res) => {
-                        if (res.data.state === "1") {
-                            this.$message.success("配送成功");
-                            this.delVisible = false;
-                            this.loadingShowData(this.batch);
+            //进行补货
+            doReplenishment() {
+                if (this.replenishment) {
+                    axios.post(" " + url + "/wuliao/markZhuwenpinBuhuo",
+                        {
+                            "id": this.listData[0]
                         }
-                        else {
-                            this.$message.warning("配送失败");
-                        }
-                    })
-                    .catch((err) => {
-                        console.log(err)
-                    })
+                    )
+                        .then((res) => {
+                            if (res.data.state === "1") {
+                                this.$message.success(res.data.message);
+                                this.replenishmentVisible= false;
+                                this.loadingShowData(this.batch)
+                            }
+                            else {
+                                this.$message.warning(res.data.message);
+                            }
+                        })
+                        .catch((err) => {
+                            console.log(err)
+                        })
+                }
+                else {
+                    this.$message.warning(`输入不能为空`);
+                }
             },
-
-
 
         }
     }
@@ -342,7 +314,7 @@
                     display: inline-block;
                 }
                 .el-button {
-                    width: 100px;
+                    width: 150px;
                     height: 30px;
                 }
             }
@@ -354,10 +326,6 @@
                 width: 100%;
                 font-size: 14px;
             }
-            .red {
-                color: #ff0000;
-            }
-
         }
     }
 

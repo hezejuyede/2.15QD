@@ -10,7 +10,7 @@
             <div class="container">
                 <div class="handle-box">
                     <label style="margin-right: 5px">
-                        <span>智能检索托单金物出库</span>
+                        <span>托单金物出库</span>
                         <span>:</span>
                         <el-input v-model="select_word" placeholder="智能托单金物出库"  style="width: 150px"  class="handle-input mr10"></el-input>
                     </label>
@@ -39,7 +39,7 @@
                 <div class="">
                     <el-table class="tb-edit"
                               :data="tables"
-                              :header-cell-style="{background:'#A1D0FC',color:'rgba(0, 0, 0, 0.8)',fontSize:'20px'}"
+                              :header-cell-style="{background:'#A1D0FC',color:'rgba(0, 0, 0, 0.8)',fontSize:'14px'}"
                               border
                               :height="this.tableHeight"
                               @row-dblclick="edit"

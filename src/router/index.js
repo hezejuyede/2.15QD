@@ -81,6 +81,9 @@ import MaterialManagement from '../components/materialManagement/materialManagem
 import ProductionOfGoldSheets from '../components/materialManagement/productionOfGoldSheets.vue'
 
 //托单金物审批
+import tuodanchaxuanyudayin from '../components/materialManagement/tuodanchaxuanyudayin.vue'
+
+//托单金物审批
 import tdApproval from '../components/materialManagement/tdApproval.vue'
 
 //出库查询（托单金物）
@@ -574,6 +577,13 @@ export default new Router({
                             component: tdApproval,
                             meta: {title: '脱单金物审批'}
                         },
+
+                        {
+                            path: 'tdquery',
+                            component: tuodanchaxuanyudayin,
+                            meta: {title: '脱单金物查询与打印'}
+                        },
+
                         {
                             path: 'tuodanjinwuchukujilv',
                             component: tuodanjinwuchukujilv,

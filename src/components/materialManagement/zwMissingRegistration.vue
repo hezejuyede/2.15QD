@@ -132,7 +132,7 @@
                 qjNumber: "",
                 select_word: '',
                 addVisible: false,
-                replenishmentVisible: false,
+                replenishmentVisible:false,
                 replenishment:"2",
                 replenishmentOptions:[{"name": "已补货", "id": "2"}],
                 page:1,
