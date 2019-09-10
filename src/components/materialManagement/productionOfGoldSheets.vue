@@ -738,7 +738,7 @@
 
                 select_word: '',
                 effective:"",
-                effectiveOptions:[{"name": "有效", "id": "1"}, {"name": "无效", "id": "2"}],
+                effectiveOptions:[{"name": "有效", "id": 1}, {"name": "无效", "id": 0}],
 
                 addVisible: false,
                 editVisible: false,
@@ -792,7 +792,7 @@
                     const info = JSON.parse(userInfo);
                     this.zuoyezhe = info.username;
                     this.setTableHeight();
-                    this.loadingShowData(this.examineTime);
+                    this.loadingShowData(this.examineTime,this.effective);
 
                 }
             },
@@ -812,11 +812,11 @@
 
 
             //瞬间加载数据
-            loadingShowData(data) {
+            loadingShowData(data1,data2) {
                 let that = this;
                 axios.all([
                     axios.post(" " + url + "/sys/showTableTitle", {"name": "tuodanjinwu"}),
-                    axios.post(" " + url + "/wuliao/tuodanjinwuList", {"times": data})
+                    axios.post(" " + url + "/wuliao/tuodanjinwuList", {"times": data1,"status":data2})
                 ])
                     .then(axios.spread(function (title, table) {
                         that.cols = title.data;
@@ -847,7 +847,7 @@
                             if (res.data.state === "1") {
                                 this.$message.success(`新增成功`);
                                 this.addVisible = false;
-                                this.loadingShowData(this.examineTime)
+                                this.loadingShowData(this.examineTime,this.effective);
                             }
                             else {
                                 this.$message.warning(`新增失败`);
@@ -876,7 +876,7 @@
             //进行查询
             doSearch() {
                 if (this.examineTime) {
-                    this.loadingShowData(this.examineTime)
+                    this.loadingShowData(this.examineTime,this.effective);
                 }
                 else {
                     this.message = "查询时间不能为空";
@@ -1046,7 +1046,6 @@
             //显示取消保存提示
             cancelEditVisible() {
                 this.cancelVisible = true;
-
             },
 
             //进行取消
@@ -1108,7 +1107,7 @@
                         if (res.data.state === "1") {
                             this.editVisible = false;
                             this.$message.success(`保存成功`);
-                            this.loadingShowData(this.examineTime)
+                            this.loadingShowData(this.examineTime,this.effective);
                         }
                         else {
                             this.$message.warning(`保存失败`);
@@ -1132,7 +1131,7 @@
                         if (res.data.state === "1") {
                             this.editVisible = false;
                             this.$message.success(`提交检图成功`);
-                            this.loadingShowData(this.examineTime)
+                            this.loadingShowData(this.examineTime,this.effective);
                         }
                         else {
                             this.$message.warning(`提交检图失败`);
@@ -1178,7 +1177,7 @@
                         if (res.data.state === "1") {
                             this.zjgzEditVisible = false;
                             this.$message.success(`保存成功`);
-                            this.loadingShowData(this.examineTime)
+                            this.loadingShowData(this.examineTime,this.effective);
                         }
                         else {
                             this.$message.warning(`保存失败`);
@@ -1191,22 +1190,20 @@
 
             //改变选择
             changeEffective() {
-                let arr = [];
-                if (this.effective === "1") {
-                    for (let i = 0; i < this.tableData2.length; i++) {
-                        if (this.tableData2[i].statusStr === "有效") {
-                            arr.push(this.tableData2[i])
-                        }
-                    }
-                    this.tableData = arr;
+                if (this.examineTime) {
+                    this.loadingShowData(this.examineTime,this.effective);
                 }
-                else if (this.effective === "2") {
-                    for (let i = 0; i < this.tableData2.length; i++) {
-                        if (this.tableData2[i].statusStr === "无效") {
-                            arr.push(this.tableData2[i])
-                        }
+                else {
+                    this.message = "查询时间不能为空";
+                    this.HideModal = false;
+                    const that = this;
+
+                    function a() {
+                        that.message = "";
+                        that.HideModal = true;
                     }
-                    this.tableData = arr;
+
+                    setTimeout(a, 2000);
                 }
             }
 
