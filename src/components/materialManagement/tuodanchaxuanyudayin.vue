@@ -503,7 +503,7 @@
                         "quhuaming": data3,
                         "tuhao": data4,
                         "status": 1,
-                        "shenpistatus": "是"
+                        "shenpistatus": "4"
 
                     })
                 ])

@@ -33,6 +33,7 @@
                         </el-select>
                     </label>
                     <el-button type="primary" @click="doSearch">查询</el-button>
+                    <el-button type="warning" @click="viewPicture">查看一品图</el-button>
                     <el-button type="success" @click="showReplenishment">已配材</el-button>
                 </div>
                 <div class="">
@@ -43,7 +44,6 @@
                               :height="this.tableHeight"
                               @select-all="selectAll"
                               @select="selectList"
-                              @row-dblclick="edit"
                               highlight-current-row
                               style="width: 98%;margin: auto">
                         <el-table-column
@@ -55,7 +55,17 @@
                         </template>
                     </el-table>
                 </div>
+
             </div>
+
+            <!--一品图弹出框 -->
+            <el-dialog title="一品图" :visible.sync="editVisible" :fullscreen="true" :center="true">
+                <viewer :images="imgs">
+                    <img v-for="src in imgs" :src="src.url" :key="src.title" style="width: 100%;height: 100%">
+                </viewer>
+            </el-dialog>
+
+
 
             <Modal :msg="message"
                    :isHideModal="HideModal"></Modal>
@@ -113,8 +123,11 @@
                 select_word: '',
 
                 replenishmentVisible:false,
-                replenishment: "2",
-                replenishmentOptions: [{"name": "已配材", "id": "2"}]
+                replenishment: 1,
+                replenishmentOptions: [{"name": "已配材", "id": 1}],
+                editVisible:false,
+                url: "",
+                imgs: [],
 
             }
         },
@@ -161,6 +174,7 @@
                         }));
                 }
             },
+
             //根据屏幕设置Table高度
             setTableHeight() {
                 if (/Android|webOS|iPhone|iPod|BlackBerry/i.test(navigator.userAgent)) {
@@ -179,7 +193,7 @@
                 let that = this;
                 axios.all([
                     axios.post(" " + url + "/sys/showTableTitle", {"name": "tuodanjinwupeisonggenzong"}),
-                    axios.post(" " + url + "/wuliao/jinwuZhuwenpinList", {"pici": data})
+                    axios.post(" " + url + "/wuliao/peisong/peisongList", {"pici": data})
                 ])
                     .then(axios.spread(function (title, table) {
                         that.cols = title.data;
@@ -205,7 +219,6 @@
 
                     setTimeout(a, 2000);
                 }
-
             },
 
             //选择那个一个
@@ -241,8 +254,83 @@
             //显示补货弹框
             showReplenishment() {
                 if (this.listData.length) {
-                    if(this.listData.length === 1){
+                    let status;
+                    for (let i = 0; i < this.tableData.length; i++) {
+                        if (this.tableData[i].id = this.listData[0]) {
+                            status = this.tableData[i].status;
+                        }
+                    }
+                    if (this.listData.length === 1 && status !== 1) {
                         this.replenishmentVisible = true;
+                    }
+                    else if (this.listData.length > 1) {
+                        this.$message.warning("只能选一个");
+                    }
+                    else {
+                        this.$message.warning("已经配材");
+                    }
+                }
+                else {
+                    this.message = "请勾选";
+                    this.HideModal = false;
+                    const that = this;
+
+                    function a() {
+                        that.message = "";
+                        that.HideModal = true;
+                    }
+
+                    setTimeout(a, 2000);
+                }
+            },
+
+
+            //查看一品图
+            viewPicture() {
+                if (this.listData.length) {
+                    if(this.listData.length === 1){
+                        let pc;
+                        let code;
+                        let yiguanhao;
+                        for (let i = 0; i < this.tableData.length; i++) {
+                            if (this.tableData[i].id = this.listData[0]) {
+                                pc = this.tableData[i].pici;
+                                code = this.tableData[i].codeno;
+                                yiguanhao = this.tableData[i].yiguanhao;
+                            }
+                        }
+                        if (pc && code && yiguanhao) {
+                            axios.post(" " + url + "/yipintu/getYipintuImg.html", {
+                                "pici": pc,
+                                "yiguanhao": yiguanhao,
+                                "code": code
+                            })
+                                .then((res) => {
+                                    if (res.data.imgurl) {
+                                        this.editVisible = true;
+                                        this.url = url + res.data.imgurl;
+                                        this.imgs = [{"url": this.url}];
+                                    }
+                                    else {
+                                        this.message = "没有查到一品图";
+                                        this.HideModal = false;
+                                        const that = this;
+
+                                        function a() {
+                                            that.message = "";
+                                            that.HideModal = true;
+                                        }
+
+                                        setTimeout(a, 2000);
+                                    }
+                                })
+                                .catch((err) => {
+                                    console.log(err)
+                                })
+                        }
+                        else {
+                            this.$message.warning("批次，一贯号，code号不能有空");
+                        }
                     }
                     else {
                         this.$message.warning("只能选一个");
@@ -262,19 +350,22 @@
                 }
             },
 
-            //进行补货
+            //进行配材
             doReplenishment() {
                 if (this.replenishment) {
-                    axios.post(" " + url + "/wuliao/markZhuwenpinBuhuo",
+                    axios.post(" " + url + "/wuliao/peisong/updateStatus",
                         {
-                            "id": this.listData[0]
+                            "id": this.listData[0],
+                            "status":this.replenishment
+
                         }
                     )
                         .then((res) => {
                             if (res.data.state === "1") {
                                 this.$message.success(res.data.message);
-                                this.replenishmentVisible= false;
-                                this.loadingShowData(this.batch)
+                                this.replenishmentVisible = false;
+                                this.loadingShowData(this.batch);
+                                this.listData = [];
                             }
                             else {
                                 this.$message.warning(res.data.message);
