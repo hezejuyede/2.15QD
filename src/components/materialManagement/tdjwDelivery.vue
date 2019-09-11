@@ -15,29 +15,17 @@
                         <el-input v-model="select_word" placeholder="智能检索托单金物" class="handle-input mr10"></el-input>
                     </label>
                     <label style="margin-right: 10px;margin-left: 10px">
-                        <span>选择查询时间</span>
-                        <span>:</span>
-                        <el-date-picker
-                            style="width: 230px"
-                            v-model="examineTime"
-                            type="daterange"
-                            start-placeholder="开始日期"
-                            end-placeholder="结束日期"
-                            value-format="yyyy-MM-dd">
-                        </el-date-picker>
-                    </label>
-                    <label style="margin-right: 10px;margin-left: 10px">
-                        <span>配送状态</span>
+                        <span>选择批次</span>
                         <span>:</span>
                         <el-select
-                            v-model="deliveryType"
+                            v-model="batch"
                             clearable
                             filterable
                             allow-create
                             default-first-option
-                            placeholder="请选择状态">
+                            placeholder="请选择批次">
                             <el-option
-                                v-for="item in deliveryTypeOptions"
+                                v-for="item in batchOptions"
                                 :key="item.id"
                                 :label="item.name"
                                 :value="item.id">
@@ -51,9 +39,7 @@
                               :data="tables"
                               :header-cell-style="{background:'#A1D0FC',color:'rgba(0, 0, 0, 0.8)',fontSize:'20px'}"
                               border
-
                               :height="this.tableHeight"
-                              @row-dblclick="edit"
                               highlight-current-row
                               style="width: 98%;margin: auto">
                         <template v-for="(col ,index) in cols">
@@ -62,44 +48,6 @@
                     </el-table>
                 </div>
             </div>
-            <!-- 未配送详细清单 -->
-            <el-dialog title="未到货清单详情" :visible.sync="editVisible" width="80%">
-                <el-form ref="form" label-width="100px">
-                    <el-table
-                        :data="tcData"
-                        :header-cell-style="{background:'#A1D0FC',color:'rgba(0, 0, 0, 0.8)',fontSize:'20px'}"
-                        border
-                        height="400"
-                        @row-dblclick="editPerson"
-                        highlight-current-row
-                        style="width: 98%;margin: auto">>
-                        <el-table-column
-                            prop="zizhname"
-                            align="center"
-                            label="托单号">
-                        </el-table-column>
-                        <el-table-column
-                            prop="username"
-                            align="center"
-                            label="管理区分号">
-                        </el-table-column>
-                        <el-table-column
-                            prop="zizhname"
-                            align="center"
-                            label="行号">
-                        </el-table-column>
-                        <el-table-column
-                            prop="username"
-                            align="center"
-                            label="采购担当">
-                        </el-table-column>
-                    </el-table>
-
-                </el-form>
-                <span slot="footer" class="dialog-footer">
-                <el-button @click="editVisible = false" style="height:30px;width:80px">取 消</el-button>
-            </span>
-            </el-dialog>
 
             <Modal :msg="message"
                    :isHideModal="HideModal"></Modal>
@@ -118,18 +66,15 @@
             return {
                 message: '',
                 HideModal: true,
-                editVisible:false,
 
                 cols: [],
                 tableData: [],
 
-                tcData:[],
-
-                examineTime: "",
+                batch: "",
+                batchOptions: [],
 
                 select_word: '',
-                deliveryType: "1",
-                deliveryTypeOptions: [{"name": "全部", "id": "1"}, {"name": "已送货", "id": "2"}, {"name": "已配材", "id": "3"}, {"name": "未配材", "id": "3"}],
+
                 tableHeight:Number,
 
 
@@ -167,13 +112,15 @@
                 }
                 else {
                     this.setTableHeight();
-                    let time = getNowTime();
-                    let times = [];
-                    for (let i = 0; i < 2; i++) {
-                        times.push(time)
-                    }
-                    this.examineTime = times;
-                    this.loadingShowData(this.examineTime);
+                    let that = this;
+                    axios.all([
+                        axios.post(" " + url + "/sys/getPiciList"),
+                    ])
+                        .then(axios.spread(function (select) {
+                            that.batchOptions = select.data;
+                            that.batch = select.data[0].id;
+                            that.loadingShowData(that.batch);
+                        }));
                 }
             },
             //根据屏幕设置Table高度
@@ -193,8 +140,8 @@
             loadingShowData(data) {
                 let that = this;
                 axios.all([
-                    axios.post(" " + url + "/sys/showTableTitle", {"name": "tuodanjinwuchukuchaxun"}),
-                    axios.post(" " + url + "/wuliao/jinwuZhuwenpinList", {"time": data})
+                    axios.post(" " + url + "/sys/showTableTitle", {"name": "tuodanjinwupeisonggenzong"}),
+                    axios.post(" " + url + "/wuliao/peisong/peisongList", {"pici": data})
                 ])
                     .then(axios.spread(function (title, table) {
                         that.cols = title.data;
@@ -202,51 +149,11 @@
                     }));
             },
 
-            //双击显示弹出框
-            edit(row, column, cell, event) {
-                if (row.id) {
-                    axios.post(" " + url + "/sysconfig/getUserbyzizhiId", {"id": row.id, "deptid": this.line})
-                        .then((res) => {
-                            if (res.data.length > 0) {
-                                this.tcData = res.data.data;
-                                this.editVisible = true;
-                            }
-                            else {
-                                this.message = "暂无数据";
-                                this.HideModal = false;
-                                const that = this;
-
-                                function a() {
-                                    that.message = "";
-                                    that.HideModal = true;
-                                }
-
-                                setTimeout(a, 2000);
-                            }
-                        })
-                        .catch((err) => {
-                            console.log(err)
-                        });
-                }
-                else {
-                    this.message = "没有ID，暂不能查询";
-                    this.HideModal = false;
-                    const that = this;
-
-                    function b() {
-                        that.message = "";
-                        that.HideModal = true;
-                    }
-
-                    setTimeout(b, 2000);
-                }
-
-            },
 
             //根据时间查询
             doSearch() {
                 if (this.batch) {
-                    this.loadingShowData(this.batch)
+                    this.loadingShowData(this.batch);
                 }
                 else {
                     this.message = "查询批次不能为空";
