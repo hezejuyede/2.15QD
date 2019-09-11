@@ -234,10 +234,17 @@
 
 
             //弹框关闭重新加载数据
-            showModal() {
-                this.listVisible=true;
-                this.loadingShowData(this.batch);
+            showModal(row, column, cell, event) {
+                this.listVisible = true;
+                this.loadingShowData(row.pici);
+            },
+
+            //关闭弹框
+            closeDialog() {
+                this.loadingShowData(this.batch)
             }
+
+
         }
     }
 </script>
