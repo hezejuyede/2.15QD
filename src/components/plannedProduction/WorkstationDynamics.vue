@@ -49,7 +49,7 @@
                             <div class="tableDivBottom">
                                 <div class="tableTemplate" v-for="(item1,index) in item.table"  >
                                     <div class="tableTemplate-title">{{item1.title}}</div>
-                                    <div class="tableTemplate-number" @click="showModal(index,item1.stationid)">{{item1.number}}</div>
+                                    <div class="tableTemplate-number">{{item1.number}}</div>
                                     <div class="tableTemplate-jd">{{item1.jd}}</div>
                                 </div>
                             </div>
@@ -59,20 +59,62 @@
             </div>
         </div>
         <!--新增弹出框 -->
-        <el-dialog title="工位列表" :visible.sync="excelVisible" width="100%" :fullscreen="true" :center="true"
-                   @close='closeDialog'>
+        <el-dialog title="工位列表" :visible.sync="wacVisible" width="60%">
             <el-table
                 class="tb-edit"
                 :data="tableData2"
                 :header-cell-style="{background:'#A1D0FC',color:'rgba(0, 0, 0, 0.8)',fontSize:'14px'}"
                 border
-                height="600"
+                @row-dblclick="showModal"
+                height="400"
                 highlight-current-row
                 style="width: 98%;margin: auto">
-                <template v-for="(col ,index) in cols">
-                    <el-table-column align="center" :prop="col.prop" :label="col.label"></el-table-column>
-                </template>
+                <el-table-column
+                    prop="xuhao"
+                    align="center"
+                    label="序号">
+                </el-table-column>
+                <el-table-column
+                    prop="pici"
+                    align="center"
+                    label="批次">
+                </el-table-column>
             </el-table>
+        </el-dialog>
+
+        <!--新增弹出框 -->
+        <el-dialog title="工位列表" :visible.sync="listVisible" width="100%" :fullscreen="true" :center="true"
+                   @close='closeDialog'>
+            <div class="contentDiv">
+                <div class="productionContentTable clearfix">
+                    <div class="productionContentTableLeft fl">
+                        {{batch}}
+                    </div>
+                    <div class="productionContentTableRight fr">
+                        <div class="tableDiv" v-for="(item,index) in tableData">
+                            <div class="tableDivTop" :class="[classColor1,{
+                        classColor2:item.status===2,
+                        classColor3:item.status===3,
+                        classColor4:item.status===4,
+                        classColor5:item.status===5,
+                        classColor6:item.status===6,
+                        }]">
+                                <div class="tableDivTop-text">{{item.stationName}}</div>
+                                <div class="tableDivTime">{{item.time}}</div>
+                            </div>
+                            <div class="tableDivBottom">
+                                <div class="tableTemplate" v-for="(item1,index) in item.table">
+                                    <div class="tableTemplate-title">{{item1.title}}</div>
+                                    <div class="tableTemplate-number" @click="showModal(index,item1.stationid)">
+                                        {{item1.number}}
+                                    </div>
+                                    <div class="tableTemplate-jd">{{item1.jd}}</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </el-dialog>
     </div>
 </template>
@@ -85,12 +127,14 @@
         name: 'FactoryCalendar',
         data() {
             return {
-                tableData: [],
                 batch: "",
                 batchOptions: [],
-                excelVisible: false,
-                cols: [],
+                tableData:[],
+
                 tableData2: [],
+
+                wacVisible: false,
+                listVisible: false,
 
             }
         },
@@ -154,53 +198,45 @@
                 }
             },
 
-            //无完成查询
-            doSearchWwc(){
-                if (this.batch) {
-                    axios.post(" " + url + "/dynamic/getStationDynamicList", {"pici": this.batch})
-                        .then((res) => {
-                            this.tableData = res.data
-                        })
-                        .catch((err) => {
-                            console.log(err)
-                        })
-                }
-                else {
-                    this.message = "查询批次不能为空";
-                    this.HideModal = false;
-                    const that = this;
+            //未完成查询
+            doSearchWwc() {
+                axios.post(" " + url + "/dynamic/getWeiwanchengDynamicList")
+                    .then((res) => {
+                        if (res.data.length > 0) {
+                            this.wacVisible = true;
+                            let data = [];
+                            for (let i = 0; i < res.data.length; i++) {
+                                let json = {
+                                    "xuhao": i + 1,
+                                    "pici": res.data[i].pici
+                                };
+                                data.push(json)
+                            }
+                            this.tableData2 = data;
+                        }
+                        else {
+                            this.message = "暂无数据";
+                            this.HideModal = false;
+                            const that = this;
 
-                    function a() {
-                        that.message = "";
-                        that.HideModal = true;
-                    }
+                            function a() {
+                                that.message = "";
+                                that.HideModal = true;
+                            }
 
-                    setTimeout(a, 2000);
-                }
-            },
-
-
-            //显示表格
-            showModal(index,stationid) {
-                let that = this;
-                axios.all([
-                    axios.post(" " + url + "/sys/showTableTitle", {"name": "gwdtbt"}),
-                    axios.post(" " + url + "/dynamic/getStationDynamicListDetail", {
-                        "pici": this.batch,
-                        "stationid": stationid,
-                        "type": index+1
+                            setTimeout(a, 2000);
+                        }
                     })
-                ])
-                    .then(axios.spread(function (title, table) {
-                        that.excelVisible = true;
-                        that.cols = title.data;
-                        that.tableData2 = table.data.data;
-                    }));
+                    .catch((err) => {
+                        console.log(err)
+                    })
             },
+
 
             //弹框关闭重新加载数据
-            closeDialog() {
-                this.loadingShowData(this.batch)
+            showModal() {
+                this.listVisible=true;
+                this.loadingShowData(this.batch);
             }
         }
     }
@@ -361,6 +397,113 @@
         background-color: red;
 
     }
+
+    .contentDiv {
+        height: 550px;
+        overflow: auto;
+    }
+    .productionContentTable {
+        height: 450px;
+        line-height: 244px;
+        margin-top: 10px;
+        .productionContentTableLeft {
+            width: 10%;
+            height: 450px;
+            line-height: 450px;
+            text-align: center;
+            font-size: @font-size-large;
+
+        }
+        .productionContentTableRight {
+            width: 90%;
+            .tableDiv {
+                width: 24%;
+                float: left;
+                border-left: 1px solid @color-background-d;
+                border-top: 1px solid @color-background-d;
+                border-bottom: 1px solid @color-background-d;
+                margin: 10px 0.25%;
+                .tableDivTop {
+                    height:50px;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    border-right: 1px solid @color-background-d;
+                    position: relative;
+                    color: @color-blue;
+                    .tableDivTop-text{
+                        width: 40%;
+                        height: 30px;
+                        margin: 0 auto;
+                        text-align: center;
+                        line-height: 30px;
+                        position: absolute;
+                        top: 12px;
+                        left: 0;
+                    }
+                    .tableDivTime{
+                        width: 60%;
+                        height: 30px;
+                        margin: 0 auto;
+                        text-align: center;
+                        line-height: 30px;
+                        position: absolute;
+                        top: 12px;
+                        right: 0;
+                        font-size: 12px;
+                    }
+                }
+
+                .tableDivBottom {
+                    display: flex;
+                    .tableTemplate {
+                        width: 25%;
+                        height: 80px;
+                        flex: 1;
+                        display: flex;
+                        align-items: center;
+                        justify-content: center;
+                        flex-direction: column;
+                        font-size: @font-size-small-s;
+
+                        .tableTemplate-number {
+                            width: 100%;
+                            height: 33%;
+                            border-right: 1px solid @color-background-d;
+                            border-bottom: 1px solid @color-background-d;
+                            display: flex;
+                            align-items: center;
+                            justify-content: center;
+                            cursor: pointer;
+
+
+                        }
+                        .tableTemplate-title {
+                            width: 100%;
+                            height: 33%;
+                            border-right: 1px solid @color-background-d;
+                            border-top: 1px solid @color-background-d;
+                            border-bottom: 1px solid @color-background-d;
+                            display: flex;
+                            align-items: center;
+                            justify-content: center;
+                        }
+                        .tableTemplate-jd {
+                            width: 100%;
+                            height: 33%;
+                            border-right: 1px solid @color-background-d;
+                            display: flex;
+                            align-items: center;
+                            justify-content: center;
+                        }
+
+                    }
+                }
+            }
+        }
+
+    }
+
 
 
 </style>
