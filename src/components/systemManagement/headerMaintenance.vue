@@ -34,8 +34,9 @@
                             </el-option>
                         </el-select>
                     </label>
-                    <el-button type="primary" icon="delete" class="handle-del mr10" @click="showAddPerson">新增表头</el-button>
-                    <el-button type="danger" icon="delete" class="handle-del mr10" @click="deletePerson">删除表头</el-button>
+                    <el-button type="primary" @click="doSearch">查询表头</el-button>
+                    <el-button type="success" @click="showAddPerson">新增表头</el-button>
+                    <el-button type="danger"  @click="deletePerson">删除表头</el-button>
                 </div>
                 <div class="">
                     <el-table class="tb-edit"
@@ -58,6 +59,7 @@
                 </div>
             </div>
         </div>
+
         <!--新增弹出框 -->
         <el-dialog title="新增表头" :visible.sync="addVisible" width="40%">
             <el-form ref="form" label-width="100px">
@@ -93,6 +95,7 @@
                 <el-button type="primary" @click="doAddPerson" style="height:30px;width:80px">确 定</el-button>
             </span>
         </el-dialog>
+
         <!-- 编辑弹出框 -->
         <el-dialog title="编辑表头" :visible.sync="editVisible" width="40%">
             <el-form ref="form" label-width="100px">
@@ -128,6 +131,7 @@
                 <el-button type="primary" @click="saveEdit" style="height:30px;width:80px">确 定</el-button>
             </span>
         </el-dialog>
+
         <!-- 删除提示框 -->
         <el-dialog title="删除表头" :visible.sync="delVisible" width="300px" center>
             <div class="del-dialog-cnt">删除不可恢复，是否确定删除？</div>
@@ -218,7 +222,6 @@
                         .then(axios.spread(function (select) {
                             that.selectOptions = select.data;
                             that.select=select.data[0].code;
-                            console.log(that.select)
                             that.loadingShowData(that.select)
 
                         }));
@@ -235,6 +238,17 @@
                     this.tableHeight = h - 300 + "px";
                 }
 
+            },
+
+            //查询表头
+            doSearch() {
+                if (this.select) {
+                    this.loadingShowData(this.select)
+                }
+                else {
+                    this.$message.warning("表头不能为空");
+
+                }
             },
 
             //瞬间加载数据
@@ -285,6 +299,7 @@
                     this.listData = [];
                 }
             },
+
             //双击点击行内编辑
             editPerson(row, column, cell, event) {
                 this.editVisible = true;
@@ -331,14 +346,14 @@
                 }
 
             },
+
             //选择点击删除
             deletePerson() {
                 if (this.listData.length) {
                     this.delVisible = true;
                 }
                 else {
-                    this.message = "请勾选要删除的表头";
-                    this.HideModal = false;
+                    this.$message.warning(`请勾选要删除的表头`);
 
                 }
             },
@@ -364,6 +379,7 @@
                         console.log(err)
                     })
             },
+
             //显示新增表头
             showAddPerson() {
                 if (this.select) {
@@ -386,6 +402,7 @@
                 }
 
             },
+
             //新增表头
             doAddPerson() {
                 if (this.pro && this.label && this.select && this.sortnum) {
