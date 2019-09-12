@@ -116,6 +116,7 @@
                 prop:'date',
 
                 select_word: '',
+                chutuNumber:[],
 
 
             }
@@ -261,7 +262,7 @@
                 const loop = data => {
                     let json = {};
                     for (let i = 0; i < this.dateArr.length; i++) {
-                        if(this.dateArr[i].date === data.defvalue.text){
+                        if (this.dateArr[i].date === data.defvalue.text) {
                             json = {
                                 Lunar: data.defvalue.Lunar,
                                 column: data.defvalue.column,
@@ -275,45 +276,60 @@
                         }
                     }
                     data.defvalue = json;
-                    if (data.defvalue.working === 1) {
+                    if (data.defvalue.working === 1 && data.defvalue.type === "normal") {
                         return data.defvalue.value ? (
-                            <div class="flex2 selected">
-                            {data.defvalue.text}号:
-                    <span>上班日</span>
-                        </div>
-                    ) : (
-                        <div class="flex2">
-                            {data.defvalue.text}号:
-                    <span>上班日</span>
-                        </div>
+                            < div style="height:60px; line-height: 60px; text-align: center;">
+                            < span style = "font-size: 30px;" > {data.defvalue.text
+                    }<
+                        /span>
+                        < /div>
+                    ) :
+                        (
+                        < div style="height:60px; line-height: 60px; text-align: center;">
+                        < span
+                        style = "font-size: 30px;" > {data.defvalue.text
+                    }<
+                        /span>
+                        < /div>
                     )
                     }
-                    else if (data.defvalue.working === 2) {
+                    else if (data.defvalue.working === 2 && data.defvalue.type === "normal") {
                         return data.defvalue.value ? (
-                            <div style="background: #00CCFF;color:#ffffff">
-                            {data.defvalue.text}号:
-                            <span >出图日</span>
-                            </div>
-                    ) : (
-                        <div style="background: #00CCFF;color:#ffffff">
-                            {data.defvalue.text}号:
-                            <span>出图日</span>
-                        </div>
+                            < div style = "height:60px; line-height: 60px; text-align: center;background:  #00CCFF;color:#ffffff" >
+                            < span style = "font-size: 30px;" > {data.defvalue.text
+                    }<
+                        /span>
+                        < /div>
+                    ) :
+                        (
+                        < div style = "height:60px; line-height: 60px; text-align: center;background:  #00CCFF;color:#ffffff" >
+                        < span
+                        style = "font-size: 30px;" > {data.defvalue.text
+                    }<
+                        /span>
+                        < /div>
                     )
                     }
-                    else if (data.defvalue.working === 0){
+                    else if (data.defvalue.working === 0 && data.defvalue.type === "normal") {
                         return data.defvalue.value ? (
-                            <div>
-                            {data.defvalue.text}号:
-                            <span>休息日</span>
-                            </div>
-                    ) : (
-                        <div>
-                        {data.defvalue.text}号:
-                        <span >休息日</span>
-                        </div>
+                            < div style = "height:60px; line-height: 60px; text-align: center;background: #26A65B;color:#ffffff" >
+                            < span
+                        style = "font-size: 30px;" > {data.defvalue.text
+                    }<
+                        /span>
+                        < /div>
+                    ) :
+                        (
+                        < div
+                        style = "height:60px; line-height: 60px; text-align: center;background: #26A65B;color:#ffffff" >
+                            < span
+                        style = "font-size: 30px;" > {data.defvalue.text
+                    }<
+                        /span>
+                        < /div>
                     )
                     }
+
                 };
                 return <div style="min-height:60px;">{loop(parmas)}</div>
             },
@@ -348,14 +364,25 @@
             }
             .handle-Div{
                 width: 100%;
-                height: 480px;
+                height:600px;
                 overflow:auto;
                 display: flex;
                 align-items: center;
                 justify-content: center;
+                flex-direction: column;
+                .handleDivTitle{
+                    width: 800px;
+                    height: 50px;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    font-size: @font-size-large-xxxxxxx;
+
+                }
                 .calendarDiv{
                     width: 800px;
                     height: 450px;
+
                 }
             }
 
