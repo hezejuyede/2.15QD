@@ -364,25 +364,15 @@
             }
             .handle-Div{
                 width: 100%;
-                height:600px;
+                height:500px;
                 overflow:auto;
                 display: flex;
                 align-items: center;
                 justify-content: center;
                 flex-direction: column;
-                .handleDivTitle{
-                    width: 800px;
-                    height: 50px;
-                    display: flex;
-                    align-items: center;
-                    justify-content: center;
-                    font-size: @font-size-large-xxxxxxx;
-
-                }
                 .calendarDiv{
                     width: 800px;
                     height: 450px;
-
                 }
             }
 
