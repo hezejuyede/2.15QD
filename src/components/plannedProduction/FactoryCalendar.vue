@@ -29,6 +29,9 @@
                     </el-button>
                 </div>
                 <div class="handle-Div">
+                    <div class="handleDivTitle">
+                        {{time}},本月{{ctNumber}}批出图,{{xxNumber}}个休息日，{{sbNumber}}个上班日
+                    </div>
                     <div class="calendarDiv">
                         <ele-calendar
                             :defaultValue="monthTime"
@@ -116,7 +119,10 @@
                 prop:'date',
 
                 select_word: '',
-                chutuNumber:[],
+                ctNumber:"",
+                xxNumber:"",
+                sbNumber:""
+
 
 
             }
@@ -167,28 +173,48 @@
                     .then(axios.spread(function (title, table) {
                         that.cols = title.data;
                         that.tableData = table.data;
+                        console.log(that.tableData)
                         let data = [];
-                        for (let i=0;i<that.tableData.length;i++){
-                            let curDate =that.tableData[i].curDate;
-                            let date =curDate.substr(8,1);
-                            if(date==="0"){
-                                let dateA =curDate.substr(9,1);
-                                let json={
-                                    date:parseInt(dateA),
-                                    working:that.tableData[i].working,
+                        for (let i = 0; i < that.tableData.length; i++) {
+                            let curDate = that.tableData[i].curDate;
+                            let date = curDate.substr(8, 1);
+                            if (date === "0") {
+                                let dateA = curDate.substr(9, 1);
+                                let json = {
+                                    date: parseInt(dateA),
+                                    working: that.tableData[i].working,
                                 };
                                 data.push(json)
                             }
                             else {
-                                let dateB =curDate.substr(8,2);
-                                let json={
-                                    date:parseInt(dateB),
-                                    working:that.tableData[i].working,
+                                let dateB = curDate.substr(8, 2);
+                                let json = {
+                                    date: parseInt(dateB),
+                                    working: that.tableData[i].working,
                                 };
                                 data.push(json)
                             }
                         }
                         that.dateArr = data;
+                        let ct = [];
+                        let xx = [];
+                        let gz = [];
+                        for (let i = 0; i < that.tableData.length; i++) {
+                            if (that.tableData[i].working === 0) {
+                                xx.push(that.tableData[i])
+                            }
+                            else if (that.tableData[i].working === 2) {
+                                ct.push(that.tableData[i])
+                            }
+                            else if (that.tableData[i].working === 1) {
+                                gz.push(that.tableData[i])
+                            }
+
+                        }
+
+                        that.ctNumber = ct.length ;
+                        that.xxNumber = xx.length;
+                        that.sbNumber = ct.length + gz.length ;
                     }));
             },
 
@@ -330,6 +356,7 @@
                     )
                     }
 
+
                 };
                 return <div style="min-height:60px;">{loop(parmas)}</div>
             },
@@ -364,15 +391,25 @@
             }
             .handle-Div{
                 width: 100%;
-                height:500px;
+                height:520px;
                 overflow:auto;
                 display: flex;
                 align-items: center;
                 justify-content: center;
                 flex-direction: column;
+                .handleDivTitle{
+                    width: 800px;
+                    height: 30px;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    font-size: @font-size-large;
+
+                }
                 .calendarDiv{
                     width: 800px;
                     height: 450px;
+
                 }
             }
 
