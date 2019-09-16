@@ -732,10 +732,8 @@
 
     .makeFrom {
         width: 100%;
-        height:580px;
         .makeFromDiv {
             width: 1100px;
-            height:550px;
             overflow: auto;
             margin: 0 auto;
             .makeFromPage{

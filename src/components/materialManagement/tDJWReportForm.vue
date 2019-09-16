@@ -14,23 +14,17 @@
                         <span>:</span>
                         <el-input v-model="select_word" placeholder="智能检索托单金物" class="handle-input mr10"></el-input>
                     </label>
-                    <label style="margin-right: 10px;margin-left: 10px">
-                        <span>批次</span>
+                    <label style="margin-right: 5px;margin-left: 5px">
+                        <span>选择时间</span>
                         <span>:</span>
-                        <el-select
-                            v-model="batch"
-                            clearable
-                            filterable
-                            allow-create
-                            default-first-option
-                            placeholder="请选择批次">
-                            <el-option
-                                v-for="item in batchOptions"
-                                :key="item.id"
-                                :label="item.name"
-                                :value="item.id">
-                            </el-option>
-                        </el-select>
+                        <el-date-picker
+                            style="width:250px"
+                            v-model="examineTime"
+                            type="daterange"
+                            start-placeholder="开始日期"
+                            end-placeholder="结束日期"
+                            value-format="yyyy-MM-dd">
+                        </el-date-picker>
                     </label>
                     <el-button type="primary" @click="doSearch">查询报表</el-button>
                     <el-button type="success" @click="importPrinting">导出Excel</el-button>
@@ -62,6 +56,7 @@
     import Modal from '../../common/modal'
     import FileSaver from 'file-saver'
     import XLSX from 'xlsx'
+    import {getNowTime} from '../../assets/js/api'
 
     export default {
         name: 'WorkingProcedure',
@@ -73,8 +68,7 @@
                 cols: [],
                 tableData: [],
 
-                batch: "",
-                batchOptions: [],
+                examineTime: "",
 
                 select_word: '',
                 tableHeight:Number,
@@ -109,21 +103,21 @@
             //页面加载检查用户是否登陆，没有登陆就加载登陆页面
             getAdminState() {
                 const userInfo = localStorage.getItem("userInfo");
+
                 if (userInfo === null) {
                     this.$router.push("/")
                 }
                 else {
                     this.setTableHeight();
-                    let that = this;
-                    axios.all([
-                        axios.post(" " + url + "/sys/getPiciList")
-                    ])
-                        .then(axios.spread(function (batch) {
-                            that.batchOptions = batch.data;
-                            that.batch = batch.data[0].id;
-                            that.loadingShowData(that.batch);
-                        }));
+                    let time = getNowTime();
+                    let times = [];
+                    for (let i = 0; i < 2; i++) {
+                        times.push(time)
+                    }
+                    this.examineTime = times;
                 }
+
+                this.loadingShowData(this.examineTime);
             },
 
             //根据屏幕设置Table高度
@@ -144,7 +138,7 @@
                 let that = this;
                 axios.all([
                     axios.post(" " + url + "/sys/showTableTitle", {"name": "tuodanjinwubaobiao"}),
-                    axios.post(" " + url + "/wuliao/jinwuZhuwenpinList", {"pici": data1})
+                    axios.post(" " + url + "/wuliao/tuodanjinwuList", {"times": data1,})
                 ])
                     .then(axios.spread(function (title, table) {
                         that.cols = title.data;
@@ -155,11 +149,11 @@
 
             //查询
             doSearch() {
-                if (this.batch) {
-                    this.loadingShowData(this.batch)
+                if (this.examineTime) {
+                    this.loadingShowData(this.examineTime)
                 }
                 else {
-                    this.message = "查询批次不能为空";
+                    this.message = "查询时间不能为空";
                     this.HideModal = false;
                     const that = this;
 

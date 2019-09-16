@@ -29,7 +29,7 @@
                     <label style="margin-right: 5px;margin-left: 5px">
                         <span>船号</span>
                         <span>:</span>
-                        <el-input v-model="chunhao" placeholder="船号"  style="width: 100px"  class="handle-input mr10"></el-input>
+                        <el-input v-model="chuanhao" placeholder="船号"  style="width: 100px"  class="handle-input mr10"></el-input>
                     </label>
                     <label style="margin-right: 5px;margin-left: 5px">
                         <span>图号</span>
@@ -69,8 +69,8 @@
 
             <!--修改弹出框 -->
             <el-dialog title="托单金物制作" :visible.sync="editVisible" width="100%" :fullscreen="true" :center="true">
-                <div class="makeFrom">
-                    <div class="makeFromDiv" ref=print>
+                <div class="makeFrom" id="printdivaa" ref="makeFrom">
+                    <div class="makeFromDiv">
                         <div class="makeFromPage fr">
                             <div class="makeFromPageText"> {{page}}</div>
                         </div>
@@ -618,8 +618,35 @@
 
             // 打印
             saveEdit() {
-                window.print();
-            },
+                /*window.print();*/
+                var userAgent = navigator.userAgent.toLowerCase(); //取得浏览器的userAgent字符串
+                if (userAgent.indexOf("trident") > -1) {
+                    alert("请使用google或者360浏览器打印");
+                    return false;
+                }
+                else if (userAgent.indexOf('msie') > -1) {
+                    var onlyChoseAlert = simpleAlert({
+                        "content": "请使用Google或者360浏览器打印",
+                        "buttons": {
+                            "确定": function () {
+                                onlyChoseAlert.close();
+                            }
+                        }
+                    })
+                    alert("请使用google或者360浏览器打印");
+                    return false;
+                }
+                else {//其它浏览器使用lodop
+                    var oldstr = document.body.innerHTML;
+                    var headstr = "<html><head><title></title></head><body>";
+                    var footstr = "</body>";
+                    //此处id换为你自己的id
+                    var printData = document.getElementById("printdivaa").innerHTML; //获得 div 里的所有 html 数据
+                    document.body.innerHTML = headstr + printData + footstr;
+                    window.print();
+                    document.body.innerHTML = oldstr;
+                }
+            }
 
 
         }
@@ -669,10 +696,8 @@
 
     .makeFrom {
         width: 100%;
-        height: 580px;
         .makeFromDiv {
             width: 1100px;
-            height: 550px;
             overflow: auto;
             margin: 0 auto;
             .makeFromPage {
@@ -988,5 +1013,333 @@
             }
         }
     }
+
+    @media print {
+        body {
+            background-color:lightblue;
+        }
+        .makeFrom {
+            width: 100%;
+            height: 580px;
+            .makeFromDiv {
+                width: 1100px;
+                height: 550px;
+                overflow: auto;
+                margin: 0 auto;
+                .makeFromPage {
+                    height: 40px;
+                    width: 1042px;
+                    .makeFromPageText {
+                        width: 200px;
+                        height: 40px;
+                        text-align: center;
+                        line-height: 40px;
+                        font-size: @font-size-large;
+                        float: right;
+
+                    }
+                }
+                .makeFromTop {
+                    height: 120px;
+                    width: 1042px;
+                    border: 1px solid #303133;
+                    .makeFromTopLeft {
+                        width: 40%;
+                        height: 120px;
+                        .makeFromTopLeftSmall {
+                            width: 40%;
+                            height: 100%;
+                            .makeFromTopLeftSmallText {
+                                width: 100%;
+                                height: 25%;
+                                border-left: 1px solid @color-background-dddd;
+                                border-top: 1px solid @color-background-dddd;
+                                border-right: 1px solid @color-background-dddd;
+                                display: flex;
+                                align-items: center;
+                                justify-content: center;
+                            }
+
+                        }
+                        .makeFromTopLeftLarge {
+                            width: 60%;
+                            height: 100%;
+                            display: flex;
+                            align-items: center;
+                            justify-content: center;
+                            font-size: @font-size-large-xxx;
+                            border-left: 1px @color-background-dddd;
+
+                        }
+                    }
+                    .makeFromTopRight {
+                        width: 60%;
+                        height: 120px;
+                        .makeFromTopRightTop {
+                            height: 60px;
+                            .makeFromTopRightTopGz {
+                                height: 60px;
+                                width: 50px;
+                                text-align: center;
+                                line-height: 60px;
+                                font-size: @font-size-large;
+                                border-left: 1px solid #303133;
+                            }
+                            .makeFromTopRightTopDH {
+                                width: 200px;
+                                height: 60px;
+                                text-align: center;
+                                line-height: 60px;
+                                font-size: @font-size-large;
+                                border-left: 1px solid #303133;
+                                display: flex;
+                                align-items: center;
+                                justify-content: center;
+                            }
+                            .makeFromTopRightTopS {
+                                width: 70px;
+                                height: 60px;
+                                text-align: center;
+                                line-height: 60px;
+                                font-size: @font-size-large;
+                                border-left: 1px solid #303133;
+
+                            }
+                            .makeFromTopRightTopNo {
+                                width: 70px;
+                                height: 60px;
+                                text-align: center;
+                                line-height: 60px;
+                                font-size: @font-size-large;
+                                border-left: 1px solid #303133;
+                            }
+                            .makeFromTopRightTopInput {
+                                width: 234px;
+                                height: 60px;
+                                text-align: center;
+                                line-height: 60px;
+                                font-size: @font-size-large;
+                                border-left: 1px solid #303133;
+                                border-bottom: 1px solid #303133;
+                                input {
+                                    height: 60px;
+                                    width: 224px;
+                                    padding-left: 10px;
+                                }
+                            }
+                        }
+                        .makeFromTopRightBottom {
+
+                            .makeFromTopRightBottomMc {
+                                width: 120px;
+                                height: 60px;
+                                line-height: 60px;
+                                text-align: center;
+                                border-top: 1px solid #303133;
+                                font-size: @font-size-large;
+                                border-left: 1px solid #303133;
+
+                            }
+                            .makeFromTopRightBottomTh {
+                                width: 120px;
+                                height: 60px;
+                                line-height: 60px;
+                                text-align: center;
+                                border-top: 1px solid #303133;
+                                font-size: @font-size-large;
+                                border-left: 1px solid #303133;
+                            }
+                            .makeFromTopRightBottomInput {
+                                width: 190px;
+                                height: 60px;
+                                text-align: center;
+                                line-height: 60px;
+                                font-size: @font-size-large;
+                                border-left: 1px solid #303133;
+                                border-top: 1px solid #303133;
+                                input {
+                                    height: 60px;
+                                    width: 190px;
+                                    padding-left: 10px;
+                                }
+                            }
+
+                        }
+
+                    }
+                }
+                .makeFromCenter {
+                    .makeFromCenterLeft {
+                        width: 50px;
+                        height: 962.5px;
+                        border-left: 1px solid #303133;
+                        border-top: 1px solid #303133;
+                        border-bottom: 1px solid #303133;
+                        .makeFromCenterLeftTop {
+                            height: 50%;
+                        }
+                        .makeFromCenterLeftBottom {
+                            height: 50%;
+                        }
+                        .makeFromCenterLeftText {
+                            height: 50%;
+                            font-size: 25px;
+                            text-align: center;
+                            line-height: 50px;
+                            border-bottom: 1px solid #303133;
+                        }
+                        .makeFromCenterLeftInput {
+                            height: 50%;
+                            border-bottom: 1px solid #303133;
+                            textarea {
+                                width: 50px;
+                                height: 200px;
+                            }
+                        }
+                    }
+
+                }
+                .makeFromBottom {
+                    height: 140px;
+                    width: 1042px;
+                    border: 1px solid #303133;
+                    .makeFromBottomOne {
+                        height: 50px;
+                        display: flex;
+                        align-items: center;
+                        justify-content: center;
+                        border-bottom: 1px solid @color-background-ddddd;
+                        .makeFromBottomOneDiv1 {
+                            flex: 2.5;
+                            border-right: 1px solid @color-background-ddddd;
+                        }
+                        .makeFromBottomOneDiv2 {
+                            flex: 4;
+                            border-right: 1px solid @color-background-ddddd;
+                        }
+                        .makeFromBottomOneDiv3 {
+                            flex: 2.5;
+                            border-right: 1px solid @color-background-ddddd;
+                        }
+                        .makeFromBottomOneDiv4 {
+                            flex: 1;
+                            display: flex;
+                            align-items: center;
+                            justify-content: center;
+                            border-right: 1px solid @color-background-ddddd;
+                        }
+                        .makeFromBottomOneDivLeft {
+                            width: 30%;
+                            height: 50px;
+                            line-height: 50px;
+                            text-align: center;
+                            font-size: @font-size-medium;
+                            border-right: 1px solid @color-background-ddddd;
+                        }
+                    }
+                    .makeFromBottomTwo {
+                        width: 100%;
+                        height: 90px;
+                        display: flex;
+                        align-items: center;
+                        justify-content: center;
+                        .makeFromBottomTwoLeft {
+                            flex: 3;
+                            height: 90px;
+                            .makeFromBottomTwoLeftTop {
+                                height: 30px;
+                                text-align: center;
+                                line-height: 30px;
+                                font-size: @font-size-large;
+                                border-bottom: 1px solid @color-background-dd;
+                                border-right: 1px solid @color-background-dd;
+                            }
+                            .makeFromBottomTwoLeftBottom {
+                                height: 60px;
+                                display: flex;
+                                align-items: center;
+                                justify-content: center;
+                                .makeFromBottomTwoLeftBottomDiv {
+                                    flex: 1;
+                                    height: 60px;
+                                    border-right: 1px solid @color-background-dd;
+                                    border-bottom: 1px solid @color-background-dd;
+                                }
+                            }
+
+                        }
+                        .makeFromBottomTwoCenter {
+                            flex: 3;
+                            height: 90px;
+                            .makeFromBottomTwoCenterTop {
+                                height: 30px;
+                                text-align: center;
+                                line-height: 30px;
+                                font-size: @font-size-large;
+                                border-bottom: 1px solid @color-background-dd;
+                                border-right: 1px solid @color-background-dd;
+                            }
+                            .makeFromBottomTwoCenterBottom {
+                                height: 60px;
+                                display: flex;
+                                align-items: center;
+                                justify-content: center;
+                                .makeFromBottomTwoCenterBottomDiv {
+                                    flex: 1;
+                                    height: 60px;
+                                    border-right: 1px solid @color-background-dd;
+                                    border-bottom: 1px solid @color-background-dd;
+                                }
+                            }
+                        }
+                        .makeFromBottomTwoRight {
+                            flex: 4;
+                            height: 90px;
+                            .makeFromBottomTwoRightTop {
+                                height: 30px;
+                                text-align: center;
+                                line-height: 30px;
+                                font-size: @font-size-large;
+                                border-bottom: 1px solid @color-background-dd;
+                                border-right: 1px solid @color-background-dd;
+                            }
+                            .makeFromBottomTwoRightBottom {
+                                height: 60px;
+                                display: flex;
+                                align-items: center;
+                                justify-content: center;
+                                .makeFromBottomTwoRightBottomDiv {
+                                    flex: 1;
+                                    height: 60px;
+                                    border-right: 1px solid @color-background-dd;
+                                    border-bottom: 1px solid @color-background-dd;
+                                    position: relative;
+                                    .makeFromBottomTwoRightBottomDivName {
+                                        position: absolute;
+                                        top: 0;
+                                        left: 0;
+                                    }
+                                }
+                            }
+                        }
+
+                    }
+                }
+                .makeFromTime {
+                    height: 50px;
+                    width: 1042px;
+                    .makeFromTimeInput {
+                        width: 200px;
+                        height: 50px;
+                    }
+                    .makeFromTimeText {
+                        font-size: 20px;
+                        line-height: 50px;
+                    }
+                }
+            }
+        }
+    }
+
 </style>
 

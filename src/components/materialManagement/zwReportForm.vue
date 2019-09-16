@@ -140,11 +140,11 @@
             },
 
             //瞬间加载数据
-            loadingShowData(data1) {
+            loadingShowData(data) {
                 let that = this;
                 axios.all([
-                    axios.post(" " + url + "/sys/showTableTitle", {"name": "zhuwenjinweubaobiao"}),
-                    axios.post(" " + url + "/wuliao/jinwuZhuwenpinList", {"pici": data1})
+                    axios.post(" " + url + "/sys/showTableTitle", {"name": "zwjwcx"}),
+                    axios.post(" " + url + "/wuliao/jinwuZhuwenpinList", {"pici": data})
                 ])
                     .then(axios.spread(function (title, table) {
                         that.cols = title.data;
