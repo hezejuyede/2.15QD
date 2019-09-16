@@ -698,7 +698,7 @@
             .makeFromTop {
                 height: 120px;
                 width: 1042px;
-                border: 1px solid #303133;
+                border: 1px solid @color-background-dddd;
                 .makeFromTopLeft {
                     width: 40%;
                     height: 120px;
@@ -739,7 +739,7 @@
                             text-align: center;
                             line-height: 60px;
                             font-size: @font-size-large;
-                            border-left: 1px solid #303133;
+                            border-left: 1px solid @color-background-dddd;
                         }
                         .makeFromTopRightTopDH {
                             width: 200px;
@@ -747,7 +747,7 @@
                             text-align: center;
                             line-height: 60px;
                             font-size: @font-size-large;
-                            border-left: 1px solid #303133;
+                            border-left: 1px solid @color-background-dddd;
                             display: flex;
                             align-items: center;
                             justify-content: center;
@@ -758,7 +758,7 @@
                             text-align: center;
                             line-height: 60px;
                             font-size: @font-size-large;
-                            border-left: 1px solid #303133;
+                            border-left: 1px solid @color-background-dddd;
 
                         }
                         .makeFromTopRightTopNo {
@@ -767,7 +767,7 @@
                             text-align: center;
                             line-height: 60px;
                             font-size: @font-size-large;
-                            border-left: 1px solid #303133;
+                            border-left: 1px solid @color-background-dddd;
                         }
                         .makeFromTopRightTopInput {
                             width: 234px;
@@ -775,8 +775,8 @@
                             text-align: center;
                             line-height: 60px;
                             font-size: @font-size-large;
-                            border-left: 1px solid #303133;
-                            border-bottom: 1px solid #303133;
+                            border-left: 1px solid @color-background-dddd;
+                            border-bottom: 1px solid @color-background-dddd;
                             input {
                                 height: 60px;
                                 width: 224px;
@@ -791,9 +791,9 @@
                             height: 60px;
                             line-height: 60px;
                             text-align: center;
-                            border-top: 1px solid #303133;
+                            border-top: 1px solid @color-background-dddd;
                             font-size: @font-size-large;
-                            border-left: 1px solid #303133;
+                            border-left: 1px solid @color-background-dddd;
 
                         }
                         .makeFromTopRightBottomTh {
@@ -801,9 +801,9 @@
                             height: 60px;
                             line-height: 60px;
                             text-align: center;
-                            border-top: 1px solid #303133;
+                            border-top: 1px solid @color-background-dddd;
                             font-size: @font-size-large;
-                            border-left: 1px solid #303133;
+                            border-left: 1px solid @color-background-dddd;
                         }
                         .makeFromTopRightBottomInput {
                             width: 190px;
@@ -811,8 +811,8 @@
                             text-align: center;
                             line-height: 60px;
                             font-size: @font-size-large;
-                            border-left: 1px solid #303133;
-                            border-top: 1px solid #303133;
+                            border-left: 1px solid @color-background-dddd;
+                            border-top: 1px solid @color-background-dddd;
                             input {
                                 height: 60px;
                                 width: 190px;
@@ -828,9 +828,9 @@
                 .makeFromCenterLeft {
                     width: 50px;
                     height: 962.5px;
-                    border-left: 1px solid #303133;
-                    border-top: 1px solid #303133;
-                    border-bottom: 1px solid #303133;
+                    border-left: 1px solid @color-background-dddd;
+                    border-top: 1px solid @color-background-dddd;
+                    border-bottom: 1px solid @color-background-dddd;
                     .makeFromCenterLeftTop {
                         height: 50%;
                     }
@@ -842,11 +842,11 @@
                         font-size: 25px;
                         text-align: center;
                         line-height: 50px;
-                        border-bottom: 1px solid #303133;
+                        border-bottom: 1px solid @color-background-dddd;
                     }
                     .makeFromCenterLeftInput {
                         height: 50%;
-                        border-bottom: 1px solid #303133;
+                        border-bottom: 1px solid @color-background-dddd;
                         textarea {
                             width: 50px;
                             height: 200px;
