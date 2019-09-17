@@ -25,10 +25,10 @@
                             placeholder="选择月">
                         </el-date-picker>
                     </label>
-                    <el-button type="success" icon="delete" class="handle-del mr10" @click="doSearch">查询
-                    </el-button>
+                    <el-button type="success" @click="doSearch">查询</el-button>
+                    <el-button type="primary" @click="importPrinting">导出</el-button>
                 </div>
-                <div class="handle-Div">
+                <div class="handle-Div" ref="imageWrapper">
                     <div class="handleDivTitle">
                         {{time}},本月{{ctNumber}}批出图,{{xxNumber}}个休息日，{{sbNumber}}个上班日
                     </div>
@@ -95,6 +95,7 @@
     import {getMonth} from '../../assets/js/api'
     import eleCalendar from 'ele-calendar'
     import 'ele-calendar/dist/vue-calendar.css'
+    import html2canvas from 'html2canvas'
 
     export default {
         name: 'WorkingProcedure',
@@ -223,6 +224,20 @@
             doSearch() {
                 this.monthTime = this.time;
                 this.loadingShowData(this.time);
+            },
+
+            //导出打印
+            importPrinting(){
+                html2canvas(this.$refs.imageWrapper, {
+                    backgroundColor: null     // 解决生成的图片有白边
+                }).then((canvas) => {
+                    let dataURL = canvas.toDataURL("image/png");
+                    let a = document.createElement('a');
+                    a.setAttribute('download', '');
+                    a.setAttribute('href', dataURL);
+                    a.setAttribute("target", "_blank");
+                    a.click();
+                })
             },
 
             // 保存编辑
