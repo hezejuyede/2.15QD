@@ -26,7 +26,7 @@
                         </el-date-picker>
                     </label>
                     <el-button type="success" @click="doSearch">查询</el-button>
-                    <el-button type="primary" @click="importPrinting">导出</el-button>
+                    <el-button type="primary" @click="importPrinting">导出打印</el-button>
                 </div>
                 <div class="handle-Div" ref="imageWrapper">
                     <div class="handleDivTitle">
