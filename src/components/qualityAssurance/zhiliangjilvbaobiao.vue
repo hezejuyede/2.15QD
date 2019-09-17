@@ -27,7 +27,7 @@
                         </el-date-picker>
                     </label>
                     <el-button type="primary"  @click="doSearch">查询</el-button>
-                    <el-button type="success"   @click="importExcel">导出Excel</el-button>
+                    <el-button type="success"  @click="importExcel">导出Excel</el-button>
                 </div>
                 <div class="">
                     <el-table class="tb-edit"
@@ -199,8 +199,8 @@
                     display: inline-block;
                 }
                 .el-button {
-                    width:100px;
-                    height: 30px;
+                    width:130px;
+                    height: 35px;
                 }
             }
             .del-dialog-cnt {

@@ -433,8 +433,8 @@
                     align-items: center;
                     justify-content: center;
                     button {
-                        width: 100px;
-                        height: 30px;
+                        width:130px;
+                        height: 35px;
                     }
                 }
             }

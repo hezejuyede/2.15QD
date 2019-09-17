@@ -32,10 +32,10 @@
                             </el-option>
                         </el-select>
                     </label>
-                    <el-button type="success" icon="delete" class="handle-del mr10" @click="doSearch">查询要点</el-button>
-                    <el-button type="primary" icon="delete" class="handle-del mr10" @click="showAdd">新增要点</el-button>
-                    <el-button type="warning" icon="delete" class="handle-del mr10" @click="showEdit">编辑要点</el-button>
-                    <el-button type="danger" icon="delete" class="handle-del mr10" @click="deleteAlert">删除要点</el-button>
+                    <el-button type="primary" @click="doSearch">查询要点</el-button>
+                    <el-button type="success" @click="showAdd">新增要点</el-button>
+                    <el-button type="warning" @click="showEdit">编辑要点</el-button>
+                    <el-button type="danger"  @click="deleteAlert">删除要点</el-button>
                 </div>
                 <div class="">
                     <el-table class="tb-edit"
@@ -470,8 +470,8 @@
                     display: inline-block;
                 }
                 .el-button {
-                    width: 100px;
-                    height: 30px;
+                    width:130px;
+                    height: 35px;
                 }
             }
             .del-dialog-cnt {
@@ -482,10 +482,6 @@
                 width: 100%;
                 font-size: 14px;
             }
-            .red {
-                color: #ff0000;
-            }
-
         }
         .container {
             .containerDiv {

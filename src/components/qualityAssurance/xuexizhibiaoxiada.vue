@@ -26,9 +26,9 @@
                             value-format="yyyy-MM-dd">
                         </el-date-picker>
                     </label>
-                    <el-button type="success" class="handle-del mr10" @click="doSearch">查询指令</el-button>
-                    <el-button type="primary"  class="handle-del mr10" @click="showAdd">下达指令</el-button>
-                    <el-button type="warning"  class="handle-del mr10" @click="showState">学习状态</el-button>
+                    <el-button type="primary"   @click="doSearch">查询指令</el-button>
+                    <el-button type="success"   @click="showAdd">下达指令</el-button>
+                    <el-button type="warning"   @click="showState">学习状态</el-button>
                 </div>
                 <div class="">
                     <el-table class="tb-edit"
@@ -573,8 +573,8 @@
                     display: inline-block;
                 }
                 .el-button {
-                    width:100px;
-                    height: 30px;
+                    width:130px;
+                    height: 35px;
                 }
             }
             .del-dialog-cnt {
