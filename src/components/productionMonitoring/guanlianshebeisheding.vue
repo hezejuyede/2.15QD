@@ -52,8 +52,8 @@
                             </el-option>
                         </el-select>
                     </label>
-                    <el-button type="primary"  class="handle-del mr10" @click="showAdd">新增设备</el-button>
-                    <el-button type="danger"   class="handle-del mr10" @click="showDelete">删除设备</el-button>
+                    <el-button type="primary"   @click="showAdd">新增设备</el-button>
+                    <el-button type="danger"    @click="showDelete">删除设备</el-button>
                 </div>
                 <div class="">
                     <el-table class="tb-edit"
@@ -503,8 +503,8 @@
                     display: inline-block;
                 }
                 .el-button {
-                    width:100px;
-                    height: 30px;
+                    width: 130px;
+                    height: 35px;
                 }
             }
             .del-dialog-cnt {
@@ -515,10 +515,6 @@
                 width: 100%;
                 font-size: 14px;
             }
-            .red {
-                color: #ff0000;
-            }
-
         }
     }
 
