@@ -99,6 +99,7 @@
                 xuexi: "1",
                 xuexiOptions: [{"name": "已学习", "id": "1"}, {"name": "未学习", "id": "2"}],
                 tableHeight:Number,
+                examineTime:"",
 
             }
         },

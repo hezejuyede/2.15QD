@@ -163,7 +163,7 @@
                 }
                 .el-button {
                     width:100px;
-                    height: 30px;
+                    height: 35px;
                 }
             }
             .handle-div{
