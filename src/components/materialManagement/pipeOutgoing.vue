@@ -193,7 +193,7 @@
                 }
                 .el-button {
                     width: 130px;
-                    height: 30px;
+                    height: 35px;
                 }
             }
             .del-dialog-cnt {
