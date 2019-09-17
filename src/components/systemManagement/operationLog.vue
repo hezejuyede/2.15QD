@@ -263,7 +263,7 @@
                     align-items: center;
                     justify-content: center;
                     .el-button {
-                        width: 180px;
+                        width: 130px;
                         height: 35px;
                     }
                 }

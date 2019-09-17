@@ -43,7 +43,7 @@
                             placeholder="选择日期">
                         </el-date-picker>
                     </label>
-                    <el-button type="success" icon="delete" class="handle-del mr10" @click="doSearchPerson">查询
+                    <el-button  type="primary" @click="doSearchPerson">查询
                     </el-button>
                 </div>
                 <div class="">
@@ -198,8 +198,8 @@
                     display: inline-block;
                 }
                 .el-button {
-                    width: 100px;
-                    height: 30px;
+                    width: 130px;
+                    height: 35px;
                 }
             }
             .del-dialog-cnt {
@@ -209,9 +209,6 @@
             .table {
                 width: 100%;
                 font-size: 14px;
-            }
-            .red {
-                color: #ff0000;
             }
         }
     }

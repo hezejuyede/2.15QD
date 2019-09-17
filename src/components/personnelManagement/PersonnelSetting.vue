@@ -76,12 +76,9 @@
                             </el-option>
                         </el-select>
                     </label>
-                    <el-button type="success" icon="delete" class="handle-del mr10" @click="doSearchPerson">查询人员
-                    </el-button>
-                    <el-button type="primary" icon="delete" class="handle-del mr10" @click="showAddPerson">新增人员
-                    </el-button>
-                    <el-button type="danger" icon="delete" class="handle-del mr10" @click="deletePerson">删除人员
-                    </el-button>
+                    <el-button type="primary" @click="doSearchPerson">查询人员</el-button>
+                    <el-button type="success" @click="showAddPerson">新增人员</el-button>
+                    <el-button type="danger"  @click="deletePerson">删除人员</el-button>
                 </div>
                 <div class="">
                     <el-table class="tb-edit"
@@ -576,8 +573,8 @@
                     display: inline-block;
                 }
                 .el-button {
-                    width: 100px;
-                    height: 30px;
+                    width: 130px;
+                    height: 35px;
                 }
             }
             .del-dialog-cnt {
@@ -587,9 +584,6 @@
             .table {
                 width: 100%;
                 font-size: 14px;
-            }
-            .red {
-                color: #ff0000;
             }
         }
     }

@@ -212,8 +212,8 @@
                     display: inline-block;
                 }
                 .el-button {
-                    width: 100px;
-                    height: 30px;
+                    width: 130px;
+                    height: 35px;
                 }
             }
             .del-dialog-cnt {
@@ -224,10 +224,6 @@
                 width: 100%;
                 font-size: 14px;
             }
-            .red {
-                color: #ff0000;
-            }
-
         }
     }
 

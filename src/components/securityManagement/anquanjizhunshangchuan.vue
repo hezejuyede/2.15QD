@@ -26,10 +26,10 @@
                             value-format="yyyy-MM-dd">
                         </el-date-picker>
                     </label>
-                    <el-button type="success" class="handle-del mr10" @click="doSearch">查询基准</el-button>
-                    <el-button type="primary" class="handle-del mr10" @click="showAdd">新增基准</el-button>
-                    <el-button type="warning" class="handle-del mr10" @click="showEdit">编辑基准</el-button>
-                    <el-button type="danger"  class="handle-del mr10" @click="deleteAlert">删除基准</el-button>
+                    <el-button type="primary"  @click="doSearch">查询基准</el-button>
+                    <el-button type="success"  @click="showAdd">新增基准</el-button>
+                    <el-button type="warning"  @click="showEdit">编辑基准</el-button>
+                    <el-button type="danger"   @click="deleteAlert">删除基准</el-button>
                 </div>
                 <div class="">
                     <el-table class="tb-edit"
@@ -488,8 +488,8 @@
                     display: inline-block;
                 }
                 .el-button {
-                    width: 100px;
-                    height: 30px;
+                    width: 130px;
+                    height: 35px;
                 }
             }
             .del-dialog-cnt {
