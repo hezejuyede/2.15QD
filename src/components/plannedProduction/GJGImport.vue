@@ -792,7 +792,7 @@
             align-items: center;
             justify-content: center;
             button {
-                width: 80px;
+                width: 130px;
                 height: 35px;
                 text-align: center;
                 line-height: 35px;

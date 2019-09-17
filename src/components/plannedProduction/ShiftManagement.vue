@@ -467,7 +467,7 @@
                     display: inline-block;
                 }
                 .el-button {
-                    width: 100px;
+                    width: 130px;
                     height: 35px;
                 }
             }

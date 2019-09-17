@@ -233,7 +233,7 @@
 
                 }
                 .el-button {
-                    width: 100px;
+                    width: 130px;
                     height: 35px;
                 }
             }
@@ -245,10 +245,6 @@
                 width: 100%;
                 font-size: 14px;
             }
-            .red {
-                color: #ff0000;
-            }
-
         }
     }
 

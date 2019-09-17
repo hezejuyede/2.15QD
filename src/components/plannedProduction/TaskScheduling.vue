@@ -646,7 +646,7 @@
                     align-items: center;
                     justify-content: center;
                     .el-button {
-                        width: 80%;
+                        width: 130px;
                         height: 35px;
                         text-align: center;
                     }

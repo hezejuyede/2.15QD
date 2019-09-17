@@ -272,7 +272,7 @@
                     display: inline-block;
                 }
                 .el-button {
-                    width: 150px;
+                    width: 130px;
                     height: 35px;
                 }
             }
