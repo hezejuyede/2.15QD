@@ -9,7 +9,7 @@
         <div class="template-content">
             <div class="container">
                 <div class="handle-box">
-                    <label style="margin-right: 5px">
+                    <label style="margin-left: 15px">
                         <span>检索托单金物</span>
                         <span>:</span>
                         <el-input v-model="select_word" placeholder="智能检索托单金物" style="width: 150px"></el-input>
@@ -26,7 +26,7 @@
                         </el-date-picker>
                     </label>
 
-                    <el-button type="success" @click="doSearch">查询</el-button>
+                    <el-button type="primary" @click="doSearch">查询</el-button>
 
                 </div>
                 <div class="">

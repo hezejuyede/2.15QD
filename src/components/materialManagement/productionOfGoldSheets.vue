@@ -45,9 +45,9 @@
                             </el-option>
                         </el-select>
                     </label>
-                    <el-button type="success" @click="doSearch">查询</el-button>
-                    <el-button type="primary" @click="showAdd">新图添加</el-button>
-                    <el-button type="danger" @click="showModify">追加改正</el-button>
+                    <el-button type="primary" @click="doSearch">查询</el-button>
+                    <el-button type="success" @click="showAdd">新图添加</el-button>
+                    <el-button type="danger"  @click="showModify">追加改正</el-button>
                 </div>
                 <div class="">
                     <el-table class="tb-edit"

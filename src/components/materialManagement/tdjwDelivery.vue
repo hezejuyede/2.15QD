@@ -32,7 +32,7 @@
                             </el-option>
                         </el-select>
                     </label>
-                    <el-button type="primary"  class="handle-del mr10" @click="doSearch">查询</el-button>
+                    <el-button type="primary"  @click="doSearch">查询</el-button>
                 </div>
                 <div class="">
                     <el-table class="tb-edit"

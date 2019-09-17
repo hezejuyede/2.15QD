@@ -45,8 +45,8 @@
                             value-format="yyyy-MM-dd">
                         </el-date-picker>
                     </label>
-                    <el-button type="success"  @click="doSearch">查询</el-button>
-                    <el-button type="primary"  @click="showApproval">审批</el-button>
+                    <el-button type="primary" @click="doSearch">查询</el-button>
+                    <el-button type="success" @click="showApproval">审批</el-button>
                 </div>
                 <div class="">
                     <el-table class="tb-edit"
@@ -722,10 +722,6 @@
                 width: 100%;
                 font-size: 14px;
             }
-            .red {
-                color: #ff0000;
-            }
-
         }
 
     }

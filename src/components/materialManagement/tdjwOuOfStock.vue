@@ -40,7 +40,7 @@
                         <span>:</span>
                         <el-input v-model="quhuaming" placeholder="区化名"  style="width: 100px"  class="handle-input mr10"></el-input>
                     </label>
-                    <el-button type="success" @click="doSearch">查询</el-button>
+                    <el-button type="primary" @click="doSearch">查询</el-button>
 
                 </div>
                 <div class="">
