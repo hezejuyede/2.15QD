@@ -52,7 +52,7 @@
                     border
                     :height="this.tableHeight"
                     @row-click="clickTable"
-                    style="width: 95%;margin: 0 auto">
+                    style="width: 98%;margin: 0 auto">
                     <el-table-column
                         prop="shipcode"
                         label="船号"
@@ -176,11 +176,11 @@
             setTableHeight() {
                 if (/Android|webOS|iPhone|iPod|BlackBerry/i.test(navigator.userAgent)) {
                     var H = window.screen.height;
-                    this.tableHeight = H - 320 + "px";
+                    this.tableHeight = H - 300 + "px";
                 }
                 else {
                     var h = document.body.clientHeight;
-                    this.tableHeight = h - 320 + "px";
+                    this.tableHeight = h - 300 + "px";
                 }
 
             },
@@ -230,10 +230,11 @@
             height: 50px;
             padding-top: 20px;
             padding-left: 20px;
+            border-bottom: 1px solid @color-background-d;
         }
         .productionContent {
             .productionContentTab {
-                height: 100px;
+                height: 80px;
                 display: flex;
                 .batchTab {
                     flex: 1;

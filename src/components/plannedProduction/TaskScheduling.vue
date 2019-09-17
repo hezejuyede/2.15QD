@@ -57,7 +57,7 @@
                     :height="this.tableHeight"
                     border
                     @select="selectList"
-                    style="width: 95%;margin: 0 auto">
+                    style="width: 98%;margin: 0 auto">
                     <el-table-column
                         type="selection"
                         width="30">

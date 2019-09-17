@@ -259,20 +259,21 @@
             height: 50px;
             padding-top: 20px;
             padding-left: 20px;
-            border-bottom: 1px solid @color-bg-hei;
+            border-bottom: 1px solid @color-background-d;
         }
         .productionContent {
+            height: 80px;
             .handle-box {
-                height: 50px;
-                line-height: 50px;
-                padding-left: 50px;
+                height: 80px;
+                line-height: 80px;
+                padding-left: 20px;
                 .handle-input {
                     width: 300px;
                     display: inline-block;
                 }
                 .el-button {
                     width: 150px;
-                    height: 30px;
+                    height: 35px;
                 }
             }
             .contentDiv {
