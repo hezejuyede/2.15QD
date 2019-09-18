@@ -105,7 +105,7 @@
 
 
                 wuzuo: "1",
-                wuzuoOptions: [{"name": "客户反馈的误做", "id": "1"}, {"name": "加工线内部误做", "id": "2"}],
+                wuzuoOptions: [{"name": "客户反馈的误做", "id": "1"}, {"name": "加工线内部误做", "id": "2"}, {"name": "全部误做", "id": "3"}],
                 tableHeight:Number,
 
 
