@@ -418,7 +418,8 @@
                     display: flex;
                     align-items: center;
                     justify-content: center;
-                    font-size: @font-size-large;
+                    background-color: #EB7347;
+                    font-size: @font-size-large-xxx;
 
                 }
                 .calendarDiv{
