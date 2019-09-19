@@ -5,7 +5,7 @@
             <i class="el-icon-menu"></i>
         </div>
         <div class="logo">
-            <span>管加工生产执行系统</span>
+            <span>管加工车间中二线生产管理系统</span>
         </div>
         <div class="header-right">
             <div class="header-user-con">
@@ -141,7 +141,7 @@
         }
         .logo {
             float: left;
-            width: 250px;
+            width: 350px;
             line-height: 70px;
         }
         .header-right {

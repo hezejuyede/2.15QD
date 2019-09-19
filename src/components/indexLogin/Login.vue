@@ -3,7 +3,7 @@
         <div class="mesLogo">
             <div class="ms-logo">
                 <div class=""><img src="../../assets/img/logo.png" alt="" class=""></div>
-                <div class="">管加工生产执行系统</div>
+                <div class="">管加工车间中二线生产管理系统</div>
             </div>
             <div class="ms-login">
                 <div class="ms-title"></div>
@@ -159,7 +159,7 @@
                 align-items: center;
                 justify-content: center;
                 flex-direction: column;
-                font-size: 26px;
+                font-size: 24px;
             }
             .ms-login{
                 border-radius: 15px;
