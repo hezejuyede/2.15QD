@@ -174,7 +174,6 @@
                     .then(axios.spread(function (title, table) {
                         that.cols = title.data;
                         that.tableData = table.data;
-                        console.log(that.tableData)
                         let data = [];
                         for (let i = 0; i < that.tableData.length; i++) {
                             let curDate = that.tableData[i].curDate;
@@ -275,27 +274,45 @@
                 this.loadingShowData(time);
             },
             //日期改变
-            dateChange(data){
+            dateChange(data) {
+                this.time=data;
+                this.monthTime=data;
                 this.loadingShowData(data);
             },
 
             //点击日期
             pick(data, event, row, dome) {
-                this.monthTime = this.time;
-                this.editVisible = true;
-                let time;
-                if (row.text <= 9) {
-                    time = data + "-" + 0 + row.text;
+                if(row.type==="prev-month"){
+                    this.time = data;
+                    this.dayTime = data;
+                    this.monthTime = data;
+                    this.loadingShowData(data);
+                }
+                else if (row.type==="next-month"){
+                    this.time = data;
+                    this.dayTime = data;
+                    this.monthTime = data;
+                    this.loadingShowData(data);
                 }
                 else {
-                    time = data + "-" + row.text;
-                }
-                this.dayTime = time;
-                for (let i = 0; i < this.tableData.length; i++) {
-                    if (this.tableData[i].curDate === this.dayTime) {
-                        this.id = this.tableData[i].id;
+                    this.monthTime = this.time;
+                    this.editVisible = true;
+                    let time;
+                    if (row.text <= 9) {
+                        time = data + "-" + 0 + row.text;
+                    }
+                    else {
+                        time = data + "-" + row.text;
+                    }
+                    this.dayTime = time;
+                    for (let i = 0; i < this.tableData.length; i++) {
+                        if (this.tableData[i].curDate === this.dayTime) {
+                            this.id = this.tableData[i].id;
+                        }
                     }
                 }
+
+
             },
 
             //自定义日历内容
@@ -317,7 +334,7 @@
                         }
                     }
                     data.defvalue = json;
-                    if (data.defvalue.working === 1 && data.defvalue.type === "normal") {
+                    if (data.defvalue.working === 1 && data.defvalue.type === "normal"  || data.defvalue.type=== "today") {
                         return data.defvalue.value ? (
                             < div style="height:60px; line-height: 60px; text-align: center;">
                             < span style = "font-size: 30px;" > {data.defvalue.text
@@ -334,7 +351,7 @@
                         < /div>
                     )
                     }
-                    else if (data.defvalue.working === 2 && data.defvalue.type === "normal") {
+                    else if (data.defvalue.working === 2 && data.defvalue.type === "normal" || data.defvalue.type=== "today") {
                         return data.defvalue.value ? (
                             < div style = "height:60px; line-height: 60px; text-align: center;background:  #00CCFF;color:#ffffff" >
                             < span style = "font-size: 30px;" > {data.defvalue.text
@@ -351,7 +368,7 @@
                         < /div>
                     )
                     }
-                    else if (data.defvalue.working === 0 && data.defvalue.type === "normal") {
+                    else if (data.defvalue.working === 0 && data.defvalue.type === "normal" || data.defvalue.type=== "today") {
                         return data.defvalue.value ? (
                             < div style = "height:60px; line-height: 60px; text-align: center;background: #26A65B;color:#ffffff" >
                             < span
@@ -370,8 +387,6 @@
                         < /div>
                     )
                     }
-
-
                 };
                 return <div style="min-height:60px;">{loop(parmas)}</div>
             },
@@ -418,9 +433,7 @@
                     display: flex;
                     align-items: center;
                     justify-content: center;
-                    background-color: #EB7347;
-                    font-size: @font-size-large-xxx;
-
+                    font-size: @font-size-large-x;
                 }
                 .calendarDiv{
                     width: 800px;
