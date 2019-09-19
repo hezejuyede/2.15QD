@@ -156,17 +156,17 @@
                         highlight-current-row
                         style="width: 98%;margin: auto">>
                         <el-table-column
-                            prop="linename"
+                            prop="lineid"
                             align="center"
                             label="生产线">
                         </el-table-column>
                         <el-table-column
-                            prop="stationname"
+                            prop="gongweiid"
                             align="center"
                             label="工位">
                         </el-table-column>
                         <el-table-column
-                            prop="username"
+                            prop="xuexiuser"
                             align="center"
                             label="人员">
                         </el-table-column>
@@ -276,6 +276,7 @@
                         }));
                 }
             },
+
             //根据屏幕设置Table高度
             setTableHeight() {
                 if (/Android|webOS|iPhone|iPod|BlackBerry/i.test(navigator.userAgent)) {
@@ -506,12 +507,11 @@
                         setTimeout(b, 2000);
                     }
                     else {
-                        this.editYsVisible = true;
-                        axios.post(" " + url + "/sysconfig/getUserbyzizhiId", {"id": this.listData[0]})
+                        axios.post(" " + url + "/xuexi/getxuexiRelation", {"id": this.listData[0]})
                             .then((res) => {
-                                if (res.data.data) {
-                                    this.zizhiData = res.data.data;
+                                if (res.data.data.length>0) {
                                     this.stateVisible = true;
+                                    this.stateData=res.data.data;
                                 }
                                 else {
                                     this.message = "暂无数据";
