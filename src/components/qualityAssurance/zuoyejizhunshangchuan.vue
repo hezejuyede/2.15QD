@@ -47,7 +47,21 @@
                             width="30">
                         </el-table-column>
                         <template v-for="(col ,index) in cols">
-                            <el-table-column align="center" :prop="col.prop" :label="col.label"></el-table-column>
+                            <el-table-column
+                                align="center"
+                                v-if="col.prop !=='createtime'"
+                                :prop="col.prop"
+                                :label="col.label">
+                            </el-table-column>
+                            <el-table-column
+                                align="center"
+                                v-if="col.prop==='createtime'"
+                                width="300"
+                                :prop="col.prop" :label="col.label">
+                                <template scope="scope">
+                                    {{ scope.row.createtime }}
+                                </template>
+                            </el-table-column>
                         </template>
                     </el-table>
                 </div>
