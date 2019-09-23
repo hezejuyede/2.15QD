@@ -38,13 +38,13 @@
                         <span>:</span>
                         <el-date-picker
                             v-model="examineTime"
-                            type="date"
-                            value-format="yyyy-MM-dd"
-                            placeholder="选择日期">
+                            type="daterange"
+                            start-placeholder="开始日期"
+                            end-placeholder="结束日期"
+                            value-format="yyyy-MM-dd">
                         </el-date-picker>
                     </label>
-                    <el-button  type="primary" @click="doSearchPerson">查询
-                    </el-button>
+                    <el-button  type="primary" @click="doSearchPerson">查询</el-button>
                 </div>
                 <div class="">
                     <el-table class="tb-edit"
@@ -70,7 +70,7 @@
     import axios from 'axios'
     import url from '../../assets/js/URL'
     import Modal from '../../common/modal'
-    import {getYTime} from '../../assets/js/api'
+    import {getNowTime,getLestWeekTime} from '../../assets/js/api'
 
     export default {
         name: 'WorkingProcedure',
@@ -126,8 +126,12 @@
                 }
                 else {
                     this.setTableHeight();
-                    let time = getYTime();
-                    this.examineTime = time;
+                    let nowTime = getNowTime();
+                    let lestWeekTime= getLestWeekTime();
+                    let times = [];
+                    times.push(lestWeekTime);
+                    times .push(nowTime);
+                    this.examineTime = times;
                     let that = this;
                     axios.all([
                         axios.post(" " + url + "/sysconfig/deptList"),

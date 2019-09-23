@@ -47,7 +47,7 @@
     import axios from 'axios'
     import url from '../../assets/js/URL'
     import Modal from '../../common/modal'
-    import {getNowTime} from '../../assets/js/api'
+    import {getNowTime,getLestWeekTime} from '../../assets/js/api'
 
     export default {
         name: 'FactoryCalendar',
@@ -85,12 +85,12 @@
                 else {
                     this.setTableHeight();
 
-                    let time = getNowTime();
+                    let nowTime = getNowTime();
+                    let lestWeekTime= getLestWeekTime();
                     let times = [];
-                    for (let i = 0; i < 2; i++) {
-                        times.push(time)
-                    }
-                    this.examineTime =times;
+                    times.push(lestWeekTime);
+                    times .push(nowTime);
+                    this.examineTime = times;
                     let that = this;
                     axios.all([
                         axios.post(" " + url + "/sys/showTableTitle", {"name": "login"}),

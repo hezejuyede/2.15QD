@@ -379,7 +379,7 @@
     import axios from 'axios'
     import url from '../../assets/js/URL'
     import Modal from '../../common/modal'
-    import {getNowTime} from '../../assets/js/api'
+    import {getNowTime,getLestWeekTime} from '../../assets/js/api'
 
     export default {
         name: 'WorkingProcedure',
@@ -465,12 +465,13 @@
                     this.$router.push("/")
                 }
                 else {
-                    let time = getNowTime();
+                    let nowTime = getNowTime();
+                    let lestWeekTime= getLestWeekTime();
                     let times = [];
-                    for (let i = 0; i < 2; i++) {
-                        times.push(time)
-                    }
+                    times.push(lestWeekTime);
+                    times .push(nowTime);
                     this.examineTime = times;
+
                     const info = JSON.parse(userInfo);
                     this.zuoyezhe = info.username;
                     this.roleid = info.roleid;

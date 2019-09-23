@@ -61,9 +61,9 @@
                         <el-date-picker
                             v-model="examineTime"
                             type="daterange"
-                            range-separator="至"
                             start-placeholder="开始日期"
-                            end-placeholder="结束日期">
+                            end-placeholder="结束日期"
+                            value-format="yyyy-MM-dd">
                         </el-date-picker>
                     </label>
                 </div>
@@ -93,7 +93,7 @@
     import axios from 'axios'
     import url from '../../assets/js/URL'
     import Modal from '../../common/modal'
-    import {getNowTime} from '../../assets/js/api'
+    import {getNowTime,getLestWeekTime} from '../../assets/js/api'
     export default {
         name: 'FactoryCalendar',
         data() {
@@ -133,12 +133,12 @@
                 }
                 else {
                     this.setTableHeight();
-                    let time = getNowTime();
+                    let nowTime = getNowTime();
+                    let lestWeekTime= getLestWeekTime();
                     let times = [];
-                    for (let i = 0; i < 2; i++) {
-                        times.push(time)
-                    }
-                    this.examineTime =times;
+                    times.push(lestWeekTime);
+                    times .push(nowTime);
+                    this.examineTime = times;
 
 
                     let that = this;

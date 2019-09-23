@@ -121,6 +121,24 @@
                     <el-form-item label="点检周期">
                         <el-input v-model="djzq" style="width: 200px" type="number"></el-input>
                     </el-form-item>
+                    <el-form-item label="周期单位">
+                        <el-select
+                            v-model="riqiType"
+                            clearable
+                            filterable
+                            allow-create
+                            default-first-option
+                            @change="changeSCX"
+                            placeholder="请选择生产线">
+                            <el-option
+                                v-for="item in riqiTypeOptions"
+                                :key="item.id"
+                                :label="item.name"
+                                :value="item.id">
+                            </el-option>
+                        </el-select>
+                    </el-form-item>
+
                 </el-form>
                 <span slot="footer" class="dialog-footer">
                 <el-button @click="addVisible = false" style="height:30px;width:80px">取 消</el-button>
@@ -226,6 +244,9 @@
                 djzq:"",
                 tableHeight:Number,
 
+                riqiType: "",
+                riqiTypeOptions: [{"name": "时", "id": "1"}, {"name": "日", "id": "2"}, {"name": "月", "id": "3"}, {"name": "年", "id": "4"}],
+
             }
         },
         computed: {
@@ -265,12 +286,12 @@
                         axios.post(" " + url + "/sys/dictionaryList", {"id": "9"}),
                         axios.post(" " + url + "/api/getPersonProcessList", {"name": ""}),
                     ])
-                        .then(axios.spread(function (line,workStation) {
+                        .then(axios.spread(function (line, workStation) {
                             that.lineOptions = line.data;
                             that.line = line.data[0].indexno;
                             that.workStation = workStation.data[0].id;
                             that.workStationOptions = workStation.data;
-                            that.loadingShowData(that.line,that.workStation);
+                            that.loadingShowData(that.line, that.workStation);
                         }));
                 }
             },
@@ -289,11 +310,11 @@
             },
 
             //瞬间加载数据
-            loadingShowData(data1,data2) {
+            loadingShowData(data1, data2) {
                 let that = this;
                 axios.all([
                     axios.post(" " + url + "/sys/showTableTitle", {"name": "djsbzqsd"}),
-                    axios.post(" " + url + "/shebei/shebeiList", {"jiagongxian": data1,"stationid":data2})
+                    axios.post(" " + url + "/shebei/shebeiList", {"jiagongxian": data1, "stationid": data2})
                 ])
                     .then(axios.spread(function (title, table) {
                         that.cols = title.data;
@@ -302,18 +323,18 @@
             },
 
             //更改生产线
-            changeSCX(){
+            changeSCX() {
                 axios.post(" " + url + "/sysconfig/getGongxuList", {"id": this.line})
                     .then((res) => {
                         this.workStation = res.data[0].id;
                         this.workStationOptions = res.data;
-                        this.loadingShowData( this.line, this.workStation)
+                        this.loadingShowData(this.line, this.workStation)
                     });
             },
 
             //根据工位选择
             changeSelect() {
-                this.loadingShowData( this.line, this.workStation)
+                this.loadingShowData(this.line, this.workStation)
             },
 
             //选择那个一个
@@ -327,7 +348,7 @@
                     this.listData = data;
                 }
                 else {
-                    this.listData=[];
+                    this.listData = [];
                 }
             },
 
@@ -348,31 +369,33 @@
 
             //显示新增
             showAdd() {
-                this.addVisible=true;
+                this.addVisible = true;
                 this.workStation = "";
                 this.line = "";
                 this.shebei = "";
                 this.djzq = "";
-                this.bianhao="";
+                this.bianhao = "";
+                this.riqiType = "";
             },
 
             //进行新增
             doAdd() {
-                if (this.shebei && this.workStation && this.line &&this.djzq && this.bianhao) {
+                if (this.shebei && this.workStation && this.line && this.djzq && this.bianhao && this.riqiType) {
                     axios.post(" " + url + "/shebei/shebeiAdd",
                         {
                             "stationid": this.workStation,
                             "jiagongxian": this.line,
                             "name": this.shebei,
                             "zhouqi": this.djzq,
-                            "bianhao":this.bianhao
+                            "danwei": this.riqiType,
+                            "bianhao": this.bianhao
                         }
                     )
                         .then((res) => {
                             if (res.data === 1) {
                                 this.$message.success(`新增成功`);
                                 this.addVisible = false;
-                                this.loadingShowData( this.line, this.workStation)
+                                this.loadingShowData(this.line, this.workStation)
                             }
                             else {
                                 this.$message.warning(`新增失败`);
@@ -397,7 +420,8 @@
                         this.line = res.data.jiagongxian;
                         this.shebei = res.data.name;
                         this.djzq = res.data.zhouqi;
-                       this.bianhao = res.data.bianhao;
+                        this.danwei = res.data.danwei;
+                        this.bianhao = res.data.bianhao;
                     })
                     .catch((err) => {
                         console.log(err)
@@ -406,22 +430,23 @@
 
             // 保存编辑
             saveEdit() {
-                if (this.shebei && this.workStation && this.line &&this.djzq && this.bianhao) {
+                if (this.shebei && this.workStation && this.line && this.djzq && this.bianhao && this.riqiType) {
                     axios.post(" " + url + "/shebei/shebeiUpdate",
                         {
-                            "id":this.id,
+                            "id": this.id,
                             "stationid": this.workStation,
                             "jiagongxian": this.line,
                             "name": this.shebei,
                             "zhouqi": this.djzq,
-                            "bianhao":this.bianhao
+                            "danwei": this.riqiType,
+                            "bianhao": this.bianhao
                         }
                     )
                         .then((res) => {
                             if (res.data === "1") {
                                 this.editVisible = false;
                                 this.$message.success(`修改成功`);
-                                this.loadingShowData(this.line,this.workStation)
+                                this.loadingShowData(this.line, this.workStation)
                             }
                             else {
                                 this.$message.warning(`新增失败`);
@@ -467,7 +492,7 @@
                         if (res.data === "1") {
                             this.$message.success('删除成功');
                             this.delVisible = false;
-                            this.loadingShowData( this.line, this.workStation)
+                            this.loadingShowData(this.line, this.workStation)
                         }
                         else {
                             this.$message.warning(`删除失败`);
