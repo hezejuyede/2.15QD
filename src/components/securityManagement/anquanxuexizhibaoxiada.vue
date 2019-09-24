@@ -156,17 +156,17 @@
                         highlight-current-row
                         style="width: 98%;margin: auto">>
                         <el-table-column
-                            prop="linename"
+                            prop="lineid"
                             align="center"
                             label="生产线">
                         </el-table-column>
                         <el-table-column
-                            prop="stationname"
+                            prop="gongweiid"
                             align="center"
                             label="工位">
                         </el-table-column>
                         <el-table-column
-                            prop="username"
+                            prop="xuexiuser"
                             align="center"
                             label="人员">
                         </el-table-column>
@@ -507,11 +507,10 @@
                         setTimeout(b, 2000);
                     }
                     else {
-                        this.editYsVisible = true;
-                        axios.post(" " + url + "/sysconfig/getUserbyzizhiId", {"id": this.listData[0]})
+                        axios.post(" " + url + "/anquan/getxuexiRelation", {"id": this.listData[0]})
                             .then((res) => {
                                 if (res.data.data) {
-                                    this.zizhiData = res.data.data;
+                                    this.stateData = res.data.data;
                                     this.stateVisible = true;
                                 }
                                 else {
