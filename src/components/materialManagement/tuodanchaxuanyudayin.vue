@@ -14,7 +14,7 @@
                         <span>:</span>
                         <el-input v-model="select_word" placeholder="智能检索托单金物" style="width: 150px"></el-input>
                     </label>
-                    <label style="margin-right: 5px;margin-left: 5px">
+                    <label style="margin-right: 10px;margin-left: 10px">
                         <span>选择时间</span>
                         <span>:</span>
                         <el-date-picker
