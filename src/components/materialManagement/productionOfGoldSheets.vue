@@ -31,7 +31,6 @@
                         <el-select
                             v-model="effective"
                             style="width: 120px"
-                            @change="changeEffective"
                             clearable
                             filterable
                             allow-create
@@ -1187,26 +1186,7 @@
                         console.log(err)
                     })
             },
-
-            //改变选择
-            changeEffective() {
-                if (this.examineTime) {
-                    this.loadingShowData(this.examineTime,this.effective);
-                }
-                else {
-                    this.message = "查询时间不能为空";
-                    this.HideModal = false;
-                    const that = this;
-
-                    function a() {
-                        that.message = "";
-                        that.HideModal = true;
-                    }
-
-                    setTimeout(a, 2000);
-                }
-            }
-
+            
 
         }
     }

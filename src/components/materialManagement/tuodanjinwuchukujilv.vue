@@ -9,15 +9,16 @@
         <div class="template-content">
             <div class="container">
                 <div class="handle-box">
-                    <label style="margin-left: 15px">
+                    <label style="margin-left: 10px">
                         <span>检索托单金物</span>
                         <span>:</span>
                         <el-input v-model="select_word" placeholder="智能检索托单金物" style="width: 150px"></el-input>
                     </label>
-                    <label style="margin-right: 10px;margin-left: 10px">
+                    <label style="margin-right: 5px;margin-left: 5px">
                         <span>选择时间</span>
                         <span>:</span>
                         <el-date-picker
+                            style="width: 230px"
                             v-model="examineTime"
                             type="daterange"
                             start-placeholder="开始日期"
@@ -25,9 +26,22 @@
                             value-format="yyyy-MM-dd">
                         </el-date-picker>
                     </label>
-
+                    <label style="margin-right: 5px;margin-left: 5px">
+                        <span>船号</span>
+                        <span>:</span>
+                        <el-input v-model="chuanhao" placeholder="船号"  style="width: 100px"  class="handle-input mr10"></el-input>
+                    </label>
+                    <label style="margin-right: 5px;margin-left: 5px">
+                        <span>图号</span>
+                        <span>:</span>
+                        <el-input v-model="tuhao" placeholder="图号"  style="width: 100px"  class="handle-input mr10"></el-input>
+                    </label>
+                    <label style="margin-right: 5px;margin-left: 5px">
+                        <span>区化名</span>
+                        <span>:</span>
+                        <el-input v-model="quhuaming" placeholder="区化名"  style="width: 100px"  class="handle-input mr10"></el-input>
+                    </label>
                     <el-button type="primary" @click="doSearch">查询</el-button>
-
                 </div>
                 <div class="">
                     <el-table class="tb-edit"
@@ -256,6 +270,7 @@
                                             width="90">
                                             <template slot-scope="scope">
                                                 <input
+                                                    @input="inputNumber(scope.row.lingqunum,scope.row.id)"
                                                     v-model="scope.row.lingqunum"
                                                     type="number"
                                                     style="width:80px"/>
@@ -373,6 +388,7 @@
                 search: "44",
                 chuanhao: "",
                 tuhao: "",
+                quhuaming: "",
 
                 excelData: [],
                 shiyongri: "",
@@ -592,6 +608,23 @@
                     return 'success-row ';
                 }
             },
+
+            //监控输入的数量
+            inputNumber(number, id) {
+                let sl = "";
+                let index = "";
+                for (let i = 0; i < this.excelData.length; i++) {
+                    if (this.excelData[i].id === id) {
+                        sl = this.excelData[i].shuliang;
+                        index = i;
+                    }
+                }
+                if (number > sl) {
+                    this.excelData[index].lingqunum = sl;
+                    this.$message.warning("最多只能领取" + sl + "个");
+                }
+
+            }
 
 
         }
