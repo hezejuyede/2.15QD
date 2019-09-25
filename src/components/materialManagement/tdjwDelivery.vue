@@ -14,7 +14,7 @@
                         <span>:</span>
                         <el-input v-model="select_word" placeholder="智能检索托单金物" class="handle-input mr10"></el-input>
                     </label>
-                    <label style="margin-right: 10px;margin-left: 10px">
+                    <label style="margin-right: 5px;margin-left: 5px">
                         <span>选择批次</span>
                         <span>:</span>
                         <el-select
@@ -26,6 +26,24 @@
                             placeholder="请选择批次">
                             <el-option
                                 v-for="item in batchOptions"
+                                :key="item.id"
+                                :label="item.name"
+                                :value="item.id">
+                            </el-option>
+                        </el-select>
+                    </label>
+                    <label style="margin-right: 5px;margin-left: 5px">
+                        <span>配材状态</span>
+                        <span>:</span>
+                        <el-select
+                            v-model="peisong"
+                            clearable
+                            filterable
+                            allow-create
+                            default-first-option
+                            placeholder="配材状态">
+                            <el-option
+                                v-for="item in peisongOptions"
                                 :key="item.id"
                                 :label="item.name"
                                 :value="item.id">
@@ -76,6 +94,8 @@
                 select_word: '',
 
                 tableHeight:Number,
+                peisong: "",
+                peisongOptions: [{"name": "已送货", "id": "1"}, {"name": "已配材", "id": "2"}, {"name": "未配材", "id": "3"}, {"name": "总清单", "id": "4"}],
 
 
             }
@@ -119,7 +139,7 @@
                         .then(axios.spread(function (select) {
                             that.batchOptions = select.data;
                             that.batch = select.data[0].id;
-                            that.loadingShowData(that.batch);
+                            that.loadingShowData(that.batch,that.peisong);
                         }));
                 }
             },
@@ -137,11 +157,11 @@
             },
 
             //瞬间加载数据
-            loadingShowData(data) {
+            loadingShowData(data1,data2) {
                 let that = this;
                 axios.all([
                     axios.post(" " + url + "/sys/showTableTitle", {"name": "tuodanjinwupeisonggenzong"}),
-                    axios.post(" " + url + "/wuliao/peisong/peisongList", {"pici": data})
+                    axios.post(" " + url + "/wuliao/peisong/peisongList", {"pici": data1,"peisong":data2})
                 ])
                     .then(axios.spread(function (title, table) {
                         that.cols = title.data;

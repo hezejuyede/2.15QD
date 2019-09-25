@@ -9,15 +9,16 @@
         <div class="template-content">
             <div class="container">
                 <div class="handle-box">
-                    <label style="margin-right: 5px">
+                    <label style="margin-right: 10px;margin-left: 10px">
                         <span>检索托单金物</span>
                         <span>:</span>
-                        <el-input v-model="select_word" placeholder="智能检索托单金物" style="width: 150px"></el-input>
+                        <el-input v-model="select_word" placeholder="智能检索托单金物" style="width:200px"></el-input>
                     </label>
                     <label style="margin-right: 5px;margin-left: 5px">
                         <span>选择时间</span>
                         <span>:</span>
                         <el-date-picker
+                            style="width: 300px"
                             v-model="examineTime"
                             type="daterange"
                             start-placeholder="开始日期"
@@ -28,20 +29,79 @@
                     <label style="margin-right: 5px;margin-left: 5px">
                         <span>船号</span>
                         <span>:</span>
-                        <el-input v-model="chuanhao" placeholder="船号"  style="width: 100px"  class="handle-input mr10"></el-input>
+                        <el-input v-model="chuanhao" placeholder="船号"  style="width: 150px"  class="handle-input mr10"></el-input>
                     </label>
                     <label style="margin-right: 5px;margin-left: 5px">
-                        <span>图号</span>
+                        <span>托单号</span>
                         <span>:</span>
-                        <el-input v-model="tuhao" placeholder="图号"  style="width: 100px"  class="handle-input mr10"></el-input>
+                        <el-input v-model="tuodanhao" placeholder="托单号" style="width: 150px"
+                                  class="handle-input mr10"></el-input>
                     </label>
                     <label style="margin-right: 5px;margin-left: 5px">
-                        <span>区化名</span>
+                        <span>区画名</span>
                         <span>:</span>
-                        <el-input v-model="quhuaming" placeholder="区化名"  style="width: 100px"  class="handle-input mr10"></el-input>
+                        <el-input v-model="quhuaming" placeholder="区画名"  style="width: 150px"  class="handle-input mr10"></el-input>
+                    </label>
+
+                </div>
+                <div class="handle-box">
+                    <label style="margin-right: 10px;margin-left: 10px">
+                        <span>改正号</span>
+                        <span>:</span>
+                        <el-input v-model="gaizheng" placeholder="改正号" style="width: 150px"
+                                  class="handle-input mr10"></el-input>
+                    </label>
+                    <label style="margin-right: 5px;margin-left: 5px">
+                        <span>管理区分号</span>
+                        <span>:</span>
+                        <el-input v-model="guanliqufenhao" placeholder="管理区分号" style="width: 150px"
+                                  class="handle-input mr10"></el-input>
+                    </label>
+                    <label style="margin-right: 5px;margin-left: 5px">
+                        <span>采购担当</span>
+                        <span>:</span>
+                        <el-input v-model="caigoudangdan" placeholder="采购担当" style="width: 150px"
+                                  class="handle-input mr10"></el-input>
+                    </label>
+                    <label style="margin-right: 5px;margin-left: 5px">
+                        <span>到货状态</span>
+                        <span>:</span>
+                        <el-select
+                            style="width: 150px"
+                            v-model="daohuoState"
+                            clearable
+                            filterable
+                            allow-create
+                            default-first-option
+                            placeholder="到货状态">
+                            <el-option
+                                v-for="item in daohuoStateOptions"
+                                :key="item.id"
+                                :label="item.name"
+                                :value="item.id">
+                            </el-option>
+                        </el-select>
+                    </label>
+                    <label style="margin-right: 5px;margin-left: 5px">
+                        <span>出库状态</span>
+                        <span>:</span>
+                        <el-select
+                            style="width: 150px"
+                            v-model="chukuState"
+                            clearable
+                            filterable
+                            allow-create
+                            default-first-option
+                            placeholder="出库状态">
+                            <el-option
+                                v-for="item in chukuStateOptions"
+                                :key="item.id"
+                                :label="item.name"
+                                :value="item.id">
+                            </el-option>
+                        </el-select>
                     </label>
                     <el-button type="primary" @click="doSearch">查询</el-button>
-
                 </div>
                 <div class="">
                     <el-table class="tb-edit"
@@ -140,7 +200,6 @@
                                         :data="excelData"
                                         :header-cell-style="{background:'#ffffff',border: '1px solid #303133',color:'rgba(0, 0, 0, 1)'}"
                                         :cell-style="{border: '1px solid #303133'}"
-                                        :row-class-name="tableRowClassName"
                                         style="width: 992px;border: 1px solid #303133">
                                         <el-table-column
                                             align="center"
@@ -380,8 +439,11 @@
                 id: "",
                 search: "44",
                 chuanhao: "",
-                tuhao: "",
+                tuodanhao: "",
                 quhuaming:"",
+                gaizheng:"",
+                guanliqufenhao:"",
+                caigoudangdan:"",
 
                 excelData: [],
                 shiyongri: "",
@@ -408,7 +470,10 @@
 
                 cols: [],
                 tableData: [],
-
+                chukuState: "",
+                chukuStateOptions: [{"name": "未出库", "id": "0"}, {"name": "已部分出库", "id": "2"}, {"name": "已全部出库", "id": "1"}],
+                daohuoState: "",
+                daohuoStateOptions: [{"name": "已到货", "id": "1"}, {"name": "未到货", "id": "0"}],
 
                 select_word: '',
 
@@ -459,7 +524,7 @@
                     times.push(lestWeekTime);
                     times .push(nowTime);
                     this.examineTime = times;
-                    this.loadingShowData(this.examineTime, this.chuanhao, this.quhuaming, this.tuhao);
+                    this.loadingShowData(this.examineTime, this.chuanhao, this.quhuaming, this.tuodanhao, this.guanliqufenhao, this.gaizheng, this.chukuState, this.daohuoState,this.caigoudangdan);
 
                 }
             },
@@ -467,17 +532,17 @@
             setTableHeight() {
                 if (/Android|webOS|iPhone|iPod|BlackBerry/i.test(navigator.userAgent)) {
                     var H = window.screen.height;
-                    this.tableHeight = H - 300 + "px";
+                    this.tableHeight = H - 350 + "px";
                 }
                 else {
                     var h = document.body.clientHeight;
-                    this.tableHeight = h - 300 + "px";
+                    this.tableHeight = h - 350 + "px";
                 }
 
             },
 
             //瞬间加载数据
-            loadingShowData(data1, data2, data3, data4) {
+            loadingShowData(data1, data2, data3, data4,data5,data6,data7,data8,data9) {
                 let that = this;
                 axios.all([
                     axios.post(" " + url + "/sys/showTableTitle", {"name": "chukuchaxuntuodanjinwu"}),
@@ -485,7 +550,12 @@
                         "times": data1,
                         "chuanhao": data2,
                         "quhuaming": data3,
-                        "tuhao": data4,
+                        "tuodanhao": data4,
+                        "guanliqufenhao": data5,
+                        "gaizheng": data6,
+                        "chukuState": data7,
+                        "daohuoState": data8,
+                        "caigoudandang": data9
                     })
                 ])
                     .then(axios.spread(function (title, table) {
@@ -498,21 +568,7 @@
 
             //进行查询
             doSearch() {
-                if (this.examineTime) {
-                    this.loadingShowData(this.examineTime, this.chuanhao, this.quhuaming, this.tuhao);
-                }
-                else {
-                    this.message = "查询时间不能为空";
-                    this.HideModal = false;
-                    const that = this;
-
-                    function a() {
-                        that.message = "";
-                        that.HideModal = true;
-                    }
-
-                    setTimeout(a, 2000);
-                }
+                this.loadingShowData(this.examineTime, this.chuanhao, this.quhuaming, this.tuodanhao, this.guanliqufenhao, this.gaizheng, this.chukuState, this.daohuoState,this.caigoudangdan);
             },
 
 
@@ -596,10 +652,8 @@
 
     .makeFrom {
         width: 100%;
-        height: 580px;
         .makeFromDiv {
             width: 1100px;
-            height: 550px;
             overflow: auto;
             margin: 0 auto;
             .makeFromPage {
