@@ -3,7 +3,7 @@
         <div class="crumbs">
             <el-breadcrumb separator="/">
                 <el-breadcrumb-item>安全管理</el-breadcrumb-item>
-                <el-breadcrumb-item>提醒内容手动提醒</el-breadcrumb-item>
+                <el-breadcrumb-item>提醒内容制作与发布</el-breadcrumb-item>
             </el-breadcrumb>
         </div>
         <div class="editorTemplate-content">

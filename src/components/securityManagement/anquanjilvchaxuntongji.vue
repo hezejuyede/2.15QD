@@ -218,21 +218,7 @@
 
             //查询
             doSearch(){
-                if (this.select) {
-                    this.loadingShowData(this.select)
-                }
-                else {
-                    this.message = "请选择要查询的工位";
-                    this.HideModal = false;
-                    const that = this;
-
-                    function a() {
-                        that.message = "";
-                        that.HideModal = true;
-                    }
-
-                    setTimeout(a, 2000);
-                }
+                this.loadingShowData(this.select)
 
             },
 

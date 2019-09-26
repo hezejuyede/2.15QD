@@ -2,7 +2,7 @@
     <div class="template">
         <div class="crumbs">
             <el-breadcrumb separator="/">
-                <el-breadcrumb-item>设备管理</el-breadcrumb-item>
+                <el-breadcrumb-item>安全记录分类</el-breadcrumb-item>
                 <el-breadcrumb-item>定义分类</el-breadcrumb-item>
             </el-breadcrumb>
         </div>
@@ -14,7 +14,8 @@
                         <span>:</span>
                         <el-input v-model="select_word" placeholder="智能检索分类" class="handle-input mr10"></el-input>
                     </label>
-                    <el-button type="primary"  @click="showAdd">新增分类</el-button>
+                    <el-button type="primary"  @click="doSearch">查询分类</el-button>
+                    <el-button type="success"  @click="showAdd">新增分类</el-button>
                     <el-button type="danger"   @click="showDelete">删除分类</el-button>
                 </div>
                 <div class="">
@@ -179,7 +180,10 @@
                     }));
             },
 
-
+            //进行查询
+            doSearch(){
+                this.loadingShowData();
+            },
 
             //选择那个一个
             selectList(val) {
