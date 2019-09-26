@@ -37,7 +37,7 @@
                         <el-input v-model="tuhao" placeholder="图号"  style="width: 100px"  class="handle-input mr10"></el-input>
                     </label>
                     <label style="margin-right: 5px;margin-left: 5px">
-                        <span>区化名</span>
+                        <span>区画名</span>
                         <span>:</span>
                         <el-input v-model="quhuaming" placeholder="区化名"  style="width: 100px"  class="handle-input mr10"></el-input>
                     </label>
