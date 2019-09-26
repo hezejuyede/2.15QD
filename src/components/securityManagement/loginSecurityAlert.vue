@@ -3,7 +3,7 @@
         <div class="crumbs">
             <el-breadcrumb separator="/">
                 <el-breadcrumb-item>安全管理</el-breadcrumb-item>
-                <el-breadcrumb-item>登录安全提醒</el-breadcrumb-item>
+                <el-breadcrumb-item>上岗安全提醒</el-breadcrumb-item>
             </el-breadcrumb>
         </div>
         <div class="editorTemplate-content">
@@ -123,6 +123,7 @@
                 </div>
             </div>
         </el-dialog>
+
         <!-- 删除提示框 -->
         <el-dialog title="删除登录安全提醒" :visible.sync="delVisible" width="300px" center>
             <div class="del-dialog-cnt">删除不可恢复，是否确定删除？</div>
@@ -232,6 +233,7 @@
                         }));
                 }
             },
+
             //根据屏幕设置Table高度
             setTableHeight() {
                 if (/Android|webOS|iPhone|iPod|BlackBerry/i.test(navigator.userAgent)) {
@@ -260,22 +262,8 @@
 
 
             //查询
-            doSearch(){
-                if (this.select) {
-                    this.loadingShowData(this.select)
-                }
-                else {
-                    this.message = "请选择要查询的工位";
-                    this.HideModal = false;
-                    const that = this;
-
-                    function a() {
-                        that.message = "";
-                        that.HideModal = true;
-                    }
-
-                    setTimeout(a, 2000);
-                }
+            doSearch() {
+                this.loadingShowData(this.select)
 
             },
 

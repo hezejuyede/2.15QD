@@ -199,7 +199,19 @@
 
             //进行查询
             doSearch() {
-                this.loadingShowData(this.batch);
+                if (this.batch) {
+                    this.loadingShowData(this.batch)
+                }
+                else {
+                    this.message = "查询批次不能为空";
+                    this.HideModal = false;
+                    const that = this;
+                    function a() {
+                        that.message = "";
+                        that.HideModal = true;
+                    }
+                    setTimeout(a, 2000);
+                }
             },
 
             //双击点击处理

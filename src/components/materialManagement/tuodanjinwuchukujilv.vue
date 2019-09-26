@@ -505,21 +505,7 @@
 
             //进行查询
             doSearch() {
-                if (this.examineTime) {
-                    this.loadingShowData(this.examineTime)
-                }
-                else {
-                    this.message = "查询时间不能为空";
-                    this.HideModal = false;
-                    const that = this;
-
-                    function a() {
-                        that.message = "";
-                        that.HideModal = true;
-                    }
-
-                    setTimeout(a, 2000);
-                }
+                this.loadingShowData(this.examineTime)
             },
 
 

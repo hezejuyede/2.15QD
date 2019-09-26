@@ -507,19 +507,7 @@
 
             //进行查询
             doSearch (){
-                if(this.examineTime){
-                    this.loadingShowData(this.examineTime,this.approvalState,this.roleid)
-                }
-                else {
-                    this.message = "时间和类型不能为空";
-                    this.HideModal = false;
-                    const that = this;
-                    function a() {
-                        that.message = "";
-                        that.HideModal = true;
-                    }
-                    setTimeout(a, 2000);
-                }
+                this.loadingShowData(this.examineTime,this.approvalState,this.roleid)
             },
 
             //选择那个一个

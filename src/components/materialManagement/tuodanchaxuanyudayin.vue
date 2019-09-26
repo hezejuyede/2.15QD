@@ -15,7 +15,7 @@
                         <el-input v-model="select_word" placeholder="智能检索托单金物" style="width: 150px"></el-input>
                     </label>
                     <label style="margin-right: 10px;margin-left: 10px">
-                        <span>选择时间</span>
+                        <span>做成时间</span>
                         <span>:</span>
                         <el-date-picker
                             style="width:250px"
@@ -551,21 +551,7 @@
 
             //进行查询
             doSearch() {
-                if (this.examineTime) {
-                    this.loadingShowData(this.examineTime, this.chuanhao, this.quhuaming, this.tuhao);
-                }
-                else {
-                    this.message = "查询时间不能为空";
-                    this.HideModal = false;
-                    const that = this;
-
-                    function a() {
-                        that.message = "";
-                        that.HideModal = true;
-                    }
-
-                    setTimeout(a, 2000);
-                }
+                this.loadingShowData(this.examineTime, this.chuanhao, this.quhuaming, this.tuhao);
             },
 
 
