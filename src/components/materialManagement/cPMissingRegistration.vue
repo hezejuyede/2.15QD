@@ -277,8 +277,15 @@
 
             //显示缺货登陆
             showAdd(){
+
                 if (this.listData.length) {
-                    this.addVisible = true;
+                    if (this.listData.length > 1) {
+                        this.$message.warning("只能选择一个");
+                    }
+                    else {
+                        this.addVisible = true;
+                        this.qjNumber = "";
+                    }
                 }
                 else {
                     this.message = "请勾选要登记的清单";
