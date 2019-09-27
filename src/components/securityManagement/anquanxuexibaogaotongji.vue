@@ -10,9 +10,9 @@
             <div class="container">
                 <div class="handle-box">
                     <label style="margin-right: 5px">
-                        <span>检索</span>
+                        <span>智能检索</span>
                         <span>:</span>
-                        <el-input v-model="select_word" placeholder="智能检索" class="handle-input mr10" style="width: 150px"></el-input>
+                        <el-input v-model="select_word" placeholder="智能检索学习报告" class="handle-input mr10" style="width:300px"></el-input>
                     </label>
                     <label style="margin-right: 10px;margin-left: 10px">
                         <span>时间</span>
