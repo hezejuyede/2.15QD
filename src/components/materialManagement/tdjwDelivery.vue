@@ -77,15 +77,15 @@
 
 
             <!--新增弹出框 -->
-            <el-dialog title="新增按钮" :visible.sync="yptVisible" :fullscreen="true" :center="true">
+            <el-dialog title="查看一品图" :visible.sync="yptVisible" :fullscreen="true" :center="true">
                <div class="" style="height: 800px;overflow: auto" ref="imageWrapper">
                    <viewer :images="imgs">
-                       <img v-for="src in imgs" :src="src.url" :key="src.title" style="width: 100%;height: 100%">
+                       <img v-for="src in imgs" :src="src.url" :key="src.title" style="width: 100%;height: 100%" id="selector">
                    </viewer>
                </div>
                 <span slot="footer" class="dialog-footer">
                 <el-button @click="yptVisible = false" style="height:30px;width:80px">取 消</el-button>
-             <!--   <el-button type="primary" @click="importImg" style="height:30px;width:80px">打印一品图</el-button>-->
+                <el-button type="primary" @click="importImg" style="height:30px;width:80px">打印一品图</el-button>
             </span>
             </el-dialog>
 
@@ -322,16 +322,13 @@
 
             //导出一品图
             importImg() {
-                html2canvas(this.$refs.imageWrapper, {
-                    backgroundColor: null     // 解决生成的图片有白边
-                }).then((canvas) => {
-                    let dataURL = canvas.toDataURL("image/png");
-                    let a = document.createElement('a');
-                    a.setAttribute('download', '');
-                    a.setAttribute('href', dataURL);
-                    a.setAttribute("target", "_blank");
-                    a.click();
-                })
+                var img = document.getElementById("selector");
+                var url = img.src;
+                let a = document.createElement('a');
+                a.setAttribute('download', '');
+                a.setAttribute('href', url);
+                a.setAttribute("target", "_blank");
+                a.click();
             }
 
         }
