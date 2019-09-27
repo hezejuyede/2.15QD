@@ -18,33 +18,12 @@
                         <span>时间</span>
                         <span>:</span>
                         <el-date-picker
-                            style="width: 240px"
                             v-model="examineTime"
                             type="daterange"
                             start-placeholder="开始日期"
                             end-placeholder="结束日期"
                             value-format="yyyy-MM-dd">
                         </el-date-picker>
-                    </label>
-                    <label style="margin-right: 10px;margin-left: 5px">
-                        <span>学习状态</span>
-                        <span>:</span>
-                        <el-select
-                            style="width: 150px"
-                            v-model="xuexi"
-                            clearable
-                            filterable
-                            allow-create
-                            default-first-option
-                            @change="changeSCX"
-                            placeholder="请选择学习状态">
-                            <el-option
-                                v-for="item in xuexiOptions"
-                                :key="item.id"
-                                :label="item.name"
-                                :value="item.id">
-                            </el-option>
-                        </el-select>
                     </label>
                     <el-button type="primary"  @click="doSearch">查询</el-button>
                     <el-button type="danger"   @click="importExcel">导出</el-button>
@@ -56,6 +35,7 @@
                               border
                               :height="this.tableHeight"
                               ref="moviesTable"
+                              id="rebateSetTable"
                               highlight-current-row
                               style="width: 98%;margin: auto">
                         <template v-for="(col ,index) in cols">
@@ -74,7 +54,9 @@
     import axios from 'axios'
     import url from '../../assets/js/URL'
     import Modal from '../../common/modal'
-    import {getNowTime} from '../../assets/js/api'
+    import {getNowTime,getLestWeekTime} from '../../assets/js/api'
+    import FileSaver from 'file-saver'
+    import XLSX from 'xlsx'
 
     export default {
         name: 'WorkingProcedure',
@@ -82,23 +64,13 @@
             return {
                 message: '',
                 HideModal: true,
-
-                val:[],
-
-
-                listData:[],
-
-                id:"",
-
-
                 cols: [],
                 tableData: [],
 
                 select_word: '',
+                examineTime: "",
 
-                xuexi: "1",
-                xuexiOptions: [{"name": "已学习", "id": "1"}, {"name": "未学习", "id": "2"}],
-                tableHeight:Number,
+                tableHeight: Number,
 
             }
         },
@@ -134,13 +106,15 @@
                 }
                 else {
                     this.setTableHeight();
-                    let time = getNowTime();
+
+                    let nowTime = getNowTime();
+                    let lestWeekTime = getLestWeekTime();
                     let times = [];
-                    for (let i = 0; i < 2; i++) {
-                        times.push(time)
-                    }
+                    times.push(lestWeekTime);
+                    times.push(nowTime);
                     this.examineTime = times;
-                    this.loadingShowData(this.examineTime,this.xuexi);
+
+                    this.loadingShowData(this.examineTime);
                 }
             },
             //根据屏幕设置Table高度
@@ -157,40 +131,33 @@
             },
 
             //瞬间加载数据
-            loadingShowData(data1,data2) {
+            loadingShowData(data) {
                 let that = this;
                 axios.all([
                     axios.post(" " + url + "/sys/showTableTitle", {"name": "xuexibaogaotongji"}),
-                    axios.post(" " + url + "/devType/devTypeList",{"times":data1,"state":data2})
+                    axios.post(" " + url + "/xuexi/tongjiXuexi",{"times":data})
                 ])
                     .then(axios.spread(function (title, table) {
                         that.cols = title.data;
-                        that.tableData = table.data;
+                        that.tableData = table.data.data;
                     }));
             },
 
-            //更改生产线
-            changeSCX() {
-                axios.post(" " + url + "/sysconfig/getGongxuList", {"id": this.line})
-                    .then((res) => {
-                        if (res.data ==="-1") {
-                            this.workStation = "";
-                            this.workStationOptions = [];
-                        }
-                        else {
-                            this.workStation = res.data[0].id;
-                            this.workStationOptions = res.data;
-                        }
-                    });
-            },
-
-
             doSearch(){
-                this.loadingShowData(this.examineTime,this.xuexi);
+                this.loadingShowData(this.examineTime);
             },
 
-            importExcel(){
-
+            importExcel() {
+                let wb = XLSX.utils.table_to_book(document.querySelector('#rebateSetTable'));
+                /* get binary string as output */
+                let wbout = XLSX.write(wb, {bookType: 'xlsx', bookSST: true, type: 'array'});
+                try {
+                    FileSaver.saveAs(new Blob([wbout], {type: 'application/octet-stream'}), '学习报告统计.xlsx');
+                } catch (e) {
+                    if (typeof console !== 'undefined')
+                        console.log(e, wbout)
+                }
+                return wbout
             }
 
 
