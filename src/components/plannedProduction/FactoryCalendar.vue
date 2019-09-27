@@ -334,6 +334,7 @@
                         }
                     }
                     data.defvalue = json;
+                    console.log(data.defvalue)
                     if (data.defvalue.working === 1 && data.defvalue.type === "normal"  || data.defvalue.type=== "today") {
                         return data.defvalue.value ? (
                             < div style="height:60px; line-height: 60px; text-align: center;">
@@ -362,6 +363,23 @@
                         (
                         < div style = "height:60px; line-height: 60px; text-align: center;background:  #00CCFF;color:#ffffff" >
                         < span
+                        style = "font-size: 30px;" > {data.defvalue.text
+                    }<
+                        /span>
+                        < /div>
+                    )
+                    }
+                    else if (data.defvalue.working === 2 && data.defvalue.type=== "today") {
+                        return data.defvalue.value ? (
+                            < div style = "height:60px; line-height: 60px; text-align: center;background:  #00CCFF;color:#ffffff" >
+                            < span style = "font-size: 30px;" > {data.defvalue.text
+                    }<
+                        /span>
+                        < /div>
+                    ) :
+                        (
+                        < div style = "height:60px; line-height: 60px; text-align: center;background:  #00CCFF;color:#ffffff" >
+                            < span
                         style = "font-size: 30px;" > {data.defvalue.text
                     }<
                         /span>
