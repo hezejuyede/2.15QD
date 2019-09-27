@@ -402,21 +402,7 @@
 
             //查询
             doSearch(){
-                if (this.examineTime) {
-                    this.loadingShowData(this.examineTime)
-                }
-                else {
-                    this.message = "请选择要查询的时间";
-                    this.HideModal = false;
-                    const that = this;
-
-                    function a() {
-                        that.message = "";
-                        that.HideModal = true;
-                    }
-
-                    setTimeout(a, 2000);
-                }
+                this.loadingShowData(this.examineTime)
 
             },
 
