@@ -3,7 +3,7 @@
         <div class="crumbs">
             <el-breadcrumb separator="/">
                 <el-breadcrumb-item>计划排产</el-breadcrumb-item>
-                <el-breadcrumb-item>导入数据审核</el-breadcrumb-item>
+                <el-breadcrumb-item>导入数据审核查询</el-breadcrumb-item>
             </el-breadcrumb>
         </div>
         <div class="template-content">
@@ -44,13 +44,13 @@
                         <el-table-column
                             align="center"
                             prop="pici"
-                            label=""
+                            label="批次"
                             width="100">
                         </el-table-column>
                         <el-table-column
                             align="center"
                             prop="filetype"
-                            label=""
+                            label="分类"
                             width="100">
                         </el-table-column>
                         <el-table-column  v-for="(item,index) in titleData"  align="center" :label="item.zye">

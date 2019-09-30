@@ -96,34 +96,13 @@
         <Modal :msg="message"
                :isHideModal="HideModal"></Modal>
         <!--新增弹出框 -->
-        <el-dialog title="导入数据" :visible.sync="uploadVisible" width="60%">
+        <el-dialog title="导入数据" :visible.sync="uploadVisible" width="60%" :close-on-click-modal="false">
             <div class="container" style="height:450px;overflow:auto">
                 <div class="containerSelect"
                      style="height: 80px;
                      display: flex;
                      align-items: center;
                      justify-content: center">
-                    <div class="select">
-                        <label style="margin-right: 5px;margin-left: 5px">
-                            <span>文件类型</span>
-                            <span>:</span>
-                            <el-select
-                                v-model="fileType"
-                                @input="setType(fileType)"
-                                clearable
-                                filterable
-                                allow-create
-                                default-first-option
-                                placeholder="请输入或者选择文件类型">
-                                <el-option
-                                    v-for="item in fileTypeOptions"
-                                    :key="item.indexno"
-                                    :label="item.name"
-                                    :value="item.indexno">
-                                </el-option>
-                            </el-select>
-                        </label>
-                    </div>
                     <div class="select">
                         <label style="margin-right: 5px;margin-left: 5px">
                             <span>批次</span>
@@ -141,6 +120,27 @@
                                     :key="item.id"
                                     :label="item.name"
                                     :value="item.id">
+                                </el-option>
+                            </el-select>
+                        </label>
+                    </div>
+                    <div class="select">
+                        <label style="margin-right: 5px;margin-left: 5px">
+                            <span>文件类型</span>
+                            <span>:</span>
+                            <el-select
+                                v-model="fileType"
+                                @input="setType(fileType)"
+                                clearable
+                                filterable
+                                allow-create
+                                default-first-option
+                                placeholder="请输入或者选择文件类型">
+                                <el-option
+                                    v-for="item in fileTypeOptions"
+                                    :key="item.indexno"
+                                    :label="item.name"
+                                    :value="item.indexno">
                                 </el-option>
                             </el-select>
                         </label>
@@ -198,7 +198,7 @@
         </el-dialog>
 
         <!--导入文件详情 -->
-        <el-dialog title="文件详情" :visible.sync="detailsVisible" width="90%" @close='closeDialog'>
+        <el-dialog title="文件详情" :visible.sync="detailsVisible" width="90%" :close-on-click-modal="false">
             <div class="container" style="height:470px;overflow:auto">
                 <el-table
                     v-loading="loading"
@@ -224,7 +224,7 @@
         </el-dialog>
 
         <!-- 失败信息返回框 -->
-        <el-dialog title="导入失败信息提示" :visible.sync="errVisible" width="60%">
+        <el-dialog title="导入失败信息提示" :visible.sync="errVisible" width="60%" :close-on-click-modal="false">
             <div class="container" style="height:450px;overflow:auto">
                 <div class="containerErr">
                     <div class="">{{errList}}</div>
