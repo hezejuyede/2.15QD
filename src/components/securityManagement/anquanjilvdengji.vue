@@ -64,6 +64,25 @@
                             </el-option>
                         </el-select>
                     </label>
+                    <label style="margin-right: 5px;margin-left: 5px">
+                        <span> 安全类型</span>
+                        <span>:</span>
+                        <el-select
+                            style="width: 120px"
+                            v-model="securityType"
+                            clearable
+                            filterable
+                            allow-create
+                            default-first-option
+                            placeholder="请选择类型">
+                            <el-option
+                                v-for="item in securityTypeOptions"
+                                :key="item.id"
+                                :label="item.name"
+                                :value="item.id">
+                            </el-option>
+                        </el-select>
+                    </label>
                     <el-button type="primary"  @click="doSearch">查询记录</el-button>
                     <el-button type="success"  @click="showAdd">新增记录</el-button>
                     <el-button type="danger"   @click="showDelete">删除记录</el-button>
