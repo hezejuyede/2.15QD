@@ -15,7 +15,7 @@
                         <el-input v-model="select_word" placeholder="智能检索船型" class="handle-input mr10"></el-input>
                     </label>
                     <el-button type="primary" @click="showAdd">新增船型</el-button>
-                   <!-- <el-button type="danger"  @click="showDelete">删除船型</el-button>-->
+                  <!--  <el-button type="danger"  @click="showDelete">删除船型</el-button>-->
                     <el-button type="warning" @click="doSearch">查询船型</el-button>
                 </div>
                 <div class="">

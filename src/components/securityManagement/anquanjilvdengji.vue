@@ -159,7 +159,7 @@
                             filterable
                             allow-create
                             default-first-option
-                            placeholder="请选择工位">
+                            placeholder="请选择安全类型">
                             <el-option
                                 v-for="item in securityTypeOptions"
                                 :key="item.id"

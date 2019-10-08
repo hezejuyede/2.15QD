@@ -76,8 +76,20 @@
                                 @row-dblclick="showEdit"
                                 style="width: 98%;margin: auto">
                                 <template v-for="(col ,index) in cols">
-                                    <el-table-column align="center" :prop="col.prop"
-                                                     :label="col.label"></el-table-column>
+                                    <el-table-column
+                                        align="center"
+                                        :prop="col.prop"
+                                        v-if="col.prop !=='jiaofuriqi'"
+                                        :label="col.label"></el-table-column>
+                                    <el-table-column
+                                        align="center"
+                                        width="170"
+                                        v-if="col.prop==='jiaofuriqi'"
+                                        :prop="col.prop" :label="col.label">
+                                        <template slot-scope="scope">
+                                            {{ scope.row.jiaofuriqi}}
+                                        </template>
+                                    </el-table-column>
                                 </template>
                             </el-table>
                         </div>
