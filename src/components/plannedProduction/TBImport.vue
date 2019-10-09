@@ -439,7 +439,6 @@
                                       :height="this.tableHeight"
                                       @select-all="selectAll"
                                       @select="selectList"
-                                      @row-dblclick="showEdit"
                                       highlight-current-row
                                       style="width: 98%;margin: auto">
                                 <el-table-column
