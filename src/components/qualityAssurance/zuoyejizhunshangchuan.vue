@@ -72,7 +72,7 @@
             <div class="container" style="height:500px;overflow:auto">
                 <div class="containerDivTop2" style="width:100%;height:50px;display: flex;align-items: center;justify-items: center">
                     <div style="width: 600px;height: 40px;margin: 0 auto">
-                        <span>学习标题</span>
+                        <span>基准名称</span>
                         <span>:</span>
                         <el-input v-model="titilename" style="width:500px" placeholder="学习标题"></el-input>
                     </div>
@@ -91,7 +91,7 @@
             <div class="container" style="height:500px;overflow:auto">
                 <div class="containerDivTop2" style="width:100%;height:50px;display: flex;align-items: center;justify-items: center">
                     <div style="width: 600px;height: 40px;margin: 0 auto">
-                        <span>学习标题</span>
+                        <span>基准名称</span>
                         <span>:</span>
                         <el-input v-model="titilename" style="width:500px"   :disabled="true"   placeholder="学习标题"></el-input>
                     </div>
@@ -105,7 +105,7 @@
             <div class="container" style="height:500px;overflow:auto">
                 <div class="containerDivTop2" style="width:100%;height:50px;display: flex;align-items: center;justify-items: center">
                     <div style="width: 600px;height: 40px;margin: 0 auto">
-                        <span>学习标题</span>
+                        <span>基准名称</span>
                         <span>:</span>
                         <el-input v-model="titilename" style="width:500px" placeholder="学习标题"></el-input>
                     </div>
