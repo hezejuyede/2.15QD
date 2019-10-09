@@ -1313,7 +1313,7 @@
                 ],       //管子种类下拉列表
 
                 batch: "",                      //批次
-                batchOptions: [],                            //批次下拉列表
+                batchOptions: [],               //批次下拉列表
 
 
                 //合拢管字段
@@ -2112,12 +2112,12 @@
 
             //设置导入数据类型
             setImportPipeType(importPipeType) {
-                this.Data = {"lineNo": this.SCX, "type": this.type, "pici": this.pc, 'guanType': importPipeType}
+                this.Data = {"lineNo": this.SCX, "type": this.fileType, "pici": this.pc, 'guanType': importPipeType}
             },
 
             //设置批次
             setPc(batch) {
-                this.Data = {"lineNo": this.scx, "type": this.type, "pici": batch, 'guanType': this.importPipeType}
+                this.Data = {"lineNo": this.scx, "type": this.fileType, "pici": batch, 'guanType': this.importPipeType}
             },
 
             //设置类型
@@ -2127,7 +2127,7 @@
 
             //设置生产线
             setScx(scx) {
-                this.Data = {"lineNo": scx, "type": this.type, "pici": this.batch, 'guanType': this.importPipeType}
+                this.Data = {"lineNo": scx, "type": this.fileType, "pici": this.batch, 'guanType': this.importPipeType}
             },
 
             //上传
@@ -2261,7 +2261,6 @@
                 let uJson ={"pici":this.batch,"yiguanhao":this.chuanhao ,"codehao":this.code,"shipcode":this.chuanhao};
                 this.drawingInputData =uJson;
                 if (this.batch && this.chuanhao && this.yiguanhao && this.code) {
-                    console.log(this.drawingInputData)
                     this.$refs.upload.submit((data) => {
                         console.log(data)
                     });

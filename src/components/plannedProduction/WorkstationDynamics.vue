@@ -37,6 +37,7 @@
                     <div class="productionContentTableRight fr">
                         <div class="tableDiv" v-for="(item,index) in tableData">
                             <div class="tableDivTop" :class="[classColor1,{
+                        classColor1:item.status===1,
                         classColor2:item.status===2,
                         classColor3:item.status===3,
                         classColor4:item.status===4,
@@ -49,7 +50,7 @@
                             <div class="tableDivBottom">
                                 <div class="tableTemplate" v-for="(item1,index) in item.table"  >
                                     <div class="tableTemplate-title">{{item1.title}}</div>
-                                    <div class="tableTemplate-number">{{item1.number}}</div>
+                                    <div class="tableTemplate-number" @click="showModalDiv(index,item1.stationid)">{{item1.number}}</div>
                                     <div class="tableTemplate-jd">{{item1.jd}}</div>
                                 </div>
                             </div>
@@ -58,6 +59,7 @@
                 </div>
             </div>
         </div>
+
         <!--新增弹出框 -->
         <el-dialog title="工位列表" :visible.sync="wacVisible" width="60%">
             <el-table
@@ -116,6 +118,23 @@
                 </div>
             </div>
         </el-dialog>
+
+        <!--新增弹出框 -->
+        <el-dialog title="工位列表" :visible.sync="excelVisible" width="100%" :fullscreen="true" :center="true"
+                   @close='closeDialog'>
+            <el-table
+                class="tb-edit"
+                :data="tableData2"
+                :header-cell-style="{background:'#A1D0FC',color:'rgba(0, 0, 0, 0.8)',fontSize:'14px'}"
+                border
+                height="600"
+                highlight-current-row
+                style="width: 98%;margin: auto">
+                <template v-for="(col ,index) in cols">
+                    <el-table-column align="center" :prop="col.prop" :label="col.label"></el-table-column>
+                </template>
+            </el-table>
+        </el-dialog>
     </div>
 </template>
 <script type="text/ecmascript-6">
@@ -132,9 +151,12 @@
                 tableData:[],
 
                 tableData2: [],
+                cols: [],
 
                 wacVisible: false,
                 listVisible: false,
+                excelVisible: false,
+                classColor1:"",
 
             }
         },
@@ -242,7 +264,26 @@
             //关闭弹框
             closeDialog() {
                 this.loadingShowData(this.batch)
-            }
+            },
+
+            //显示表格
+            showModalDiv(index,stationid) {
+                let that = this;
+                axios.all([
+                    axios.post(" " + url + "/sys/showTableTitle", {"name": "gwdtbt"}),
+                    axios.post(" " + url + "/dynamic/getStationDynamicListDetail", {
+                        "pici": this.batch,
+                        "stationid": stationid,
+                        "type": index+1
+                    })
+                ])
+                    .then(axios.spread(function (title, table) {
+                        that.excelVisible = true;
+                        that.cols = title.data;
+                        that.tableData2 = table.data.data;
+                    }));
+            },
+
 
 
         }
