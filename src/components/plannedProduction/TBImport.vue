@@ -79,12 +79,21 @@
                                     <el-table-column
                                         align="center"
                                         :prop="col.prop"
-                                        v-if="col.prop !=='jiaofuriqi'"
+                                        v-if="col.prop !=='jiaofuriqi' && col.prop !=='wanchengriqi'"
                                         :label="col.label"></el-table-column>
                                     <el-table-column
                                         align="center"
-                                        width="170"
+                                        width="120"
                                         v-if="col.prop==='jiaofuriqi'"
+                                        :prop="col.prop" :label="col.label">
+                                        <template slot-scope="scope">
+                                            {{ scope.row.jiaofuriqi}}
+                                        </template>
+                                    </el-table-column>
+                                    <el-table-column
+                                        align="center"
+                                        width="120"
+                                        v-if="col.prop==='wanchengriqi'"
                                         :prop="col.prop" :label="col.label">
                                         <template slot-scope="scope">
                                             {{ scope.row.jiaofuriqi}}
@@ -172,7 +181,6 @@
                                       :height="this.tableHeight"
                                       @select-all="selectAll"
                                       @select="selectList"
-                                      @row-dblclick="showEdit"
                                       highlight-current-row
                                       style="width: 98%;margin: auto">
                                 <el-table-column
